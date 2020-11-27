@@ -1,31 +1,26 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Home from '@/views/Home.vue'
 
 Vue.use(VueRouter)
 
-import MainLayout from '../views/layouts/MainLayout.vue'
+import MainLayout from '@/views/layouts/MainLayout.vue'
 
 const routes = [
     {
         path: '/',
-        redirect: '/home/index'
-    },
-    {
-        path: '/home',
-        name: 'mainLayout',
+        name: 'MainLayout',
         component: MainLayout,
         children: [
             {
-                path: 'index',
+                name: 'Home',
+                path: '',
                 component: Home
             },
             {
+                name: 'Login',
                 path: 'login',
-                components: {
-                    // 上面的另外一种写法，这样可以在一个组建中嵌入多个路由(router-view)
-                    default: () => import('../views/Login.vue')
-                },
+                component: () => import('@/views/Login.vue')
             },
         ]
     }
@@ -41,7 +36,8 @@ const routes = [
 ]
 
 const router = new VueRouter({
-    routes
+    mode: 'history',
+    routes: routes
 })
 
 export default router
