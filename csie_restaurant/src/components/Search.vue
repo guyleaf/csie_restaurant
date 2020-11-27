@@ -15,5 +15,6 @@ export default {
     border: 1px solid #f48fb1;
     box-shadow: 0 0 0 1px #f48fb1;
     margin: 5%;
+    width: 50%;
   }
 </style>

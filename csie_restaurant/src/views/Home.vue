@@ -1,8 +1,6 @@
 <template>
   <div class="home">
-    <div>
-    <Carousel imagePath1='@/assets/logo.png' imagePath2='@/assets/vuemmerce-logo.png'/>
-    </div>
+    <Carousel imgPath1="https://picsum.photos/1024/480/?image=54" imgPath2='https://picsum.photos/1024/480/?image=12' imgPath3='https://picsum.photos/1024/480/?image=22'/>
     <center>
       <Search />
       <Checkbox />
@@ -34,7 +32,12 @@ export default {
 </script>
 
 <style scopped>
-
-
+@media  (min-width: 1200px) {
+  .container{
+    max-width:100% !important; 
+    padding: 0% !important;
+    overflow: hidden;
+  }
+}
 
 </style>

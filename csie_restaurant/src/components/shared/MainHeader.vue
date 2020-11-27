@@ -1,6 +1,6 @@
 <template>
     <div>
-        <b-navbar toggleable="lg" type="dark" variant="dark">
+        <b-navbar toggleable="lg" type="light" variant="faded">
             <b-navbar-brand href="#">NavBar</b-navbar-brand>
 
             <b-navbar-nav class="navbar-nav mr-auto">
@@ -52,4 +52,5 @@ export default {
 </script>
 
 <style scoped>
+
 </style>
