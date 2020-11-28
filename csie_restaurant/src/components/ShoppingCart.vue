@@ -27,13 +27,12 @@
         </b-button>
         訂購餐廳：{{BookingShopName}}  
       </template>
-      <CartCell foodName='大麥克' foodPrice="75"/>
-      <br>
-      <CartCell foodName='大薯' foodPrice="55"/>
-      <br>
-      <CartCell foodName='可樂(大)' foodPrice="40"/>
-      <br>
+      <dev v-for="(item,index) in ItemList" :key="index" >
+        <CartCell />
+        <b-button @click="handledelete(index)" variant="outline-info" vertical>-</b-button>
+      </dev>
       <b-button @click="onOk" variant="outline-info" vertical>Ok</b-button>
+      <b-button @click="add" variant="outline-info" vertical>+</b-button>
       <!--div>
         <b-alert show class="small">
           <strong>Current Values:</strong><br>
@@ -58,10 +57,14 @@
     },
     data() {
       return {
-        input1: '',
-        input1state: null,
-        input2: '',
-        input2state: null,
+        ItemList:[
+          {
+            input1: '',
+            input1state: null,
+            input2: '',
+            input2state: null,
+          }
+        ],
         options: [{ text: '- Choose 1 -', value: '' }, 'Red', 'Green', 'Blue'],
         input1Return: '',
         input2Return: '',
@@ -117,6 +120,20 @@
         // Called just after the popover has finished hiding
         // Bring focus back to the button
         this.focusRef(this.$refs.button)
+      },
+      add()
+      {
+        this.ItemList.push(
+        {
+            input1: '',
+            input1state: null,
+            input2: '',
+            input2state: null,
+        })
+      },
+      handledelete:function(index)
+      {
+        this.ItemList.splice(index,1);
       },
      /* focusRef(ref) {
         // Some references may be a component, functional component, or plain element
