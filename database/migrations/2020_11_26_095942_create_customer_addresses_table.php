@@ -13,9 +13,12 @@ class CreateCustomerAddressesTable extends Migration
      */
     public function up()
     {
-        Schema::create('customer_addresses', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::create('Customer_address', function (Blueprint $table) {
+            $table->foreignId("Customer_id")->comment("所屬顧客編號");
+            $table->string("Address")->comment("地址");
+            $table->primary(["Customer_id", "Address"]);
+            $table->foreign("Customer_id")->references("Member_id")->on("Customer")
+            ->onUpdate("cascade")->onDelete("cascade");
         });
     }
 
@@ -26,6 +29,6 @@ class CreateCustomerAddressesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('customer_addresses');
+        Schema::dropIfExists('Customer_address');
     }
 }

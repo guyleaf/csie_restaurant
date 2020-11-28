@@ -13,9 +13,16 @@ class CreateOrderItemsTable extends Migration
      */
     public function up()
     {
-        Schema::create('order_items', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::create('Order_item', function (Blueprint $table) {
+            $table->foreignId("Order_id")->comment("所屬訂單編號");
+            $table->foreignId("Product_id")->comment("所屬商品編號");
+            $table->unsignedInteger("Quantity")->default(1)->comment("訂購數量");
+            $table->string("Note")->nullable()->comment("商品備註");
+            $table->primary(["Order_id", "Product_id"]);
+            $table->foreign("Order_id")->references("Id")->on("Order")
+            ->onUpdate("cascade")->onDelete("cascade");
+            $table->foreign("Product_id")->references("Id")->on("Product")
+            ->onUpdate("cascade")->onDelete("cascade");
         });
     }
 
@@ -26,6 +33,6 @@ class CreateOrderItemsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('order_items');
+        Schema::dropIfExists('Order_item');
     }
 }

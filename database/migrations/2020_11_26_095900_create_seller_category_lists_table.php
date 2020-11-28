@@ -13,9 +13,14 @@ class CreateSellerCategoryListsTable extends Migration
      */
     public function up()
     {
-        Schema::create('seller_category_lists', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::create('Seller_category_list', function (Blueprint $table) {
+            $table->foreignId("Seller_id")->comment("所屬商店編號");
+            $table->foreignId("Category_id")->comment("所屬商店類別");
+            $table->primary(["Seller_id", "Category_id"]);
+            $table->foreign("Seller_id")->references("Member_id")->on("Seller")
+            ->onUpdate("cascade")->onDelete("cascade");
+            $table->foreign("Category_id")->references("Category_id")->on("Seller_category")
+            ->onUpdate("cascade")->onDelete("cascade");
         });
     }
 
@@ -26,6 +31,6 @@ class CreateSellerCategoryListsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('seller_category_lists');
+        Schema::dropIfExists('Seller_category_list');
     }
 }

@@ -13,10 +13,11 @@ class CreateSellersTable extends Migration
      */
     public function up()
     {
-        Schema::create('sellers', function (Blueprint $table) {
+        Schema::create('Seller', function (Blueprint $table) {
             $table->foreignId("Member_id")->comment("商店編號");
             $table->string("Desctiption")->comment("商店描述")->nullable();
             $table->unsignedBigInteger("Counter_number")->unique()->comment("櫃位號碼");
+            $table->string("Header_image")->nullable()->comment("商店圖片路徑");
             $table->primary("Member_id");
             $table->foreign("Member_id")->references("Id")->on("Member")
             ->onUpdate("cascade")->onDelete("cascade");
@@ -30,6 +31,6 @@ class CreateSellersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sellers');
+        Schema::dropIfExists('Seller');
     }
 }

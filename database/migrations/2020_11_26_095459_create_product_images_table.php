@@ -13,9 +13,12 @@ class CreateProductImagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('product_images', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::create('Product_image', function (Blueprint $table) {
+            $table->string("Image_path")->comment("圖片路徑");
+            $table->foreignId("Id")->comment("所屬商品編號");
+            $table->primary(["Image_path", "Id"]);
+            $table->foreign("Id")->references("Id")->on("Product")
+            ->onUpdate("cascade")->onDelete("cascade");
         });
     }
 
@@ -26,6 +29,6 @@ class CreateProductImagesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('product_images');
+        Schema::dropIfExists('Product_image');
     }
 }

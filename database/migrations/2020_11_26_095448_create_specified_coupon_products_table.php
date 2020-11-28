@@ -13,9 +13,15 @@ class CreateSpecifiedCouponProductsTable extends Migration
      */
     public function up()
     {
-        Schema::create('specified_coupon_products', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::create('Specified_coupon_product', function (Blueprint $table) {
+            $table->foreignId("Coupon_id")->comment("所屬優惠券編號");
+            $table->foreignId("Product_id")->comment("商品編號");
+            $table->unsignedInteger("Quantity")->default(1)->comment("商品數量");
+            $table->primary(["Coupon_id", "Product_id"]);
+            $table->foreign("Coupon_id")->references("Id")->on("Coupon")
+            ->onUpdate("cascade")->onDelete("cascade");
+            $table->foreign("Product_id")->references("Id")->on("Product")
+            ->onUpdate("cascade")->onDelete("cascade");
         });
     }
 
@@ -26,6 +32,6 @@ class CreateSpecifiedCouponProductsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('specified_coupon_products');
+        Schema::dropIfExists('Specified_coupon_product');
     }
 }
