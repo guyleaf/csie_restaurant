@@ -4,5 +4,5 @@ After pulling
 
 ~~bash~~
 
-cd {destination_folder}
+cd {folder}/CSIE_restaurant/csie_restaurant
 npm install 

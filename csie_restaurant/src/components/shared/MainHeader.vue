@@ -1,6 +1,6 @@
 <template>
     <div>
-        <b-navbar toggleable="lg" type="dark" variant="dark">
+        <b-navbar toggleable="lg" type="light" variant="faded">
             <b-navbar-brand href="#">NavBar</b-navbar-brand>
 
             <b-navbar-nav class="navbar-nav mr-auto">
@@ -8,19 +8,26 @@
             </b-navbar-nav>
 
             <b-navbar-nav>
+                <ShoppingCart />
+            </b-navbar-nav>
+
+            <b-navbar-nav>
                 <router-link :to="{name: 'Login'}" class="nav-link">Login</router-link>
             </b-navbar-nav>
+
         </b-navbar>
     </div>
 </template>
 
 <script>
+import ShoppingCart from "@/components/ShoppingCart.vue";
 // @ is an alias to /src
 // import HelloWorld from "@/components/HelloWorld.vue";
 export default {
     name: "main-header",
     components: {
         // HelloWorld
+        ShoppingCart
     },
     data: function() {
         return {};
@@ -45,4 +52,5 @@ export default {
 </script>
 
 <style scoped>
+
 </style>
