@@ -1,8 +1,8 @@
 <template>
-  <div id="my-container">
+  <div id="my-container" width=500px>
     <div class="my-3">
       <!-- Our triggering (target) element -->
-      <b-button id="popover-reactive-1" variant="primary" ref="button">
+      <b-button id="popover-reactive-1" variant="outline-secondary" ref="button">
         ShoppingCart
       </b-button>
     </div>
@@ -37,50 +37,12 @@
       </template>
 
       <div>
-        <b-form-group
-          label="Name"
-          label-for="popover-input-1"
-          label-cols="3"
-          :state="input1state"
-          class="mb-1"
-          description="Enter your name"
-          invalid-feedback="This field is required"
-        >
-          <b-form-input
-            ref="input1"
-            id="popover-input-1"
-            v-model="input1"
-            :state="input1state"
-            size="sm"
-          ></b-form-input>
-        </b-form-group>
-
-        <b-form-group
-          label="Color"
-          label-for="popover-input-2"
-          label-cols="3"
-          :state="input2state"
-          class="mb-1"
-          description="Pick a color"
-          invalid-feedback="This field is required"
-        >
-          <b-form-select
-            id="popover-input-2"
-            v-model="input2"
-            :state="input2state"
-            :options="options"
-            size="sm"
-          ></b-form-select>
-        </b-form-group>
-
         <b-alert show class="small">
           <strong>Current Values:</strong><br>
           Name: <strong>{{ input1 }}</strong><br>
           Color: <strong>{{ input2 }}</strong>
         </b-alert>
-
-        <b-button @click="onClose" size="sm" variant="danger">Cancel</b-button>
-        <b-button @click="onOk" size="sm" variant="primary">Ok</b-button>
+        <b-button @click="onOk" variant="outline-info" vertical>Ok</b-button>
       </div>
     </b-popover>
   </div>
