@@ -7,7 +7,7 @@
       <CardGroup />
     </center>
     <div>
-      <ShoppingCart />
+      <ShoppingCart BookingShopName='McDonald'/>
     </div>
   </div>
 </template>

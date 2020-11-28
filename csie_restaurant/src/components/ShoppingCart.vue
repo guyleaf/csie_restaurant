@@ -1,20 +1,11 @@
 <template>
-  <div id="my-container" width=500px>
+  <div id="my-container">
     <div class="my-3">
       <!-- Our triggering (target) element -->
       <b-button id="popover-reactive-1" variant="outline-secondary" ref="button">
         ShoppingCart
       </b-button>
     </div>
-
-    <!-- Output from the popover interaction -->
-    <b-card title="Returned values:" v-if="input1Return && input2Return">
-      <p class="card-text" style="max-width: 20rem;">
-        Name: <strong>{{ input1Return }}</strong><br>
-        Color: <strong>{{ input2Return }}</strong>
-      </p>
-    </b-card>
-
     <!-- Our popover title and content render container -->
     <!-- We use placement 'auto' so popover fits in the best spot on viewport -->
     <!-- We specify the same container as the trigger button, so that popover is close to button -->
@@ -34,24 +25,37 @@
         <b-button @click="onClose" class="close" aria-label="Close">
           <span class="d-inline-block" aria-hidden="true">&times;</span>
         </b-button>
-        Interactive Content
+        訂購餐廳：{{BookingShopName}}  
       </template>
-
-      <div>
+      <CartCell foodName='大麥克' foodPrice="75"/>
+      <br>
+      <CartCell foodName='大薯' foodPrice="55"/>
+      <br>
+      <CartCell foodName='可樂(大)' foodPrice="40"/>
+      <br>
+      <b-button @click="onOk" variant="outline-info" vertical>Ok</b-button>
+      <!--div>
         <b-alert show class="small">
           <strong>Current Values:</strong><br>
           Name: <strong>{{ input1 }}</strong><br>
           Color: <strong>{{ input2 }}</strong>
         </b-alert>
-        <b-button @click="onOk" variant="outline-info" vertical>Ok</b-button>
-      </div>
+        
+      </div-->
     </b-popover>
   </div>
 </template>
 
 <script>
+  import CartCell from "@/components/CartCell.vue";
   export default {
     name:"ShoppingCart",
+    components: {
+        CartCell
+    },
+    props: {
+      BookingShopName: String
+    },
     data() {
       return {
         input1: '',
@@ -130,9 +134,7 @@
 </script>
 <style scoped>
   .wide-popover {
-    min-width: 250px; 
-    max-width: 400px; 
-    min-height: 200px;
+    width:1000px;
     max-height: 500px;
   }
 </style>
