@@ -6,9 +6,6 @@
       <Checkbox />
       <CardGroup />
     </center>
-    <div>
-      <ShoppingCart BookingShopName='McDonald'/>
-    </div>
   </div>
 </template>
 
@@ -18,14 +15,12 @@ import Search from "@/components/Search.vue";
 import CardGroup from "@/components/CardGroup.vue";
 import Carousel from "@/components/Carousel.vue";
 import Checkbox from "@/components/Checkbox.vue";
-import ShoppingCart from "@/components/ShoppingCart.vue";
 export default {
   name: "home",
   components: {
     Search,
     Carousel,
     Checkbox,
-    ShoppingCart,
     CardGroup
   }
 };
