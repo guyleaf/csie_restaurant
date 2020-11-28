@@ -4,7 +4,7 @@
     <center>
       <Search />
       <Checkbox />
-      <CardGroup />
+      <ShopCardGroup />
     </center>
   </div>
 </template>
@@ -12,7 +12,7 @@
 <script>
 // @ is an alias to /src
 import Search from "@/components/Search.vue";
-import CardGroup from "@/components/CardGroup.vue";
+import ShopCardGroup from "@/components/ShopCardGroup.vue";
 import Carousel from "@/components/Carousel.vue";
 import Checkbox from "@/components/Checkbox.vue";
 export default {
@@ -21,7 +21,7 @@ export default {
     Search,
     Carousel,
     Checkbox,
-    CardGroup
+    ShopCardGroup
   }
 };
 </script>

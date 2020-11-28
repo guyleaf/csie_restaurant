@@ -12,7 +12,7 @@
 <script>
 import ShopCard from "@/components/ShopCard.vue";
 export default {
-    name: "CardGroup",
+    name: "ShopCardGroup",
     components: {
         ShopCard
     }
