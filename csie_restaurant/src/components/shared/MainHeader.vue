@@ -4,7 +4,7 @@
             <b-navbar-brand href="#">NavBar</b-navbar-brand>
 
             <b-navbar-nav class="navbar-nav mr-auto">
-                <router-link to="/home/index" class="nav-link">Home</router-link>
+                <router-link :to="{name: 'Home'}" class="nav-link">Home</router-link>
             </b-navbar-nav>
 
             <b-navbar-nav>
@@ -12,7 +12,7 @@
             </b-navbar-nav>
 
             <b-navbar-nav>
-                <router-link to="/home/login" class="nav-link">Login</router-link>
+                <router-link :to="{name: 'Login'}" class="nav-link">Login</router-link>
             </b-navbar-nav>
 
         </b-navbar>
