@@ -5,8 +5,6 @@
                     <h1>渴望享受美食嗎？立即訂餐。</h1>
                     <p>搜尋最愛的餐廳、料理或餐點。</p>
             </div>
-
-
             <div class='col-md-7 carouselStyle' style="padding=15 15 15 15">
                 <b-carousel
                     id="carousel-fade"

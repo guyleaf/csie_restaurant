@@ -1,5 +1,5 @@
 <template>
-    <div class="fixed-bottom">
+    <div class="bottom">
         <b-navbar toggleable="lg" type="dark" variant="dark" class="d-flex justify-content-center">
             <b-navbar-brand href="#">Bottom Bar</b-navbar-brand>
         </b-navbar>
