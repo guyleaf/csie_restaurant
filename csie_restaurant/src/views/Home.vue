@@ -32,7 +32,7 @@ export default {
 </script>
 
 <style scopped>
-@media  (min-width: 1200px) {
+@media  (min-width: 800px) {
   .container{
     max-width:100% !important; 
     padding: 0% !important;
