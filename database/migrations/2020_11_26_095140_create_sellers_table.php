@@ -14,8 +14,12 @@ class CreateSellersTable extends Migration
     public function up()
     {
         Schema::create('sellers', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->foreignId("Member_id")->comment("商店編號");
+            $table->string("Desctiption")->comment("商店描述")->nullable();
+            $table->unsignedBigInteger("Counter_number")->unique()->comment("櫃位號碼");
+            $table->primary("Member_id");
+            $table->foreign("Member_id")->references("Id")->on("Member")
+            ->onUpdate("cascade")->onDelete("cascade");
         });
     }
 

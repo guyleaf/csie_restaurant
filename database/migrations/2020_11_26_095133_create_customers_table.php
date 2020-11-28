@@ -14,8 +14,8 @@ class CreateCustomersTable extends Migration
     public function up()
     {
         Schema::create('Customer', function (Blueprint $table) {
-            $table->unsignedBigInteger('Member_id');
-            $table->boolean('Sex');
+            $table->foreignId('Member_id')->comment("顧客編號");
+            $table->boolean('Sex')->comment("顧客性別");
             $table->primary('Member_id');
             $table->foreign('Member_id')->references('Id')->on('Member')
             ->onUpdate('cascade')->onDelete('cascade');
