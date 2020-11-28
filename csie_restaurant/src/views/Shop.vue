@@ -1,28 +1,21 @@
 <template>
-  <div class="shop">
-    
-  </div>
+    <div >
+      <HelloWorld msg="WELCOME TO SHOP PAGE"/>
+    </div>
 </template>
+
 
 <script>
 // @ is an alias to /src
-//import Search from "@/components/Search.vue";
-//https://placekitten.com/300/300
+import HelloWorld from "@/components/HelloWorld.vue";
 export default {
-  name: "shop",
+  name: "Shop",
   components: {
-      
-  }
+    HelloWorld
+  },
+  data: function() {
+    return {};
+  },
+  methods: {}
 };
 </script>
-
-<style scopped>
-@media  (min-width: 800px) {
-  .container{
-    max-width:100% !important; 
-    padding: 0% !important;
-    overflow: hidden;
-  } 
-}
-
-</style>
