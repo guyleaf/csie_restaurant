@@ -1,14 +1,14 @@
 <template>
     <div>
         <b-navbar toggleable="lg" type="light" variant="faded">
-            <b-navbar-brand href="#">NavBar</b-navbar-brand>
+            <b-navbar-brand href="#">CSIE_RESTAURANT</b-navbar-brand>
 
             <b-navbar-nav class="navbar-nav mr-auto">
                 <router-link :to="{name: 'Home'}" class="nav-link">Home</router-link>
             </b-navbar-nav>
 
             <b-navbar-nav>
-                <ShoppingCart />
+                <ShoppingCart BookingShopName='McDonald'/>
             </b-navbar-nav>
 
             <b-navbar-nav>

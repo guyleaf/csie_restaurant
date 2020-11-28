@@ -1,20 +1,17 @@
 <template>
-  <div class="login">
-    <center>
-      <button class="btn btn-lg btn-info">Login</button>
-      <HelloWorld msg='Welcome to Login Page' />
-    </center>
-  </div>
+    <div >
+      <FoodCardGroup  />
+    </div>
 </template>
 
 
 <script>
 // @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
+import FoodCardGroup from "@/components/FoodCardGroup.vue";
 export default {
   name: "login",
   components: {
-    HelloWorld
+    FoodCardGroup
   },
   data: function() {
     return {};
