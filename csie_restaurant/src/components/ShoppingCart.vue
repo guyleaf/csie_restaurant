@@ -19,6 +19,7 @@
     <!-- We use placement 'auto' so popover fits in the best spot on viewport -->
     <!-- We specify the same container as the trigger button, so that popover is close to button -->
     <b-popover
+      custom-class="wide-popover"
       target="popover-reactive-1"
       triggers="focus"
       :show.sync="popoverShow"
@@ -127,3 +128,11 @@
     }
   }
 </script>
+<style scoped>
+  .wide-popover {
+    min-width: 250px; 
+    max-width: 400px; 
+    min-height: 200px;
+    max-height: 500px;
+  }
+</style>
