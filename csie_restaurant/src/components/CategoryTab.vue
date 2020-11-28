@@ -1,70 +1,111 @@
 <template>
-<div>
-    <b-tabs content-class="mt-3">
-        <b-tab v-for="item in tabList" :key="item.id" title=item.name></b-tab>
-    </b-tabs>
-    <div class="item-content">
-    <div>11111111</div>
+    <div>
+        <b-tabs content-class="mt-3">
+            <b-tab class="item-tab" v-for="(item,index) in tabs" :key="index" :title="item.title" :name="index" @click="jump(index)" v-bind:class="isActive===index?'active':''"></b-tab>
+        </b-tabs>
+        <div class="scroll-content">
+            <div class="item-content">
+                <p style="height:40px" v-for="item in [0,1,2,3,4,5,6,7,8,9,10]" :key="item">1</p>
+            </div>
+            <div class="item-content">
+                <p style="height:40px" v-for="item in [0,1,2,3,4,5,6,7,8,9,10]" :key="item">2</p>
+            </div>
+            <div class="item-content">
+                <p style="height:40px" v-for="item in [0,1,2,3,4,5,6,7,8,9,10]" :key="item">3</p>
+            </div>
+        </div>
     </div>
-    <div class="item-content">
-    <div>22222</div>
-    </div>
-    <div class="item-content">
-    <div>33333</div>
-    </div>
-    <div class="item-content">
-    <div>44444</div>
-    </div>
-    <div class="item-content">
-    <div>555555</div>
-    </div>
-</div>
 </template>
+
 
 <script>
   export default {
+      name:'CategoryTab',
     data() {
       return {
-        tabList:[{
-            id:1,
-            name:'详情'
-            },{
-            id:2,
-            name:'评论'
-            },{
-            id:3,
-            name:'新闻'
-            },{
-            id:4,
-            name:'关于'
-            },{
-            id:5,
-            name:'相关'
-            }],
+          isActive: 0,
+         tabs: [
+          {
+            title: 'First',
+            refName: 'setOneRef',
+          },
+          {
+            title: 'Second',
+            refName: 'setTwoRef',
+          },
+          {
+            title: 'Third',
+            refName: 'setThreeRef',
+          }
+        ],
         }
     },
-    handleScroll(){  
-        let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;  
-        this.headerFixed = scrollTop > this.offsetTop;  
-        for (let i = 0; i < this.arrDom.length; i++) {  
-        //因为下面使用到了i+1，所以需要把最后一个分离出来判断  
-        if(this.arrDom[this.arrDom.length-1].offsetTop-scrollTop>80){  
-        if(this.arrDom[i].offsetTop-scrollTop<=80&&this.arrDom[i+1].offsetTop-scrollTop>80){  
-        this.active = i+1  
-        }  
-        }else{  
-        this.active = this.arrDom.length;  
-        }  
-        
-        }  
+    methods: {
+        jump(index) 
+        {
+            let target = document.querySelector('.scroll-content')
+            let scrollItems = document.querySelectorAll('.item-content')
+            if (target.scrollHeight <= target.scrollTop + target.clientHeight) this.tabIndex = index.index.toString()
+            let totalY = scrollItems[index].offsetTop - document.body.scrollTop
+            let distance = document.documentElement.scrollTop
+            let step = totalY / 50
+            document.documentElement.scrollTop=distance
+            if (totalY > distance) 
+            {
+                smoothDown(document.documentElement)
+            } 
+            else 
+            {
+                let newTotal = distance - totalY
+                step = newTotal / 50
+                smoothUp(document.documentElement)
+            }
+            function smoothDown(element) 
+            {
+                if (distance < totalY) 
+                {
+                    distance += step
+                    element.scrollTop = distance
+                    setTimeout(smoothDown.bind(this, element), 10)
+                } 
+                else element.scrollTop = totalY
+            }
+            function smoothUp(element) 
+            {
+                if (distance > totalY) 
+                {
+                    distance -= step
+                    element.scrollTop = distance
+                    setTimeout(smoothUp.bind(this, element), 10)
+                } 
+            else element.scrollTop = totalY
+            }
         },
-      mounted(){  
-        //记录每个内容对用的dom数组  
-        this.arrDom = document.getElementsByClassName("line-title");  
-        window.addEventListener('scroll', this.handleScroll);  
-        },  
-            
-        destroyed(){  
-        window.removeEventListener('scroll', this.handleScroll);  
+        handleScroll () 
+        {
+            let scrollItems = document.querySelectorAll('.item-content')
+            let scrollTop =document.documentElement.scrollTop
+            for(var i=scrollItems.length-1;i>=0;i--)
+            {
+                var ItmeY = scrollItems[i].offsetTop - document.body.scrollTop
+                if(scrollTop>ItmeY) 
+                {
+                    this.isActive=i
+                    break
+                }
+            }
+            let tab = document.querySelectorAll('.nav-item>a')
+            console.log(tab)
+            for(i=tab.length-1;i>=0;i--)   if(tab[i].className.indexOf("active") >= 0){tab[i].classList.remove("active") } 
+            tab[this.isActive].classList.add("active")
+
         },
-  }
+    },
+    mounted () {
+    window.addEventListener('scroll', this.handleScroll)
+    },
+    destroyed () {
+    window.removeEventListener('scroll', this.handleScroll)
+    },
+}
+</script>

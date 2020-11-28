@@ -2,6 +2,7 @@
   <div class="home">
     <Carousel imgPath1="https://picsum.photos/1024/480/?image=54" imgPath2='https://picsum.photos/1024/480/?image=12' imgPath3='https://picsum.photos/1024/480/?image=22'/>
     <center>
+      <CategoryTab />
       <Search />
       <Checkbox />
       <CardGroup />
@@ -19,6 +20,7 @@ import CardGroup from "@/components/CardGroup.vue";
 import Carousel from "@/components/Carousel.vue";
 import Checkbox from "@/components/Checkbox.vue";
 import ShoppingCart from "@/components/ShoppingCart.vue";
+import CategoryTab from "@/components/CategoryTab.vue";
 export default {
   name: "home",
   components: {
@@ -26,7 +28,8 @@ export default {
     Carousel,
     Checkbox,
     ShoppingCart,
-    CardGroup
+    CardGroup,
+    CategoryTab
   }
 };
 </script>
