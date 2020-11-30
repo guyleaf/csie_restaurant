@@ -4,7 +4,7 @@ Grape
 <template>
   <div>
     <b-form-group label="Individual stacked checkboxes (default)">
-      <b-form-checkbox
+      <b-form-checkbox style="text-align:left"
         v-for="option in options"
         v-model="selected"
         :key="option.value"

@@ -1,14 +1,17 @@
 <template>
   <div class="home">
     <Carousel imgPath1="https://picsum.photos/1024/480/?image=54" imgPath2='https://picsum.photos/1024/480/?image=12' imgPath3='https://picsum.photos/1024/480/?image=22'/>
-    <center>
+    <center >
       <Search />
-      <Checkbox />
-      <CardGroup />
+      <div class="container row">
+        <div class="col-3">
+        <Checkbox />
+        </div>
+        <div class="col-9">
+          <CardGroup />
+        </div>
+      </div>
     </center>
-    <div>
-      <ShoppingCart BookingShopName='McDonald'/>
-    </div>
   </div>
 </template>
 
@@ -18,14 +21,12 @@ import Search from "@/components/Search.vue";
 import CardGroup from "@/components/CardGroup.vue";
 import Carousel from "@/components/Carousel.vue";
 import Checkbox from "@/components/Checkbox.vue";
-import ShoppingCart from "@/components/ShoppingCart.vue";
 export default {
   name: "home",
   components: {
     Search,
     Carousel,
     Checkbox,
-    ShoppingCart,
     CardGroup
   }
 };
