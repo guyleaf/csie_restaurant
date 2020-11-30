@@ -13,9 +13,9 @@ class CreateSellerCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('Seller_category', function (Blueprint $table) {
-            $table->bigIncrements("Category_id")->comment("商店種類編號");
-            $table->string("Name")->comment("種類名稱");
+        Schema::create('seller_category', function (Blueprint $table) {
+            $table->bigIncrements("category_id")->comment("商店種類編號");
+            $table->string("name")->comment("種類名稱");
         });
     }
 
@@ -26,6 +26,6 @@ class CreateSellerCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Seller_category');
+        Schema::dropIfExists('seller_category');
     }
 }

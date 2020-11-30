@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 class CreateOrdersTable extends Migration
 {
@@ -13,27 +14,30 @@ class CreateOrdersTable extends Migration
      */
     public function up()
     {
-        Schema::create('Order', function (Blueprint $table) {
-            $table->bigIncrements("Id")->comment("訂單編號");
-            $table->foreignId("Customer_id")->comment("顧客編號");
-            $table->foreignId("Coupon_id")->comment("優惠券編號");
-            $table->foreignid("Seller_id")->comment("商店編號");
-            $table->dateTime("Order_time")->comment("下單時間");
-            $table->dateTime("Ship_date")->nullable()->comment("運送時間");
-            $table->unsignedInteger("Payment_method")->comment("付款方式");
-            // $table->unsignedInteger("Status")->comment("訂單狀態");
-            $table->string("Address")->nullable()->comment("送餐地址");
-            $table->unsignedInteger("Fee")->comment("運費");
-            // $table->unsignedInteger("Taking_method")->comment("取餐方式");
-            $table->enum("Status", [0, 1, 2, 3, 4])->comment("訂單狀態");
-            $table->enum("Taking_method", [0, 1])->comment("取餐方式");
-            $table->foreign("Customer_id")->references("Member_id")->on("Customer")
+        Schema::create('order', function (Blueprint $table) {
+            $table->bigIncrements("id")->comment("訂單編號");
+            $table->foreignId("customer_id")->comment("顧客編號");
+            $table->foreignId("coupon_id")->comment("優惠券編號");
+            $table->foreignid("seller_id")->comment("商店編號");
+            $table->dateTime("order_time")->comment("下單時間");
+            $table->dateTime("ship_date")->nullable()->comment("運送時間");
+            $table->unsignedInteger("payment_method")->comment("付款方式");
+            $table->unsignedInteger("status")->comment("訂單狀態");
+            $table->string("address")->nullable()->comment("送餐地址");
+            $table->unsignedInteger("fee")->comment("運費");
+            $table->unsignedInteger("taking_method")->comment("取餐方式");
+            // $table->enum("status", [0, 1, 2, 3, 4])->comment("訂單狀態");
+            // $table->enum("taking_method", [0, 1])->comment("取餐方式");
+            $table->foreign("customer_id")->references("member_id")->on("customer")
             ->onUpdate("cascade")->onDelete("cascade");
-            $table->foreign("Coupon_id")->references("Id")->on("Coupon")
+            $table->foreign("coupon_id")->references("id")->on("coupon")
             ->onUpdate("cascade")->onDelete("cascade");
-            $table->foreign("Seller_id")->references("Member_id")->on("Seller")
+            $table->foreign("seller_id")->references("member_id")->on("seller")
             ->onUpdate("cascade")->onDelete("cascade");
         });
+
+        DB::statement('ALTER TABLE "order" ADD CONSTRAINT chk_status_of_order CHECK (status BETWEEN 0 AND 4);');
+        DB::statement('ALTER TABLE "order" ADD CONSTRAINT chk_taking_method_of_order CHECK (taking_method BETWEEN 0 AND 1);');
     }
 
     /**
@@ -43,6 +47,6 @@ class CreateOrdersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Order');
+        Schema::dropIfExists('order');
     }
 }

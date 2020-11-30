@@ -13,11 +13,11 @@ class CreateCustomersTable extends Migration
      */
     public function up()
     {
-        Schema::create('Customer', function (Blueprint $table) {
-            $table->foreignId('Member_id')->comment("顧客編號");
-            $table->boolean('Sex')->comment("顧客性別");
-            $table->primary('Member_id');
-            $table->foreign('Member_id')->references('Id')->on('Member')
+        Schema::create('customer', function (Blueprint $table) {
+            $table->foreignId('member_id')->comment("顧客編號");
+            $table->boolean('sex')->comment("顧客性別");
+            $table->primary('member_id');
+            $table->foreign('member_id')->references('id')->on('member')
             ->onUpdate('cascade')->onDelete('cascade');
         });
     }
@@ -29,6 +29,6 @@ class CreateCustomersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Customer');
+        Schema::dropIfExists('customer');
     }
 }

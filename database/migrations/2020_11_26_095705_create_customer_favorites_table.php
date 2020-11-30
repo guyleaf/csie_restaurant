@@ -13,13 +13,13 @@ class CreateCustomerFavoritesTable extends Migration
      */
     public function up()
     {
-        Schema::create('Customer_favorite', function (Blueprint $table) {
-            $table->foreignId("Customer_id")->comment("所屬顧客編號");
-            $table->foreignId("Seller_id")->comment("所屬店家編號");
-            $table->primary(["Customer_id", "Seller_id"]);
-            $table->foreign("Customer_id")->references("Member_id")->on("Customer")
+        Schema::create('customer_favorite', function (Blueprint $table) {
+            $table->foreignId("customer_id")->comment("所屬顧客編號");
+            $table->foreignId("seller_id")->comment("所屬店家編號");
+            $table->primary(["customer_id", "seller_id"]);
+            $table->foreign("customer_id")->references("member_id")->on("customer")
             ->onUpdate("cascade")->onDelete("cascade");
-            $table->foreign("Seller_id")->references("Member_id")->on("Seller")
+            $table->foreign("seller_id")->references("member_id")->on("seller")
             ->onUpdate("cascade")->onDelete("cascade");
         });
     }
@@ -31,6 +31,6 @@ class CreateCustomerFavoritesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Customer_favorite');
+        Schema::dropIfExists('customer_favorite');
     }
 }

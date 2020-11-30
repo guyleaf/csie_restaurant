@@ -14,24 +14,25 @@ class CreateMembersTable extends Migration
      */
     public function up()
     {
-        Schema::create('Member', function (Blueprint $table) {
-            $table->bigIncrements('Id')->comment("會員編號");
-            $table->string('Name')->comment("暱稱");
-            $table->string('Username')->unique()->comment("帳號");
-            // $table->unsignedInteger('Member_status')->comment("狀態");
-            $table->string('Phone')->unique()->comment("電話號碼");
-            $table->string('Email')->unique()->comment("電子信箱");
-            // $table->unsignedInteger('Permission')->comment("權限");
-            $table->string('Password')->comment("密碼");
-            $table->dateTime('Created_at')->comment("註冊日期");
-            $table->dateTime('Updated_at')->comment("最後更動日期");
-            $table->dateTime('Email_verified_at')->nullable()->comment("電子信箱認證狀態");
-            $table->enum("Member_status", [0, 1, 2])->comment("狀態");
-            $table->enum("Permission", [0, 1, 2])->comment("權限");
+        Schema::create('member', function (Blueprint $table) {
+            $table->bigIncrements('id')->comment("會員編號");
+            $table->string('name')->comment("暱稱");
+            $table->string('username')->unique()->comment("帳號");
+            $table->unsignedInteger('member_status')->comment("狀態");
+            $table->string('phone')->unique()->comment("電話號碼");
+            $table->string('email')->unique()->comment("電子信箱");
+            $table->unsignedInteger('permission')->comment("權限");
+            $table->string('password')->comment("密碼");
+            $table->dateTime('created_at')->comment("註冊日期");
+            $table->dateTime('updated_at')->comment("最後更動日期");
+            $table->dateTime('email_verified_at')->nullable()->comment("電子信箱認證狀態");
+            // $table->enum("Member_status", [0, 1, 2])->comment("狀態");
+            // $table->enum("Permission", [0, 1, 2])->comment("權限");
         });
 
-        // DB::statement('ALTER TABLE Member ADD CONSTRAINT chk_status_of_member CHECK (Member_status BETWEEN 0 AND 2);');
-        // DB::statement('ALTER TABLE Member ADD CONSTRAINT chk_permission_of_member CHECK (Permission BETWEEN 0 AND 2);');
+
+        DB::statement('ALTER TABLE "member" ADD CONSTRAINT chk_status_of_member CHECK (member_status BETWEEN 0 AND 2);');
+        DB::statement('ALTER TABLE "member" ADD CONSTRAINT chk_permission_of_member CHECK (permission BETWEEN 0 AND 2);');
     }
 
     /**
@@ -41,6 +42,6 @@ class CreateMembersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Member');
+        Schema::dropIfExists('member');
     }
 }

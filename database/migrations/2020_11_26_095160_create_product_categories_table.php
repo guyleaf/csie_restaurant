@@ -13,12 +13,12 @@ class CreateProductCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('Product_category', function (Blueprint $table) {
-            $table->foreignId("Seller_id")->comment("所屬店家編號");
-            $table->string("Name")->comment("商品類別名稱");
-            $table->unsignedInteger("Display_order")->comment("顯示順序");
-            $table->primary(["Seller_id", "Name"]);
-            $table->foreign("Seller_id")->references("Member_id")->on("Seller")
+        Schema::create('product_category', function (Blueprint $table) {
+            $table->foreignId("seller_id")->comment("所屬店家編號");
+            $table->string("name")->comment("商品類別名稱");
+            $table->unsignedInteger("display_order")->comment("顯示順序");
+            $table->primary(["seller_id", "name"]);
+            $table->foreign("seller_id")->references("member_id")->on("seller")
             ->onUpdate("cascade")->onDelete("cascade");
         });
     }
@@ -30,6 +30,6 @@ class CreateProductCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Product_category');
+        Schema::dropIfExists('product_category');
     }
 }

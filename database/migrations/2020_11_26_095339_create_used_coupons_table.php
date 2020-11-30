@@ -13,14 +13,14 @@ class CreateUsedCouponsTable extends Migration
      */
     public function up()
     {
-        Schema::create('Used_coupon', function (Blueprint $table) {
-            $table->foreignId("Customer_id")->comment("所屬顧客編號");
-            $table->foreignId("Coupon_id")->comment("所屬優惠券編號");
-            $table->dateTime("Usage_time")->comment("使用時間");
-            $table->primary(["Customer_id", "Coupon_id"]);
-            $table->foreign("Customer_id")->references("Member_id")->on("Customer")
+        Schema::create('used_coupon', function (Blueprint $table) {
+            $table->foreignId("customer_id")->comment("所屬顧客編號");
+            $table->foreignId("coupon_id")->comment("所屬優惠券編號");
+            $table->dateTime("usage_time")->comment("使用時間");
+            $table->primary(["customer_id", "coupon_id"]);
+            $table->foreign("customer_id")->references("member_id")->on("customer")
             ->onUpdate("cascade")->onDelete("cascade");
-            $table->foreign("Coupon_id")->references("Id")->on("Coupon")
+            $table->foreign("coupon_id")->references("id")->on("coupon")
             ->onUpdate("cascade")->onDelete("cascade");
         });
     }
@@ -32,6 +32,6 @@ class CreateUsedCouponsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Used_coupon');
+        Schema::dropIfExists('used_coupon');
     }
 }
