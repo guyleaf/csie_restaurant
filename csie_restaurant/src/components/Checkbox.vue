@@ -1,18 +1,14 @@
-Pineapple
-
-Grape
 <template>
   <div>
-    <b-form-group label="Individual stacked checkboxes (default)">
-      <b-form-checkbox style="text-align:left"
-        v-for="option in options"
-        v-model="selected"
-        :key="option.value"
-        :value="option.value"
-        name="flavour-3a"
-      >
-        {{ option.text }}
-      </b-form-checkbox>
+    <b-form-group label="商店種類" label-class="checkboxHeader">
+      <div v-for="option in options" :key="option.value" class="checkboxMenuPadding">
+        <b-form-checkbox class="checkboxMenu"
+          v-model="selected"
+          :value="option.value"
+        >
+          {{ option.text }}
+        </b-form-checkbox>
+      </div>
     </b-form-group>
   </div>
 </template>
@@ -33,3 +29,23 @@ Grape
     }
   }
 </script>
+
+<style scopped>
+  .checkboxHeader{
+    text-align: left;
+    color: #FFFFFF;
+    padding-left: 2%;
+    background-color: rgb(96,96,96);
+  }
+  .checkboxMenu{
+    text-align:left;
+    border-left: medium solid gray;
+    background-color:rgb(233,233,233);
+    padding-top:1.5%;
+    padding-bottom:1.5%;
+  }
+  .checkboxMenuPadding{
+    padding-top:1%;
+    padding-bottom:1%;
+  }
+</style>

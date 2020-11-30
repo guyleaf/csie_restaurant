@@ -26,7 +26,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scopped>
     .b_button{
         align-items: center;
     }
