@@ -27,7 +27,7 @@
 
 <style scoped>
 .container{
-    margin: 2% 5% 2% 5%;
+    margin: 2% 0 2% 0;
     
 }
 
@@ -35,12 +35,12 @@
     background-color: #FFFFFF !important;
     overflow-x: visible;
     overflow-y: scroll;
-    width :90%;
+    width :auto;
     height: 200px;
 }
 .desStyle{
-    padding:2%;
-    font-size: 24px;
+    padding:0 2% 0 2%;
+    font-size: 16px;
 }
 .tag{
     background-color: #FFFFFF !important;

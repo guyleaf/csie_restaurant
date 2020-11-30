@@ -1,6 +1,6 @@
 <template>
     <div class='container'>
-        <div class='row '>
+        <div class='row'>
             <div class='col-md-4'>
                 <b-card
                     overlay 
@@ -49,9 +49,9 @@
 
 <style scoped>
 .container{
-    background-color: #FFFFFF  !important;
 }
-
+.row{
+}
 .flex{
     display:flex;
     justify-content:center;
@@ -61,9 +61,8 @@
 h1{
     font-size: 44px;
 }
-
 .row{
-    margin: 1.5%;
+    margin: 1.5% 0 1.5% 0;
 }
 .style1{
     width: 100%;
@@ -81,17 +80,18 @@ h1{
 .grid-container {
   display: grid;
   grid-template-columns: 50% 50%;
-  background-color: #FDFDFD;
   color: #492645;
   padding: 10px;
 }
 .grid-item {
   padding: 5% 0 5% 0 ;
   font-size: 16px;
-  text-align: left;
+  text-align: right;
   color: #492645;
 }
-
+.col-md-4{
+    padding: 0;
+}
 </style>
 
 
