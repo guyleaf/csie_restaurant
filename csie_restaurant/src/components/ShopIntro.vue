@@ -48,6 +48,9 @@
 </script>
 
 <style scoped>
+.container{
+    background-color: #FFFFFF  !important;
+}
 
 .flex{
     display:flex;

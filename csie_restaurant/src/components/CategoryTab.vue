@@ -1,7 +1,7 @@
 <template>
     <div>
         <b-tabs content-class="mt-3">
-            <b-tab class="item-tab" v-for="(item,index) in tabs" :key="index" :title="item.title" :name="index" @click="jump(index)" v-bind:class="isActive===index?'active':''"></b-tab>
+            <b-tab v-for="(item,index) in tabs" :key="index" :title="item.title" :name="index" @click="jump(index)"></b-tab>
         </b-tabs>
         <div class="scroll-content">
             <div class="item-content">
@@ -26,16 +26,13 @@
           isActive: 0,
          tabs: [
           {
-            title: 'First',
-            refName: 'setOneRef',
+            title: 'First'
           },
           {
-            title: 'Second',
-            refName: 'setTwoRef',
+            title: 'Second'
           },
           {
-            title: 'Third',
-            refName: 'setThreeRef',
+            title: 'Third'
           }
         ],
         }
@@ -43,9 +40,7 @@
     methods: {
         jump(index) 
         {
-            let target = document.querySelector('.scroll-content')
             let scrollItems = document.querySelectorAll('.item-content')
-            if (target.scrollHeight <= target.scrollTop + target.clientHeight) this.tabIndex = index.index.toString()
             let totalY = scrollItems[index].offsetTop - document.body.scrollTop
             let distance = document.documentElement.scrollTop
             let step = totalY / 50
