@@ -8,10 +8,10 @@
           <b-card>
             <div class="container row">
               <div class="col-3 splitLine">
-                <Checkbox />
+                <Checkbox v-on:selectChange="updateSelected" />
               </div>
               <div class="col-9">
-                <CardGroup />
+                <CardGroup :tag="selected"/>
               </div>
             </div>
           </b-card>
@@ -33,9 +33,20 @@ export default {
     Search,
     Carousel,
     Checkbox,
-    CardGroup
+    CardGroup,
+  },
+  methods:{
+    updateSelected(e){
+      this.selected = e;
+    }
+  },
+  data()
+  {
+    return{
+      selected: []
+    }
   }
-};
+}
 </script>
 
 <style scopped>

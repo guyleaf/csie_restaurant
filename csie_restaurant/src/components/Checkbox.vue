@@ -5,6 +5,7 @@
         <b-form-checkbox class="checkboxMenu"
           v-model="selected"
           :value="option.value"
+          @change="onChange()"
         >
           {{ option.text }}
         </b-form-checkbox>
@@ -20,11 +21,18 @@
       return {
         selected: [], // Must be an array reference!
         options: [
-          { text: 'Orange', value: 'orange' },
-          { text: 'Apple', value: 'apple' },
-          { text: 'Pineapple', value: 'pineapple' },
-          { text: 'Grape', value: 'grape' }
+          { text: 'Ron', value: 'Ron' },
+          { text: 'Pan', value: 'Pan' },
+          { text: 'Leaf', value: 'Leaf' },
+          { text: 'Lee', value: 'Lee' }
         ]
+      }
+    },
+    methods:
+    {
+      onChange()
+      {
+        this.$emit("selectChange",this.selected)
       }
     }
   }
