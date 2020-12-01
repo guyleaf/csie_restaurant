@@ -5,13 +5,13 @@
         </b-tabs>
         <div class="scroll-content">
             <div class="item-content">
-                <p style="height:40px" v-for="item in [0,1,2,3,4,5,6,7,8,9,10]" :key="item">1</p>
+                <!--<p style="height:40px" :key="item"></p>-->
             </div>
             <div class="item-content">
-                <p style="height:40px" v-for="item in [0,1,2,3,4,5,6,7,8,9,10]" :key="item">2</p>
+                
             </div>
             <div class="item-content">
-                <p style="height:40px" v-for="item in [0,1,2,3,4,5,6,7,8,9,10]" :key="item">3</p>
+                
             </div>
         </div>
     </div>
@@ -21,12 +21,15 @@
 <script>
   export default {
       name:'CategoryTab',
+      props:{
+          item:String
+      },
     data() {
       return {
           isActive: 0,
          tabs: [
           {
-            title: 'First'
+            title: this.item
           },
           {
             title: 'Second'

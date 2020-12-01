@@ -1,10 +1,20 @@
 <template>
-    <div class="col-md-4">
-        <b-card :title="foodName" :img-src="imgPath" img-alt="Image" img-right img-height="200px" img-width="200px">
-                <div class="col-md-4" >
+    <div class="col-md-4 card-body">
+        <b-card tag="article">
+            <div class='row'>
+                <b-col md='6' >
+                    <b-card-title> {{foodName}} </b-card-title>
                     <b-card-text class="ellipsis" >{{foodDescription}}</b-card-text>
-                    <b-card-text>${{price}}</b-card-text>
-                </div>
+                    <b-card-text>{{price}}</b-card-text>
+                </b-col>
+                <b-col md='6'>
+                    <b-card-img
+                    :src="imgPath" 
+                    alt="Image"
+                    class="rounded-0">
+                    </b-card-img>
+                </b-col>
+            </div>
         </b-card>
     </div>
 </template>
@@ -13,6 +23,7 @@
 export default {
     name: 'FoodCard',
     props:{
+        tag :Array,
         foodName: String,
         imgPath: String,
         foodDescription: String,
@@ -22,7 +33,9 @@ export default {
 </script>
 
 <style scoped>
-
+.card-body{
+    margin-bottom: 0.5%;
+}
 .ellipsis {
     overflow:hidden;
     white-space: nowrap;

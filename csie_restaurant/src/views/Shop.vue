@@ -10,8 +10,8 @@
       </div>
       <div class='row justify-content-center'>
         <div class='col-md-8'>
-           <ShopDescription description=' AHAStyle 官方旗艦店
-                                        【AHAStyle 官方旗艦店 品牌館全新開張！】
+           <ShopDescription description='AHAStyle 官方旗艦店
+                                        【AHAStyle 官方旗艦店 品牌館全新開張！
                                         AHAStyle 是一個以設計和創意為驅動的年輕品牌，由一群有夢想且充滿熱情的夥伴組成，我們堅持原創設計，探索生活中的小創意，崇尚簡約，秉持對高品質的執著，追求每一個細節，以用戶體驗為出發點，致力於美與實用的結合創造給用戶帶來更多便利和享受的產品。
                                         【常見問題】
                                         ＊出貨時間：平日週(一) ~ 週(五)17:00前和週(六)、週(日)13:00前的訂單當日皆會寄出，一般為下單後24小時內出貨，偶有缺貨狀況也會第一時間告知，若有特定少數休假日時間會於此公告。
@@ -21,9 +21,9 @@
                                         台灣總代理 艾海國際有限公司 AIHAI Tech'/>
       
             <div>
-              <CategoryTab />
+              <CategoryTab item="咖哩飯"/>
             </div>
-              <FoodCardGroup/>
+              <FoodCardGroup foodCategory1="貓飯" foodCategory2="貓貓飯"/>
         </div>      
       </div>
     </div>
@@ -58,6 +58,6 @@ body{
 }
 .introBack{
   max-width: 100% !important;
-  background: #e4f5e2 !important;
+  background: #132328 !important;
 }
 </style>
