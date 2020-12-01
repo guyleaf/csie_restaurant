@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="inArray()">
         <b-card :title="shopName"
             :img-src= "imgPath"
             img-alt="Image"
@@ -20,14 +20,26 @@
 export default {
     name: 'ShopCard',
     props:{
+        tag: Array,
+        shopTag: String,
         shopName: String,
         imgPath: String,
         shopDescription: String
+    },
+    methods:
+    {
+        inArray()
+        {
+            if(this.tag[0]==undefined)   return true;
+            for(let i=0;i<this.tag.length;i++)
+                if(this.shopTag == this.tag[i]) return true;
+            return false;
+        }
     }
 }
 </script>
 
-<style scoped>
+<style scopped>
     .link{
         color: rgb(93, 30, 210);
         font-weight: bold;
