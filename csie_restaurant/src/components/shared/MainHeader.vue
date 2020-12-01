@@ -1,20 +1,34 @@
 <template>
     <div>
-        <b-navbar toggleable="lg" type="light" variant="faded">
-            <b-navbar-brand href="#">CSIE_RESTAURANT</b-navbar-brand>
+        <b-navbar toggleable="lg" type="dark" variant="dark">
+            <b-navbar-brand> 
+                <router-link :to="{name: 'Home'}" class="nav-link">CSIE_Restaurant</router-link>
+            </b-navbar-brand>
 
-            <b-navbar-nav class="navbar-nav mr-auto">
-                <router-link :to="{name: 'Home'}" class="nav-link">Home</router-link>
-            </b-navbar-nav>
+            <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
+            <b-collapse id="nav-collapse" is-nav>
             <b-navbar-nav>
-                <ShoppingCart BookingShopName='McDonald'/>
+                <b-nav-item> 
+                    <router-link :to="{name: 'Home'}" class="nav-link">Home</router-link>
+                </b-nav-item>
             </b-navbar-nav>
+            
+            <!-- Right aligned nav items -->
 
+            <b-nav-form class="ml-auto">
+                <b-form-input size="sm" class="mr-sm-2" placeholder="Search"></b-form-input>
+                <b-button size="sm" class="my-2 my-sm-0" type="submit">button</b-button> <!--input type="image" src="" /-->
+            </b-nav-form>
+            <b-navbar-nav class="ml-5">
+                <ShoppingCart />
+            </b-navbar-nav>
             <b-navbar-nav>
-                <router-link :to="{name: 'Login'}" class="nav-link">Login</router-link>
+                <b-nav-item> 
+                    <router-link :to="{name: 'Login'}" class="nav-link">Login</router-link>
+                </b-nav-item>
             </b-navbar-nav>
-
+            </b-collapse>
         </b-navbar>
     </div>
 </template>
@@ -26,16 +40,15 @@ import ShoppingCart from "@/components/ShoppingCart.vue";
 export default {
     name: "main-header",
     components: {
-        // HelloWorld
-        ShoppingCart
+        ShoppingCart,
     },
     data: function() {
-        return {};
+        return {
+        };
+    },
+    method: {
     },
     computed: {
-        displayYMD() {
-            return new Date().getFullYear().toString();
-        }
     },
     beforeCreate: function() {},
     created: function() {},
