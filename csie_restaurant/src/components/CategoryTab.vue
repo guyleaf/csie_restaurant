@@ -93,7 +93,6 @@
                 }
             }
             let tab = document.querySelectorAll('.nav-item>a')
-            console.log(tab)
             for(i=tab.length-1;i>=0;i--)   if(tab[i].className.indexOf("active") >= 0){tab[i].classList.remove("active") } 
             tab[this.isActive].classList.add("active")
 

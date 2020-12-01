@@ -1,25 +1,19 @@
 <template>
     <div class="container">
-        <div class="row">
+        <div class="row" v-for="category in foodCategories" :key="category.categoryId">
             <div class="row">
-                <h1>{{foodCategory1}}</h1>
+                
+                <div getTemp({{category.foodCategory}})>{{this.temp}}</div>
             </div>
-            <div class="row">
-                <FoodCard foodName='ShopRon' imgPath='https://placekitten.com/300/300' foodDescription='1111111111111111111' price="123"/>
-                <FoodCard foodName='ShopPan' imgPath='https://placekitten.com/300/300' foodDescription='8787878788888888888' price="323"/>
-                <FoodCard foodName='ShopLeaf' imgPath='https://placekitten.com/300/300' foodDescription='7771111111111111111111111117777' price="163"/>
-                <FoodCard foodName='ShopLee' imgPath='https://placekitten.com/300/300' foodDescription='00000000000000000000000000000' price="183"/>
-            </div>
-        </div>
-        <div class="row">
-            <div class="row">
-                <h1>{{foodCategory2}}</h1>
-            </div>
-            <div class="row">
-                <FoodCard foodName='ShopRon' imgPath='https://placekitten.com/300/300' foodDescription='1111111111111111111' price="123"/>
-                <FoodCard foodName='ShopPan' imgPath='https://placekitten.com/300/300' foodDescription='8787878788888888888' price="323"/>
-                <FoodCard foodName='ShopLeaf' imgPath='https://placekitten.com/300/300' foodDescription='7771111111111111111111111117777' price="163"/>
-                <FoodCard foodName='ShopLee' imgPath='https://placekitten.com/300/300' foodDescription='00000000000000000000000000000' price="183"/>
+            <div class="row fback" >
+                <FoodCard 
+                    v-for="card in sameTag" :key="card.foodId"
+                    v-bind="card"
+                    :foodName="card.foodName" 
+                    :imgPath="card.imgPath" 
+                    :foodDescription="card.foodDescription" 
+                    :foodTag="card.foodTag"
+                />
             </div>
         </div>
     </div>
@@ -33,16 +27,59 @@ export default {
         FoodCard
     },
     props:{
-        foodCategory1:String,
-        foodCategory2:String
+        foodCategory:Array,
+        // foodCategory1:String,
+        // foodCategory2:String,
+        // foodCategory3:String
+    },
+    data()
+    {
+        return{
+            temp :null,
+            foodCategories:
+            [
+                {categoryId: 0,  foodCategory: this.foodCategory[0]},
+                {categoryId: 1,  foodCategory: this.foodCategory[1]},
+                {categoryId: 2,  foodCategory: this.foodCategory[2]},
+            ] ,
+            foodCards:
+            [
+                {foodId: 0,  foodName: 'ShopRon',  imgPath: 'https://placekitten.com/300/300', foodDescription: '11111111',  foodTag: 'Ron', price:'12333'},
+                {foodId: 1,  foodName: 'ShopPan',  imgPath: 'https://placekitten.com/300/300', foodDescription: '878787878', foodTag: 'Ron', price:'12333'},
+                {foodId: 2,  foodName: 'ShopLeaf', imgPath: 'https://placekitten.com/300/300', foodDescription: '3333333',   foodTag: 'Pan', price:'12333'},
+                {foodId: 3,  foodName: 'aaaaaaa',  imgPath: 'https://placekitten.com/300/300', foodDescription: '0000000',   foodTag: 'Lee', price:'12333'},
+                {foodId: 4,  foodName: 'aaaaaaa',  imgPath: 'https://placekitten.com/300/300', foodDescription: '11111111',  foodTag: 'Lee', price:'12333'},
+                {foodId: 5,  foodName: 'aaaaaaa',  imgPath: 'https://placekitten.com/300/300', foodDescription: '878787878', foodTag: 'Ron', price:'12333'},
+                {foodId: 6,  foodName: 'aaaaaaaf', imgPath: 'https://placekitten.com/300/300', foodDescription: '7777777',   foodTag: 'Ron', price:'12333'},
+                {foodId: 7,  foodName: 'aaaaaaa',  imgPath: 'https://placekitten.com/300/300', foodDescription: '0000000',   foodTag: 'Lee', price:'12333'},
+                {foodId: 8,  foodName: 'aaaaaaa',  imgPath: 'https://placekitten.com/300/300', foodDescription: '11111111',  foodTag: 'Lee', price:'12333'},
+                {foodId: 9,  foodName: 'ShopPan',  imgPath: 'https://placekitten.com/300/300', foodDescription: '222222222', foodTag: 'Pan', price:'12333'},
+                {foodId: 10, foodName: 'ShopLeaf', imgPath: 'https://placekitten.com/300/300', foodDescription: '5555555',   foodTag: 'Pan', price:'12333'},
+                {foodId: 11, foodName: 'ShopLee',  imgPath: 'https://placekitten.com/300/300', foodDescription: '6666666',   foodTag: 'Pan', price:'12333'},
+                {foodId: 12, foodName: 'ShopRon',  imgPath: 'https://placekitten.com/300/300', foodDescription: '77777777',  foodTag: 'Pan', price:'12333'},
+                {foodId: 13, foodName: 'ShopPan',  imgPath: 'https://placekitten.com/300/300', foodDescription: '888888888', foodTag: 'Pan', price:'12333'},
+                {foodId: 14, foodName: 'ShopLeaf', imgPath: 'https://placekitten.com/300/300', foodDescription: '9999999',   foodTag: 'Pan', price:'12333'},
+            ] , 
+        }
+    }, 
+    computed:{
+        sameTag:function(){
+            console.log(this.temp);
+            return this.foodCards.filter(i => i.foodTag === this.temp)
+        },
+        getTemp:function(test){
+            this.temp = test
+        }
     }
 }
 </script>
 
 <style scoped>
-
 .row{
     margin:1% 0 1% 0;   
+}
+.fback{
+    background-color:#FFFFFF
 }
 
 </style>

@@ -21,9 +21,9 @@
                                         台灣總代理 艾海國際有限公司 AIHAI Tech'/>
       
             <div>
-              <CategoryTab item="咖哩飯"/>
+              <CategoryTab item1="Pan"/>
             </div>
-              <FoodCardGroup foodCategory1="貓飯" foodCategory2="貓貓飯"/>
+              <FoodCardGroup :foodCategory='test'/>
         </div>      
       </div>
     </div>
@@ -46,7 +46,9 @@ export default {
 
   },
   data: function() {
-    return {};
+    return {
+      test : ['Pan','Lee','Ron']
+    };
   },
   methods: {}
 };
