@@ -48,14 +48,13 @@
 </script>
 
 <style scoped>
-.container{
-}
-.row{
+.card-subtitle{
+    font-weight: bolder;
+    font-family: UberMoveText-Regular, sans-serif;
 }
 .flex{
     display:flex;
     justify-content:center;
-    color:#FFFFFF;
     flex-direction: column;
 }
 h1{
@@ -79,15 +78,17 @@ h1{
 }
 .grid-container {
   display: grid;
+  margin-left: 20%;
   grid-template-columns: 50% 50%;
-  color: #492645;
+  color: #FFFFFF;
   padding: 10px;
 }
 .grid-item {
   padding: 5% 0 5% 0 ;
-  font-size: 16px;
-  text-align: right;
-  color: #492645;
+  font-size: 20px;
+  font-weight: bold;
+  text-align:initial;
+  color: #FFFFFF;
 }
 .col-md-4{
     padding: 0;
