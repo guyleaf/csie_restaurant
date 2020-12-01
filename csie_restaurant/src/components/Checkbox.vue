@@ -48,6 +48,7 @@
   .checkboxMenu{
     text-align:left;
     border-left: medium solid gray;
+    border-bottom: thin solid gray;
     background-color:rgb(233,233,233);
     padding-top:1.5%;
     padding-bottom:1.5%;
