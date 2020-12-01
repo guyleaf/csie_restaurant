@@ -27,9 +27,9 @@
     data() {
       return {
           isActive: 0,
-         tabs: [
+          tabs: [
           {
-            title: this.item
+            title: 'First'
           },
           {
             title: 'Second'

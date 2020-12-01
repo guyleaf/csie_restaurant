@@ -21,7 +21,7 @@
                                         台灣總代理 艾海國際有限公司 AIHAI Tech'/>
       
             <div>
-              <CategoryTab item1="Pan"/>
+              <CategoryTab/>
             </div>
               <FoodCardGroup :foodCategory='test'/>
         </div>      
