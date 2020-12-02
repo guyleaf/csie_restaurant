@@ -11,7 +11,7 @@
                 <Checkbox v-on:selectChange="updateSelected" />
               </div>
               <div class="col-9">
-                <CardGroup :tag="selected"/>
+                <ShopCardGroup :tag="selected"/>
               </div>
             </div>
           </b-card>
@@ -24,7 +24,7 @@
 <script>
 // @ is an alias to /src
 import Search from "@/components/Search.vue";
-import CardGroup from "@/components/CardGroup.vue";
+import ShopCardGroup from "@/components/ShopCardGroup.vue";
 import Carousel from "@/components/Carousel.vue";
 import Checkbox from "@/components/Checkbox.vue";
 export default {
@@ -33,7 +33,7 @@ export default {
     Search,
     Carousel,
     Checkbox,
-    CardGroup,
+    ShopCardGroup,
   },
   methods:{
     updateSelected(e){

@@ -3,14 +3,11 @@
         <div class="cardHeader">
             <h3>{{ tagName }}</h3>
         </div>
-        <b-card-group class="container row justify-content-around">
+        <b-card-group deck class="ml-0 mr-0 card-columns">
             <ShopCard v-for="card in cards" :key="card.shopId" 
                       v-bind="card"
-                      :shopName="card.shopName" 
-                      :imgPath="card.imgPath" 
-                      :shopDescription="card.shopDescription" 
-                      :shopTag="card.shopTag"
                       :tag="tag" 
+                      
             />
         </b-card-group>
     </div>
@@ -19,7 +16,7 @@
 <script>
 import ShopCard from "@/components/ShopCard.vue";
 export default {
-    name: "CardGroup",
+    name: "ShopCardGroup",
     props:{
         tag: Array,
     },
@@ -46,7 +43,6 @@ export default {
                 {shopId: 12,shopName: 'ShopRon',imgPath: '',shopDescription: '11111111',shopTag: 'Ron'},
                 {shopId: 13,shopName: 'ShopPan',imgPath: '',shopDescription: '878787878',shopTag: 'Pan'},
                 {shopId: 14,shopName: 'ShopLeaf',imgPath: '',shopDescription: '7777777',shopTag: 'Leaf'},
-                {shopId: 15,shopName: 'ShopLee',imgPath: '',shopDescription: '0000000',shopTag: 'Lee'},
             ]
         }
     },
