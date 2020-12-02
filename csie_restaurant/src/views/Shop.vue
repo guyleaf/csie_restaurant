@@ -19,10 +19,6 @@
                                         ＊退換貨規則：15天內皆可退換貨，退貨會有物流司機與您聯絡收取商品。
                                         ＊若商品有瑕疵狀況可以隨時詢問客服，我們一定會完善幫您做好售後服務，謝謝！
                                         台灣總代理 艾海國際有限公司 AIHAI Tech'/>
-      
-            <div>
-              <CategoryTab/>
-            </div>
               <FoodCardGroup :foodCategory='test'/>
         </div>      
       </div>
@@ -34,7 +30,6 @@
 // @ is an alias to /src
 import ShopIntro from "@/components/ShopIntro.vue";
 import FoodCardGroup from "@/components/FoodCardGroup.vue";
-import CategoryTab from "@/components/CategoryTab.vue";
 import ShopDescription from "@/components/ShopDescription.vue";
 export default {
   name: "Shop",
@@ -42,8 +37,6 @@ export default {
     ShopIntro,
     ShopDescription,
     FoodCardGroup,  
-    CategoryTab
-
   },
   data: function() {
     return {

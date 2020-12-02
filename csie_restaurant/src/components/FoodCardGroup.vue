@@ -1,5 +1,6 @@
 <template>
     <div class="container">
+        <CategoryTab :foodCategory="foodCategory" />
         <div class="row" v-for="category in foodCategories" :key="category.categoryId">
             <div class="row">
                 <h1>{{category.foodCategory}}</h1>
@@ -19,11 +20,13 @@
 </template>
 
 <script>
+import CategoryTab from "@/components/CategoryTab.vue";
 import FoodCard from "@/components/FoodCard.vue";
 export default {
     name: "FoodCardGroup",
     components: {
-        FoodCard
+        FoodCard,
+        CategoryTab
     },
     props:{
         foodCategory:Array,
@@ -35,12 +38,7 @@ export default {
     data()
     {
         return{
-            foodCategories:
-            [
-                {categoryId: 0,  foodCategory: this.foodCategory[0]},
-                {categoryId: 1,  foodCategory: this.foodCategory[1]},
-                {categoryId: 2,  foodCategory: this.foodCategory[2]},
-            ] ,
+            foodCategories:[],
             foodCards:
             [
                 {foodId: 0,  foodName: 'ShopRon',  imgPath: 'https://placekitten.com/300/300', foodDescription: '11111111',  foodTag: 'Ron', price:123},
@@ -61,13 +59,14 @@ export default {
             ] , 
         }
     }, 
-    computed:{
-
-    },
     methods:{
         sameTag:function(category){
             return this.foodCards.filter(i => i.foodTag === category)
         },
+    },
+    created(){
+        for(let i=0;i<this.foodCategory.length;i++)
+            this.foodCategories.push({categoryId: i,foodCategory: this.foodCategory[i]})
     }
 }
 </script>
