@@ -21,12 +21,9 @@ export default {
     name: 'CartCell',
     props:{
         foodName: String,
-        price: Number,
+        foodPrice: Number,
+        foodSpinValue: Number,
         index: Number
-    },
-    data() {
-      return {
-        spinValue: 1      }
     },
     methods: {
         deleteitem(){
@@ -35,7 +32,10 @@ export default {
     },
     computed: {
     total: function() {
-       return this.price*this.spinValue;
+        console.log(this.foodName);
+        console.log(this.foodPrice);
+        console.log(this.foodSpinValue);
+       return this.foodPrice*this.foodSpinValue;
     },
   },
 }

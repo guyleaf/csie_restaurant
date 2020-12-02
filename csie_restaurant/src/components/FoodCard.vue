@@ -40,7 +40,6 @@ export default {
     name: 'FoodCard',
     data() {
       return {
-        dataToCart: [this.foodName, this.spinValue, this.price],
         spinValue: 1,
         text:''
       }
@@ -55,6 +54,9 @@ export default {
     computed:{
         total: function() {
             return this.price*this.spinValue;
+        },
+        dataToCart: function(){
+            return [this.foodName, this.spinValue, this.price];
         }
     },
     methods:{
@@ -65,6 +67,7 @@ export default {
             this.$refs['my-modal'].show();
         },
         confirmModal() {
+            this.$bus.$emit("addfunction",this.dataToCart);
             //缺：lack of return this.dataToCart to ShoppingCart.vue/CartCell.vue
             this.$refs['my-modal'].hide();
         },

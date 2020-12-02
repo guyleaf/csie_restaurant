@@ -58,6 +58,7 @@
           {
             foodName:"aaa",
             foodPrice: 30,
+            foodSpinValue: 1,
           }
         ],
         options: [{ text: '- Choose 1 -', value: '' }, 'Red', 'Green', 'Blue'],
@@ -109,16 +110,24 @@
         this.input1Return = ''
         this.input2Return = ''
       },
-      add()
+      add(name,spinValue,price)
       {
+        console.log(name);
+        console.log(spinValue);
+        console.log(price);
         this.ItemList.push(
         {
-            input1: '',
-            input1state: null,
-            input2: '',
-            input2state: null,
+            foodName: name,
+            foodPrice: price,
+            foodSpinValue: spinValue,    
         })
       },
+    },
+    created(){
+      this.$bus.$on("addfunction",msg =>{
+        console.log(msg)
+        this.add(msg[0],msg[1],msg[2]);
+      })
     }
   }
 </script>
