@@ -6,10 +6,6 @@
         <b-card-group deck class="ml-0 mr-0 card-columns">
             <ShopCard v-for="card in cards" :key="card.shopId" 
                       v-bind="card"
-                      :shopName="card.shopName" 
-                      :imgPath="card.imgPath" 
-                      :shopDescription="card.shopDescription" 
-                      :shopTag="card.shopTag"
                       :tag="tag" 
                       
             />
@@ -67,8 +63,5 @@ export default {
         text-align:left;
         border-bottom:1px solid gray ;
         margin:1%
-    }
-    .card-columns{
-        column-count: 4;
     }
 </style>
