@@ -29,12 +29,10 @@ export default {
         deleteitem(){
             this.$emit("deleteclick",this.index)
         }
+        
     },
     computed: {
     total: function() {
-        console.log(this.foodName);
-        console.log(this.foodPrice);
-        console.log(this.foodSpinValue);
        return this.foodPrice*this.foodSpinValue;
     },
   },

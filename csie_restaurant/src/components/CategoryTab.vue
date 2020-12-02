@@ -3,17 +3,6 @@
         <b-tabs content-class="mt-3">
             <b-tab v-for="(item,index) in tabs" :key="index" :title="item.title" :name="index" @click="jump(index)"></b-tab>
         </b-tabs>
-        <div class="scroll-content">
-            <div class="item-content">
-                <!--<p style="height:40px" :key="item"></p>-->
-            </div>
-            <div class="item-content">
-                
-            </div>
-            <div class="item-content">
-                
-            </div>
-        </div>
     </div>
 </template>
 
@@ -43,8 +32,9 @@
     methods: {
         jump(index) 
         {
-            let scrollItems = document.querySelectorAll('.item-content')
-            let totalY = scrollItems[index].offsetTop - document.body.scrollTop
+            let scrollItems = document.querySelectorAll('h1')
+            let header = document.querySelectorAll('nav')
+            let totalY = scrollItems[index].offsetParent.offsetTop+scrollItems[index].offsetTop+header[0].clientHeight
             let distance = document.documentElement.scrollTop
             let step = totalY / 50
             document.documentElement.scrollTop=distance
