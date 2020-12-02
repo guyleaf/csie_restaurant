@@ -12,12 +12,11 @@
     <b-popover
       custom-class="wide-popover"
       target="popover-reactive-1"
-      triggers="focus"
+      triggers="click"
       :show.sync="popoverShow"
       placement="auto"
       container="my-container"
       ref="popover"
-      @show="onShow"
     >
       <template #title>
         <b-button @click="onClose" class="close" aria-label="Close">
@@ -62,22 +61,7 @@
             foodSpinValue: 1,
           }
         ],
-        options: [{ text: '- Choose 1 -', value: '' }, 'Red', 'Green', 'Blue'],
-        input1Return: '',
-        input2Return: '',
         popoverShow: false
-      }
-    },
-    watch: {
-      input1(val) {
-        if (val) {
-          this.input1state = true
-        }
-      },
-      input2(val) {
-        if (val) {
-          this.input2state = true
-        }
       }
     },
     methods: {
@@ -88,34 +72,10 @@
         this.popoverShow = false
       },
       onOk() {
-        if (!this.input1) {
-          this.input1state = false
-        }
-        if (!this.input2) {
-          this.input2state = false
-        }
-        if (this.input1 && this.input2) {
           this.onClose()
-          // Return our popover form results
-          this.input1Return = this.input1
-          this.input2Return = this.input2
-        }
-      },
-      onShow() {
-        // This is called just before the popover is shown
-        // Reset our popover form variables
-        this.input1 = ''
-        this.input2 = ''
-        this.input1state = null
-        this.input2state = null
-        this.input1Return = ''
-        this.input2Return = ''
       },
       add(name,spinValue,price)
       {
-        console.log(name);
-        console.log(spinValue);
-        console.log(price);
         this.ItemList.push(
         {
             foodName: name,
@@ -123,18 +83,35 @@
             foodSpinValue: spinValue,    
         })
       },
+      handleScroll ()
+      {
+        this.onClose();
+      },
+      handleopen ()
+      {
+      }
+    },
+    watch: {
+      $route: {
+        handler: function() {
+        this.onClose()
+      },
+      }
     },
     created(){
       this.$bus.$on("addfunction",msg =>{
         console.log(msg)
         this.add(msg[0],msg[1],msg[2]);
       })
-    }
+    },
+    mounted () {
+      var button = document.querySelector(".container")
+      button.addEventListener('click',this.handleScroll );
+    },
   }
 </script>
 <style scoped>
   .wide-popover {
-    width:1000px;
-    max-height: 500px;
+    min-width:25%;
   }
 </style>
