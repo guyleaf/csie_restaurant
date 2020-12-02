@@ -28,8 +28,9 @@
       <div v-for="(item,index) in ItemList" :key="index" >
         <CartCell v-on:deleteclick="deleteCartCell" v-bind="item" :index="index"/>
       </div>
+      <!-- <b-button @click="add" variant="outline-info" vertical>+</b-button> -->
+
       <b-button @click="onOk" variant="outline-info" vertical>Ok</b-button>
-      <b-button @click="add" variant="outline-info" vertical>+</b-button>
       <!--div>
         <b-alert show class="small">
           <strong>Current Values:</strong><br>
