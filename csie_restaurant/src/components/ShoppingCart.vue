@@ -28,8 +28,7 @@
         訂購餐廳：{{BookingShopName}}  
       </template>
       <dev v-for="(item,index) in ItemList" :key="index" >
-        <CartCell />
-        <b-button @click="handledelete(index)" variant="outline-info" vertical>-</b-button>
+        <CartCell v-on:deleteclick="deleteCartCell"/>
       </dev>
       <b-button @click="onOk" variant="outline-info" vertical>Ok</b-button>
       <b-button @click="add" variant="outline-info" vertical>+</b-button>
@@ -84,6 +83,11 @@
       }
     },
     methods: {
+      deleteCartCell(e){
+        console.log(e)
+        for(let index=0;index<this.ItemList.length;index++)
+          {if(this.ItemList[index]==e) this.ItemList.splice(index,1);}
+      },
       onClose() {
         this.popoverShow = false
       },
@@ -130,10 +134,6 @@
             input2: '',
             input2state: null,
         })
-      },
-      handledelete:function(index)
-      {
-        this.ItemList.splice(index,1);
       },
      /* focusRef(ref) {
         // Some references may be a component, functional component, or plain element
