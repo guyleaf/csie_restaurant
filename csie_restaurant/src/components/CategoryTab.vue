@@ -1,6 +1,6 @@
 <template>
     <div>
-        <b-tabs content-class="mt-3">
+        <b-tabs content-class="mt-3" class="CategoryTab">
             <b-tab v-for="(item,index) in tabs" :key="index" :title="item.title" :name="index" @click="jump(index)"></b-tab>
         </b-tabs>
     </div>
@@ -11,22 +11,12 @@
   export default {
       name:'CategoryTab',
       props:{
-          item:String
+          foodCategory:Array
       },
     data() {
       return {
           isActive: 0,
-          tabs: [
-          {
-            title: 'First'
-          },
-          {
-            title: 'Second'
-          },
-          {
-            title: 'Third'
-          }
-        ],
+          tabs: [],
         }
     },
     methods: {
@@ -71,22 +61,28 @@
         },
         handleScroll () 
         {
-            let scrollItems = document.querySelectorAll('.item-content')
+            let scrollItems = document.querySelectorAll('h1')
+            let header = document.querySelectorAll('nav')
             let scrollTop =document.documentElement.scrollTop
             for(var i=scrollItems.length-1;i>=0;i--)
             {
-                var ItmeY = scrollItems[i].offsetTop - document.body.scrollTop
+                var ItmeY = scrollItems[i].offsetParent.offsetTop+scrollItems[i].offsetTop+header[0].clientHeight
                 if(scrollTop>ItmeY) 
                 {
                     this.isActive=i
                     break
                 }
             }
-            let tab = document.querySelectorAll('.nav-item>a')
+            let tabClass = document.querySelector('.CategoryTab')
+            let tab = tabClass.querySelectorAll('.nav-item>a')
             for(i=tab.length-1;i>=0;i--)   if(tab[i].className.indexOf("active") >= 0){tab[i].classList.remove("active") } 
             tab[this.isActive].classList.add("active")
 
         },
+    },
+    created(){
+        for(let i=0;i<this.foodCategory.length;i++)
+            this.tabs.push({title:this.foodCategory[i]})
     },
     mounted () {
     window.addEventListener('scroll', this.handleScroll)
