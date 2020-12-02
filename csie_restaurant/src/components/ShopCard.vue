@@ -9,8 +9,9 @@
             class="mb-2"
         >
             <b-card-text>{{shopDescription}}</b-card-text>
-
-            <b-button href="#" variant="primary">Go somewhere</b-button>
+            <b-button variant="info">
+                <router-link :to="{name: 'Shop'}" class="link">GO TO SHOP</router-link>
+            </b-button>
         </b-card>
     </div>
 </template>
@@ -39,7 +40,9 @@ export default {
 </script>
 
 <style scopped>
-    .b_button{
-        align-items: center;
+    .link{
+        color: rgb(93, 30, 210);
+        font-weight: bold;
+        text-decoration-line: none;
     }
 </style>

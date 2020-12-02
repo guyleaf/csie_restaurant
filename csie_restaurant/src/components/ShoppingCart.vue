@@ -18,8 +18,6 @@
       container="my-container"
       ref="popover"
       @show="onShow"
-      @shown="onShown"
-      @hidden="onHidden"
     >
       <template #title>
         <b-button @click="onClose" class="close" aria-label="Close">
@@ -27,9 +25,9 @@
         </b-button>
         訂購餐廳：{{BookingShopName}}  
       </template>
-      <dev v-for="(item,index) in ItemList" :key="index" >
-        <CartCell v-on:deleteclick="deleteCartCell"/>
-      </dev>
+      <div v-for="(item,index) in ItemList" :key="index" >
+        <CartCell v-on:deleteclick="deleteCartCell" v-bind="item" :index="index"/>
+      </div>
       <b-button @click="onOk" variant="outline-info" vertical>Ok</b-button>
       <b-button @click="add" variant="outline-info" vertical>+</b-button>
       <!--div>
@@ -58,10 +56,8 @@
       return {
         ItemList:[
           {
-            input1: '',
-            input1state: null,
-            input2: '',
-            input2state: null,
+            foodName:"aaa",
+            foodPrice: 30,
           }
         ],
         options: [{ text: '- Choose 1 -', value: '' }, 'Red', 'Green', 'Blue'],
@@ -84,9 +80,7 @@
     },
     methods: {
       deleteCartCell(e){
-        console.log(e)
-        for(let index=0;index<this.ItemList.length;index++)
-          {if(this.ItemList[index]==e) this.ItemList.splice(index,1);}
+          this.ItemList.splice(e,1);
       },
       onClose() {
         this.popoverShow = false
@@ -115,16 +109,6 @@
         this.input1Return = ''
         this.input2Return = ''
       },
-      onShown() {
-        // Called just after the popover has been shown
-        // Transfer focus to the first input
-        this.focusRef(this.$refs.input1)
-      },
-      onHidden() {
-        // Called just after the popover has finished hiding
-        // Bring focus back to the button
-        this.focusRef(this.$refs.button)
-      },
       add()
       {
         this.ItemList.push(
@@ -135,17 +119,6 @@
             input2state: null,
         })
       },
-     /* focusRef(ref) {
-        // Some references may be a component, functional component, or plain element
-        // This handles that check before focusing, assuming a `focus()` method exists
-        // We do this in a double `$nextTick()` to ensure components have
-        // updated & popover positioned first
-        this.$nextTick(() => {
-          this.$nextTick(() => {
-            ;(ref.$el || ref).focus()
-          })
-        })
-      }*/
     }
   }
 </script>

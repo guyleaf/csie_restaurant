@@ -8,7 +8,7 @@
             </b-navbar-nav>
 
             <b-navbar-nav>
-                <ShoppingCart />
+                <ShoppingCart BookingShopName="MCD"/>
             </b-navbar-nav>
 
             <b-navbar-nav>

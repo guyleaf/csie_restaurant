@@ -10,7 +10,7 @@
                     <b-card-text>{{total}}</b-card-text>
                 </b-col>
                 <b-col md="2">
-                    <b-button @click="handledelete()" variant="outline-info" vertical>-</b-button>
+                    <b-button @click="deleteitem" variant="outline-info" vertical>-</b-button>
                 </b-col>
             </b-row>
         </b-card>
@@ -22,6 +22,7 @@ export default {
     props:{
         foodName: String,
         foodPrice: Number,
+        index: Number
     },
     data() {
       return {
@@ -29,15 +30,16 @@ export default {
         isDelete: false,
       }
     },
+    methods: {
+        deleteitem(){
+            this.$emit("deleteclick",this.index)
+        }
+    },
     computed: {
     total: function() {
        return this.foodPrice*this.value;
-    }
+    },
   },
-    handledelete:function()
-      {
-        this.$emit("deleteclick",this)
-      },
 }
 </script>
 
