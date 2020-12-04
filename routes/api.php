@@ -26,4 +26,8 @@ $router->group(['prefix' => 'auth'], function () use ($router) {
         $router->post('', 'AuthController@me');
     });
 });
+
+$router->group(['prefix' => 'restaurants'], function () use ($router) {
+    $router->get('', 'ShopController@getShops');
+});
 ?>

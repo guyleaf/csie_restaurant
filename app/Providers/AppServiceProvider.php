@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Services\ShopService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,6 +14,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->singleton(ShopService::class);
     }
 }
