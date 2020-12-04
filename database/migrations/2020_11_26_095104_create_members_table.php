@@ -18,11 +18,11 @@ class CreateMembersTable extends Migration
             $table->bigIncrements('id')->comment("會員編號");
             $table->string('name')->comment("暱稱");
             $table->string('username')->unique()->comment("帳號");
+            $table->string('password')->comment("密碼");
             $table->unsignedInteger('member_status')->comment("狀態");
             $table->string('phone')->unique()->comment("電話號碼");
             $table->string('email')->unique()->comment("電子信箱");
             $table->unsignedInteger('permission')->comment("權限");
-            $table->string('password')->comment("密碼");
             $table->dateTime('created_at')->comment("註冊日期");
             $table->dateTime('updated_at')->comment("最後更動日期");
             $table->dateTime('email_verified_at')->nullable()->comment("電子信箱認證狀態");
