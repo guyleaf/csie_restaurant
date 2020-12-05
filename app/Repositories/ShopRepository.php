@@ -12,6 +12,8 @@ class ShopRepository
 
     /**
      * @var \Illuminate\Database\Query\Builder $shopsInfoView
+     *
+     * Columns: member_id, name, header_image, category_id, numberOfRatings, averageOfRatings
      */
     protected $shopsInfoView;
 
@@ -36,6 +38,25 @@ class ShopRepository
     public function getShops($currentNumber, $requiredNumber)
     {
         $shops = $this->shopsInfoView
+            ->skip($currentNumber)
+            ->take($requiredNumber)
+            ->get();
+
+        return $shops;
+    }
+
+    /**
+     * Get shops by filters
+     *
+     * @param integer $currentNumber
+     * @param integer $requiredNumber
+     * @param array:id $filters
+     * @return \Illuminate\Support\Collection
+     */
+    public function getShopsByfilters($currentNumber, $requiredNumber, $filters)
+    {
+        $shops = $this->shopsInfoView
+            ->whereIn('category_id', $filters)
             ->skip($currentNumber)
             ->take($requiredNumber)
             ->get();

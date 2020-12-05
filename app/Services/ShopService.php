@@ -21,29 +21,5 @@ class ShopService
     {
         $this->shopRepository = $shopRepository;
     }
-
-    /**
-     * Get a part of shops via database
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function getShops(Request $request)
-    {
-        $validator = Validator::make($request->query(), [
-            'currentNumber' => 'required|integer|min:0',
-            'requiredNumber' => 'required|integer|min:0|max:50'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['message' => $validator->errors()], 400);
-        }
-
-        $currentNumber = (int)$request->get('currentNumber');
-        $requiredNumber = (int)$request->get('requiredNumber');
-
-        $result = $this->shopRepository->getShops($currentNumber, $requiredNumber);
-        return response()->json($result);
-    }
 }
 ?>

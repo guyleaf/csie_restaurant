@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\ShopService;
+use App\Services\SearchService;
+use Exception;
 
 class ShopController extends Controller
 {
@@ -11,14 +13,21 @@ class ShopController extends Controller
      * @var \App\Services\ShopService $shopService
      */
     protected $shopService;
+
+    /**
+     * @var \App\Services\SearchService $searchService
+     */
+    protected $searchService;
+
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(ShopService $shopService)
+    public function __construct(ShopService $shopService, SearchService $searchService)
     {
         $this->shopService = $shopService;
+        $this->searchService = $searchService;
     }
 
     /**
@@ -29,6 +38,18 @@ class ShopController extends Controller
      */
     public function getShops(Request $request)
     {
-        return $this->shopService->getShops($request);
+        try {
+            if ($request->exists('filters'))
+                $result = $this->searchService->getShopsByfilters($request->except('filters'), $request->query('filters'));
+            else
+                $result = $this->searchService->getShops($request->query());
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => $e->getCode(),
+                'messages' => unserialize($e->getMessage())
+            ],$e->getCode());
+        }
+
+        return response()->json($result);
     }
 }

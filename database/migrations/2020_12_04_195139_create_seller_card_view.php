@@ -13,7 +13,7 @@ class CreateSellerCardView extends Migration
     public function up()
     {
         DB::statement('CREATE VIEW seller_card_view AS (
-            SELECT S.member_id, M.name, S.header_image, SCL.category_id as category, R.numberOfRatings, R.averageOfRatings
+            SELECT S.member_id, M.name, S.header_image, SCL.category_id as category_id, R.numberOfRatings, R.averageOfRatings
             FROM seller as S, member as M, seller_category_list as SCL,
             (
                 SELECT seller_id, COUNT(*) as numberOfRatings, AVG(stars) as averageOfRatings
