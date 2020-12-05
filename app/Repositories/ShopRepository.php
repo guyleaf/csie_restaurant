@@ -18,6 +18,11 @@ class ShopRepository
     protected $shopsInfoView;
 
     /**
+     * @var \Illuminate\Database\Query\Builder $categoryTable
+     */
+    protected $categoryTable;
+
+    /**
      * Shop Repository constructor
      *
      * @return void
@@ -25,6 +30,7 @@ class ShopRepository
     public function __construct()
     {
         $this->shopTable = DB::table('seller');
+        $this->categoryTable = DB::table('seller_category');
         $this->shopsInfoView = DB::table('seller_card_view');
     }
 
@@ -40,7 +46,7 @@ class ShopRepository
         $shops = $this->shopsInfoView
             ->skip($currentNumber)
             ->take($requiredNumber)
-            ->get();
+            ->get(['member_id', 'name', 'counter_number', 'header_image', 'numberofratings', 'averageofratings']);
 
         return $shops;
     }
@@ -56,12 +62,22 @@ class ShopRepository
     public function getShopsByfilters($currentNumber, $requiredNumber, $filters)
     {
         $shops = $this->shopsInfoView
-            ->whereIn('category_id', $filters)
+            ->join('seller_category_list as SCL', 'SCL.seller_id', '=', 'member_id')
+            ->whereIn('SCL.category_id', $filters)
             ->skip($currentNumber)
             ->take($requiredNumber)
-            ->get();
+            ->distinct()
+            ->get(['member_id', 'name', 'counter_number', 'header_image', 'numberofratings', 'averageofratings']);
 
         return $shops;
+    }
+
+    public function getCategories()
+    {
+        $category = $this->categoryTable
+            ->get();
+
+        return $category;
     }
 }
 ?>

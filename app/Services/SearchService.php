@@ -49,14 +49,25 @@ class SearchService
      */
     protected function validateFilters($filters)
     {
-        $validator = Validator::make($filters, [
-            'currentNumber' => 'required|integer|min:0',
-            'requiredNumber' => 'required|integer|min:0|max:50'
+        $validator = Validator::make(['filters' => $filters], [
+            'filters' => 'bail|required|array|min:0',
+            'filters.*' => 'required|integer|min:0'
         ]);
 
         if ($validator->fails()) {
             throw new InvalidArgumentException(serialize($validator->errors()), 400);
         }
+    }
+
+    protected function filterNull($data, $value)
+    {
+        $data = $data->map(function ($item, $key) use ($value) {
+            $item->numberofratings = $item->numberofratings == NULL ? $value : $item->numberofratings;
+            $item->averageofratings = $item->averageofratings == NULL ? $value : $item->averageofratings;
+            return $item;
+        });
+
+        return $data;
     }
 
     /**
@@ -74,7 +85,8 @@ class SearchService
 
         $result = $this->shopRepository
             ->getShops($currentNumber, $requiredNumber);
-        return $result;
+
+        return $this->filterNull($result, 0);
     }
 
     /**
@@ -94,12 +106,19 @@ class SearchService
 
         $result = $this->shopRepository
             ->getShopsByfilters($currentNumber, $requiredNumber, $filters);
-        return $result;
+        return $this->filterNull($result, 0);
     }
 
     public function getShopsBykeywords($keywords)
     {
 
+    }
+
+    public function getCategories()
+    {
+        $result = $this->shopRepository
+            ->getCategories();
+        return $result;
     }
 }
 ?>

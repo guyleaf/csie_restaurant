@@ -47,7 +47,21 @@ class ShopController extends Controller
             return response()->json([
                 'status' => $e->getCode(),
                 'messages' => unserialize($e->getMessage())
-            ],$e->getCode());
+            ], $e->getCode());
+        }
+
+        return response()->json($result);
+    }
+
+    public function getCategories(Request $request)
+    {
+        try {
+            $result = $this->searchService->getCategories();
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => $e->getCode(),
+                'messages' => unserialize($e->getMessage())
+            ], $e->getCode());
         }
 
         return response()->json($result);
