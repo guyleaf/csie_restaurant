@@ -3,9 +3,30 @@
         <div class='row'>
             <div class='tag'>關於賣場</div>
         </div>
-        <div class='row justify-content-end'>
-            <div class='coupon'>
-
+        <div class='row justify-content-start'>
+            <div class='about col'>
+                <b-card
+                    overlay 
+                    title="SHOP"
+                    title-tag="h5"
+                    :img-src= "imgPath"
+                    img-alt="Card Image"
+                    img-width="300"
+                    img-height="150"
+                    :sub-title="shopName"
+                    sub-title-tag="h3"
+                    text-variant="white"
+                    sub-title-text-variant="white"
+                    class="text-center"
+                    style= "font-family: Lucida Console, Courier, monospace font-weight: bold;"
+                    >
+                </b-card>
+                <div class='grid-container'>
+                        <div class ='grid-item'>商品:{{commodity}}</div>
+                        <div class ='grid-item'>粉絲:{{fans}}</div>
+                        <div class ='grid-item'>評分{{rate}}</div>
+                        <div class ='grid-item'>加入時間:{{joinDate}}</div>
+                </div>
             </div>
             <div class='desField col-md-6' >
                <div class='desStyle'>{{description}}</div>
@@ -16,9 +37,15 @@
 
 <script>
     export default {
-    name: 'ShopDescription',
+    name: 'ShopInfo',
     props:{
-        description:String
+        description:String,
+        shopName: String,
+        imgPath: String,
+        commodity: Number,
+        fans: Number,
+        joinDate: Date,
+        rate: Number
         
     }
 }
@@ -55,6 +82,20 @@
     margin-bottom: 0;
     background-color: #FFFFFF !important;
     padding:1% 0 0 1%;
+}
+.grid-container {
+  display: grid;
+  margin-left: 0%;
+  grid-template-columns: 50% 50%;
+  color: #FFFFFF;
+  padding: 10px 0 10px 0;
+}
+.grid-item {
+  padding: 5% 0 0 0 ;
+  font-size: 20px;
+  font-weight: bold;
+  text-align:initial;
+  color: #000000;
 }
 
 
