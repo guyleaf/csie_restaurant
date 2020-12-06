@@ -11,7 +11,7 @@
                     <!--<b-card-text class = "card_text">{{index}}</b-card-text>-->
                 </b-col>
                 <b-col md="2">
-                    <b-button @click="deleteitem" variant="outline-info" vertical>-</b-button>
+                    <b-button @click="deleteitem" variant="outline-danger" vertical>x</b-button>
                 </b-col>
             </b-row>
         </b-card>
