@@ -15,7 +15,7 @@ class CreateSellerCategoriesTable extends Migration
     {
         Schema::create('seller_category', function (Blueprint $table) {
             $table->bigIncrements("category_id")->comment("商店種類編號");
-            $table->string("name")->comment("種類名稱");
+            $table->string("name")->unique()->comment("種類名稱");
         });
     }
 
