@@ -5,13 +5,13 @@
       <b-form-checkbox class="mb-1 checkbox"
         v-model="selected"
         @change="onChange()"
-        v-for="option in options"
-        :key="option.value"
-        :value="option.value"
+        v-for="category in categories"
+        :key="category.category_id"
+        :value="category.name"
         button
         button-variant="none"
       >
-        {{ option.text }}
+        {{ category.name }}
       </b-form-checkbox>
     </div>
     </b-form-group>
@@ -19,26 +19,32 @@
 </template>
 
 <script>
+  import axios from 'axios';
   export default {
       name:"Checkbox",
     data() {
       return {
+        categories:{
+          category_id: '',
+          name:'',
+        },
+        info: null,
+        category: [],
         selected: [], // Must be an array reference!
-        options: [
-          { text: 'Ron', value: 'Ron' },
-          { text: 'Pan', value: 'Pan' },
-          { text: 'Leaf', value: 'Leaf' },
-          { text: 'Lee', value: 'Lee' }
-        ]
       }
+    },
+    mounted () {
+    axios
+      .get('https://98ac56da56a5.ap.ngrok.io/restaurants/category?currentNumber=0&requiredNumber=10')
+      .then(response => (this.categories = response.data))
     },
     methods:
     {
       onChange()
       {
         this.$emit("selectChange",this.selected)
-      }
-    }
+      },
+    },
   }
 </script>
 
