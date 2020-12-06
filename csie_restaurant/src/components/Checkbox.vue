@@ -7,7 +7,7 @@
         @change="onChange()"
         v-for="category in categories"
         :key="category.category_id"
-        :value="category.name"
+        :value="category.category_id"
         button
         button-variant="none"
       >
@@ -34,9 +34,8 @@
       }
     },
     mounted () {
-    axios
-      .get('https://98ac56da56a5.ap.ngrok.io/restaurants/category?currentNumber=0&requiredNumber=10')
-      .then(response => (this.categories = response.data))
+    axios.get('https://98ac56da56a5.ap.ngrok.io/restaurants/category?currentNumber=0&requiredNumber=10')
+        .then(response => (this.categories = response.data))
     },
     methods:
     {
