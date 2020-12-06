@@ -61,6 +61,7 @@ $app->singleton(
 
 $app->configure('app');
 
+$app->configure('cors'); // 如果想 `config/cors.php` 的配置生效，请务必添加这行代码！如果没有添加，则使用默认配置。
 /*
 |--------------------------------------------------------------------------
 | Register Middleware
@@ -77,8 +78,7 @@ $app->configure('app');
 // ]);
 
 $app->routeMiddleware([
-    'auth' => App\Http\Middleware\Authenticate::class,
-    'cors' => App\Http\Middleware\CorsMiddleware::class
+    'auth' => App\Http\Middleware\Authenticate::class
 ]);
 
 /*
@@ -95,6 +95,7 @@ $app->routeMiddleware([
 $app->register(App\Providers\AppServiceProvider::class);
 $app->register(App\Providers\AuthServiceProvider::class);
 $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
+$app->register(Medz\Cors\Lumen\ServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 
 /*

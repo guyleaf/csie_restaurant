@@ -11,6 +11,7 @@
     "require": {
         "php": "^7.3|^8.0",
         "laravel/lumen-framework": "^8.0",
+        "medz/cors": "^1.5",
         "tymon/jwt-auth": "^1.0"
     },
     "require-dev": {
