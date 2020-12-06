@@ -1,5 +1,5 @@
 <template>
-    <div class="card">
+    <b-card border-variant="light" class="">
         <div class="cardHeader">
             <h3>{{ tagName }}</h3>
         </div>
@@ -10,7 +10,7 @@
                       
             />
         </b-card-group>
-    </div>
+    </b-card>
 </template>
 
 <script>

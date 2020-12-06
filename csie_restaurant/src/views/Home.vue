@@ -5,11 +5,11 @@
       <div class="container row justify-content-center cardMargin">
         <div class="col-10">
           <b-card>
-            <div class="container row">
-              <div class="col-3 splitLine">
+            <div class="row">
+              <div class="col-2">
                 <Checkbox v-on:selectChange="updateSelected" />
               </div>
-              <div class="col-9">
+              <div class="col-10">
                 <ShopCardGroup :tag="selected"/>
               </div>
             </div>

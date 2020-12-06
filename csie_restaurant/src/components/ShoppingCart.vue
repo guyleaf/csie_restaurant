@@ -2,7 +2,7 @@
   <div id="my-container">
     <div class="my-3">
       <!-- Our triggering (target) element -->
-      <b-button id="popover-reactive-1" variant="outline-secondary" ref="button">
+      <b-button id="popover-reactive-1" ref="button">
         ShoppingCart
       </b-button>
     </div>
@@ -113,5 +113,16 @@
 <style scoped>
   .wide-popover {
     min-width:25%;
+  }
+  #popover-reactive-1 {
+    color: rgba(255, 255, 255, 0.5);
+    background-color: transparent;
+  }
+  #popover-reactive-1:hover {
+    color: rgba(255, 255, 255, 0.75);
+    border-color: rgba(255, 255, 255, 0.75);
+  }
+  #popover-reactive-1:focus {
+    box-shadow: none;
   }
 </style>

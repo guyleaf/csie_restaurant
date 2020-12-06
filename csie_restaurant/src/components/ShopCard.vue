@@ -9,7 +9,7 @@
             class="mb-2"
         >
             <b-card-text>{{shopDescription}}</b-card-text>
-            <b-button variant="info">
+            <b-button variant="light">
                 <router-link :to="{name: 'Shop'}" class="link">GO TO SHOP</router-link>
             </b-button>
         </b-card>
@@ -43,6 +43,9 @@ export default {
     .link{
         color: rgb(93, 30, 210);
         font-weight: bold;
+        text-decoration-line: none;
+    }
+    .link:hover {
         text-decoration-line: none;
     }
 </style>
