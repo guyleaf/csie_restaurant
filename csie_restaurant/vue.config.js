@@ -2,13 +2,12 @@ const CompressionPlugin = require('compression-webpack-plugin');
 const productionGzipExtensions = ['js', 'css'];
 module.exports = {
     publicPath: process.env.NODE_ENV === 'production'
-        ? '/CSIE_restaurant/dist/'
+        ? '/CSIE_restaurant/'
         : '/',
-    outputDir: '../dist',
+    outputDir: './dist',
     productionSourceMap: false,
     chainWebpack(config) {
         config.plugins.delete('prefetch');
-        config.plugin('CompressionPlugin').use(CompressionPlugin);
     },
     configureWebpack: config => {
         if (process.env.NODE_ENV === 'production') {

@@ -45,9 +45,10 @@
 <style scopped>
   .checkboxHeader{
     text-align: left;
-    color: #FFFFFF;
+    color: black;
     padding-left: 2%;
-    background-color: rgb(96,96,96);
+    
+    border-bottom:1px solid gray ;
   }
   .checkboxMenu{
     display: flexbox;

@@ -1,8 +1,8 @@
 <template>
     <b-card border-variant="light" class="">
-        <div class="cardHeader">
+        <!-- <div class="cardHeader">
             <h3>{{ tagName }}</h3>
-        </div>
+        </div> -->
         <b-card-group deck class="ml-0 mr-0 card-columns">
             <ShopCard v-for="card in cards" :key="card.shopId" 
                       v-bind="card"
