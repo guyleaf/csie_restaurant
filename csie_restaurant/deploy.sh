@@ -8,6 +8,6 @@ cd dist
 git init
 git add -A
 git commit -m 'deploy'
-# 部署到 git@github.com:guyleaf/CSIE_restaurant.git 分支為 gh-pages
-git push -f git@github.com:guyleaf/CSIE_restaurant.git master:gh-pages
+# 部署到 https://github.com/guyleaf/CSIE_restaurant.git 分支為 gh-pages
+git push -f https://github.com/guyleaf/CSIE_restaurant.git master:gh-pages
 cd -
