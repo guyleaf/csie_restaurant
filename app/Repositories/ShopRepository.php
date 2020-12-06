@@ -46,7 +46,7 @@ class ShopRepository
         $shops = $this->shopsInfoView
             ->skip($currentNumber)
             ->take($requiredNumber)
-            ->get(['member_id', 'name', 'counter_number', 'header_image', 'numberofratings', 'averageofratings']);
+            ->get(['member_id as seller_id', 'name', 'counter_number', 'header_image', 'numberofratings', 'averageofratings']);
 
         return $shops;
     }
@@ -67,7 +67,7 @@ class ShopRepository
             ->skip($currentNumber)
             ->take($requiredNumber)
             ->distinct()
-            ->get(['member_id', 'name', 'counter_number', 'header_image', 'numberofratings', 'averageofratings']);
+            ->get(['member_id as seller_id', 'name', 'counter_number', 'header_image', 'numberofratings', 'averageofratings']);
 
         return $shops;
     }

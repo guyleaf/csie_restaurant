@@ -36,7 +36,7 @@ class CreateOrdersTable extends Migration
             ->onUpdate("cascade")->onDelete("cascade");
         });
 
-        DB::statement('ALTER TABLE "order" ADD CONSTRAINT chk_status_of_order CHECK (status BETWEEN 0 AND 4);');
+        DB::statement('ALTER TABLE "order" ADD CONSTRAINT chk_status_of_order CHECK (status BETWEEN 0 AND 5);');
         DB::statement('ALTER TABLE "order" ADD CONSTRAINT chk_taking_method_of_order CHECK (taking_method BETWEEN 0 AND 1);');
     }
 
