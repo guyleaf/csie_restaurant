@@ -34,7 +34,7 @@
       }
     },
     mounted () {
-    axios.get('https://98ac56da56a5.ap.ngrok.io/restaurants/category?currentNumber=0&requiredNumber=10')
+    axios.get(this.$url+'restaurants/category')
         .then(response => (this.categories = response.data))
     },
     methods:
