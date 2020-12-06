@@ -2,7 +2,7 @@
     <div>
         <b-navbar toggleable="lg" type="dark" variant="dark">
             <b-navbar-brand> 
-                <router-link :to="{name: 'Home'}" class="nav-link" variant="info">CSIE_Restaurant</router-link>
+                <router-link :to="{name: 'Home'}" class="nav-link" variant="info">孜宮庭園</router-link>
             </b-navbar-brand>
 
             <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
