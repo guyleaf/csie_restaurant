@@ -27,23 +27,23 @@ export default {
     },
      watch:{
          tag : function() {
-            let url='restaurants/?currentNumber=0&requiredNumber=10';
+            let url='/restaurants/?currentNumber=0&requiredNumber=10';
             for (let i=0;i<this.tag.length;i++)    url=url+'&filters[]='+this.tag[i]
             //console.log(url);
             this.$http.get(url)
             .then(response => {
                     this.cards=[];
                     let data=response.data;
-                    for (let i=0;i<data.length;i++) this.cards.push({shopId: data[i].seller_id, shopName: data[i].name, imgPath: data[i].header_image});
+                    for (let i=0;i<data.length;i++) this.cards.push({shopId: data[i].seller_id, shopName: data[i].name, imgPath: this.$url + data[i].header_image});
                 })
             }
      },
      created() {
-        this.$axios.get(this.$url+'restaurants/?currentNumber=0&requiredNumber=10')
+        this.$http.get('/restaurants/?currentNumber=0&requiredNumber=10')
         .then(response => {
           this.cards=[];
           let data=response.data;
-          for (let i=0;i<data.length;i++)this.cards.push({shopId: data[i].seller_id, shopName: data[i].name, imgPath: data[i].header_image});
+          for (let i=0;i<data.length;i++)this.cards.push({shopId: data[i].seller_id, shopName: data[i].name, imgPath: this.$url + data[i].header_image});
             }
         )
      },

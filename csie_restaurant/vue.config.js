@@ -1,6 +1,9 @@
 const CompressionPlugin = require('compression-webpack-plugin');
 const productionGzipExtensions = ['js', 'css'];
 module.exports = {
+    devServer: {
+        proxy: 'http://localhost:8081'
+    },
     publicPath: process.env.NODE_ENV === 'production'
         ? '/CSIE_restaurant/'
         : '/',

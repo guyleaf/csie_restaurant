@@ -1,11 +1,11 @@
 <template>
     <div>
         <b-card :title="shopName"
-            :img-src= "imgPath"
+            :img-src="imgPath"
             img-alt="Image"
             img-top
             tag="article"
-            style="max-width: 20rem;"
+            style="max-width: 15rem;"
             class="mb-2"
         >
             <b-card-text>{{shopDescription}}</b-card-text>

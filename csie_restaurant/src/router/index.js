@@ -34,8 +34,8 @@ const routes = [
                     title: '孜宮庭園 - 商店',
                 }
             },
-        ]
-    }
+        ],
+    },
 
     // {
     //     path: '/login',

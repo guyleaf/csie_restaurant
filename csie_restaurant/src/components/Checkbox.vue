@@ -33,7 +33,7 @@
       }
     },
     mounted () {
-      this.$http.get('restaurants/category')
+      this.$http.get('/restaurants/category')
           .then(response => (this.categories = response.data))
     },
     methods:

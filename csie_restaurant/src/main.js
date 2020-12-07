@@ -7,10 +7,10 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import axios from 'axios'
 import { cacheAdapterEnhancer, throttleAdapterEnhancer } from 'axios-extensions';
 
-Vue.prototype.$url = 'https://98ac56da56a5.ap.ngrok.io/'
+Vue.prototype.$url = 'https://1e6acea1b26e.ap.ngrok.io'
 Vue.prototype.$axios = axios // no cache response
 Vue.prototype.$http = axios.create({
-	baseURL: 'https://98ac56da56a5.ap.ngrok.io/',
+	baseURL: 'https://1e6acea1b26e.ap.ngrok.io',
 	headers: { 'Cache-Control': 'no-cache' },
 	adapter: throttleAdapterEnhancer(cacheAdapterEnhancer(axios.defaults.adapter))
 });
