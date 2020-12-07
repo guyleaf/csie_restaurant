@@ -1,14 +1,10 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import axios from 'axios';
-Vue.prototype.$axios = axios;
-Vue.prototype.$url = 'https://98ac56da56a5.ap.ngrok.io/'
 Vue.use(VueRouter)
 
 const routes = [
     {
         path: '/',
-        name: 'MainLayout',
         component: () => import('@/views/layouts/MainLayout.vue'),
         meta: {
             title: '孜宮庭園',

@@ -19,7 +19,6 @@
 </template>
 
 <script>
-  import axios from 'axios';
   export default {
       name:"Checkbox",
     data() {
@@ -34,8 +33,8 @@
       }
     },
     mounted () {
-    axios.get(this.$url+'restaurants/category')
-        .then(response => (this.categories = response.data))
+      this.$http.get('restaurants/category')
+          .then(response => (this.categories = response.data))
     },
     methods:
     {

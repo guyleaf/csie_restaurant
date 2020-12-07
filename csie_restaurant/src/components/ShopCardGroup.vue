@@ -27,10 +27,10 @@ export default {
     },
      watch:{
          tag : function() {
-             let url=this.$url+'restaurants/?currentNumber=0&requiredNumber=10';
-             for (let i=0;i<this.tag.length;i++)    url=url+'&filters[]='+this.tag[i]
-             console.log(url);
-            this.$axios.get(url)
+            let url='restaurants/?currentNumber=0&requiredNumber=10';
+            for (let i=0;i<this.tag.length;i++)    url=url+'&filters[]='+this.tag[i]
+            //console.log(url);
+            this.$http.get(url)
             .then(response => {
                     this.cards=[];
                     let data=response.data;

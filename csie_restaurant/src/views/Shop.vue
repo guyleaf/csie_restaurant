@@ -28,9 +28,9 @@
 
 <script>
 // @ is an alias to /src
-import ShopIntro from "@/components/ShopIntro.vue";
-import FoodCardGroup from "@/components/FoodCardGroup.vue";
-import ShopDescription from "@/components/ShopDescription.vue";
+import ShopIntro from '@/components/shop/ShopIntro.vue';
+import FoodCardGroup from '@/components/shop/FoodCardGroup.vue';
+import ShopDescription from '@/components/shop/ShopDescription.vue';
 export default {
   name: "Shop",
   components: {

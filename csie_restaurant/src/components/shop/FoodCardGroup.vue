@@ -21,7 +21,7 @@
 
 <script>
 import CategoryTab from "@/components/CategoryTab.vue";
-import FoodCard from "@/components/FoodCard.vue";
+import FoodCard from "@/components/shop/FoodCard.vue";
 export default {
     name: "FoodCardGroup",
     components: {
