@@ -62,8 +62,8 @@ class SearchService
     protected function filterNull($data, $value)
     {
         $data = $data->map(function ($item, $key) use ($value) {
-            $item->numberofratings = $item->numberofratings == NULL ? $value : $item->numberofratings;
-            $item->averageofratings = $item->averageofratings == NULL ? $value : $item->averageofratings;
+            $item->numberofratings = $item->numberofratings == NULL ? $value : (double)$item->numberofratings;
+            $item->averageofratings = $item->averageofratings == NULL ? $value : (double)$item->averageofratings;
             return $item;
         });
 

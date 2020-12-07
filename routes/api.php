@@ -28,6 +28,7 @@ $router->group(['prefix' => 'auth'], function () use ($router) {
 });
 
 $router->group(['prefix' => 'restaurants'], function () use ($router) {
+    $router->get('{id}/assets/{filename}', 'ShopController@getImage');
     $router->get('', 'ShopController@getShops');
     $router->get('category', 'ShopController@getCategories');
 });

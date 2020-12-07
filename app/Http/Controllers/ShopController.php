@@ -66,4 +66,9 @@ class ShopController extends Controller
 
         return response()->json($result);
     }
+
+    public function getImage(Request $request, $id, $filename)
+    {
+        return response(app('filesystem')->url('test.txt'));
+    }
 }
