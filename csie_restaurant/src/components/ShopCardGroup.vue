@@ -34,7 +34,7 @@ export default {
             .then(response => {
                     this.cards=[];
                     let data=response.data;
-                    for (let i=0;i<data.length;i++) this.cards.push({shopId: data[i].seller_id, shopName: data[i].name, imgPath: this.$url + data[i].header_image});
+                    for (let i=0;i<data.length;i++) this.cards.push({shopId: data[i].seller_id, shopName: data[i].name, imgPath: this.$url + data[i].header_image, rating: data[i].averageofratings});
                 })
             }
      },
@@ -43,7 +43,7 @@ export default {
         .then(response => {
           this.cards=[];
           let data=response.data;
-          for (let i=0;i<data.length;i++)this.cards.push({shopId: data[i].seller_id, shopName: data[i].name, imgPath: this.$url + data[i].header_image});
+          for (let i=0;i<data.length;i++)this.cards.push({shopId: data[i].seller_id, shopName: data[i].name, imgPath: this.$url + data[i].header_image, rating: data[i].averageofratings});
             }
         )
      },

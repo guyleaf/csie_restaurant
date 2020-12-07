@@ -9,6 +9,7 @@
             class="mb-2"
         >
             <b-card-text>{{shopDescription}}</b-card-text>
+            <b-form-rating v-model="rating" id="rating-inline" class="mb-1" size="sm" no-border readonly show-value inline precision="1"></b-form-rating>
             <b-button variant="light">
                 <router-link :to="{name: 'Shop'}" class="link">GO TO SHOP</router-link>
             </b-button>
@@ -23,7 +24,8 @@ export default {
         shopTag: String,
         shopName: String,
         imgPath: String,
-        shopDescription: String
+        shopDescription: String,
+        rating: Number
     }
 }
 </script>
@@ -36,5 +38,8 @@ export default {
     }
     .link:hover {
         text-decoration-line: none;
+    }
+    #rating-inline:focus {
+        box-shadow: none;
     }
 </style>
