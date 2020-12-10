@@ -2,7 +2,7 @@
   <div id="my-container">
     <div class="my-3">
       <!-- Our triggering (target) element -->
-      <b-button id="popover-reactive-1" variant="outline-secondary" ref="button">
+      <b-button id="popover-reactive-1" ref="button">
         ShoppingCart
       </b-button>
     </div>
@@ -12,12 +12,11 @@
     <b-popover
       custom-class="wide-popover"
       target="popover-reactive-1"
-      triggers="focus"
+      triggers="click"
       :show.sync="popoverShow"
       placement="auto"
       container="my-container"
       ref="popover"
-      @show="onShow"
     >
       <template #title>
         <b-button @click="onClose" class="close" aria-label="Close">
@@ -28,8 +27,9 @@
       <div v-for="(item,index) in ItemList" :key="index" >
         <CartCell v-on:deleteclick="deleteCartCell" v-bind="item" :index="index"/>
       </div>
+      <!-- <b-button @click="add" variant="outline-info" vertical>+</b-button> -->
+
       <b-button @click="onOk" variant="outline-info" vertical>Ok</b-button>
-      <b-button @click="add" variant="outline-info" vertical>+</b-button>
       <!--div>
         <b-alert show class="small">
           <strong>Current Values:</strong><br>
@@ -58,24 +58,10 @@
           {
             foodName:"aaa",
             foodPrice: 30,
+            foodSpinValue: 1,
           }
         ],
-        options: [{ text: '- Choose 1 -', value: '' }, 'Red', 'Green', 'Blue'],
-        input1Return: '',
-        input2Return: '',
         popoverShow: false
-      }
-    },
-    watch: {
-      input1(val) {
-        if (val) {
-          this.input1state = true
-        }
-      },
-      input2(val) {
-        if (val) {
-          this.input2state = true
-        }
       }
     },
     methods: {
@@ -86,45 +72,57 @@
         this.popoverShow = false
       },
       onOk() {
-        if (!this.input1) {
-          this.input1state = false
-        }
-        if (!this.input2) {
-          this.input2state = false
-        }
-        if (this.input1 && this.input2) {
           this.onClose()
-          // Return our popover form results
-          this.input1Return = this.input1
-          this.input2Return = this.input2
-        }
       },
-      onShow() {
-        // This is called just before the popover is shown
-        // Reset our popover form variables
-        this.input1 = ''
-        this.input2 = ''
-        this.input1state = null
-        this.input2state = null
-        this.input1Return = ''
-        this.input2Return = ''
-      },
-      add()
+      add(name,spinValue,price)
       {
         this.ItemList.push(
         {
-            input1: '',
-            input1state: null,
-            input2: '',
-            input2state: null,
+            foodName: name,
+            foodPrice: price,
+            foodSpinValue: spinValue,    
         })
       },
-    }
+      handleScroll ()
+      {
+        this.onClose();
+      },
+      handleopen ()
+      {
+      }
+    },
+    watch: {
+      $route: {
+        handler: function() {
+        this.onClose()
+      },
+      }
+    },
+    created(){
+      this.$bus.$on("addfunction",msg =>{
+        console.log(msg)
+        this.add(msg[0],msg[1],msg[2]);
+      })
+    },
+    mounted () {
+      var button = document.querySelector(".container")
+      button.addEventListener('click',this.handleScroll );
+    },
   }
 </script>
 <style scoped>
   .wide-popover {
-    width:1000px;
-    max-height: 500px;
+    min-width:25%;
+  }
+  #popover-reactive-1 {
+    color: rgba(255, 255, 255, 0.5);
+    background-color: transparent;
+  }
+  #popover-reactive-1:hover {
+    color: rgba(255, 255, 255, 0.75);
+    border-color: rgba(255, 255, 255, 0.75);
+  }
+  #popover-reactive-1:focus {
+    box-shadow: none;
   }
 </style>
