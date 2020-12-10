@@ -16,6 +16,9 @@
           </b-card>
         </div>
       </div>
+      <div style="width: 60%;">
+        <Histogram />
+      </div>
     </center>
   </div>
 </template>
@@ -25,12 +28,14 @@
 import ShopCardGroup from "@/components/ShopCardGroup.vue";
 import Carousel from "@/components/Carousel.vue";
 import Checkbox from "@/components/Checkbox.vue";
+import Histogram from "@/components/Histogram.vue";
 export default {
   name: "home",
   components: {
     Carousel,
     Checkbox,
     ShopCardGroup,
+    Histogram
   },
   methods:{
     updateSelected(e){
