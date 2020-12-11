@@ -10,6 +10,7 @@
 
 <script>
 // @ is an alias to /src
+import Vue from 'vue';
 import MainHeader from "@/components/shared/MainHeader.vue";
 import MainFooter from "@/components/shared/MainFooter.vue";
 export default {
@@ -35,6 +36,7 @@ export default {
     destroyed: function() {},
     errorCaptured: function() {}
 };
+  Vue.prototype.$bus = new Vue();
 </script>
 
 <style scoped>

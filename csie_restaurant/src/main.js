@@ -4,6 +4,16 @@ import router from './router'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import axios from 'axios'
+import { cacheAdapterEnhancer, throttleAdapterEnhancer } from 'axios-extensions';
+
+Vue.prototype.$url = 'https://1e6acea1b26e.ap.ngrok.io'
+Vue.prototype.$axios = axios // no cache response
+Vue.prototype.$http = axios.create({
+	baseURL: 'https://1e6acea1b26e.ap.ngrok.io',
+	headers: { 'Cache-Control': 'no-cache' },
+	adapter: throttleAdapterEnhancer(cacheAdapterEnhancer(axios.defaults.adapter))
+});
 
 // Install BootstrapVue
 Vue.use(BootstrapVue)

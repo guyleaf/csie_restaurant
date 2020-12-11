@@ -2,15 +2,14 @@
   <div class="home">
     <Carousel imgPath1="https://picsum.photos/1024/480/?image=54" imgPath2='https://picsum.photos/1024/480/?image=12' imgPath3='https://picsum.photos/1024/480/?image=22'/>
     <center >
-      <Search />
       <div class="container row justify-content-center cardMargin">
         <div class="col-10">
           <b-card>
-            <div class="container row">
-              <div class="col-3 splitLine">
+            <div class="row">
+              <div class="col-2">
                 <Checkbox v-on:selectChange="updateSelected" />
               </div>
-              <div class="col-9">
+              <div class="col-10">
                 <ShopCardGroup :tag="selected"/>
               </div>
             </div>
@@ -26,7 +25,6 @@
 
 <script>
 // @ is an alias to /src
-import Search from "@/components/Search.vue";
 import ShopCardGroup from "@/components/ShopCardGroup.vue";
 import Carousel from "@/components/Carousel.vue";
 import Checkbox from "@/components/Checkbox.vue";
@@ -34,7 +32,6 @@ import Histogram from "@/components/Histogram.vue";
 export default {
   name: "home",
   components: {
-    Search,
     Carousel,
     Checkbox,
     ShopCardGroup,
@@ -58,7 +55,6 @@ export default {
   .container{
     max-width:100% !important; 
     padding: 0% !important;
-    margin: 0%;
     overflow: hidden;
   }
   .cardMargin{

@@ -1,15 +1,19 @@
 <template>
   <div>
     <b-form-group label="商店種類" label-class="checkboxHeader">
-      <div v-for="option in options" :key="option.value" class="checkboxMenuPadding">
-        <b-form-checkbox class="checkboxMenu"
-          v-model="selected"
-          :value="option.value"
-          @change="onChange()"
-        >
-          {{ option.text }}
-        </b-form-checkbox>
-      </div>
+    <div class="checkboxMenu row mt-1">
+      <b-form-checkbox class="mb-1 checkbox"
+        v-model="selected"
+        @change="onChange()"
+        v-for="category in categories"
+        :key="category.category_id"
+        :value="category.category_id"
+        button
+        button-variant="none"
+      >
+        {{ category.name }}
+      </b-form-checkbox>
+    </div>
     </b-form-group>
   </div>
 </template>
@@ -19,40 +23,65 @@
       name:"Checkbox",
     data() {
       return {
+        categories:{
+          category_id: '',
+          name:'',
+        },
+        info: null,
+        category: [],
         selected: [], // Must be an array reference!
-        options: [
-          { text: 'Ron', value: 'Ron' },
-          { text: 'Pan', value: 'Pan' },
-          { text: 'Leaf', value: 'Leaf' },
-          { text: 'Lee', value: 'Lee' }
-        ]
       }
+    },
+    mounted () {
+      this.$http.get('/restaurants/category')
+          .then(response => (this.categories = response.data))
     },
     methods:
     {
       onChange()
       {
         this.$emit("selectChange",this.selected)
-      }
-    }
+      },
+    },
   }
 </script>
 
 <style scopped>
   .checkboxHeader{
     text-align: left;
-    color: #FFFFFF;
+    color: black;
     padding-left: 2%;
-    background-color: rgb(96,96,96);
+    
+    border-bottom:1px solid gray ;
   }
   .checkboxMenu{
-    text-align:left;
-    border-left: medium solid gray;
-    border-bottom: thin solid gray;
-    background-color:rgb(233,233,233);
-    padding-top:1.5%;
-    padding-bottom:1.5%;
+    display: flexbox;
+    flex-direction: column !important;
+    width: 100%;
   }
+  .checkbox > .btn{
+    display: block;
+    color: black;
+    background-color: #EEEEEEEE;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+  .checkbox > .btn:hover {
+    background-color: #edecec;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  .checkbox > .btn:focus {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  .checkbox > .active,  .checkbox > .active:hover{
+    color: white;
+    background-color: black;
+  }
+
   .checkboxMenuPadding{
     padding-top:1%;
     padding-bottom:1%;
