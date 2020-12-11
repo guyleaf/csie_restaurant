@@ -3,14 +3,15 @@
         <b-card no-body class="over-flow-hidden" style="max-width: 540px;">
             <b-row no-gutters class="align-items-center">
                 <b-col md="5">
-                    <b-form-spinbutton id="sb-inline" v-model="value" inline step size="sm" style="width:7rem"></b-form-spinbutton>
+                    <b-form-spinbutton id="sb-inline" v-model="foodSpinValue" inline step size="sm" style="width:7rem"></b-form-spinbutton>
                 </b-col>
                 <b-col md="5">
-                    <b-card-text>{{foodName}}</b-card-text>
-                    <b-card-text>{{total}}</b-card-text>
+                    <b-card-text class = "card_text">{{foodName}}</b-card-text>
+                    <b-card-text class = "card_text">{{totalPrice}}</b-card-text>
+                    <!--<b-card-text class = "card_text">{{index}}</b-card-text>-->
                 </b-col>
                 <b-col md="2">
-                    <b-button @click="deleteitem" variant="outline-info" vertical>-</b-button>
+                    <b-button @click="deleteitem" variant="outline-danger" vertical>x</b-button>
                 </b-col>
             </b-row>
         </b-card>
@@ -22,13 +23,8 @@ export default {
     props:{
         foodName: String,
         foodPrice: Number,
+        foodSpinValue: Number,
         index: Number
-    },
-    data() {
-      return {
-        value: 1,
-        isDelete: false,
-      }
     },
     methods: {
         deleteitem(){
@@ -36,12 +32,18 @@ export default {
         }
     },
     computed: {
-    total: function() {
-       return this.foodPrice*this.value;
+    totalPrice: function() {
+       return this.foodPrice*this.foodSpinValue;
     },
   },
 }
 </script>
 
 <style scoped>
+    .card_text{
+        text-align: center;
+        margin: 0;
+        padding: 0;
+    }
+
 </style>

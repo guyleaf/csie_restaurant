@@ -1,29 +1,41 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '@/views/Home.vue'
-
 Vue.use(VueRouter)
-
-import MainLayout from '@/views/layouts/MainLayout.vue'
 
 const routes = [
     {
         path: '/',
-        name: 'MainLayout',
-        component: MainLayout,
+        component: () => import('@/views/layouts/MainLayout.vue'),
+        meta: {
+            title: '孜宮庭園',
+        },
         children: [
             {
                 name: 'Home',
                 path: '',
-                component: Home
+                component: () => import('@/views/Home.vue'),
+                meta: {
+                    title: '孜宮庭園 - 首頁',
+                }
             },
             {
                 name: 'Login',
                 path: 'login',
-                component: () => import('@/views/Login.vue')
+                component: () => import('@/views/Login.vue'),
+                meta: {
+                    title: '孜宮庭園 - 登入',
+                }
             },
-        ]
-    }
+            {
+                name: 'Shop',
+                path: 'shop',
+                component: () => import('@/views/Shop.vue'),
+                meta: {
+                    title: '孜宮庭園 - 商店',
+                }
+            },
+        ],
+    },
 
     // {
     //     path: '/login',
@@ -36,7 +48,7 @@ const routes = [
 ]
 
 const router = new VueRouter({
-    mode: 'history',
+    mode: 'hash',
     routes: routes
 })
 

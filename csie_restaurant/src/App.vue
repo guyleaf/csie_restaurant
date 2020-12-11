@@ -7,6 +7,7 @@
 <script>
 export default {
   name: 'app',
+  title: '孜宮庭園',
   components: {
   }
 }
