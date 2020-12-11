@@ -19,6 +19,7 @@
       </div>
       <div style="width: 60%;">
         <Histogram />
+        <ManageTab />
       </div>
     </center>
   </div>
@@ -31,6 +32,7 @@ import ShopCardGroup from "@/components/ShopCardGroup.vue";
 import Carousel from "@/components/Carousel.vue";
 import Checkbox from "@/components/Checkbox.vue";
 import Histogram from "@/components/Histogram.vue";
+import ManageTab from "@/components/ManageTab.vue";
 export default {
   name: "home",
   components: {
@@ -39,6 +41,7 @@ export default {
     Checkbox,
     ShopCardGroup,
     Histogram,
+    ManageTab
   },
   methods:{
     updateSelected(e){
