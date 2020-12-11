@@ -1,16 +1,11 @@
 <template>
-    <div class="card">
-        <div class="cardHeader">
-            <h3>{{ tagName }}</h3>
-        </div>
+    <b-card border-variant="light" class="">
         <b-card-group deck class="ml-0 mr-0 card-columns">
             <ShopCard v-for="card in cards" :key="card.shopId" 
-                      v-bind="card"
-                      :tag="tag" 
-                      
+                      v-bind="card"      
             />
         </b-card-group>
-    </div>
+    </b-card>
 </template>
 
 <script>
@@ -27,40 +22,37 @@ export default {
     {
         return{
             cards:
-            [
-                {shopId: 0,shopName: 'ShopRon',imgPath: '',shopDescription: '11111111',shopTag: 'Ron'},
-                {shopId: 1,shopName: 'ShopPan',imgPath: '',shopDescription: '878787878',shopTag: 'Pan'},
-                {shopId: 2,shopName: 'ShopLeaf',imgPath: '',shopDescription: '7777777',shopTag: 'Leaf'},
-                {shopId: 3,shopName: 'ShopLee',imgPath: '',shopDescription: '0000000',shopTag: 'Lee'},
-                {shopId: 4,shopName: 'ShopRon',imgPath: '',shopDescription: '11111111',shopTag: 'Ron'},
-                {shopId: 5,shopName: 'ShopPan',imgPath: '',shopDescription: '878787878',shopTag: 'Pan'},
-                {shopId: 6,shopName: 'ShopLeaf',imgPath: '',shopDescription: '7777777',shopTag: 'Leaf'},
-                {shopId: 7,shopName: 'ShopLee',imgPath: '',shopDescription: '0000000',shopTag: 'Lee'},
-                {shopId: 8,shopName: 'ShopRon',imgPath: '',shopDescription: '11111111',shopTag: 'Ron'},
-                {shopId: 9,shopName: 'ShopPan',imgPath: '',shopDescription: '878787878',shopTag: 'Pan'},
-                {shopId: 10,shopName: 'ShopLeaf',imgPath: '',shopDescription: '7777777',shopTag: 'Leaf'},
-                {shopId: 11,shopName: 'ShopLee',imgPath: '',shopDescription: '0000000',shopTag: 'Lee'},
-                {shopId: 12,shopName: 'ShopRon',imgPath: '',shopDescription: '11111111',shopTag: 'Ron'},
-                {shopId: 13,shopName: 'ShopPan',imgPath: '',shopDescription: '878787878',shopTag: 'Pan'},
-                {shopId: 14,shopName: 'ShopLeaf',imgPath: '',shopDescription: '7777777',shopTag: 'Leaf'},
-            ]
+            []
         }
     },
-    computed: {
-        tagName: function() 
-        {
-            if(this.tag[0]==undefined) return "All"
-            let Name=this.tag[0]
-            for(let i=1;i<this.tag.length;i++)  Name=Name+"+"+this.tag[i]
-            return Name
-        }
+     watch:{
+         tag : function() {
+            let url='/restaurants/?currentNumber=0&requiredNumber=10';
+            for (let i=0;i<this.tag.length;i++)    url=url+'&filters[]='+this.tag[i]
+            //console.log(url);
+            this.$http.get(url)
+            .then(response => {
+                    this.cards=[];
+                    let data=response.data;
+                    for (let i=0;i<data.length;i++) this.cards.push({shopId: data[i].seller_id, shopName: data[i].name, imgPath: this.$url + data[i].header_image, rating: data[i].averageofratings});
+                })
+            }
+     },
+     created() {
+        this.$http.get('/restaurants/?currentNumber=0&requiredNumber=10')
+        .then(response => {
+          this.cards=[];
+          let data=response.data;
+          for (let i=0;i<data.length;i++)this.cards.push({shopId: data[i].seller_id, shopName: data[i].name, imgPath: this.$url + data[i].header_image, rating: data[i].averageofratings});
+            }
+        )
      },
 }
 </script>
 
 <style scopped>
     .cardHeader{
-        text-align:left;
+        text-align:left;    
         border-bottom:1px solid gray ;
         margin:1%
     }

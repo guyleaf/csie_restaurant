@@ -1,15 +1,16 @@
 <template>
-    <div v-if="inArray()">
+    <div>
         <b-card :title="shopName"
-            :img-src= "imgPath"
+            :img-src="imgPath"
             img-alt="Image"
             img-top
             tag="article"
-            style="max-width: 20rem;"
+            style="max-width: 15rem;"
             class="mb-2"
         >
             <b-card-text>{{shopDescription}}</b-card-text>
-            <b-button variant="info">
+            <b-form-rating v-model="rating" id="rating-inline" class="mb-1" size="sm" no-border readonly show-value inline precision="1"></b-form-rating>
+            <b-button variant="light">
                 <router-link :to="{name: 'Shop'}" class="link">GO TO SHOP</router-link>
             </b-button>
         </b-card>
@@ -20,21 +21,11 @@
 export default {
     name: 'ShopCard',
     props:{
-        tag: Array,
         shopTag: String,
         shopName: String,
         imgPath: String,
-        shopDescription: String
-    },
-    methods:
-    {
-        inArray()
-        {
-            if(this.tag[0]==undefined)   return true;
-            for(let i=0;i<this.tag.length;i++)
-                if(this.shopTag == this.tag[i]) return true;
-            return false;
-        }
+        shopDescription: String,
+        rating: Number
     }
 }
 </script>
@@ -44,5 +35,11 @@ export default {
         color: rgb(93, 30, 210);
         font-weight: bold;
         text-decoration-line: none;
+    }
+    .link:hover {
+        text-decoration-line: none;
+    }
+    #rating-inline:focus {
+        box-shadow: none;
     }
 </style>

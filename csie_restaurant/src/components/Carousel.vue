@@ -69,7 +69,9 @@ h1{
     /* padding:0,0,0,0; */
     /* overflow: hidden; */
 }
-
+p{
+    font-family: UberMoveText-Regular, sans-serif;
+}
 </style>
 
 
