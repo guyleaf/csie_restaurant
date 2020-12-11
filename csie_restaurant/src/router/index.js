@@ -34,6 +34,28 @@ const routes = [
                     title: '孜宮庭園 - 商店',
                 }
             },
+            {
+                name: 'Manage',
+                path: 'manage',
+                component: () =>import('@/views/layouts/ManageLayout.vue'),
+                children: [
+                    {
+                    name: 'Money',
+                    path: 'money',
+                    component: () =>import('@/components/Histogram.vue')
+                    },
+                    {
+                    name: 'Shop',
+                    path: 'shop',
+                    component: () =>import('@/components/Carousel.vue')
+                    },
+                    {
+                    name: 'Manage',
+                    path: 'manage',
+                    component: () =>import('@/components/shop/ShopIntro.vue')
+                    }
+            ]
+            }
         ],
     },
 
