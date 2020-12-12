@@ -1,5 +1,5 @@
 <template>
-    <div class="row">
+    <div class="container row justify-content-center">
         <div class="col-3">
             <ManageTab />
         </div>
@@ -18,3 +18,11 @@ export default {
     },
 }
 </script>
+<style scopped>
+  .container{
+    max-width:100% !important; 
+    padding: 0% !important;
+    margin: 0% 1% 0% 1%;
+    overflow: hidden;
+  }
+</style>

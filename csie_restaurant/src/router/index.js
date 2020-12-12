@@ -40,9 +40,9 @@ const routes = [
                 component: () =>import('@/views/layouts/ManageLayout.vue'),
                 children: [
                     {
-                    name: 'Money',
-                    path: 'money',
-                    component: () =>import('@/components/Histogram.vue')
+                    name: 'SalesReport',
+                    path: 'salesReport',
+                    component: () =>import('@/views/SalesReport.vue')
                     },
                     {
                     name: 'Shop',
@@ -52,7 +52,7 @@ const routes = [
                     {
                     name: 'Manage',
                     path: 'manage',
-                    component: () =>import('@/components/shop/ShopIntro.vue')
+                    component: () =>import('@/views/Member.vue')
                     }
             ]
             }

@@ -10,7 +10,14 @@ export default {
           {foodName:"薯條",data: 30},
           {foodName:"漢堡",data: 20},
           {foodName:"飲料",data: 10},
-          {foodName:"雞塊",data: 12}
+          {foodName:"雞塊",data: 12},
+          {foodName:"雞塊",data: 12},
+          {foodName:"雞塊",data: 12},
+          {foodName:"雞塊",data: 12},
+          {foodName:"雞塊",data: 12},
+          {foodName:"雞塊",data: 12},
+          {foodName:"雞塊",data: 12},
+          {foodName:"雞塊",data: 12},
         ],
       }
   },
