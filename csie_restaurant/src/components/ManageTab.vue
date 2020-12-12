@@ -2,7 +2,7 @@
   <div>
     <b-form-group label="商店種類" label-class="checkboxHeader">
     <div class="checkboxMenu row mt-1">
-      <b-form-checkbox class="mb-1 checkbox"
+      <b-form-radio class="mb-1 checkbox"
         v-model="selected"
         @change="onChange()"
         v-for="option in options"
@@ -12,7 +12,7 @@
         button-variant="none"
       >
       {{ option.label }}
-      </b-form-checkbox>
+      </b-form-radio>
       
     </div>
     </b-form-group>
