@@ -11,8 +11,9 @@
         button
         button-variant="none"
       >
-        {{ option.label }}
+      {{ option.label }}
       </b-form-checkbox>
+      
     </div>
     </b-form-group>
   </div>
@@ -27,7 +28,7 @@ export default {
             options:[
                 {id:1, label:"會員管理", path:'manage'},
                 {id:2, label:"店家管理", path:'shop'},
-                {id:3, label:"報表統計", path:"money"}
+                {id:3, label:"報表統計", path:"salesReport"}
                 ],  
         }
     },
@@ -40,3 +41,45 @@ export default {
     }
 }
 </script>
+
+<style scopped>
+  .checkboxHeader{
+    text-align: left;
+    color: black;
+    padding-left: 2%;
+    border-bottom:1px solid gray ;
+  }
+  .checkboxMenu{
+    display: flexbox;
+    flex-direction: column !important;
+    margin: 0;
+    width: 100%;
+  }
+  .checkbox > .btn{
+    display: block;
+    color: black;
+    background-color: #EEEEEEEE;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+  .checkbox > .btn:hover {
+    background-color: #edecec;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  .checkbox > .btn:focus {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  .checkbox > .active,  .checkbox > .active:hover{
+    color: white;
+    background-color: black;
+  }
+
+  .checkboxMenuPadding{
+    padding-top:1%;
+    padding-bottom:1%;
+  }
+</style>

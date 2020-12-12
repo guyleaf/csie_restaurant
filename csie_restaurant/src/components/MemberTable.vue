@@ -10,6 +10,10 @@
     :outlined="outlined"
     :borderless="borderless"
     >
+    <template #cell(function)>
+        <b-button size="sm" class="mr-2"> Details </b-button>
+        <b-button size="sm" class="mr-2"> Details </b-button>
+    </template>
     </b-table>
   </div>
 </template>
@@ -21,25 +25,49 @@
         // Note 'isActive' is left out and will not appear in the rendered table
         fields: [
           {
-            key: 'last_name',
-            sortable: true
+            key: 'id',
+            label: '編號',
           },
           {
-            key: 'first_name',
-            sortable: false
+            key: 'username',
+            label: '客戶帳號',
           },
           {
-            key: 'age',
-            label: 'Person age',
-            sortable: true,
+            key: 'name',
+            label: '客戶暱稱',
+            // Variant applies to the whole column, including the header and footer
+          },
+          {
+            key: 'email',
+            label: '客戶信箱',
+            // Variant applies to the whole column, including the header and footer
+          },
+          {
+            key: 'created_at',
+            label: '註冊時間',
+            // Variant applies to the whole column, including the header and footer
+          },
+          {
+            key: 'phone',
+            label: '電話號碼',
+            // Variant applies to the whole column, including the header and footer
+          },
+          {
+            key: 'member_status',
+            label: '狀態',
+            // Variant applies to the whole column, including the header and footer
+          },
+          {
+            key: 'function',
+            label: '操作',
             // Variant applies to the whole column, including the header and footer
           }
         ],
         items: [
-          { isActive: true, age: 40, first_name: 'Dickerson', last_name: 'Macdonald' },
-          { isActive: false, age: 21, first_name: 'Larsen', last_name: 'Shaw' },
-          { isActive: false, age: 89, first_name: 'Geneva', last_name: 'Wilson' },
-          { isActive: true, age: 38, first_name: 'Jami', last_name: 'Carney' }
+          { isActive: true, id: 1, username: 'asd3013593', name: '夏先生', email:'t107590001@gmail.com', created_at:'2000-02-30', phone:'0934426548', member_status:'O', },
+          { isActive: true, id: 2, username: 'asd3013593', name: '夏先生', email:'t107590001@gmail.com', created_at:'2000-02-30', phone:'0934426548', member_status:'O', },
+          { isActive: true, id: 3, username: 'asd3013593', name: '夏先生', email:'t107590001@gmail.com', created_at:'2000-02-30', phone:'0934426548', member_status:'O', },
+          { isActive: true, id: 4, username: 'asd3013593', name: '夏先生', email:'t107590001@gmail.com', created_at:'2000-02-30', phone:'0934426548', member_status:'O', },
         ],
         headvariant:"dark",
         tablevariant:'',
