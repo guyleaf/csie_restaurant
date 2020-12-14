@@ -30,7 +30,7 @@
             </b-navbar-nav>
             <b-navbar-nav>
                 <b-nav-item> 
-                    <router-link :to="{name: 'Manage'}" class="nav-link manage">Manage</router-link>
+                    <router-link :to="{name: 'Member'}" class="nav-link manage">Manage</router-link>
                 </b-nav-item>
             </b-navbar-nav>
             </b-collapse>

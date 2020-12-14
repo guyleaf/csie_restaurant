@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-form-group label="商店種類" label-class="checkboxHeader">
+    <b-form-group>
     <div class="checkboxMenu row mt-1">
       <b-form-radio class="mb-1 checkbox"
         v-model="selected"
@@ -23,7 +23,7 @@ export default {
     name: "ManageTab",
     data(){
         return{
-            selected: '',
+            selected: 'member',
             options:[
                 {id:1, label:"會員管理", path:'member'},
                 {id:2, label:"店家管理", path:'shop'},
