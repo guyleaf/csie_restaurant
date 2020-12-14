@@ -13,7 +13,6 @@
       >
       {{ option.label }}
       </b-form-radio>
-      
     </div>
     </b-form-group>
   </div>
@@ -26,7 +25,7 @@ export default {
         return{
             selected: '',
             options:[
-                {id:1, label:"會員管理", path:'manage'},
+                {id:1, label:"會員管理", path:'member'},
                 {id:2, label:"店家管理", path:'shop'},
                 {id:3, label:"報表統計", path:"salesReport"}
                 ],  

@@ -47,11 +47,11 @@ const routes = [
                     {
                     name: 'Shop',
                     path: 'shop',
-                    component: () =>import('@/components/Carousel.vue')
+                    component: () =>import('@/views/Member.vue')
                     },
                     {
-                    name: 'Manage',
-                    path: 'manage',
+                    name: 'Member',
+                    path: 'member',
                     component: () =>import('@/views/Member.vue')
                     }
             ]

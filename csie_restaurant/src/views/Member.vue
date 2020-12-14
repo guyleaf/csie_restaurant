@@ -19,7 +19,7 @@
 <script>
 import MemberTable from "@/components/MemberTable.vue";
 export default {
-    name:"member",
+    name:"Member",
     components:
     {
        MemberTable 
@@ -44,5 +44,8 @@ export default {
     color: black;
     padding-left: 2%;
     border-bottom:1px solid gray ;
+  }
+  .ml-auto{
+    margin: 1% 0 1% 0;
   }
 </style>

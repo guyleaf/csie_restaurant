@@ -17,7 +17,7 @@
 import Histogram from "@/components/Histogram.vue";
 import Dropdown from "@/components/Dropdown.vue";
 export default {
-    name:"member",
+    name:"SalesReport",
     components:
     {
        Histogram,
