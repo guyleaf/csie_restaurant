@@ -49,7 +49,6 @@ export default {
 <style scopped>
   .container{
     max-width:100% !important; 
-    min-height: 100% !important;
     padding: 0% !important;
     overflow: hidden;
   }
