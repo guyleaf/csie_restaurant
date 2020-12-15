@@ -19,14 +19,6 @@ const routes = [
                 }
             },
             {
-                name: 'Login',
-                path: 'login',
-                component: () => import('@/views/Login.vue'),
-                meta: {
-                    title: '孜宮庭園 - 登入',
-                }
-            },
-            {
                 name: 'Shop',
                 path: 'shop',
                 component: () => import('@/views/Shop.vue'),
@@ -53,8 +45,8 @@ const routes = [
                     component: () =>import('@/views/SalesReport.vue')
                     },
                     {
-                    name: 'Shop',
-                    path: 'shop',
+                    name: 'manageShops',
+                    path: 'manageshops',
                     component: () =>import('@/views/Member.vue')
                     },
                     {
