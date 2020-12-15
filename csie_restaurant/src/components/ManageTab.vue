@@ -23,11 +23,11 @@ export default {
     name: "ManageTab",
     data(){
         return{
-            selected: 'member',
+            selected:this.$router.history.current.name,
             options:[
-                {id:1, label:"會員管理", path:'member'},
-                {id:2, label:"店家管理", path:'shop'},
-                {id:3, label:"報表統計", path:"salesReport"}
+                {id:1, label:"會員管理", path:'Member'},
+                {id:2, label:"店家管理", path:'Shop'},
+                {id:3, label:"報表統計", path:"SalesReport"}
                 ],  
         }
     },
@@ -37,7 +37,15 @@ export default {
             else this.$router.push("/manage/"+this.selected)
             console.log(this.selected)
         }
-    }
+    },
+    watch: {
+      $route: {
+        handler: function() {
+        console.log(this.$router.history.current.name)
+        this.selected = this.$router.history.current.name
+      },
+      }
+    },
 }
 </script>
 

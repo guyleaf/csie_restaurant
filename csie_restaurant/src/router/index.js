@@ -35,6 +35,14 @@ const routes = [
                 }
             },
             {
+                name: 'History',
+                path: 'history',
+                component: () => import('@/views/History.vue'),
+                meta: {
+                    title: '孜宮庭園 - 商店',
+                }
+            },
+            {
                 name: 'Manage',
                 path: 'manage',
                 component: () =>import('@/views/layouts/ManageLayout.vue'),

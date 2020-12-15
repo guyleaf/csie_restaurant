@@ -30,7 +30,12 @@
             </b-navbar-nav>
             <b-navbar-nav>
                 <b-nav-item> 
-                    <router-link :to="{name: 'Member'}" class="nav-link manage">Manage</router-link>
+                    <router-link :to="{name: 'SalesReport'}" class="nav-link manage">Manage</router-link>
+                </b-nav-item>
+            </b-navbar-nav>
+            <b-navbar-nav>
+                <b-nav-item> 
+                    <router-link :to="{name: 'History'}" class="nav-link manage">History</router-link>
                 </b-nav-item>
             </b-navbar-nav>
             </b-collapse>
