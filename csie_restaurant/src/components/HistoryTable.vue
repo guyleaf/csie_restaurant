@@ -4,8 +4,8 @@
       <template #cell(評分)="row">
         <div class="star">
             <div class='starXin' v-for="(item,index) in list" :key='index'>
-              <div @click="star(index,row)">
-                <img :src="row.item.xing>index?stara:starb"/>
+              <div @click="clickStar(index,row)" >
+                <img :src="row.item.ratingStar>index?stara:starb" @mouseover="hoverStar(index,row)" @mouseleave="unhoverStar(row)"/>
               </div>
             </div>
         </div>
@@ -31,11 +31,12 @@
             </div>
             <div class='col-md-6'>
                 <div class='row justify-content-center'>
-                  <textarea readonly='readonly' placeholder="幹" class='tA'></textarea>
+                  <textarea :id="'text'+row.index" :placeholder="items[row.index].comment" class='tA' :readonly="items[row.index].readonly"/>
                   <div :id ="'disabled-wrapper'+row.index" class="d-inline-block sb">
-                    <b-button :id="'bt'+row.index" class="te" disabled='disabled'>評價</b-button>
+                    <b-button class="te" :disabled="items[row.index].ratingdisabled" @click="submitRating(row)">評價</b-button>
                   </div>
-                  <b-tooltip :target="'disabled-wrapper'+row.index">Disabled tooltip</b-tooltip>
+                  <b-tooltip v-if="!items[row.index].isClicked" :target="'disabled-wrapper'+row.index">請先給予評分。</b-tooltip>
+                  <b-tooltip v-if="items[row.index].isRated" :target="'disabled-wrapper'+row.index">已留言</b-tooltip>
                 </div>
             </div>
           </div>
@@ -49,16 +50,18 @@
   export default {
     data() {
       return {
-        counter: 0,
-        textArea:document.querySelectorAll('.tA'),
         list:[0,1,2,3,4],
         stara:'https://i.imgur.com/S1EjjXA.png',//亮星星
         starb:'https://i.imgur.com/gONraUA.png',//暗星星
         fields: ['店家', '日期', '評分', '顯示更多'],
         items: [
           { 
-              xing:0,
-              rated:false,
+              ratingStar:0,
+              isClicked:false,
+              isRated:false,
+              readonly:false,
+              comment:"請留下您的評論。",
+              ratingdisabled:'disabled',
               店家: 'Dickerson', 日期: 'Macdonald',
               datas:[
                   {name:123123},
@@ -66,38 +69,59 @@
               ]
           }, 
            { 
-              xing:0,
-              rated:false,
+              ratingStar:0,
+              isClicked:false,
+              isRated:false,
+              readonly:false,
+              comment:"請留下您的評論。",
+              ratingdisabled:'disabled',
               店家: 'Dickerson', 日期: 'Macdonald',
               datas:[
                   {name:123123},
                   {name:456 },
               ]
+              
           }, 
         ],
       }
     },
     methods:{
-      star(val,history){
-        if(this.items[history.index].xing == 0 ){
-          if(history.detailsShowing ==false){
+      clickStar(val,history){
+        var index = history.index
+        if(!this.items[index].isClicked){
+          if(!history.detailsShowing){
             history.toggleDetails()
           }
-          this.items[history.index].xing = val+1
-          console.log("點選了"+(val+1)+"顆星")
-          var submit =  document.getElementById("bt"+history.index.toString())
-          submit.disabled=!submit.disabled
-          submit.classList.remove('disabled')
+          this.items[index].ratingdisabled=!this.items[index].ratingdisabled
         }
-        this.items[history.index].xing = val+1
-        console.log("點選了"+(val+1)+"顆星")
-
+        if(!this.items[index].isRated){
+          this.items[index].isClicked = true
+          this.items[index].ratingStar = val+1
+        }
       },
-      rating(history){
-        if(this.items[history.index].xing == 0)
-        console.log("請幹你娘")
+      hoverStar(val,history){
+        var index = history.index
+        if(!this.items[index].isClicked){
+          this.items[index].ratingStar = val+1
+        }
       },
+      unhoverStar(history){
+        var index = history.index
+        if(!this.items[index].isClicked){
+          this.items[index].ratingStar = 0
+        }
+      },
+      submitRating(history){
+        var index = history.index
+        var textArea = document.getElementById("text"+index.toString())
+        var comment = textArea.value
+        this.items[index].isRated = true
+        this.items[index].readonly = true
+        this.items[index].comment = comment
+        this.items[index].ratingdisabled=!this.items[index].ratingdisabled
+      }
     },
+    
   }
 </script>
 
