@@ -47,8 +47,8 @@
     data() {
       return {
         list:[0,1,2,3,4],
-        stara:'https://picsum.photos/1024/480/?image=12',//亮星星
-        starb:'https://picsum.photos/1024/480/?image=54',//暗星星
+        stara:'https://i.imgur.com/S1EjjXA.png',//亮星星
+        starb:'https://i.imgur.com/gONraUA.png',//暗星星
         xing:0,
         fields: ['店家', '日期', '評分', '顯示更多'],
         items: [
