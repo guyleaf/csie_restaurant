@@ -1,6 +1,6 @@
 <template>
     <div>
-        <b-navbar toggleable="lg" type="dark" variant="dark">
+        <b-navbar toggleable="lg" type="dark" variant="dark" class='header'>
             <b-navbar-brand> 
                 <router-link :to="{name: 'Home'}" class="nav-link" variant="info">孜宮庭園</router-link>
             </b-navbar-brand>
@@ -26,6 +26,16 @@
             <b-navbar-nav>
                 <b-nav-item> 
                     <router-link :to="{name: 'Login'}" class="nav-link login">Login</router-link>
+                </b-nav-item>
+            </b-navbar-nav>
+            <b-navbar-nav>
+                <b-nav-item> 
+                    <router-link :to="{name: 'SalesReport'}" class="nav-link manage">Manage</router-link>
+                </b-nav-item>
+            </b-navbar-nav>
+            <b-navbar-nav>
+                <b-nav-item> 
+                    <router-link :to="{name: 'History'}" class="nav-link manage">History</router-link>
                 </b-nav-item>
             </b-navbar-nav>
             </b-collapse>

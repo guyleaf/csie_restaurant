@@ -36,7 +36,7 @@ export default {
   components: {
     ShopIntro,
     ShopDescription,
-    FoodCardGroup,  
+    FoodCardGroup  
   },
   data: function() {
     return {

@@ -1,7 +1,7 @@
 <template>
     <div>
         <MainHeader />
-        <div class="container">
+        <div class="container body">
             <router-view />
         </div>
         <MainFooter />
@@ -22,12 +22,18 @@ export default {
     data: function() {
         return {};
     },
-    computed: {
-    },
     beforeCreate: function() {},
     created: function() {},
     beforeMount: function() {},
-    mounted: function() {},
+    mounted: function() {
+        var body = document.querySelector('.body')
+        var header = document.querySelector('.header')
+        var footer = document.querySelector('.bottom')
+        var footerHeight = footer.clientHeight 
+        body.style.minHeight ="100vh"
+        var bodyHeight = body.clientHeight - footerHeight - header.clientHeight
+        body.style.minHeight= bodyHeight.toString()+"px"
+    },  
     beforeUpdate: function() {},
     updated: function() {},
     activated: function() {},
@@ -40,4 +46,5 @@ export default {
 </script>
 
 <style scoped>
+
 </style>

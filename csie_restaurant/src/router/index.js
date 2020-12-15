@@ -34,6 +34,36 @@ const routes = [
                     title: '孜宮庭園 - 商店',
                 }
             },
+            {
+                name: 'History',
+                path: 'history',
+                component: () => import('@/views/History.vue'),
+                meta: {
+                    title: '孜宮庭園 - 商店',
+                }
+            },
+            {
+                name: 'Manage',
+                path: 'manage',
+                component: () =>import('@/views/layouts/ManageLayout.vue'),
+                children: [
+                    {
+                    name: 'SalesReport',
+                    path: 'salesReport',
+                    component: () =>import('@/views/SalesReport.vue')
+                    },
+                    {
+                    name: 'Shop',
+                    path: 'shop',
+                    component: () =>import('@/views/Member.vue')
+                    },
+                    {
+                    name: 'Member',
+                    path: 'member',
+                    component: () =>import('@/views/Member.vue')
+                    }
+            ]
+            }
         ],
     },
 
