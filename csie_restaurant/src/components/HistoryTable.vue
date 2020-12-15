@@ -1,18 +1,18 @@
 <template>
   <div>
     <b-table :items="items" :fields="fields" striped responsive="sm">
-      <template #cell(評分)>
+      <template #cell(評分)="row">
         <div class="star">
             <div class='starXin' v-for="(item,index) in list" :key='index'>
-              <div @click="star(index)">
-                <img :src="xing>index?stara:starb"/>
+              <div @click="star(index,row)">
+                <img :src="row.item.xing>index?stara:starb"/>
               </div>
             </div>
         </div>
       </template>
       <template #cell(顯示更多)="row">
-        <b-button size="sm" @click="row.toggleDetails" class="mr-2">
-          {{ row.detailsShowing ?   'Hide' : 'Show'}} Details
+        <b-button size="sm" @click="row.toggleDetails" class="mr-2 detail">
+          {{ row.detailsShowing ?  'Hide' : 'Show'}} Details
         </b-button>
 
         <!-- As `row.showDetails` is one-way, we call the toggleDetails function on @change -->
@@ -31,8 +31,11 @@
             </div>
             <div class='col-md-6'>
                 <div class='row justify-content-center'>
-                <textarea placeholder="幹"></textarea>
-                 <button class="te">評價</button>
+                  <textarea readonly='readonly' placeholder="幹" class='tA'></textarea>
+                  <div :id ="'disabled-wrapper'+row.index" class="d-inline-block sb">
+                    <b-button :id="'bt'+row.index" class="te" disabled='disabled'>評價</b-button>
+                  </div>
+                  <b-tooltip :target="'disabled-wrapper'+row.index">Disabled tooltip</b-tooltip>
                 </div>
             </div>
           </div>
@@ -46,28 +49,55 @@
   export default {
     data() {
       return {
+        counter: 0,
+        textArea:document.querySelectorAll('.tA'),
         list:[0,1,2,3,4],
         stara:'https://i.imgur.com/S1EjjXA.png',//亮星星
         starb:'https://i.imgur.com/gONraUA.png',//暗星星
-        xing:0,
         fields: ['店家', '日期', '評分', '顯示更多'],
         items: [
           { 
+              xing:0,
+              rated:false,
               店家: 'Dickerson', 日期: 'Macdonald',
               datas:[
                   {name:123123},
-                  {name:456 }
+                  {name:456 },
               ]
           }, 
-        ]
+           { 
+              xing:0,
+              rated:false,
+              店家: 'Dickerson', 日期: 'Macdonald',
+              datas:[
+                  {name:123123},
+                  {name:456 },
+              ]
+          }, 
+        ],
       }
     },
     methods:{
-      star(val){
-          this.xing = val+1
+      star(val,history){
+        if(this.items[history.index].xing == 0 ){
+          if(history.detailsShowing ==false){
+            history.toggleDetails()
+          }
+          this.items[history.index].xing = val+1
           console.log("點選了"+(val+1)+"顆星")
-      }
-    }
+          var submit =  document.getElementById("bt"+history.index.toString())
+          submit.disabled=!submit.disabled
+          submit.classList.remove('disabled')
+        }
+        this.items[history.index].xing = val+1
+        console.log("點選了"+(val+1)+"顆星")
+
+      },
+      rating(history){
+        if(this.items[history.index].xing == 0)
+        console.log("請幹你娘")
+      },
+    },
   }
 </script>
 
@@ -92,10 +122,15 @@
     margin: 0;
     padding: 0;
   }
+  .sb{
+    width:85%;
+    height:43px;
+    margin-top: 1%;
+    border-radius:4px;
+  }
   .te{
-      margin-top: 1%;
-      width:85%;
-      height:43px;
+      width:100%;
+      height: 100%;
       background:rgba(67,154,255,1);
       border-radius:4px;
       font-size:15px;
