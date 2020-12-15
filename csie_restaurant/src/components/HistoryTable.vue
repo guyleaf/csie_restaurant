@@ -4,8 +4,8 @@
       <template #cell(評分)="row">
         <div class="star">
             <div class='starXin' v-for="(item,index) in list" :key='index'>
-              <div @click="star(index,row)">
-                <img :src="row.item.xing>index?stara:starb"/>
+              <div @click="star(index,row)" >
+                <img :src="row.item.ratingStar>index?stara:starb" @mouseover="hoverStar(index,row)" @mouseleave="unhoverStar(row)"/>
               </div>
             </div>
         </div>
@@ -31,9 +31,9 @@
             </div>
             <div class='col-md-6'>
                 <div class='row justify-content-center'>
-                  <textarea readonly='readonly' placeholder="幹" class='tA'></textarea>
+                  <textarea placeholder="幹" class='tA'></textarea>
                   <div :id ="'disabled-wrapper'+row.index" class="d-inline-block sb">
-                    <b-button :id="'bt'+row.index" class="te" disabled='disabled'>評價</b-button>
+                    <b-button class="te" :disabled="items[row.index].ratingdisabled">評價</b-button>
                   </div>
                   <b-tooltip :target="'disabled-wrapper'+row.index">Disabled tooltip</b-tooltip>
                 </div>
@@ -49,16 +49,16 @@
   export default {
     data() {
       return {
-        counter: 0,
-        textArea:document.querySelectorAll('.tA'),
         list:[0,1,2,3,4],
         stara:'https://i.imgur.com/S1EjjXA.png',//亮星星
         starb:'https://i.imgur.com/gONraUA.png',//暗星星
         fields: ['店家', '日期', '評分', '顯示更多'],
         items: [
           { 
-              xing:0,
-              rated:false,
+              ratingStar:0,
+              isClicked:false,
+              isRated:false,
+              ratingdisabled:'disabled',
               店家: 'Dickerson', 日期: 'Macdonald',
               datas:[
                   {name:123123},
@@ -66,8 +66,10 @@
               ]
           }, 
            { 
-              xing:0,
-              rated:false,
+              ratingStar:0,
+              isClicked:false,
+              isRated:false,
+              ratingdisabled:'disabled',
               店家: 'Dickerson', 日期: 'Macdonald',
               datas:[
                   {name:123123},
@@ -79,25 +81,32 @@
     },
     methods:{
       star(val,history){
-        if(this.items[history.index].xing == 0 ){
+        var index = history.index
+        if(this.items[index].isClicked == false ){
           if(history.detailsShowing ==false){
             history.toggleDetails()
           }
-          this.items[history.index].xing = val+1
-          console.log("點選了"+(val+1)+"顆星")
-          var submit =  document.getElementById("bt"+history.index.toString())
-          submit.disabled=!submit.disabled
-          submit.classList.remove('disabled')
+          this.items[index].ratingdisabled=!this.items[index].ratingdisabled
         }
-        this.items[history.index].xing = val+1
-        console.log("點選了"+(val+1)+"顆星")
-
+        this.items[index].isClicked = true
+        this.items[index].ratingStar = val+1
       },
-      rating(history){
-        if(this.items[history.index].xing == 0)
-        console.log("請幹你娘")
+      hoverStar(val,history){
+        var index = history.index
+        if(this.items[index].isClicked == false){
+          this.items[index].ratingStar = val+1
+        }
+      },
+      unhoverStar(history){
+        var index = history.index
+        if(this.items[index].isClicked == false){
+          this.items[index].ratingStar = 0
+        }
+      },
+      rating(){
       },
     },
+    
   }
 </script>
 
