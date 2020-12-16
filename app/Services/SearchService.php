@@ -131,12 +131,5 @@ class SearchService
             ->getCategories();
         return $result;
     }
-
-    public function getItems($id)
-    {
-        $result = $this->shopRepository
-            ->getItems($id);
-        return $result
-    }
 }
 ?>

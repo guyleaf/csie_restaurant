@@ -31,6 +31,6 @@ $router->group(['prefix' => 'restaurants'], function () use ($router) {
     $router->get('{id}/assets/{filename}', 'ShopController@getImage');
     $router->get('', 'ShopController@getShops');
     $router->get('category', 'ShopController@getCategories');
-    $router->get('id={id}', 'shopController@getItems')
+    $router->get('{id}/products', 'shopController@getItems')
 });
 ?>

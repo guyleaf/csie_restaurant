@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Services\ShopService;
 use App\Services\SearchService;
+use App\Services\ProductService;
 use Exception;
 
 class ShopController extends Controller
@@ -20,14 +21,20 @@ class ShopController extends Controller
     protected $searchService;
 
     /**
+     * @var \App\Services\ProductService $productService
+     */
+    protected $productService;
+
+    /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(ShopService $shopService, SearchService $searchService)
+    public function __construct(ShopService $shopService, SearchService $searchService, ProductService $productService)
     {
         $this->shopService = $shopService;
         $this->searchService = $searchService;
+        $this->productService = $productService;
     }
 
     /**
@@ -75,7 +82,7 @@ class ShopController extends Controller
     public function getItems(Request $request, $id)
     {
         try {
-            $result = $this->searchService->getItems($id);
+            $result = $this->productService->getItems($id);
         } catch (Exception $e) {
             return response()->json([
                 'status' => $e->getCode(),
