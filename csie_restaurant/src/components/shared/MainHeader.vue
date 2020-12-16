@@ -4,6 +4,7 @@
             <b-navbar-brand> 
                 <router-link :to="{name: 'Home'}" class="nav-link" variant="info">孜宮庭園</router-link>
             </b-navbar-brand>
+            
 
             <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
@@ -11,6 +12,9 @@
             <b-navbar-nav>
                 <b-nav-item> 
                     <router-link :to="{name: 'Home'}" class="nav-link">Home</router-link>
+                </b-nav-item>
+                <b-nav-item> 
+                    <router-link :to="{name: 'Cashier'}" class="nav-link">Cashier</router-link>
                 </b-nav-item>
             </b-navbar-nav>
             

@@ -31,7 +31,15 @@ const routes = [
                 path: 'history',
                 component: () => import('@/views/History.vue'),
                 meta: {
-                    title: '孜宮庭園 - 商店',
+                    title: '孜宮庭園 - 歷史訂單',
+                }
+            },
+            {
+                name: 'Cashier',
+                path: 'cashier',
+                component: () => import('@/views/Cashier.vue'),
+                meta: {
+                    title: '孜宮庭園 - 結帳',
                 }
             },
             {
