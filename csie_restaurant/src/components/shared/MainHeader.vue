@@ -24,9 +24,7 @@
                 <ShoppingCart />
             </b-navbar-nav>
             <b-navbar-nav>
-                <b-nav-item> 
-                    <router-link :to="{name: 'Login'}" class="nav-link login">Login</router-link>
-                </b-nav-item>
+                <LoginNav />
             </b-navbar-nav>
             <b-navbar-nav>
                 <b-nav-item> 
@@ -35,7 +33,7 @@
             </b-navbar-nav>
             <b-navbar-nav>
                 <b-nav-item> 
-                    <router-link :to="{name: 'History'}" class="nav-link manage">History</router-link>
+                    <router-link :to="{name: 'History'}" class="nav-link history">History</router-link>
                 </b-nav-item>
             </b-navbar-nav>
             </b-collapse>
@@ -45,12 +43,13 @@
 
 <script>
 import ShoppingCart from "@/components/ShoppingCart.vue";
+import LoginNav from "@/components/LoginNav.vue";
 // @ is an alias to /src
-// import HelloWorld from "@/components/HelloWorld.vue";
 export default {
     name: "main-header",
     components: {
         ShoppingCart,
+        LoginNav
     },
     data: function() {
         return {
