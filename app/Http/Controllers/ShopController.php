@@ -71,4 +71,18 @@ class ShopController extends Controller
     {
         return response(app('filesystem')->url('test.txt'));
     }
+
+    public function getItems(Request $request, $id)
+    {
+        try {
+            $result = $this->searchService->getItems($id);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => $e->getCode(),
+                'messages' => unserialize($e->getMessage())
+            ], $e->getCode());
+        }
+
+        return response()->json($result);
+    }
 }

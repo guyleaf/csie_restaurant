@@ -59,6 +59,17 @@ class SearchService
         }
     }
 
+    protected function validateId($id)
+    {
+        $validator = Validator::make(['filters' => $filters], [
+            'filters' => 'bail|required|array|min:0',
+            'filters.*' => 'required|integer|min:0'
+        ]);
+        if ($validator->fails()) {
+            throw new InvalidArgumentException(serialize($validator->errors()), 400);
+        }
+    }
+
     protected function filterNull($data, $value)
     {
         $data = $data->map(function ($item, $key) use ($value) {
@@ -119,6 +130,13 @@ class SearchService
         $result = $this->shopRepository
             ->getCategories();
         return $result;
+    }
+
+    public function getItems($id)
+    {
+        $result = $this->shopRepository
+            ->getItems($id);
+        return $result
     }
 }
 ?>
