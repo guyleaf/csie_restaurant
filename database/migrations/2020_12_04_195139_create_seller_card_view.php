@@ -27,7 +27,7 @@ class CreateSellerCardView extends Migration
             ORDER BY S.member_id) as S
             left JOIN
             (SELECT seller_id, COUNT(*) as numberOfRatings, AVG(stars) as averageOfRatings
-            FROM customer_rating
+            FROM "order"
             GROUP BY seller_id) as R
             on S.member_id = R.seller_id);'
         );
