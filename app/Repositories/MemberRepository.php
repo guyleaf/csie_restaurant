@@ -3,7 +3,7 @@ namespace App\Repositories;
 
 use Illuminate\Support\Facades\DB;
 
-class MemverRepository
+class MemberRepository
 {
     /**
      * @var \Illuminate\Database\Query\Builder $memberTable
@@ -31,7 +31,7 @@ class MemverRepository
         $members = $this->memberTable
             ->skip($currentNumber)
             ->take($requiredNumber)
-            ->get(['member_id as seller_id', 'name', 'username', 'email', 'created_at', 'phone', 'member_status', ]);
+            ->get(['id as seller_id', 'name', 'username', 'email', 'created_at', 'phone', 'member_status', ]);
 
         return $members;
     }

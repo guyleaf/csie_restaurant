@@ -8,7 +8,7 @@ use App\Services\SearchService;
 use App\Services\ProductService;
 use Exception;
 
-class ShopController extends Controller
+class MemberController extends Controller
 {
     /**
      * @var \App\Services\MemberService $memberService
@@ -30,11 +30,9 @@ class ShopController extends Controller
      *
      * @return void
      */
-    public function __construct(MemberService $memberService, SearchService $searchService, ProductService $productService)
+    public function __construct(MemberService $memberService)
     {
         $this->memberService = $memberService;
-        $this->searchService = $searchService;
-        $this->productService = $productService;
     }
 
     /**

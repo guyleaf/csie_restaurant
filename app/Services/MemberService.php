@@ -17,7 +17,7 @@ class MemberService
      *
      * @param \App\Repositories\MemberRepository $memberReposity
      */
-    public function __construct(MemberReposity $memberRepository)
+    public function __construct(MemberRepository $memberRepository)
     {
         $this->memberRepository = $memberRepository;
     }
@@ -58,7 +58,7 @@ class MemberService
         $currentNumber = (int)$numbers['currentNumber'];
         $requiredNumber = (int)$numbers['requiredNumber'];
 
-        $result = $this->memberReposity
+        $result = $this->memberRepository
             ->getMembers($currentNumber, $requiredNumber);
 
         return $result;
