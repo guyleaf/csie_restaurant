@@ -21,5 +21,12 @@ class ShopService
     {
         $this->shopRepository = $shopRepository;
     }
+
+    public function getShopInfo($id)
+    {
+        $result = $this->shopRepository
+        ->getShopInfoByShopId();
+        return $result;
+    }
 }
 ?>

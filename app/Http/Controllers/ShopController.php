@@ -89,7 +89,19 @@ class ShopController extends Controller
                 'messages' => unserialize($e->getMessage())
             ], $e->getCode());
         }
+        return response()->json($result);
+    }
 
+    public function getShopInfo(Request $request, $id)
+    {
+        try {
+            $result = $this->shopService->getShopInfo($id);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => $e->getCode(),
+                'messages' => unserialize($e->getMessage())
+            ], $e->getCode());
+        }
         return response()->json($result);
     }
 }

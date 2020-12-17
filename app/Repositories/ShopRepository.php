@@ -79,5 +79,14 @@ class ShopRepository
 
         return $category;
     }
+
+    public function getShopInfoByShopId($id)
+    {
+        $info = $this->shopTable
+            ->join('member as M', 'M.member_id','=','seller.member_id')
+            ->where('seller.member_id','=', $id)
+            ->get(['seller.name','description','M.created_at']);
+        return $info;
+    }
 }
 ?>
