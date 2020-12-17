@@ -23,11 +23,12 @@ class ProductRepository
 
     public function getShopItemsByShopId($id)
     {
-        $items = $this->$productTable
-            ->join('product as P', 'P.seller_id', '=', 'member_id')
-            ->whereIn('P.member_id', $id)
+
+        $items = $this->productTable
+            ->join('seller as S', 'seller_id', '=', 'S.member_id')
+            ->where('S.member_id','=', $id)
             ->distinct()
-            ->get(['id', 'name', 'price', 'description']);
+            ->get(['id', 'name', 'price', 'product.description']);
 
         return $items;
     }
