@@ -33,7 +33,7 @@ class CustomerController extends Controller
     public function getOrder(Request $request, $id)
     {
         try {
-            $result = $this->CustomerService->getOrder($id);
+            $result = $this->customerService->getOrder($id);
         } catch (Exception $e) {
             return response()->json([
                 'status' => $e->getCode(),
@@ -47,7 +47,7 @@ class CustomerController extends Controller
     public function getOrderItems(Request $request, $id)
     {
         try {
-            $result = $this->CustomerService->getOrderItem($id);
+            $result = $this->customerService->getOrderItem($id);
         } catch (Exception $e) {
             return response()->json([
                 'status' => $e->getCode(),
