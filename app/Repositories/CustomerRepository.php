@@ -12,9 +12,9 @@ class CustomerRepository
     protected $order_item;
 
     /**
-     * @var \Illuminate\Database\Query\Builder $historyOrderView
+     * @var \Illuminate\Database\Query\Builder $order
      */
-    protected $historyOrderView;
+    protected $order;
 
     /**
      * Member Repository constructor
@@ -24,7 +24,7 @@ class CustomerRepository
     public function __construct()
     {
         $this->order_item = DB::table('order_item');
-        $this->historyOrderView = DB::table('history_order_view');
+        $this->order = DB::table('order', 'O');
     }
     /**
      * Get shops
@@ -45,9 +45,10 @@ class CustomerRepository
 
     public function getOrderByCustomerId($id)
     {
-        $order = $this->historyOrderView
-            ->where('customer_id', '=', $id)
-            ->get();
+        $order = $this->order
+            ->join('member as M', 'O.seller_id','=','M.id')
+            ->where('O.customer_id', '=', $id)
+            ->get(['O.id as order_id', 'M.name', 'O.order_time', 'O.stars']);
 
         return $order;
     }
