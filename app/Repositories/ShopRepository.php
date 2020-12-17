@@ -89,7 +89,7 @@ class ShopRepository
         return $info;
     }
 
-    public function getProductCategories($id)
+    public function getProductCategoriesByShopId($id)
     {
         $category = $this->shopTable
             ->join('product_category as PC', 'seller_id','=','member_id')
