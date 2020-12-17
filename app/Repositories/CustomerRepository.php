@@ -23,7 +23,7 @@ class CustomerRepository
      */
     public function __construct()
     {
-        $this->orderItemTable = DB::table('order_item');
+        $this->order_item = DB::table('order_item');
         $this->historyOrderView = DB::table('history_order_view');
     }
     /**
@@ -35,7 +35,7 @@ class CustomerRepository
      */
     public function getOrderItemsByOrderId($id)
     {
-        $items = $this->orderItemTable
+        $items = $this->order_item
             ->join('product as P', 'P.id', '=', 'product_id')
             ->where('order_id', '=', $id)
             ->get(['name', 'price', 'quantity']);
