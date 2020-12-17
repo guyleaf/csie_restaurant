@@ -21,6 +21,7 @@ class MemberSeeder extends Seeder
         $member = json_decode($content, true);
 
         foreach ($member as $person) {
+            var_dump($person);
             DB::table('member')->insert([
                 'id' => $person['id'],
                 'name' => $person['name'],
