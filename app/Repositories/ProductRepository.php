@@ -23,7 +23,6 @@ class ProductRepository
 
     public function getShopItemsByShopId($id)
     {
-
         $items = $this->productTable
             ->join('seller as S', 'seller_id', '=', 'S.member_id')
             ->where('S.member_id','=', $id)
