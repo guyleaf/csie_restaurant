@@ -17,6 +17,7 @@ class CreateOrderItemsTable extends Migration
             $table->foreignId("order_id")->comment("所屬訂單編號");
             $table->foreignId("product_id")->comment("所屬商品編號");
             $table->unsignedInteger("quantity")->default(1)->comment("訂購數量");
+            $table->unsignedInteger("price")->comment("商品單價");
             $table->string("note")->nullable()->comment("商品備註");
             $table->primary(["order_id", "product_id"]);
             $table->foreign("order_id")->references("id")->on("order")
