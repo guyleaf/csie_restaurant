@@ -39,4 +39,9 @@ $router->group(['prefix' => 'restaurants'], function () use ($router) {
 $router->group(['prefix' => 'members'], function () use ($router) {
     $router->get('', 'MemberController@getMembers');
 });
+
+$router->group(['prefix' => 'customer'], function () use ($router) {
+    $router->get('{id}/order', 'CustomerController@getOrder');
+    $router->get('{id}/items', 'CustomerController@getOrderItems');
+});
 ?>

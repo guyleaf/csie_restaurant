@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\MemberService;
-use App\Services\SearchService;
-use App\Services\ProductService;
 use Exception;
 
 class MemberController extends Controller
@@ -14,17 +12,6 @@ class MemberController extends Controller
      * @var \App\Services\MemberService $memberService
      */
     protected $memberService;
-
-    /**
-     * @var \App\Services\SearchService $searchService
-     */
-    protected $searchService;
-
-    /**
-     * @var \App\Services\ProductService $productService
-     */
-    protected $productService;
-
     /**
      * Create a new controller instance.
      *
