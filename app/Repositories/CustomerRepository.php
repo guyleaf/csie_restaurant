@@ -24,7 +24,7 @@ class CustomerRepository
     public function __construct()
     {
         $this->order_item = DB::table('order_item');
-        $this->order = DB::table('order');
+        $this->order = DB::table('order', 'O');
     }
     /**
      * Get shops
@@ -46,9 +46,10 @@ class CustomerRepository
     public function getOrderByCustomerId($id)
     {
         $order = $this->order
-            ->join('order as O', 'member as M', 'O.seller_id','=','M.id')
+            ->join('member as M', 'O.seller_id','=','M.id')
             ->where('O.customer_id', '=', $id)
             ->get(['O.id as order_id', 'M.name', 'O.order_time', 'O.stars']);
+
         return $order;
     }
 }
