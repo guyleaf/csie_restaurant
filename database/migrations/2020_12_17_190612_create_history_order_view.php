@@ -24,7 +24,7 @@ class CreateHistoryOrderView extends Migration
             (SELECT id, customer_id, M.name, order_time, stars
             FROM "order" as O, member as M
             WHERE O.seller_id = M.id
-            );'
+            ) as G);'
         );
     }
 
