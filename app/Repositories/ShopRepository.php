@@ -88,5 +88,14 @@ class ShopRepository
             ->get(['name','description','created_at']);
         return $info;
     }
+
+    public function getProductCategories($id)
+    {
+        $category = $this->shopTable
+            ->join('product_category as PC', 'seller_id','=','member_id')
+            ->where('member_id','=', $id)
+            ->get(['PC.name']);
+        return $category;
+    }
 }
 ?>

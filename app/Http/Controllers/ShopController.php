@@ -104,4 +104,17 @@ class ShopController extends Controller
         }
         return response()->json($result);
     }
+
+    public function getProductCategories(Request $request, $id)
+    {
+        try {
+            $result = $this->shopService->getProductCategories($id);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => $e->getCode(),
+                'messages' => unserialize($e->getMessage())
+            ], $e->getCode());
+        }
+        return response()->json($result);
+    }
 }

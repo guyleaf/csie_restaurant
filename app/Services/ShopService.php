@@ -28,5 +28,12 @@ class ShopService
         ->getShopInfoByShopId($id);
         return $result;
     }
+
+    public function getProductCategories($id)
+    {
+        $result = $this->shopRepository
+        ->getProductCategoriesByShopId($id);
+        return $result;
+    }
 }
 ?>
