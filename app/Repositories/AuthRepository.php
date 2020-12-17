@@ -10,6 +10,5 @@
             $member = DB::table('member');
         }
 
-        function
     }
 ?>

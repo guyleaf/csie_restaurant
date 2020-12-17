@@ -22,8 +22,6 @@ class ShopRepository
      */
     protected $categoryTable;
 
-    protected $productTable;
-
     /**
      * Shop Repository constructor
      *
@@ -34,7 +32,6 @@ class ShopRepository
         $this->shopTable = DB::table('seller');
         $this->categoryTable = DB::table('seller_category');
         $this->shopsInfoView = DB::table('seller_card_view');
-        $this->productTable = DB::table('product');
     }
 
     /**
@@ -83,15 +80,22 @@ class ShopRepository
         return $category;
     }
 
-    public function getShopItemsByShopId($id)
+    public function getShopInfoByShopId($id)
     {
-        $items = $this->$productTable
-            ->join('product as P', 'P.seller_id', '=', 'member_id')
-            ->whereIn('P.member_id', $id)
-            ->distinct()
-            ->get(['id', 'name', 'price', 'description']);
+        $info = $this->shopTable
+            ->join('member as M', 'id','=','member_id')
+            ->where('member_id','=', $id)
+            ->get(['name','description','created_at']);
+        return $info;
+    }
 
-        return $items;
+    public function getProductCategories($id)
+    {
+        $category = $this->shopTable
+            ->join('product_category as PC', 'seller_id','=','member_id')
+            ->where('member_id','=', $id)
+            ->get(['PC.name']);
+        return $category;
     }
 }
 ?>
