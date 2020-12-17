@@ -22,7 +22,7 @@ class CreateHistoryOrderView extends Migration
         DB::statement('CREATE VIEW history_order_view AS (
             select * FROM
             (SELECT id, customer_id, M.name, order_time, stars
-            FROM order as O, member as M
+            FROM "order" as O, member as M
             WHERE O.seller_id = M.id
             );'
         );
