@@ -13,15 +13,17 @@ class MemberSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run($member_path, $customer_path, $seller_path)
     {
-        $path = base_path('database/seeders/member.json');
+        $member = file_get_contents($member_path);
+        $customer = file_get_contents($customer_path);
+        $seller = file_get_contents($seller_path);
 
-        $content = file_get_contents($path);
-        $member = json_decode($content, true);
+        $member = json_decode($member, true);
+        $customer = json_decode($customer, true);
+        $seller = json_decode($seller, true);
 
         foreach ($member as $person) {
-            var_dump($person);
             DB::table('member')->insert([
                 'id' => $person['id'],
                 'name' => $person['name'],
@@ -36,19 +38,9 @@ class MemberSeeder extends Seeder
             ]);
         }
 
-        $path = base_path('database/seeders/customer.json');
-
-        $content = file_get_contents($path);
-        $customer = json_decode($content, true);
-
         foreach ($customer as $person) {
             DB::table('customer')->insert($person);
         }
-
-        $path = base_path('database/seeders/seller.json');
-
-        $content = file_get_contents($path);
-        $seller = json_decode($content, true);
 
         foreach ($seller as $person) {
             DB::table('seller')->insert($person);
