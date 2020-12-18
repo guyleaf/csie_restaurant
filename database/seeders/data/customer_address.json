@@ -1,0 +1,30 @@
+[
+	{
+		"customer_id" : 5,
+		"address" : "第六教學大樓327"
+	},
+	{
+		"customer_id" : 6,
+		"address" : "科研大樓1421"
+	},
+	{
+		"customer_id" : 7,
+		"address" : "科研大樓1321"
+	},
+	{
+		"customer_id" : 8,
+		"address" : "綜二演講廳"
+	},
+	{
+		"customer_id" : 9,
+		"address" : "第二教學大樓221"
+	},
+	{
+		"customer_id" : 10,
+		"address" : "第一教學大樓221"
+	},
+	{
+		"customer_id" : 5,
+		"address" : "科研大樓438"
+	}
+]
