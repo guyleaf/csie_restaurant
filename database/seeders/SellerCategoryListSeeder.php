@@ -3,9 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Database\Seeders\MemberSeeder;
 
-class DatabaseSeeder extends Seeder
+class SellerCategoryListSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,6 +13,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(MemberSeeder::class);
+        //
     }
 }
