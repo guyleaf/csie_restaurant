@@ -15,19 +15,43 @@ class MemberSeeder extends Seeder
      */
     public function run()
     {
-        // DB::insert('insert into "member" ("name", username, "password", member_status,
-        // phone, email, "permission", created_at, updated_at)
-        // values ("test", "csie", "csie", 0, "0906111111", "test@ggg.com", 0, "2020-12-04", "2020-12-04")');
-        $cc = DB::table('member')->insert([
-            'name' => 'test',
-            'username' => 'csie',
-            'password' => Hash::make('csie'),
-            'member_status' => 1,
-            'phone' => '0906111111',
-            'email' => 'test@ggg.com',
-            'permission' => 1,
-            'created_at' => '2020-12-04',
-            'updated_at' => '2020-12-04'
-        ]);
+        $path = base_path('database/seeders/member.json');
+
+        $content = file_get_contents($path);
+        $member = json_decode($content, true);
+
+        foreach ($member as $person) {
+            var_dump($person);
+            DB::table('member')->insert([
+                'id' => $person['id'],
+                'name' => $person['name'],
+                'username' => $person['username'],
+                'password' => Hash::make($person['password']),
+                'member_status' => $person['member_status'],
+                'phone' => $person['phone'],
+                'email' => $person['email'],
+                'permission' => $person['permission'],
+                'created_at' => $person['created_at'],
+                'updated_at' => $person['updated_at']
+            ]);
+        }
+
+        $path = base_path('database/seeders/customer.json');
+
+        $content = file_get_contents($path);
+        $customer = json_decode($content, true);
+
+        foreach ($customer as $person) {
+            DB::table('customer')->insert($person);
+        }
+
+        $path = base_path('database/seeders/seller.json');
+
+        $content = file_get_contents($path);
+        $seller = json_decode($content, true);
+
+        foreach ($seller as $person) {
+            DB::table('seller')->insert($person);
+        }
     }
 }
