@@ -1,6 +1,6 @@
 <template>
-  <b-container>
-    <b-row class="justify-content-md-center">
+  <div class="container">
+    <b-row class="justify-content-md-center mt-5">
       <b-col col lg="4">
         <div class="desField">
           <div v-for="(item,index) in ItemList" :key="index" >
@@ -12,34 +12,21 @@
       <b-col col lg="3">
         <h1>Total Price</h1>
         <h3>{{totalPrice}}</h3>
-        <b-form @submit="onSubmit" @reset="onReset">
-          <b-form-group
-            label="支付方式:"
-            label-for="payment"
-          >
-            <b-form-radio v-model="selected" name="pay" value="1">信用卡</b-form-radio>
-            <b-form-radio v-model="selected" name="pay" value="2">現金支付  </b-form-radio>
-            </b-form-group>
-            <b-form-group
-              label="優惠碼:"
-              label-for="coupon"
-            >
-              <b-form-input id="coupon" v-model="coupon" type="text" size="lg" placeholder="輸入優惠碼"></b-form-input>
-            </b-form-group>
-            <b-button type="submit">Submit</b-button>
-        </b-form>
+        <CashierForm />
       </b-col>
     </b-row>
-  </b-container>
+  </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import CartCell from "@/components/CartCell.vue"
+import CashierForm from "@/components/CashierForm.vue"
 export default {
   name: "Cashier",
   components: {
-    CartCell
+    CartCell,
+    CashierForm
   },
   props:{
     totalPrice: Number
@@ -83,7 +70,7 @@ export default {
 <style scopped>
 .container{
   max-width:100% !important; 
-  padding: 3% !important;
+  padding: 0% !important;
   overflow: hidden;
 }
 .desField{
