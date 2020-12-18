@@ -63,7 +63,11 @@ const routes = [
                     component: () =>import('@/views/Member.vue')
                     }
             ]
-            }
+            },
+            {   
+                path: '*', 
+                component:() => import('@/views/404.vue')  
+            } //404 notFoundPage
         ],
     },
 
