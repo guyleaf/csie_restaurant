@@ -41,7 +41,10 @@ $router->group(['prefix' => 'members'], function () use ($router) {
 });
 
 $router->group(['prefix' => 'customer'], function () use ($router) {
-    $router->get('{id}/order', 'CustomerController@getOrder');
-    $router->get('{id}/items', 'CustomerController@getOrderItems');
+    $router->get('{id}/orders', 'CustomerController@getOrders');
+});
+
+$router->group(['prefix' => 'order'], function () use ($router) {
+    $router->get('{id}/items', 'OrderController@getOrderItems');
 });
 ?>
