@@ -20,7 +20,7 @@ const routes = [
             },
             {
                 name: 'Shop',
-                path: 'shop',
+                path: 'shop/:shopName',
                 component: () => import('@/views/Shop.vue'),
                 meta: {
                     title: '孜宮庭園 - 商店',
