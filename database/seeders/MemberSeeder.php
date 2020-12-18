@@ -13,21 +13,37 @@ class MemberSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run($member_path, $customer_path, $seller_path)
     {
-        // DB::insert('insert into "member" ("name", username, "password", member_status,
-        // phone, email, "permission", created_at, updated_at)
-        // values ("test", "csie", "csie", 0, "0906111111", "test@ggg.com", 0, "2020-12-04", "2020-12-04")');
-        $cc = DB::table('member')->insert([
-            'name' => 'test',
-            'username' => 'csie',
-            'password' => Hash::make('csie'),
-            'member_status' => 1,
-            'phone' => '0906111111',
-            'email' => 'test@ggg.com',
-            'permission' => 1,
-            'created_at' => '2020-12-04',
-            'updated_at' => '2020-12-04'
-        ]);
+        $member = file_get_contents($member_path);
+        $customer = file_get_contents($customer_path);
+        $seller = file_get_contents($seller_path);
+
+        $member = json_decode($member, true);
+        $customer = json_decode($customer, true);
+        $seller = json_decode($seller, true);
+
+        foreach ($member as $person) {
+            DB::table('member')->insert([
+                'id' => $person['id'],
+                'name' => $person['name'],
+                'username' => $person['username'],
+                'password' => Hash::make($person['password']),
+                'member_status' => $person['member_status'],
+                'phone' => $person['phone'],
+                'email' => $person['email'],
+                'permission' => $person['permission'],
+                'created_at' => $person['created_at'],
+                'updated_at' => $person['updated_at']
+            ]);
+        }
+
+        foreach ($customer as $person) {
+            DB::table('customer')->insert($person);
+        }
+
+        foreach ($seller as $person) {
+            DB::table('seller')->insert($person);
+        }
     }
 }
