@@ -15,7 +15,7 @@ class CreateSellersTable extends Migration
     {
         Schema::create('seller', function (Blueprint $table) {
             $table->foreignId("member_id")->comment("商店編號");
-            $table->string("desctiption")->comment("商店描述")->nullable();
+            $table->string("description")->comment("商店描述")->nullable();
             $table->unsignedBigInteger("counter_number")->unique()->comment("櫃位號碼");
             $table->string("header_image")->nullable()->comment("商店圖片路徑");
             $table->primary("member_id");

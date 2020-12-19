@@ -1,0 +1,162 @@
+[
+	{
+		"id" : 1,
+		"code" : "Vs9wHy",
+		"member_id" : 1,
+		"start_time" : "2018-02-27T16:00:00.000Z",
+		"end_time" : "2018-02-27T16:00:00.000Z",
+		"type" : 0,
+		"discount" : 1.0,
+		"limit_money" : 50.0
+	},
+	{
+		"id" : 2,
+		"code" : "4caLqC",
+		"member_id" : 1,
+		"start_time" : "2019-02-27T16:00:00.000Z",
+		"end_time" : "2019-02-27T16:00:00.000Z",
+		"type" : 0,
+		"discount" : 1.0,
+		"limit_money" : 50.0
+	},
+	{
+		"id" : 3,
+		"code" : "DP73Jh",
+		"member_id" : 1,
+		"start_time" : "2020-02-27T16:00:00.000Z",
+		"end_time" : "2020-02-27T16:00:00.000Z",
+		"type" : 0,
+		"discount" : 1.0,
+		"limit_money" : 50.0
+	},
+	{
+		"id" : 4,
+		"code" : "A4Ayjg",
+		"member_id" : 1,
+		"start_time" : "2020-12-05T16:00:00.000Z",
+		"end_time" : "2020-12-24T16:00:00.000Z",
+		"type" : 1,
+		"discount" : 0.85,
+		"limit_money" : 100.0
+	},
+	{
+		"id" : 5,
+		"code" : "SVJRdV",
+		"member_id" : 11,
+		"start_time" : "2020-12-05T16:00:00.000Z",
+		"end_time" : "2020-12-24T16:00:00.000Z",
+		"type" : 1,
+		"discount" : 0.85,
+		"limit_money" : 100.0
+	},
+	{
+		"id" : 6,
+		"code" : "M7gtYR",
+		"member_id" : 11,
+		"start_time" : "2020-10-09T16:00:00.000Z",
+		"end_time" : "2020-10-09T16:00:00.000Z",
+		"type" : 2,
+		"discount" : 0.8,
+		"limit_money" : null
+	},
+	{
+		"id" : 7,
+		"code" : "nkyV6n",
+		"member_id" : 11,
+		"start_time" : "2020-11-10T16:00:00.000Z",
+		"end_time" : "2020-11-10T16:00:00.000Z",
+		"type" : 2,
+		"discount" : 0.6,
+		"limit_money" : null
+	},
+	{
+		"id" : 8,
+		"code" : "fp5eZd",
+		"member_id" : 3,
+		"start_time" : "2019-12-31T16:00:00.000Z",
+		"end_time" : "2020-01-06T16:00:00.000Z",
+		"type" : 1,
+		"discount" : 0.6,
+		"limit_money" : 2020.0
+	},
+	{
+		"id" : 9,
+		"code" : "ggRQ8U",
+		"member_id" : 3,
+		"start_time" : "2020-12-05T16:00:00.000Z",
+		"end_time" : "2020-12-24T16:00:00.000Z",
+		"type" : 1,
+		"discount" : 0.8,
+		"limit_money" : 100.0
+	},
+	{
+		"id" : 10,
+		"code" : "RntVd9",
+		"member_id" : 3,
+		"start_time" : "2020-02-03T16:00:00.000Z",
+		"end_time" : "2020-02-03T16:00:00.000Z",
+		"type" : 2,
+		"discount" : 0.8,
+		"limit_money" : null
+	},
+	{
+		"id" : 11,
+		"code" : "8ErNsY",
+		"member_id" : 3,
+		"start_time" : "2020-02-13T16:00:00.000Z",
+		"end_time" : "2020-02-13T16:00:00.000Z",
+		"type" : 2,
+		"discount" : 0.8,
+		"limit_money" : null
+	},
+	{
+		"id" : 12,
+		"code" : "bPhZha",
+		"member_id" : 4,
+		"start_time" : "2020-10-09T16:00:00.000Z",
+		"end_time" : "2020-10-09T16:00:00.000Z",
+		"type" : 2,
+		"discount" : 0.8,
+		"limit_money" : null
+	},
+	{
+		"id" : 13,
+		"code" : "rF5R2f",
+		"member_id" : 4,
+		"start_time" : "2020-12-04T16:00:00.000Z",
+		"end_time" : "2020-12-24T16:00:00.000Z",
+		"type" : 1,
+		"discount" : 0.6,
+		"limit_money" : 100.0
+	},
+	{
+		"id" : 14,
+		"code" : "t6L4FW",
+		"member_id" : 4,
+		"start_time" : "2020-08-07T16:00:00.000Z",
+		"end_time" : "2020-08-07T16:00:00.000Z",
+		"type" : 2,
+		"discount" : 0.7,
+		"limit_money" : null
+	},
+	{
+		"id" : 15,
+		"code" : "HrksmE",
+		"member_id" : 11,
+		"start_time" : "2020-09-10T16:00:00.000Z",
+		"end_time" : "2020-09-10T16:00:00.000Z",
+		"type" : 1,
+		"discount" : 0.1,
+		"limit_money" : 911.0
+	},
+	{
+		"id" : 16,
+		"code" : "xsK22C",
+		"member_id" : 11,
+		"start_time" : "2020-05-22T16:00:00.000Z",
+		"end_time" : "2020-05-22T16:00:00.000Z",
+		"type" : 2,
+		"discount" : 0.2,
+		"limit_money" : null
+	}
+]

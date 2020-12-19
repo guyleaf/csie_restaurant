@@ -18,7 +18,7 @@ class CreateMembersTable extends Migration
             $table->bigIncrements('id')->comment("會員編號");
             $table->string('name')->comment("暱稱");
             $table->string('username')->unique()->comment("帳號");
-            $table->string('password')->comment("密碼");
+            $table->longText('password')->comment("密碼");
             $table->unsignedInteger('member_status')->comment("狀態");
             $table->string('phone')->unique()->comment("電話號碼");
             $table->string('email')->unique()->comment("電子信箱");

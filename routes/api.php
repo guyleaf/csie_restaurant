@@ -26,4 +26,25 @@ $router->group(['prefix' => 'auth'], function () use ($router) {
         $router->post('', 'AuthController@me');
     });
 });
+
+$router->group(['prefix' => 'restaurants'], function () use ($router) {
+    $router->get('{id}/assets/{filename}', 'ShopController@getImage');
+    $router->get('', 'ShopController@getShops');
+    $router->get('category', 'ShopController@getCategories');
+    $router->get('{id}/products', 'ShopController@getItems');
+    $router->get('{id}/category', 'ShopController@getProductCategories');
+    $router->get('{id}/Info', 'ShopController@getShopInfo');
+});
+
+$router->group(['prefix' => 'members'], function () use ($router) {
+    $router->get('', 'MemberController@getMembers');
+});
+
+$router->group(['prefix' => 'customer'], function () use ($router) {
+    $router->get('{id}/orders', 'CustomerController@getOrders');
+});
+
+$router->group(['prefix' => 'order'], function () use ($router) {
+    $router->get('{id}/items', 'OrderController@getOrderItems');
+});
 ?>
