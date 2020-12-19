@@ -17,7 +17,7 @@ class CustomerService
         $this->customerRepository = $customerRepository;
     }
 
-    public function getOrder($id)
+    public function getOrders($id)
     {
         $result = $this->customerRepository
         ->getOrderByCustomerId($id);
