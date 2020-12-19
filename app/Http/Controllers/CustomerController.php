@@ -30,24 +30,10 @@ class CustomerController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getOrder(Request $request, $id)
+    public function getOrders(Request $request, $id)
     {
         try {
-            $result = $this->customerService->getOrder($id);
-        } catch (Exception $e) {
-            return response()->json([
-                'status' => $e->getCode(),
-                'messages' => unserialize($e->getMessage())
-            ], $e->getCode());
-        }
-
-        return response()->json($result);
-    }
-
-    public function getOrderItems(Request $request, $id)
-    {
-        try {
-            $result = $this->customerService->getOrderItem($id);
+            $result = $this->customerService->getOrders($id);
         } catch (Exception $e) {
             return response()->json([
                 'status' => $e->getCode(),

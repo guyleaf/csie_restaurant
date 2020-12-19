@@ -1,0 +1,42 @@
+[
+	{
+		"coupon_id" : 6,
+		"product_id" : 17,
+		"quantity" : 1
+	},
+	{
+		"coupon_id" : 7,
+		"product_id" : 14,
+		"quantity" : 2
+	},
+	{
+		"coupon_id" : 10,
+		"product_id" : 1,
+		"quantity" : 1
+	},
+	{
+		"coupon_id" : 11,
+		"product_id" : 2,
+		"quantity" : 1
+	},
+	{
+		"coupon_id" : 12,
+		"product_id" : 7,
+		"quantity" : 1
+	},
+	{
+		"coupon_id" : 14,
+		"product_id" : 12,
+		"quantity" : 1
+	},
+	{
+		"coupon_id" : 16,
+		"product_id" : 13,
+		"quantity" : 1
+	},
+	{
+		"coupon_id" : 6,
+		"product_id" : 14,
+		"quantity" : 1
+	}
+]

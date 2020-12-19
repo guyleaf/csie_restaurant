@@ -7,11 +7,6 @@ class CustomerRepository
 {
 
     /**
-     * @var \Illuminate\Database\Query\Builder $order_item
-     */
-    protected $order_item;
-
-    /**
      * @var \Illuminate\Database\Query\Builder $order
      */
     protected $order;
@@ -23,24 +18,7 @@ class CustomerRepository
      */
     public function __construct()
     {
-        $this->order_item = DB::table('order_item');
         $this->order = DB::table('order', 'O');
-    }
-    /**
-     * Get shops
-     *
-     * @param integer $currentNumber
-     * @param integer $requiredNumber
-     * @return \Illuminate\Support\Collection
-     */
-    public function getOrderItemsByOrderId($id)
-    {
-        $items = $this->order_item
-            ->join('product as P', 'P.id', '=', 'product_id')
-            ->where('order_id', '=', $id)
-            ->get(['name', 'price', 'quantity']);
-
-        return $items;
     }
 
     public function getOrderByCustomerId($id)
