@@ -11,14 +11,9 @@
         </div>
       </template>
       <template #cell(顯示更多)="row">
-        <b-button size="sm" @click="row.toggleDetails" class="mr-2 detail">
+        <b-button size="sm" @click="show(row);" class="mr-2 detail">
           {{ row.detailsShowing ?  'Hide' : 'Show'}} Details
         </b-button>
-
-        <!-- As `row.showDetails` is one-way, we call the toggleDetails function on @change -->
-        <b-form-checkbox v-model="row.detailsShowing" @change="row.toggleDetails">
-          Details via check
-        </b-form-checkbox>
       </template>
 
       <template #row-details="row">
@@ -26,8 +21,9 @@
           <div class='container row'>
             <div class='col-md-6'>
                 <b-row class="mb-2" v-for= "(data,index) in row.item.datas " :key="index">
-                    <b-col  >{{ data.name }}</b-col>
+                    <b-col  >{{ data.product_name }} * {{data.quantity}}={{data.price*data.quantity}}</b-col>
                 </b-row>
+                <b-col  >運費={{row.item.fee}}</b-col>
             </div>
             <div class='col-md-6'>
                 <div class='row justify-content-center'>
@@ -53,19 +49,23 @@
         list:[0,1,2,3,4],
         stara:'https://i.imgur.com/S1EjjXA.png',//亮星星
         starb:'https://i.imgur.com/gONraUA.png',//暗星星
-        fields: ['店家', '日期', '評分', '顯示更多'],
+        fields: ['店家', '日期', '訂單狀態', '評分', '顯示更多'],
         items: [
           { 
+              id:0,
+              seller_id:0,
               ratingStar:0,
               isClicked:false,
               isRated:false,
               readonly:false,
               comment:"請留下您的評論。",
-              ratingdisabled:'disabled',
-              店家: 'Dickerson', 日期: 'Macdonald',
+              ratingdisabled:true,
+              店家: 'Dickerson', 日期: '2020-11-11 04:12:25',
+              運輸時間:'null',地址:'null',訂單狀態:'4',
+              fee:0,
               datas:[
-                  {name:123123},
-                  {name:456 },
+                  {name:123123, price:123, quantity:1},
+                  {name:456, price:456, quantity:2},
               ]
           }, 
            { 
@@ -119,9 +119,44 @@
         this.items[index].readonly = true
         this.items[index].comment = comment
         this.items[index].ratingdisabled=!this.items[index].ratingdisabled
+      },
+      show(history){
+        console.log(history.item.id)
+        this.$http.get('/customer/orders/'+history.item.id)
+      .then(response => {
+        let datas=response.data
+        history.item.datas=[]
+        history.item.comment=datas.order.comment
+        history.item.datas=datas.order_items
+        console.log(datas.order_items)
+        history.item.fee=datas.order.fee
+        history.toggleDetails()
+        })
       }
     },
-    
+    created() {
+      this.$http.get('/customer/orders')
+      .then(response => {
+          this.items=[];
+          let data=response.data;
+          for (let i=0;i<data.length;i++)
+          {
+            let ratingdisabled=false
+            let isRated=false
+            let readonly=false
+            let isClicked=false
+            if(data[i].stars>0) 
+            {
+              isClicked=true
+              isRated=true
+              readonly=true
+              ratingdisabled=true
+            }
+            this.items.push({ratingStar: data[i].stars, 日期: data[i].order_time, seller_id: data[i].seller_id, 店家: data[i].seller_name ,id: data[i].order_id, isRated: isRated, readonly: readonly, ratingdisabled:ratingdisabled, isClicked: isClicked});
+          }
+          console.log(this.items) 
+          })
+    },
   }
 </script>
 
