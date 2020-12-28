@@ -25,7 +25,6 @@ class CreateOrdersTable extends Migration
             $table->unsignedInteger("status")->comment("訂單狀態");
             $table->string("address")->nullable()->comment("送餐地址");
             $table->unsignedInteger("fee")->comment("運費");
-            $table->unsignedInteger("total_price")->nullable()->comment("總金額");
             $table->unsignedInteger("taking_method")->comment("取餐方式");
             $table->unsignedFloat("stars")->nullable()->comment("分數");
             $table->dateTime("rating_time")->nullable()->comment("評分時間");

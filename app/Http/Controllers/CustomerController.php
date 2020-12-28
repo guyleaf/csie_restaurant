@@ -33,9 +33,9 @@ class CustomerController extends Controller
     public function getOrders(Request $request)
     {
         try {
-            $user = auth()->userOrFail();
-            $id = $user->id;
-            $result = $this->customerService->getOrders($id);
+            // $user = auth()->userOrFail();
+            // $id = $user->id;
+            $result = $this->customerService->getOrders(8);
         } catch (Exception $e) {
             return response()->json([
                 'status' => $e->getCode(),
@@ -49,9 +49,9 @@ class CustomerController extends Controller
     public function getOrderInfo(Request $request, $orderId)
     {
         try {
-            $user = auth()->userOrFail();
-            $id = $user->id;
-            $result = $this->customerService->getOrderInfo($id, $orderId);
+            // $user = auth()->userOrFail();
+            // $id = $user->id;
+            $result = $this->customerService->getOrderInfo(8, $orderId);
         } catch (Exception $e) {
             return response()->json([
                 'status' => $e->getCode(),

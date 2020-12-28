@@ -37,7 +37,7 @@ class OrderService
         $result = $this->orderRepository
         ->getOrderInfo($id, $orderId);
 
-        if (!empty($result->get('order')->coupon_id) && $result->get('order')->type == 2)
+        if (!empty($result->get('order')->coupon_id) && $result->get('order')->coupon_type == 2)
         {
             $coupon_items = $this->couponRepository
             ->getCouponItems($result->get('order')->coupon_id);
