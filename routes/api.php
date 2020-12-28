@@ -28,7 +28,6 @@ $router->group(['prefix' => 'auth'], function () use ($router) {
 });
 
 $router->group(['prefix' => 'restaurants'], function () use ($router) {
-    $router->get('{id}/assets/{filename}', 'ShopController@getImage');
     $router->get('', 'ShopController@getShops');
     $router->get('category', 'ShopController@getCategories');
     $router->get('{id}/products', 'ShopController@getItems');
@@ -41,7 +40,11 @@ $router->group(['prefix' => 'members'], function () use ($router) {
 });
 
 $router->group(['prefix' => 'customer'], function () use ($router) {
-    $router->get('{id}/orders', 'CustomerController@getOrders');
+    $router->get('orders', 'CustomerController@getOrders');
+    $router->get('orders/{orderId}', 'CustomerController@getOrderInfo');
+    $router->group(['middleware' => 'jwt.auth'], function () use ($router) {
+        
+    });
 });
 
 $router->group(['prefix' => 'order'], function () use ($router) {

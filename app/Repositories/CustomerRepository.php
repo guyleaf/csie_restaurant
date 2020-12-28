@@ -7,9 +7,9 @@ class CustomerRepository
 {
 
     /**
-     * @var \Illuminate\Database\Query\Builder $order
+     * @var \Illuminate\Database\Query\Builder $customer
      */
-    protected $order;
+    protected $customer;
 
     /**
      * Member Repository constructor
@@ -18,17 +18,7 @@ class CustomerRepository
      */
     public function __construct()
     {
-        $this->order = DB::table('order', 'O');
-    }
-
-    public function getOrderByCustomerId($id)
-    {
-        $order = $this->order
-            ->join('member as M', 'O.seller_id','=','M.id')
-            ->where('O.customer_id', '=', $id)
-            ->get(['O.id as order_id', 'M.name', 'O.order_time', 'O.stars']);
-
-        return $order;
+        $this->customer = DB::table('customer', 'C');
     }
 }
 ?>
