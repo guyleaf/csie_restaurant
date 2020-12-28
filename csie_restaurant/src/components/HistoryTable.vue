@@ -11,22 +11,31 @@
         </div>
       </template>
       <template #cell(顯示更多)="row">
-        <b-button size="sm" @click="row.toggleDetails" class="mr-2 detail">
+        <b-button size="sm" @click="show(row);" class="mr-2 detail">
           {{ row.detailsShowing ?  'Hide' : 'Show'}} Details
         </b-button>
-
-        <!-- As `row.showDetails` is one-way, we call the toggleDetails function on @change -->
-        <b-form-checkbox v-model="row.detailsShowing" @change="row.toggleDetails">
-          Details via check
-        </b-form-checkbox>
       </template>
 
       <template #row-details="row">
         <b-card>
           <div class='container row'>
-            <div class='col-md-6'>
-                <b-row class="mb-2" v-for= "(data,index) in row.item.datas " :key="index">
-                    <b-col  >{{ data.name }}</b-col>
+            <div class='col-md-3'>
+                  <b-row class="mb-2" v-for= "(data,index) in row.item.datas " :key="index">
+                      <b-row class="mr-2">{{ data.product_name }}</b-row>
+                      <b-row class="mr-2">* {{ data.quantity }} =</b-row>
+                      <b-row v-bind:class="{'line-throughdisplay':data.discount<1}" class="mr-2">{{ data.price*data.quantity }}</b-row>
+                      <b-row v-if="data.discount<1" class="mr-2"> {{price(data)}} </b-row>
+                      <b-row v-if="data.discount<1" class="mr-2 discount pl-1 pr-1"> {{data.discount*10}}折</b-row>
+                  </b-row>
+            </div>
+            <div class='col-md-3 align-self-end'>
+                <b-row class="mb-2 justify-content-end">
+                  <b-row>運費：</b-row>
+                  <b-row v-bind:class="{'line-throughdisplay':row.item.isShippingCoupon,'mr-2':row.item.isShippingCoupon}">{{ row.item.fee }}</b-row>
+                  <b-row v-if='row.item.isShippingCoupon' class="mb-2">0</b-row>
+                </b-row>
+                <b-row class="mb-2 justify-content-end">
+                  <b-row>總金額：{{ total(row.item.datas) }}</b-row>
                 </b-row>
             </div>
             <div class='col-md-6'>
@@ -53,19 +62,25 @@
         list:[0,1,2,3,4],
         stara:'https://i.imgur.com/S1EjjXA.png',//亮星星
         starb:'https://i.imgur.com/gONraUA.png',//暗星星
-        fields: ['店家', '日期', '評分', '顯示更多'],
+        status: ['已下單','店家已確認','準備中','運送中','已完成','已取消'],
+        fields: ['店家', '日期', '訂單狀態', '評分', '顯示更多'],
         items: [
           { 
+              id:0,
+              seller_id:0,
               ratingStar:0,
               isClicked:false,
               isRated:false,
               readonly:false,
               comment:"請留下您的評論。",
-              ratingdisabled:'disabled',
-              店家: 'Dickerson', 日期: 'Macdonald',
+              ratingdisabled:true,
+              店家: 'Dickerson', 日期: '2020-11-11 04:12:25',
+              運輸時間:'null',地址:'null',訂單狀態:'4',
+              fee:0,
+              isShippingCoupon:false,
               datas:[
-                  {name:123123},
-                  {name:456 },
+                  {name:123123, price:123, quantity:1,discount:1},
+                  {name:456, price:456, quantity:2},
               ]
           }, 
            { 
@@ -80,11 +95,21 @@
                   {name:123123},
                   {name:456 },
               ]
+              
           }, 
         ],
       }
     },
     methods:{
+      price(data){
+        return parseFloat(data.price * data.quantity * data.discount).toFixed(0)
+      },
+      total(datas){
+        let total=0;
+        console.log(datas)
+        for(let i=0;i<datas.length;i++) total=total+parseFloat(parseFloat(datas[i].price * datas[i].quantity * datas[i].discount).toFixed(0))
+        return total
+      },
       clickStar(val,history){
         var index = history.index
         if(!this.items[index].isClicked){
@@ -118,12 +143,66 @@
         this.items[index].readonly = true
         this.items[index].comment = comment
         this.items[index].ratingdisabled=!this.items[index].ratingdisabled
+      },
+      show(history){
+        this.$http.get('/customer/orders/'+history.item.id)
+      .then(response => {
+        let datas=response.data
+        history.item.datas=[]
+        history.item.comment=datas.order.comment
+        for(let i=0;i<datas.order_items.length;i++) 
+        {
+          let discount = 1
+          if(datas.coupon_items!=undefined) for (let j =0;j<datas.coupon_items.length;j++)
+            if(datas.coupon_items[j].product_id == datas.order_items[i].product_id && datas.coupon_items[j].quantity<=datas.order_items[i].quantity) discount=datas.order.discount
+          history.item.datas.push({product_name:datas.order_items[i].product_name, price:datas.order_items[i].price, quantity:datas.order_items[i].quantity ,discount:discount})
+        }
+        if(datas.order.coupon_type==1) history.item.isShippingCoupon=true;
+        else history.item.isShippingCoupon=false;
+        history.item.fee=datas.order.fee;
+        history.toggleDetails()
+        })
       }
+    },
+    created() {
+      this.$http.get('/customer/orders')
+      .then(response => {
+          this.items=[];
+          let data=response.data;
+          for (let i=0;i<data.length;i++)
+          {
+            let ratingdisabled=false
+            let isRated=false
+            let readonly=false
+            let isClicked=false
+            if(data[i].stars>0) 
+            {
+              isClicked=true
+              isRated=true
+              readonly=true
+              ratingdisabled=true
+            }
+            this.items.push({訂單狀態: this.status[data[i].status],ratingStar: data[i].stars, 日期: data[i].order_time, seller_id: data[i].seller_id, 店家: data[i].seller_name ,id: data[i].order_id, isRated: isRated, readonly: readonly, ratingdisabled:ratingdisabled, isClicked: isClicked});
+          }
+          })
     },
   }
 </script>
 
 <style scoped>
+  pre{
+    margin: 0;
+    font-size: 16px;
+  }
+  .discount{
+    background-color: yellow;
+    font-weight: bold;
+  }
+  .line-throughdisplay{
+    text-decoration:line-through;
+    text-decoration-color:red;
+    color: rgba(0,0,0,.4);
+  }
   .star{
       width: 1%;
       height: 1%;

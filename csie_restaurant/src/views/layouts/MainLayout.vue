@@ -45,6 +45,11 @@ export default {
   Vue.prototype.$bus = new Vue();
 </script>
 
-<style scoped>
-
+<style>
+  .container{
+    min-width:100% !important; 
+    margin: 0 !important;
+    padding: 0% !important;
+    overflow: hidden;
+  }
 </style>
