@@ -41,10 +41,9 @@ $router->group(['prefix' => 'members'], function () use ($router) {
 });
 
 $router->group(['prefix' => 'customer'], function () use ($router) {
-    $router->get('{id}/orders', 'CustomerController@getOrders');
-});
-
-$router->group(['prefix' => 'order'], function () use ($router) {
-    $router->get('{id}/items', 'OrderController@getOrderItems');
+    $router->group(['middleware' => 'jwt.auth'], function () use ($router) {
+        $router->get('orders', 'CustomerController@getOrders');
+        $router->get('orders/{orderId}', 'CustomerController@getOrderInfo');
+    });
 });
 ?>

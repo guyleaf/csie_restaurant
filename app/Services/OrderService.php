@@ -1,26 +1,49 @@
 <?php
 namespace App\Services;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use App\Repositories\OrderRepository;
+use App\Repositories\CouponRepository;
+
+use function PHPUnit\Framework\isEmpty;
 
 class OrderService
 {
     /**
-     * @var \App\Repositories\OrderRepository $orderRepository
+     * @var App\Repositories\OrderRepository $orderRepository
      */
     protected $orderRepository;
 
-    public function __construct(OrderRepository $orderRepository)
+    /**
+     * @var App\Repositories\CouponRepository $couponRepository
+     */
+    protected $couponRepository;
+
+    public function __construct(OrderRepository $orderRepository, CouponRepository $couponRepository)
     {
         $this->orderRepository = $orderRepository;
+        $this->couponRepository = $couponRepository;
     }
 
-    public function getOrderItems($id)
+    public function getOrders($id)
     {
         $result = $this->orderRepository
-        ->getOrderItemsByOrderId($id);
+        ->getOrders($id);
+
+        return $result;
+    }
+
+    public function getOrderInfo($id, $orderId)
+    {
+        $result = $this->orderRepository
+        ->getOrderInfo($id, $orderId);
+
+        if (!empty($result->get('order')->coupon_id) && $result->get('order')->type == 2)
+        {
+            $coupon_items = $this->couponRepository
+            ->getCouponItems($result->get('order')->coupon_id);
+            $result['coupon_items'] = $coupon_items;
+        }
+
         return $result;
     }
 }
