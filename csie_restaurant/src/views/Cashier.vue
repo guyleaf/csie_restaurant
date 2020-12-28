@@ -34,33 +34,52 @@ export default {
   data() {
       return {
         ItemList:[
-          { foodName:"a1a", foodPrice: 30, foodSpinValue: 1,},
-          { foodName:"a2a", foodPrice: 30, foodSpinValue: 1,},
-          { foodName:"a3a", foodPrice: 30, foodSpinValue: 1,},
-          { foodName:"a4a", foodPrice: 30, foodSpinValue: 1,},
-          { foodName:"a5a", foodPrice: 30, foodSpinValue: 1,},
-          { foodName:"a6a", foodPrice: 30, foodSpinValue: 1,},
-          { foodName:"a7a", foodPrice: 30, foodSpinValue: 1,},
-          { foodName:"a8a", foodPrice: 30, foodSpinValue: 1,},
-          { foodName:"a9a", foodPrice: 30, foodSpinValue: 1,},
-          { foodName:"a10", foodPrice: 30, foodSpinValue: 1,},
-          { foodName:"a111111111111", foodPrice: 30, foodSpinValue: 1,},
+          // { foodName:"a1a", foodPrice: 30, foodSpinValue: 1,},
+          // { foodName:"a2a", foodPrice: 30, foodSpinValue: 1,},
+          // { foodName:"a3a", foodPrice: 30, foodSpinValue: 1,},
+          // { foodName:"a4a", foodPrice: 30, foodSpinValue: 1,},
+          // { foodName:"a5a", foodPrice: 30, foodSpinValue: 1,},
+          // { foodName:"a6a", foodPrice: 30, foodSpinValue: 1,},
+          // { foodName:"a7a", foodPrice: 30, foodSpinValue: 1,},
+          // { foodName:"a8a", foodPrice: 30, foodSpinValue: 1,},
+          // { foodName:"a9a", foodPrice: 30, foodSpinValue: 1,},
+          // { foodName:"a10", foodPrice: 30, foodSpinValue: 1,},
+          // { foodName:"a111111111111", foodPrice: 30, foodSpinValue: 1,},
         ]
       }
   },
   methods:{
-    add(name,spinValue,price)
-      {
-        this.ItemList.push({foodName: name,foodPrice: price,foodSpinValue: spinValue,});
-        this.totalPrice += spinValue*price; //failed
+     parseCookie(){
+        // let cookies = document.cookie;
+        let cookie;
+        let allCookies = document.cookie.split('; ');
+        let cookieObj = {};
+        
+        for (var i=0, l=allCookies.length; i<l; i++){
+            cookie = allCookies[i];
+            cookie = cookie.split('=');
+            cookieObj[cookie[0]] = cookie[1];
+        }
+        return cookieObj;
+      },
+      loadingData(){
+        this.ItemList = [];
+        let data = this.parseCookie()
+        let foodNum = parseInt(data['productNum'],10);
+        for (var i=1 ,l=foodNum+1; i<l; i++){
+          console.log(data['product'+ i.toString()])
+          console.log('product'+ i.toString())
+          this.ItemList.push(
+          {
+            foodName: data['product'+ i.toString()],
+            foodPrice: parseInt(data['price'+ i.toString()], 10),
+            foodSpinValue: parseInt(data['pinValue'+ i.toString()], 10)  
+          });
+        }
       },
   },
   created(){
-    this.totalPrice = 0;
-    this.$bus.$on("addfunction",msg =>{
-        console.log(msg)
-        this.add(msg[0],msg[1],msg[2]);
-      })
+    this.loadingData()
   },
   computed: {
   }

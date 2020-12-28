@@ -80,7 +80,6 @@
                   {name:123123},
                   {name:456 },
               ]
-              
           }, 
         ],
       }
@@ -121,7 +120,6 @@
         this.items[index].ratingdisabled=!this.items[index].ratingdisabled
       }
     },
-    
   }
 </script>
 

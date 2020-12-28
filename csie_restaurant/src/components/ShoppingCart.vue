@@ -2,7 +2,7 @@
   <div id="my-container">
     <div class="my-3">
       <!-- Our triggering (target) element -->
-      <b-button id="popover-reactive-1" ref="button">
+      <b-button id="popover-reactive-1" ref="button" @click="loadingData()">
         ShoppingCart
       </b-button>
     </div>
@@ -29,7 +29,10 @@
       </div>
       <!-- <b-button @click="add" variant="outline-info" vertical>+</b-button> -->
 
-      <b-button @click="onOk" variant="outline-info" vertical>Ok</b-button>
+      <b-button @click="onOk" variant="outline-info" vertical :to="{name: 'Cashier'}">OK</b-button>
+      <!-- <b-nav-item @click="onOk" variant="outline-info" vertical>  
+        <router-link :to="{name: 'Cashier'}" class="nav-link">Ok</router-link>
+      </b-nav-item> -->
       <!--div>
         <b-alert show class="small">
           <strong>Current Values:</strong><br>
@@ -56,22 +59,57 @@
       return {
         ItemList:[
           {
-            foodName:"aaa",
-            foodPrice: 30,
-            foodSpinValue: 1,
+            foodName: null,
+            foodPrice: null,
+            foodSpinValue: null,
           }
         ],
         popoverShow: false
       }
     },
     methods: {
+      parseCookie(){
+        // let cookies = document.cookie;
+        let cookie;
+        let allCookies = document.cookie.split('; ');
+        let cookieObj = {};
+        
+        for (var i=0, l=allCookies.length; i<l; i++){
+            cookie = allCookies[i];
+            cookie = cookie.split('=');
+            cookieObj[cookie[0]] = cookie[1];
+        }
+        return cookieObj;
+      },
+      loadingData(){
+        this.ItemList = [];
+        let data = this.parseCookie()
+        let foodNum = parseInt(data['productNum'],10);
+        for (var i=1 ,l=foodNum+1; i<l; i++){
+          console.log(data['product'+ i.toString()])
+          console.log('product'+ i.toString())
+          this.ItemList.push(
+          {
+            foodName: data['product'+ i.toString()],
+            foodPrice: parseInt(data['price'+ i.toString()], 10),
+            foodSpinValue: parseInt(data['pinValue'+ i.toString()], 10)  
+          });
+        }
+      },
+      dataToCashier(){
+        return this.ItemList;
+      },
+      confirmModal() {
+        this.$bus.$emit("cashier",this.dataToCashier());
+      },
       deleteCartCell(e){
-          this.ItemList.splice(e,1);
+        this.ItemList.splice(e,1);
       },
       onClose() {
         this.popoverShow = false
       },
       onOk() {
+          this.confirmModal()
           this.onClose()
       },
       add(name,spinValue,price)
@@ -99,10 +137,7 @@
       }
     },
     created(){
-      this.$bus.$on("addfunction",msg =>{
-        console.log(msg)
-        this.add(msg[0],msg[1],msg[2]);
-      })
+      
     },
     mounted () {
       var button = document.querySelector(".container")
