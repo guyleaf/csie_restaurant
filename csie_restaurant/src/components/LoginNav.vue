@@ -7,123 +7,68 @@
         <b-dropdown-item v-if="loginState===3" :to="{name: 'Member'}" >MemberForAdmin</b-dropdown-item>
         <b-dropdown-item disabled>Third Action</b-dropdown-item>
         <b-dropdown-divider></b-dropdown-divider>
-        <b-dropdown-item variant="danger" >Log off</b-dropdown-item>
+        <b-dropdown-item variant="danger" @click="handleLogout">Log out</b-dropdown-item>
     </b-dropdown>
     <b-modal id="login-modal" size="sm" ref="modal" title="會員登入" @show="resetModal" @hidden="resetModal" hide-footer hide-header-close>
-      <form ref="form" @submit.stop.prevent="handleSubmit" >
-        <b-form-group
-          label="Account"
-          label-for="account-input"
-          invalid-feedback="Account is required"
-          :state="accountState"
-        >
-          <b-form-input
-            ref="account-input"
-            v-model="account"
-            :state="accountState"
-            required
-          ></b-form-input>
-        </b-form-group>
-        <b-form-group
-          label="Password"
-          label-for="password-input"
-          invalid-feedback="Password is required"
-          :state="passwordState"
-        >
-          <b-form-input
-            ref="password-input"
-            v-model="password"
-            :state="passwordState"
-            required
-          ></b-form-input>
-        </b-form-group>
+      <form ref="form" @submit.prevent="handleSubmit" >
+        <div class="form-group">
+          <label for="Username"></label>
+          <input type="text" id="username" class="form-control" placeholder="Enter Username" v-model="username" required>
+        </div>
+        <div class="form-group">
+          <label for="Password"></label>
+          <input type="password" id="password" class="form-control" placeholder="Enter Password" v-model="password" required>
+        </div>
+        <button type="submit" class="btn btn-primary" :disabled="loading">
+          <span v-if="!loading">Submit</span>
+          <span v-if="loading"><i class="fa fa-spinner" aria-hidden="true"></i> Loading... </span>
+        </button>
+        <button class="btn btn-danger" @click="closeModal"> CANCEL </button>
       </form>
-      <div class="row m-2" style="justify-content:space-around">
-          <b-button variant="info" @click="handleSubmit" size="sm">CONFIRM</b-button>
-          <b-button variant="danger" @click="closeModal" size="sm">CANCEL</b-button>
-      </div>
     </b-modal>
   </div>
 </template>
 
 <script>
-  export default {
+import { mapState } from 'vuex'
+export default {
     name: 'LoginNav',
     data() {
       return {
-        accountState: null,
-        passwordState: null,
-        loginState: -1,
-        loginMsg: null,
-        userInfo:{
-          account:'',
-          password:'',   
-        },
-        fakeUser:{
-            account:'user',
-            password:'user',
-            name:'87Roger'
-        },
-        fakeShop:{
-            account:'shop',
-            password:'shop',
-            name:'66Lee'
-        },
-        fakeAdmin:{
-            account:'admin',
-            password:'admin',
-            name:'NiceRon'
-        }
+        username:'',
+        password:'',  
+        status: null, 
+        loginMsg: 'Login',
       }
     },
+    computed:{
+      ...mapState({
+        loading: state => state.user.loading
+      })
+    },
     methods: {
-      checkFormValidity() {
-        const valid1 = this.$refs['account-input'].checkValidity()
-        const valid2 = this.$refs['password-input'].checkValidity()
-        this.accountState = valid1
-        this.passwordState = valid2
-        return valid1 && valid2
-      },
       resetModal() {
-        this.userInfo.account=''
-        this.userInfo.password=''
-        this.accountState = null
-        this.passwordState = null
+        this.username=''
+        this.password=''
       },
       handleSubmit() {
         // Exit when the form isn't valid
-        if (!this.checkFormValidity()) {
-          return
-        }
-        this.userInfo.account = this.account
-        this.userInfo.password = this.password
-        
-        console.log(this.account, this.password)
-        this.verification()
+        this.$store.dispatch('onSubmitSignin', {username: this.username, password: this.password})
+        .then((result) => {
+            console.log(result)
+            this.loginMsg = 'Hi' + this.username
+        }).catch( (err) =>{
+            console.log(err);
+        })
       },
-      verification(){
-         
-        if(this.userInfo.account==this.fakeUser.account && this.userInfo.password==this.fakeUser.password){
-            this.loginState = 1
-            this.loginMsg = 'Hi ' + this.fakeUser.name
-            this.$bvModal.hide('login-modal')
-        }
-        else if(this.userInfo.account==this.fakeShop.account && this.userInfo.password==this.fakeShop.password){
-            this.loginState = 2
-            this.loginMsg = 'Hi ' + this.fakeShop.name
-            this.$bvModal.hide('login-modal')
-        }
-        else if(this.userInfo.account==this.fakeAdmin.account && this.userInfo.password==this.fakeAdmin.password){
-            this.loginState = 3
-            this.loginMsg = 'Hi ' + this.fakeAdmin.name
-            this.$bvModal.hide('login-modal')
-        }
-        else{
-            this.loginState = -1
-            this.accountState = null
-            this.passwordState = null
-            alert('輸入錯誤帳號或密碼')
-        }
+      handleLogout() {
+        this.$store.dispatch('onSubmitLogout')
+        .then((result) => {
+            console.log(result)
+            this.loginMsg = 'Login'
+        }).catch( (err) =>{             
+            console.log(err);
+        })
       },
       showModal() {
           this.$bvModal.show('login-modal')

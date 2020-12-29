@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
-// import store from './store'
+import store from './store'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -9,6 +9,8 @@ import axios from 'axios'
 import { cacheAdapterEnhancer, throttleAdapterEnhancer } from 'axios-extensions';
 
 Vue.prototype.$url = 'http://api.guyleaf.site:8880'
+Vue.prototype.$router = router;
+Vue.prototype.$store = store
 Vue.prototype.$axios = axios // no cache response
 Vue.prototype.$http = axios.create({
 	baseURL: 'http://api.guyleaf.site:8880',
@@ -26,5 +28,6 @@ Vue.config.productionTip = false
 new Vue({
     el: '#app',
     router,
+    store,
     render: h => h(App)
 })
