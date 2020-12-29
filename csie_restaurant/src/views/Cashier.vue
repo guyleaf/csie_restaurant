@@ -34,51 +34,34 @@ export default {
   data() {
       return {
         ItemList:[
-          // { foodName:"a1a", foodPrice: 30, foodSpinValue: 1,},
-          // { foodName:"a2a", foodPrice: 30, foodSpinValue: 1,},
-          // { foodName:"a3a", foodPrice: 30, foodSpinValue: 1,},
-          // { foodName:"a4a", foodPrice: 30, foodSpinValue: 1,},
-          // { foodName:"a5a", foodPrice: 30, foodSpinValue: 1,},
-          // { foodName:"a6a", foodPrice: 30, foodSpinValue: 1,},
-          // { foodName:"a7a", foodPrice: 30, foodSpinValue: 1,},
-          // { foodName:"a8a", foodPrice: 30, foodSpinValue: 1,},
-          // { foodName:"a9a", foodPrice: 30, foodSpinValue: 1,},
-          // { foodName:"a10", foodPrice: 30, foodSpinValue: 1,},
-          // { foodName:"a111111111111", foodPrice: 30, foodSpinValue: 1,},
+
         ]
       }
   },
   methods:{
-     parseCookie(){
-        // let cookies = document.cookie;
-        let cookie;
-        let allCookies = document.cookie.split('; ');
-        let cookieObj = {};
-        
-        for (var i=0, l=allCookies.length; i<l; i++){
-            cookie = allCookies[i];
-            cookie = cookie.split('=');
-            cookieObj[cookie[0]] = cookie[1];
-        }
-        return cookieObj;
+      parseCookie(){
+        let allCookies = JSON.parse(this.$cookie.get("product"));
+        return allCookies
       },
       loadingData(){
         this.ItemList = [];
-        let data = this.parseCookie()
-        let foodNum = parseInt(data['productNum'],10);
-        for (var i=1 ,l=foodNum+1; i<l; i++){
-          console.log(data['product'+ i.toString()])
-          console.log('product'+ i.toString())
-          this.ItemList.push(
-          {
-            foodName: data['product'+ i.toString()],
-            foodPrice: parseInt(data['price'+ i.toString()], 10),
-            foodSpinValue: parseInt(data['pinValue'+ i.toString()], 10)  
-          });
+        let data = this.parseCookie();
+        for (var i = 0; i<data.length;i++)
+        {
+          this.ItemList.push({foodName:data[i].foodName, foodSpinValue:data[i].foodSpinValue, foodPrice:data[i].foodPrice});
         }
+      },
+      deleteCartCell(e){
+        // this.ItemList.splice(e,1);
+        this.ItemList.pop();
+        console.log(this.ItemList,e);
+        // this.$cookie.delete('product');
+        this.$cookie.set('product',JSON.stringify(this.ItemList));
+        console.log(JSON.parse(this.$cookie.get("product")));
       },
   },
   created(){
+    console.log(123123123)
     this.loadingData()
   },
   computed: {

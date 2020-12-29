@@ -2,7 +2,7 @@
     <div>
         <b-card no-body class="over-flow-hidden" style="max-width: 540px;">
             <b-row no-gutters class="align-items-center">
-                <b-col md="5">
+                <b-col md="5" @click="modifySpinValue">
                     <b-form-spinbutton id="sb-inline" v-model="foodSpinValue" inline step size="sm" style="width:7rem"></b-form-spinbutton>
                 </b-col>
                 <b-col md="5">
@@ -27,6 +27,9 @@ export default {
         index: Number
     },
     methods: {
+        modifySpinValue(){
+            this.$emit("spinClick",this.foodSpinValue)
+        },
         deleteitem(){
             this.$emit("deleteclick",this.index)
         }
@@ -36,6 +39,12 @@ export default {
        return this.foodPrice*this.foodSpinValue;
     },
   },
+    watch: {
+        foodSpinValue: function(){
+            console.log(1231434234223)
+            this.$emit("spinClick",this.index,this.foodSpinValue)
+        }
+    },
 }
 </script>
 

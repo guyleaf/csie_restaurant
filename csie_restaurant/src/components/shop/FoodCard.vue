@@ -59,7 +59,7 @@ export default {
             return [this.foodName, this.spinValue, this.price];
         },
         data: function(){
-            return [{foodname:this.foodName, spinValue:this.spinValue, price:this.price}];
+            return [{foodName:this.foodName, foodSpinValue:this.spinValue, foodPrice:this.price}];
         }
     },
     methods:{
@@ -83,10 +83,10 @@ export default {
             if(this.$cookie.get("product")==null) this.$cookie.set('product', JSON.stringify(this.data))
             else 
             {
-                console.log(JSON.parse(this.$cookie.get("product")))
                 let current = JSON.parse(this.$cookie.get("product"));
                 current.push(this.data[0])
                 this.$cookie.set('product', JSON.stringify(current));
+                console.log(JSON.parse(this.$cookie.get("product")))
             }
         },
         hoverCard() {   
@@ -96,6 +96,7 @@ export default {
             this.$refs['my-modal'].show();
         },
         confirmModal() {
+            // this.$cookie.delete('product')
             // document.cookie = 'data=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; //delete cookie
             // document.cookie = 'products=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; //delete cookie
             // document.cookie = 'productNum=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; //delete cookie

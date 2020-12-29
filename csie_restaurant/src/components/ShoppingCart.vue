@@ -25,11 +25,11 @@
         訂購餐廳：{{BookingShopName}}  
       </template>
       <div v-for="(item,index) in ItemList" :key="index" >
-        <CartCell v-on:deleteclick="deleteCartCell" v-bind="item" :index="index"/>
+        <CartCell v-on:deleteclick="deleteCartCell" @spinClick="modifySpinValue" v-bind="item" :index="index"/>
       </div>
       <!-- <b-button @click="add" variant="outline-info" vertical>+</b-button> -->
 
-      <b-button @click="onOk" variant="outline-info" vertical :to="{name: 'Cashier'}">OK</b-button>
+      <b-button @click="onOk" variant="outline-info" vertical>OK</b-button>
       <!-- <b-nav-item @click="onOk" variant="outline-info" vertical>  
         <router-link :to="{name: 'Cashier'}" class="nav-link">Ok</router-link>
       </b-nav-item> -->
@@ -69,31 +69,15 @@
     },
     methods: {
       parseCookie(){
-        // let cookies = document.cookie;
-        let cookie;
-        let allCookies = document.cookie.split('; ');
-        let cookieObj = {};
-        
-        for (var i=0, l=allCookies.length; i<l; i++){
-            cookie = allCookies[i];
-            cookie = cookie.split('=');
-            cookieObj[cookie[0]] = cookie[1];
-        }
-        return cookieObj;
+        let allCookies = JSON.parse(this.$cookie.get("product"));
+        return allCookies
       },
       loadingData(){
         this.ItemList = [];
-        let data = this.parseCookie()
-        let foodNum = parseInt(data['productNum'],10);
-        for (var i=1 ,l=foodNum+1; i<l; i++){
-          console.log(data['product'+ i.toString()])
-          console.log('product'+ i.toString())
-          this.ItemList.push(
-          {
-            foodName: data['product'+ i.toString()],
-            foodPrice: parseInt(data['price'+ i.toString()], 10),
-            foodSpinValue: parseInt(data['pinValue'+ i.toString()], 10)  
-          });
+        let data = this.parseCookie();
+        for (var i = 0; i<data.length;i++)
+        {
+          this.ItemList.push({foodName:data[i].foodName, foodSpinValue:data[i].foodSpinValue, foodPrice:data[i].foodPrice});
         }
       },
       dataToCashier(){
@@ -102,15 +86,22 @@
       confirmModal() {
         this.$bus.$emit("cashier",this.dataToCashier());
       },
+      modifySpinValue(index,value){
+        this.ItemList[index].foodSpinValue = value;
+      },
       deleteCartCell(e){
         this.ItemList.splice(e,1);
+        this.$cookie.set('product',JSON.stringify(this.ItemList));
       },
       onClose() {
         this.popoverShow = false
       },
       onOk() {
+          this.$cookie.set('product',JSON.stringify(this.ItemList));
           this.confirmModal()
           this.onClose()
+          if (this.$router.currentRoute['name'] == "Cashier") window.location.reload();
+          else this.$router.push("/cashier");
       },
       add(name,spinValue,price)
       {
