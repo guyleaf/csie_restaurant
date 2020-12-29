@@ -41,7 +41,7 @@ export default {
     data() {
       return {
         spinValue: 1,
-        text:''
+        text:'',
       }
     },
     props:{
@@ -57,6 +57,9 @@ export default {
         },
         dataToCart: function(){
             return [this.foodName, this.spinValue, this.price];
+        },
+        data: function(){
+            return [{foodname:this.foodName, spinValue:this.spinValue, price:this.price}];
         }
     },
     methods:{
@@ -75,19 +78,16 @@ export default {
         },
         addToCookie(){
             let productNum = this.parseCookie()['productNum'];
-            let product = 'product';
-            let pinValue = 'pinValue';
-            let price = 'price';
             if (productNum!=undefined) productNum = parseInt(productNum, 10) + 1;
-            else productNum = 1; 
-            product = product + productNum;
-            pinValue = pinValue + productNum;
-            price = price + productNum;
-            document.cookie = 'productNum=' + encodeURIComponent(productNum);
-            document.cookie = product + '=' + encodeURIComponent(this.foodName);
-            document.cookie = pinValue + '=' + encodeURIComponent(this.spinValue);
-            document.cookie = price + '=' + encodeURIComponent(this.price);
-            console.log(document.cookie.split('; '));
+            else productNum = 1;
+            if(this.$cookie.get("product")==null) this.$cookie.set('product', JSON.stringify(this.data))
+            else 
+            {
+                console.log(JSON.parse(this.$cookie.get("product")))
+                let current = JSON.parse(this.$cookie.get("product"));
+                current.push(this.data[0])
+                this.$cookie.set('product', JSON.stringify(current));
+            }
         },
         hoverCard() {   
             //缺：lack of the responsive action when hover on the card
