@@ -34,33 +34,35 @@ export default {
   data() {
       return {
         ItemList:[
-          { foodName:"a1a", foodPrice: 30, foodSpinValue: 1,},
-          { foodName:"a2a", foodPrice: 30, foodSpinValue: 1,},
-          { foodName:"a3a", foodPrice: 30, foodSpinValue: 1,},
-          { foodName:"a4a", foodPrice: 30, foodSpinValue: 1,},
-          { foodName:"a5a", foodPrice: 30, foodSpinValue: 1,},
-          { foodName:"a6a", foodPrice: 30, foodSpinValue: 1,},
-          { foodName:"a7a", foodPrice: 30, foodSpinValue: 1,},
-          { foodName:"a8a", foodPrice: 30, foodSpinValue: 1,},
-          { foodName:"a9a", foodPrice: 30, foodSpinValue: 1,},
-          { foodName:"a10", foodPrice: 30, foodSpinValue: 1,},
-          { foodName:"a111111111111", foodPrice: 30, foodSpinValue: 1,},
+
         ]
       }
   },
   methods:{
-    add(name,spinValue,price)
-      {
-        this.ItemList.push({foodName: name,foodPrice: price,foodSpinValue: spinValue,});
-        this.totalPrice += spinValue*price; //failed
+      parseCookie(){
+        let allCookies = JSON.parse(this.$cookie.get("product"));
+        return allCookies
+      },
+      loadingData(){
+        this.ItemList = [];
+        let data = this.parseCookie();
+        for (var i = 0; i<data.length;i++)
+        {
+          this.ItemList.push({foodName:data[i].foodName, foodSpinValue:data[i].foodSpinValue, foodPrice:data[i].foodPrice});
+        }
+      },
+      deleteCartCell(e){
+        // this.ItemList.splice(e,1);
+        this.ItemList.pop();
+        console.log(this.ItemList,e);
+        // this.$cookie.delete('product');
+        this.$cookie.set('product',JSON.stringify(this.ItemList));
+        console.log(JSON.parse(this.$cookie.get("product")));
       },
   },
   created(){
-    this.totalPrice = 0;
-    this.$bus.$on("addfunction",msg =>{
-        console.log(msg)
-        this.add(msg[0],msg[1],msg[2]);
-      })
+    console.log(123123123)
+    this.loadingData()
   },
   computed: {
   }

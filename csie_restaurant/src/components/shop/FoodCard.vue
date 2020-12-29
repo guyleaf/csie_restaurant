@@ -41,7 +41,7 @@ export default {
     data() {
       return {
         spinValue: 1,
-        text:''
+        text:'',
       }
     },
     props:{
@@ -57,9 +57,38 @@ export default {
         },
         dataToCart: function(){
             return [this.foodName, this.spinValue, this.price];
+        },
+        data: function(){
+            return [{foodName:this.foodName, foodSpinValue:this.spinValue, foodPrice:this.price}];
         }
     },
     methods:{
+        parseCookie(){
+            // let cookies = document.cookie;
+            let cookie;
+            let allCookies = document.cookie.split('; ');
+            let cookieObj = {};
+            
+            for (var i=0, l=allCookies.length; i<l; i++){
+                cookie = allCookies[i];
+                cookie = cookie.split('=');
+                cookieObj[cookie[0]] = cookie[1];
+            }
+            return cookieObj;
+        },
+        addToCookie(){
+            let productNum = this.parseCookie()['productNum'];
+            if (productNum!=undefined) productNum = parseInt(productNum, 10) + 1;
+            else productNum = 1;
+            if(this.$cookie.get("product")==null) this.$cookie.set('product', JSON.stringify(this.data))
+            else 
+            {
+                let current = JSON.parse(this.$cookie.get("product"));
+                current.push(this.data[0])
+                this.$cookie.set('product', JSON.stringify(current));
+                console.log(JSON.parse(this.$cookie.get("product")))
+            }
+        },
         hoverCard() {   
             //缺：lack of the responsive action when hover on the card
         },
@@ -67,6 +96,14 @@ export default {
             this.$refs['my-modal'].show();
         },
         confirmModal() {
+            // this.$cookie.delete('product')
+            // document.cookie = 'data=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; //delete cookie
+            // document.cookie = 'products=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; //delete cookie
+            // document.cookie = 'productNum=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; //delete cookie
+            // document.cookie = 'product5=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; //delete cookie
+            // document.cookie = 'pinValue5=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; //delete cookie
+            // document.cookie = 'price5=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; //delete cookie
+            this.addToCookie()
             this.$bus.$emit("addfunction",this.dataToCart);
             //缺：lack of return this.dataToCart to ShoppingCart.vue/CartCell.vue
             this.$refs['my-modal'].hide();
