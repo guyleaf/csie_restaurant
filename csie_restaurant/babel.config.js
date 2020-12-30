@@ -3,7 +3,6 @@ module.exports = {
     '@vue/cli-plugin-babel/preset'
   ],
   plugins: [
-    '@babel/syntax-dynamic-import',
-    'transform-object-rest-spread'
+    '@babel/syntax-dynamic-import'
   ]
 }
