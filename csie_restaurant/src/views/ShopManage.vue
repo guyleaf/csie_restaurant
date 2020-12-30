@@ -29,7 +29,7 @@
 <script>
 // @ is an alias to /src
 import ShopIntro from '@/components/shop/ShopIntro.vue';
-import FoodCardGroup from '@/components/shop/FoodCardGroup.vue';
+import FoodCardGroup from '@/components/manage/FoodCardGroup.vue';
 import ShopDescription from '@/components/shop/ShopDescription.vue';
 export default {
   name: "Shop",
