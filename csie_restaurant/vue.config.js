@@ -11,6 +11,7 @@ module.exports = {
     productionSourceMap: false,
     chainWebpack(config) {
         config.plugins.delete('prefetch');
+        config.module.rules.delete('eslint');
     },
     configureWebpack: config => {
         if (process.env.NODE_ENV === 'production') {
@@ -27,7 +28,6 @@ module.exports = {
 
         } else {
             // 开发环境
-
         }
     },
     pluginOptions: {

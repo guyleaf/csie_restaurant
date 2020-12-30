@@ -1,8 +1,7 @@
 <template>
-    <div class="col-md-4 card-body" v-b-hover="hoverCard" @click="showModal">
+    <div class="col-md-4 card-body" v-b-hover="hoverCard">
         <b-modal id="modal-sm" size="sm" ref="my-modal" hide-header hide-footer hide-header-close>
             <div class="container">
-                <!--b-img :src="imgPath" fluid alt="Responsive image"></b-img-->
                 <button>選擇圖檔</button>
                 <div class="m-2">
                     <b-form-group
@@ -41,12 +40,16 @@
                     <div class="row m-2" style="justify-content:space-around">
                         <b-button variant="primary" @click="confirmModal" size="sm">ADD</b-button>
                         <b-button variant="info" @click="cancelModal" size="sm">CANCEL</b-button>
-                        <!--b-button variant="danger" @click="deleteModal" size="sm">DELETE</b-button-->
                     </div>
                 </div>
             </div> 
         </b-modal>
         <b-card tag="article">
+            <b-card-header header-bg-variant="white" header-border-variant="white" class="b-header">
+                <b-button :id="'target-'+this.foodId">
+                    <img width="10px" height="1px" src="https://imgur.com/WIOoDzF">
+                </b-button>
+            </b-card-header>
             <div class='row'>
                 <b-col md='6' >
                     <b-card-title> {{foodName}} </b-card-title>
@@ -60,8 +63,23 @@
                     class="rounded-0">
                     </b-card-img>
                 </b-col>
+                <b-popover 
+                    :target="'target-'+this.foodId" 
+                    triggers="hover" 
+                    fallback-placement="clockwise" 
+                    placement="right"
+                    offset="-30"
+                    custom-class="option">
+                    <template #title>操作選項</template>
+                        <b-list-group horizontal>
+                            <b-list-group-item href="#" variant="primary" @click="showModal">修改商品</b-list-group-item>
+                            <b-list-group-item href="#" variant="warning" @click="showModal">售完商品</b-list-group-item>
+                            <b-list-group-item href="#" variant="danger"  @click="showModal">下架商品</b-list-group-item>
+                        </b-list-group>
+                </b-popover>
             </div>
         </b-card>
+
     </div>
 </template>
 
@@ -80,7 +98,8 @@ export default {
         foodName: String,
         imgPath: String,
         foodDescription: String,
-        price: Number
+        price: Number,
+        foodId: Number
     },
     computed:{
         total: function() {
@@ -165,6 +184,14 @@ export default {
 </script>
 
 <style scoped>
+.b-header{
+    padding-top:0%;
+    padding-left:0%;
+}
+.option{
+    min-width: 330px;
+    min-height: auto;
+}
 .card-body{
     margin-bottom: 0.5%;
 }
