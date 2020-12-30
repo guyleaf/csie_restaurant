@@ -32,7 +32,7 @@ import ShopIntro from '@/components/shop/ShopIntro.vue';
 import FoodCardGroup from '@/components/manage/FoodCardGroup.vue';
 import ShopDescription from '@/components/shop/ShopDescription.vue';
 export default {
-  name: "Shop",
+  name: "ShopManage",
   components: {
     ShopIntro,
     ShopDescription,

@@ -4,6 +4,7 @@
         <div class="row" v-for="category in foodCategories" :key="category.categoryId">
             <div class="row">
                 <h1>{{category.foodCategory}}</h1>
+                <b-button style="margin:15px">ADD PRODUCT</b-button>
             </div>
             <div class="row fback" >
                 <FoodCard 
@@ -20,8 +21,8 @@
 </template>
 
 <script>
-import CategoryTabMenage from "@/components/manage/CategoryManage.vue";
-import FoodCard from "@/components/shop/FoodCard.vue";
+import CategoryTabMenage from "@/components/manage/CategoryTabManage.vue";
+import FoodCard from "@/components/manage/FoodCard.vue";
 export default {
     name: "FoodCardGroup",
     components: {
@@ -80,3 +81,4 @@ export default {
 }
 
 </style>
+>>>>>>> .theirs

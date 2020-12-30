@@ -5,11 +5,9 @@
             <b-col md="4">
                 <button>+</button>
             </b-col>
-
         </b-row>
     </div>
 </template>
-
 
 <script>
 import CategoryTab from "@/components/CategoryTab.vue";
@@ -88,15 +86,15 @@ import CategoryTab from "@/components/CategoryTab.vue";
 
     //     },
     // },
-    // created(){
-    //     for(let i=0;i<this.foodCategory.length;i++)
-    //         this.tabs.push({title:this.foodCategory[i]})
-    // },
-    // mounted () {
-    // window.addEventListener('scroll', this.handleScroll)
-    // },
-    // destroyed () {
-    // window.removeEventListener('scroll', this.handleScroll)
-    // },
+    created(){
+        for(let i=0;i<this.foodCategory.length;i++)
+            this.tabs.push({title:this.foodCategory[i]})
+    },
+    mounted () {
+    window.addEventListener('scroll', this.handleScroll)
+    },
+    destroyed () {
+    window.removeEventListener('scroll', this.handleScroll)
+    },
 }
 </script>
