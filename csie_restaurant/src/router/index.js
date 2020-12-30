@@ -43,6 +43,14 @@ const routes = [
                 }
             },
             {
+                name: 'ShopManage',
+                path: 'shopManage',
+                component: () => import('@/views/ShopManage.vue'),
+                meta: {
+                    title: '孜宮庭園 - 商店管理',
+                }
+            },
+            {
                 name: 'Manage',
                 path: 'manage',
                 component: () =>import('@/views/layouts/ManageLayout.vue'),
