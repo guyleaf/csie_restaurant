@@ -8,6 +8,8 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import VueCookie from 'vue-cookie'
 import axios from 'axios'
 import { cacheAdapterEnhancer, throttleAdapterEnhancer } from 'axios-extensions';
+import VueSimpleAlert from "vue-simple-alert";
+
 
 Vue.prototype.$url = 'http://api.guyleaf.site:8880'
 Vue.prototype.$axios = axios // no cache response
@@ -22,7 +24,7 @@ Vue.use(BootstrapVue)
 // Optionally install the BootstrapVue icon components plugin
 Vue.use(IconsPlugin)
 Vue.use(VueCookie)
-
+Vue.use(VueSimpleAlert);
 Vue.config.productionTip = false
 
 new Vue({

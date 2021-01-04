@@ -24,8 +24,12 @@
             <!-- Right aligned nav items -->
 
             <b-nav-form class="ml-auto">
-                <b-form-input size="sm" class="mr-sm-2" placeholder="Search"></b-form-input>
-                <b-button size="sm" class="my-2 my-sm-0" type="submit" variant="success">button</b-button> <!--input type="image" src="" /-->
+                <b-input-group size="sm">
+                    <b-form-input type="search" placeholder="Search terms"></b-form-input>
+                    <b-input-group-prepend is-text>
+                        <b-icon icon="search" @click="search"></b-icon>
+                    </b-input-group-prepend>
+                </b-input-group>
             </b-nav-form>
             <b-navbar-nav class="ml-5">
                 <ShoppingCart />
