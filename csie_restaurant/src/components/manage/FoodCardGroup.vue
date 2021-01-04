@@ -1,10 +1,9 @@
 <template>
     <div class="container">
-        <CategoryTabMenage :foodCategory="foodCategory" />
+        <CategoryTabManage :foodCategory="foodCategory"/>
         <div class="row" v-for="category in foodCategories" :key="category.categoryId">
             <div class="row">
                 <h1>{{category.foodCategory}}</h1>
-                <b-button style="margin:15px">ADD PRODUCT</b-button>
             </div>
             <div class="row fback" >
                 <FoodCard 
@@ -30,20 +29,16 @@
 </template>
 
 <script>
-import CategoryTabMenage from "@/components/manage/CategoryTabManage.vue";
+import CategoryTabManage from "@/components/manage/CategoryTabManage.vue";
 import FoodCard from "@/components/manage/FoodCard.vue";
 export default {
     name: "FoodCardGroup",
     components: {
         FoodCard,
-        CategoryTabMenage
+        CategoryTabManage
     },
     props:{
         foodCategory:Array,
-        foodToCart: Array,
-        // foodCategory1:String,
-        // foodCategory2:String,
-        // foodCategory3:String
     },
     data()
     {
@@ -77,10 +72,16 @@ export default {
         showModal() {
             this.$refs['my-modal'].show();
         },
+        sortOrder:function(a, b){
+            return a - b;
+        }
     },
     created(){
+        this.foodCategory.sort(function(a,b){
+            return a.order - b.order;
+        });
         for(let i=0;i<this.foodCategory.length;i++)
-            this.foodCategories.push({categoryId: i,foodCategory: this.foodCategory[i],hover:false})
+            this.foodCategories.push({categoryId: i, foodCategory: this.foodCategory[i].tag,hover:false})
         console.log(this.foodCategories)
     }
 }
