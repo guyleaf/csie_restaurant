@@ -128,6 +128,7 @@ export default {
             }
             this.image=input.files[0];
             reader.readAsDataURL(input.files[0]);
+            console.log(this.preview)
         }
         },
         parseCookie(){
