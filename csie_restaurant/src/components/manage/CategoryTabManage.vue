@@ -3,7 +3,7 @@
         <b-row>
             <b-col md="8"><CategoryTab :foodCategory='foodCategory'/></b-col>
             <b-col md="4">
-                <button>+</button>
+                <button @click="addTab">+</button>
             </b-col>
         </b-row>
     </div>
@@ -12,17 +12,15 @@
 <script>
 import CategoryTab from "@/components/CategoryTab.vue";
   export default {
-      name:'CategoryTabMenage',
+      name:'CategoryTabManage',
       props:{
-          foodCategory:Array
+          foodCategory:Array,
       },
       components:{
           CategoryTab,
       },
     data() {
       return {
-          isActive: 0,
-          tabs: ['lee','pan','ron'],
         }
     },
     // methods: {
@@ -86,10 +84,6 @@ import CategoryTab from "@/components/CategoryTab.vue";
 
     //     },
     // },
-    created(){
-        for(let i=0;i<this.foodCategory.length;i++)
-            this.tabs.push({title:this.foodCategory[i]})
-    },
     mounted () {
     window.addEventListener('scroll', this.handleScroll)
     },
