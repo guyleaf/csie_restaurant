@@ -30,9 +30,9 @@
   export default {
     data() {
       return {
-        deleteImage:require('../assets/delete.png'),
-        noImage:require('../assets/no.png'),
-        onImage:require('../assets/on.png'),
+        deleteImage:require('../assets/xIcon.png'),
+        noImage:require('../assets/red.png'),
+        onImage:require('../assets/green.png'),
         members:[],
         currentNumber: 0,
         requiredNumber: 5,

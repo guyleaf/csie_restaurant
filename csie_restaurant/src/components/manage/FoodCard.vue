@@ -46,10 +46,9 @@
             </div> 
         </b-modal>
         <b-card tag="article" no-body>
-            <b-card-header header-bg-variant="gray" header-border-variant="white" class="foodCardHeader">
-                <b-icon icon="list" :id="'target-'+this.foodId" font-scale="1.2"/>
-            </b-card-header>
-            <div class='row card-body'>
+            <img :src="noStock" class="soldOut" v-if="this.soldOut" /> 
+       
+            <div class='row card-body' v-bind:class="{'outOfStock':this.soldOut}">
                 <b-col md='6' >
                     <b-card-title> {{foodName}} </b-card-title>
                     <b-card-text class="ellipsis" >{{foodDescription}}</b-card-text>
@@ -62,7 +61,8 @@
                     class="rounded-0">
                     </b-card-img>
                 </b-col>
-                <b-popover 
+       
+                <!-- <b-popover 
                     :target="'target-'+this.foodId" 
                     triggers="hover" 
                     fallback-placement="clockwise" 
@@ -72,12 +72,23 @@
                     <template #title>操作選項</template>
                         <b-list-group>
                             <b-list-group-item href="#" variant="primary" @click="showModal">修改商品</b-list-group-item>
-                            <b-list-group-item href="#" variant="warning" @click="showModal">售完商品</b-list-group-item>
-                            <b-list-group-item href="#" variant="danger"  @click="offShelf">下架商品</b-list-group-item>
-                            <b-list-group-item href="#" variant="danger"  @click="showModal">刪除商品</b-list-group-item>
+                            <b-list-group-item href="#" v-if="this.sellingState" :variant="this.soldOut ? 'secondary' : 'success'" @click="changeStock">售完商品</b-list-group-item>
+                            <b-list-group-item href="#" :variant="this.sellingState ? 'warning' : 'success'" @click="changeShelf">{{ this.sellingState ?  '下' : '上'}}架商品</b-list-group-item>
+                            <b-list-group-item href="#" variant="danger"  @click="deleteProduct">刪除商品</b-list-group-item>
                         </b-list-group>
-                </b-popover>
+                </b-popover> -->
             </div>
+                          <b-card-footer footer-bg-variant="gray" footer-border-variant="white" class="foodCardHeader">
+                <b-row class='brow'>
+                    <b-button-group class="bgoption">
+                        <b-button size='sm' block  class="boption" variant="primary" @click="showModal">修改</b-button>
+                        <b-button size='sm' block  v-if="this.sellingState" class="boption" :variant="this.soldOut ? 'secondary' : 'success'" @click="changeStock">售完</b-button>
+                        <b-button size='sm' block  class="boption" :variant="this.sellingState ? 'info' : 'success'" @click="changeShelf">{{ this.sellingState ?  '下' : '上'}}架</b-button>
+                        <b-button size='sm' block  class="boption" variant="danger"  @click="deleteProduct">刪除</b-button>
+                    </b-button-group>
+                </b-row>
+                <!-- <b-icon icon="list" :id="'target-'+this.foodId" font-scale="1.2"/> -->
+            </b-card-footer>
         </b-card>
 
     </div>
@@ -92,6 +103,7 @@ export default {
         descriptionState:null,
         priceState:null,
         preview: require('../../assets/photoupload.png'),
+        noStock: require('../../assets/noStock.png'),
         image: null,
       }
     },
@@ -102,6 +114,7 @@ export default {
         foodDescription: String,
         price: Number,
         foodId: Number,
+        soldOut: Boolean,
         sellingState: Boolean
     },
     computed:{
@@ -190,8 +203,15 @@ export default {
         deleteModal() {
             this.$refs['my-modal'].hide();
         },
-        offShelf(){
-            this.sellingState = false;
+        changeStock(){
+            this.$emit("changeStock",this.foodId)
+        },
+        changeShelf(){
+            this.sellingState = !this.sellingState;
+            this.$emit("changeState",this.foodId)
+        },
+        deleteProduct(){
+            this.$emit("deleteProduct",this.foodId)
         },
         checkFormValidity() {
             const valid1 = this.$refs['name-input'].checkValidity()
@@ -203,11 +223,6 @@ export default {
             return valid1 && valid2 && valid3
         },
     },
-    watch: {
-        sellingState: function(){
-            this.$emit("state",this.foodId)
-        }
-    },
 }
 </script>
 
@@ -215,15 +230,33 @@ export default {
 #upload{
     display: none;
 }
+.brow{
+    margin: 0;
+}
 .preview{
     width: 250px;
     height: 250px;
 }
-.option{
-    min-height: auto;
+.outOfStock{
+    background-color: rgb(255,255,255) !important;
+    opacity: 0.3;
+}
+.soldOut{
+    position: absolute;
+    z-index: 100;
+    width: 100%;
+    height: 100%;
+}
+.bgoption{
+    padding:0px; 
+    width:100%;
+}
+.boption{
+    margin:0;
 }
 .foodCardHeader{
-    padding: 0.5rem;
+    padding: 0rem;
+    z-index: 101;
 }
 .card-body{
     margin-bottom: 0.5%;
