@@ -1,8 +1,8 @@
 <template>
   <div>
-    <b-button v-if="loginState===-1" @click="showModal">Login</b-button>
-    <span v-else :text="loginMsg"></span>
-    <LoginForm @close="closeModal" />
+    <b-button v-if="!logined" @click="showModal">Login</b-button>
+    <span v-else>{{ loginMsg }}</span>
+    <LoginForm ref="form" @close="closeModal" @success="loginSucess"/>
   </div>
 </template>
 
@@ -14,22 +14,29 @@
       LoginForm
     },
     beforeMount() {
-
+      if (!this.$store.getters['auth/expired']) {
+        this.loginSucess('qqq')
+      }
     },
     data() {
       return {
-        loginState: -1,
+        logined: false,
         loginMsg: null,
       }
     },
     methods: {
       showModal() {
-          this.$bvModal.show('login-modal')
-          this.$bvModal.reset()
+        this.$refs.form.reset()
+        this.$bvModal.show('login-modal')
       },
       closeModal() {
-          this.$bvModal.hide('login-modal')
+        this.$refs.form.reset()
+        this.$bvModal.hide('login-modal')
       },
+      loginSucess(name) {
+        this.logined = true
+        this.loginMsg = 'Hi ' + name
+      }
     }
   }
 </script>
