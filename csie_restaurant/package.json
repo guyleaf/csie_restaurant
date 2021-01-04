@@ -16,6 +16,8 @@
     "core-js": "^3.6.5",
     "jquery": "^3.5.1",
     "jquery.js": "0.0.2-security",
+    "jsonwebtoken": "^8.5.1",
+    "secure-ls": "^1.2.6",
     "vue": "^2.6.11",
     "vue-chartjs": "^3.5.1",
     "vue-cookie": "^1.1.4",

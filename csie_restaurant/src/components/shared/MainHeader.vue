@@ -33,11 +33,11 @@
             <b-navbar-nav>
                 <LoginNav />
             </b-navbar-nav>
-            <b-navbar-nav>
+            <!-- <b-navbar-nav>
                 <b-nav-item> 
                     <router-link :to="{name: 'SalesReport'}" class="nav-link manage">Manage</router-link>
                 </b-nav-item>
-            </b-navbar-nav>
+            </b-navbar-nav> -->
             <b-navbar-nav>
                 <b-nav-item> 
                     <router-link :to="{name: 'History'}" class="nav-link history">History</router-link>
@@ -63,6 +63,8 @@ export default {
         };
     },
     method: {
+        showHistory() {
+        }
     },
     computed: {
     },
