@@ -74,15 +74,24 @@ export default {
         },
         sortOrder:function(a, b){
             return a - b;
+        },
+        updateTab:function(msg){
+            this.foodCategories = []
+            for(let i=0;i<this.foodCategory.length;i++){
+                this.foodCategories.push({categoryId: i, foodCategory: msg[i].tag,hover:false})
+            }
         }
     },
     created(){
         this.foodCategory.sort(function(a,b){
             return a.order - b.order;
         });
-        for(let i=0;i<this.foodCategory.length;i++)
+        for(let i=0;i<this.foodCategory.length;i++){
             this.foodCategories.push({categoryId: i, foodCategory: this.foodCategory[i].tag,hover:false})
-        console.log(this.foodCategories)
+        }
+        this.$bus.$on("updateTab", msg => {
+            this.updateTab(msg);
+        });
     }
 }
 </script>
