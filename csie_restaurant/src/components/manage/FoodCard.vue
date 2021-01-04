@@ -73,7 +73,7 @@
                         <b-list-group>
                             <b-list-group-item href="#" variant="primary" @click="showModal">修改商品</b-list-group-item>
                             <b-list-group-item href="#" variant="warning" @click="showModal">售完商品</b-list-group-item>
-                            <b-list-group-item href="#" variant="danger"  @click="showModal">下架商品</b-list-group-item>
+                            <b-list-group-item href="#" variant="danger"  @click="offShelf">下架商品</b-list-group-item>
                             <b-list-group-item href="#" variant="danger"  @click="showModal">刪除商品</b-list-group-item>
                         </b-list-group>
                 </b-popover>
@@ -101,7 +101,8 @@ export default {
         imgPath: String,
         foodDescription: String,
         price: Number,
-        foodId: Number
+        foodId: Number,
+        sellingState: Boolean
     },
     computed:{
         total: function() {
@@ -188,6 +189,9 @@ export default {
         deleteModal() {
             this.$refs['my-modal'].hide();
         },
+        offShelf(){
+            this.sellingState = false;
+        },
         checkFormValidity() {
             const valid1 = this.$refs['name-input'].checkValidity()
             const valid2 = this.$refs['description-input'].checkValidity()
@@ -197,6 +201,11 @@ export default {
             this.priceState = valid3
             return valid1 && valid2 && valid3
         },
+    },
+    watch: {
+        sellingState: function(){
+            this.$emit("state",this.foodId)
+        }
     },
 }
 </script>
