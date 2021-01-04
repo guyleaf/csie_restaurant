@@ -17,6 +17,8 @@
       if (!this.$store.getters['auth/expired']) {
         this.loginSucess('qqq')
       }
+      else
+        this.$store.dispatch('auth/invalidate')
     },
     data() {
       return {
