@@ -6,11 +6,15 @@
                 <button @click="addTab">+</button>
             </b-col>
         </b-row>
+        <div>
+            <DraggableTab :foodCategory='foodCategory'/>
+        </div>
     </div>
 </template>
 
 <script>
 import CategoryTab from "@/components/CategoryTab.vue";
+import DraggableTab from "@/components/manage/DraggableTab.vue";
   export default {
       name:'CategoryTabManage',
       props:{
@@ -18,6 +22,7 @@ import CategoryTab from "@/components/CategoryTab.vue";
       },
       components:{
           CategoryTab,
+          DraggableTab
       },
     data() {
       return {

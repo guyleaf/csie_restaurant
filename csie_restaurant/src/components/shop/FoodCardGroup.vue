@@ -65,8 +65,11 @@ export default {
         },
     },
     created(){
+        this.foodCategory.sort(function(a,b){
+            return a.order - b.order;
+        });
         for(let i=0;i<this.foodCategory.length;i++)
-            this.foodCategories.push({categoryId: i,foodCategory: this.foodCategory[i]})
+            this.foodCategories.push({categoryId: i, foodCategory: this.foodCategory[i].tag,hover:false})
     }
 }
 </script>
