@@ -10,9 +10,12 @@
       :outlined="outlined"
       :borderless="borderless"
       >
-      <template #cell(function)>
-          <b-button size="sm" class="mr-2"> Details </b-button>
-          <b-button size="sm" class="mr-2"> Details </b-button>
+      <template #cell(member_status)="row">
+        <img v-if="row.item.member_status==0" :src="onImage" @click="changestatus(row)"/>
+        <img v-else :src="noImage" @click="changestatus(row)"/>
+      </template>
+      <template #cell(function)="row">
+        <img :src="deleteImage" @click="deleteMember(row)"/>
       </template>
     </b-table>
     <div>
@@ -27,6 +30,9 @@
   export default {
     data() {
       return {
+        deleteImage:require('../assets/delete.png'),
+        noImage:require('../assets/no.png'),
+        onImage:require('../assets/on.png'),
         members:[],
         currentNumber: 0,
         requiredNumber: 5,
@@ -92,6 +98,21 @@
       }
     },
     methods:{
+      changestatus(member){
+        this.$confirm("你確定要更改這位會員的狀態？","","question").then(() => {
+            this.members[member.index].member_status=!this.members[member.index].member_status
+            // uploadtodatabase
+            this.$alert("成功更改","","success");
+        });    
+      },
+      deleteMember(member){
+        this.$confirm("你確定要刪除？","","question").then(() => {
+            this.members.splice(member.index,1);
+            // deletetodatabase
+            // uploadtodatabase
+            this.$alert("成功刪除","","success");
+        });
+      },
       routeMembers(direction){
         this.members = []
         if (direction == 'next')  {this.currentNumber += this.requiredNumber}
