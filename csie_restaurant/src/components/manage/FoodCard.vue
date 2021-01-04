@@ -2,7 +2,8 @@
     <div class="col-md-4 card-body" v-b-hover="hoverCard">
         <b-modal id="modal-sm" size="sm" ref="my-modal" hide-header hide-footer hide-header-close>
             <div class="container">
-                <button>選擇圖檔</button>
+                <input type="file" accept="image/*" @change="previewImage" id="upload">
+                <img :src="preview" @click="upload" class="preview"/>
                 <div class="m-2">
                     <b-form-group
                     label="Name"
@@ -44,13 +45,11 @@
                 </div>
             </div> 
         </b-modal>
-        <b-card tag="article">
-            <b-card-header header-bg-variant="white" header-border-variant="white" class="b-header">
-                <b-button :id="'target-'+this.foodId">
-                    <img width="10px" height="1px" src="https://imgur.com/WIOoDzF">
-                </b-button>
+        <b-card tag="article" no-body>
+            <b-card-header header-bg-variant="gray" header-border-variant="white" class="foodCardHeader">
+                <b-icon icon="list" :id="'target-'+this.foodId" font-scale="1.2"/>
             </b-card-header>
-            <div class='row'>
+            <div class='row card-body'>
                 <b-col md='6' >
                     <b-card-title> {{foodName}} </b-card-title>
                     <b-card-text class="ellipsis" >{{foodDescription}}</b-card-text>
@@ -67,14 +66,15 @@
                     :target="'target-'+this.foodId" 
                     triggers="hover" 
                     fallback-placement="clockwise" 
-                    placement="right"
-                    offset="-30"
-                    custom-class="option">
+                    placement="bottom"
+                    custom-class="option"
+                    >
                     <template #title>操作選項</template>
-                        <b-list-group horizontal>
+                        <b-list-group>
                             <b-list-group-item href="#" variant="primary" @click="showModal">修改商品</b-list-group-item>
                             <b-list-group-item href="#" variant="warning" @click="showModal">售完商品</b-list-group-item>
                             <b-list-group-item href="#" variant="danger"  @click="showModal">下架商品</b-list-group-item>
+                            <b-list-group-item href="#" variant="danger"  @click="showModal">刪除商品</b-list-group-item>
                         </b-list-group>
                 </b-popover>
             </div>
@@ -91,6 +91,8 @@ export default {
         nameState:null,
         descriptionState:null,
         priceState:null,
+        preview: require('../../assets/photoupload.png'),
+        image: null,
       }
     },
     props:{
@@ -113,6 +115,21 @@ export default {
         }
     },
     methods:{
+        upload(){
+            let upload=document.querySelector('#upload')
+            upload.click()
+        },
+        previewImage: function(event) {
+        var input = event.target;
+        if (input.files) {
+            var reader = new FileReader();
+            reader.onload = (e) => {
+            this.preview = e.target.result;
+            }
+            this.image=input.files[0];
+            reader.readAsDataURL(input.files[0]);
+        }
+        },
         parseCookie(){
             // let cookies = document.cookie;
             let cookie;
@@ -143,6 +160,7 @@ export default {
             //缺：lack of the responsive action when hover on the card
         },
         showModal() {
+            this.preview=require('../../assets/photoupload.png'),
             this.$refs['my-modal'].show();
         },
         confirmModal() {
@@ -179,18 +197,23 @@ export default {
             this.priceState = valid3
             return valid1 && valid2 && valid3
         },
-    }
+    },
 }
 </script>
 
 <style scoped>
-.b-header{
-    padding-top:0%;
-    padding-left:0%;
+#upload{
+    display: none;
+}
+.preview{
+    width: 250px;
+    height: 250px;
 }
 .option{
-    min-width: 330px;
     min-height: auto;
+}
+.foodCardHeader{
+    padding: 0.5rem;
 }
 .card-body{
     margin-bottom: 0.5%;

@@ -15,6 +15,15 @@
                     :foodDescription="card.foodDescription" 
                     :foodTag="card.foodTag"
                 />
+<!-- /////////////////////////////////////      -->
+                <div class="col-md-4 card-body">
+                    <b-card tag="article" class="addFoodCard">
+                        <div class='row'>
+                            <b-icon @mouseleave="category.hover=false" v-if="category.hover" icon="plus-circle-fill" font-scale="4" class="addProduct" @click="showModal"/>
+                            <b-icon @mouseover="category.hover=true" v-else icon="plus-circle" font-scale="4" class="addProduct"/>
+                        </div>  
+                    </b-card>
+                </div>
             </div>
         </div>
     </div>
@@ -39,6 +48,7 @@ export default {
     data()
     {
         return{
+
             foodCategories:[],
             foodCards:
             [
@@ -57,17 +67,21 @@ export default {
                 {foodId: 12, foodName: 'ShPanon',  imgPath: 'https://placekitten.com/300/300', foodDescription: '77777777',  foodTag: 'Pan', price:188},
                 {foodId: 13, foodName: 'SPanPan',  imgPath: 'https://placekitten.com/300/300', foodDescription: '888888888', foodTag: 'Pan', price:120},
                 {foodId: 14, foodName: 'ShPanf', imgPath: 'https://placekitten.com/300/300', foodDescription: '9999999',   foodTag: 'Pan', price:73},
-            ] , 
+            ], 
         }
-    }, 
+    },
     methods:{
         sameTag:function(category){
             return this.foodCards.filter(i => i.foodTag === category)
         },
+        showModal() {
+            this.$refs['my-modal'].show();
+        },
     },
     created(){
         for(let i=0;i<this.foodCategory.length;i++)
-            this.foodCategories.push({categoryId: i,foodCategory: this.foodCategory[i]})
+            this.foodCategories.push({categoryId: i,foodCategory: this.foodCategory[i],hover:false})
+        console.log(this.foodCategories)
     }
 }
 </script>
@@ -79,6 +93,18 @@ export default {
 .fback{
     background-color:#FFFFFF
 }
-
+.addFoodCard{
+    width: 100%;
+    height: 100%;
+    border:thin gray dashed;
+}
+.card-body{
+    margin-bottom: 0.5%;
+}
+.addProduct{
+    position: absolute;
+    top: calc(50% + -32px);
+    left: calc(50% + -32px);
+}
 </style>
 >>>>>>> .theirs
