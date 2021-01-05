@@ -29,7 +29,7 @@
                 <ShoppingCart />
             </b-navbar-nav>
             <b-navbar-nav>
-                <LoginNav ref="loginNav"></LoginNav>>
+                <LoginNav ref="loginNav"></LoginNav>
             </b-navbar-nav>
             </b-collapse>
         </b-navbar>

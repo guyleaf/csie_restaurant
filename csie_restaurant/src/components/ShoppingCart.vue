@@ -34,9 +34,9 @@
               class="mb-3"
               prepend="優惠券"
             >
-            <b-form-input v-model="coupon"></b-form-input>
+            <b-form-input v-model="coupon" :placeholder="prompt"></b-form-input>
             <b-input-group-append>
-              <b-button size="sm" text="Button" variant="success" @click="checkLogin">使用</b-button>
+              <b-button size="sm" text="Button" variant="success" @click="checkCoupon">使用</b-button>
             </b-input-group-append>
           </b-input-group>
         </div>
@@ -71,6 +71,8 @@
     },
     data() {
       return {
+        coupon: null,
+        prompt:'請輸入優惠卷',
         bookingShopName: null,
         ItemList:[
           {
@@ -92,7 +94,7 @@
         this.ItemList = [];
         this.totalPrice = null;
         let data = this.parseCookie();
-        this.bookingShopName = this.$cookie.get('shop')
+        this.bookingShopName = this.$cookie.get('shopName')
         for (var i = 0; i<data.length;i++)
         {
           this.totalPrice = this.totalPrice + data[i].foodPrice*data[i].foodSpinValue;
@@ -119,14 +121,21 @@
       showModal() {
         this.$bvModal.show('login-modal')
       },
-      checkCoupon(coupon){
-        let id = this.$cookie.get('shopId');
-        this.$http.get('restaurants/' + id + '/coupons' + '?include_expired=1'). //FIXME  ?include_expired=1要移除
-        then(response => {
-            this.couponCards=response.data;
-            console.log(this.couponCards);
-        })
-        console.log(coupon)
+      checkCoupon(){
+        if(this.checkLogin()){
+        //   let id = this.$cookie.get('shopId');
+        //   this.$http.get('/customer/coupon/check?coupon_code='+ coupon +"&seller_id="+ id , {
+        //     headers: {
+        //       'Authorization': 'Bearer ' + this.$store.getters['auth/token']
+        //     }
+        //   })
+        //   .then(response => {
+        //       this.couponCards=response.data;
+        //       console.log(this.couponCards);
+        //   }).catch(error => {
+        //       console.log(error.response);
+        //   })
+        }
       },
       confirmModal() {
         this.$bus.$emit("cashier",this.dataToCashier());
@@ -138,7 +147,10 @@
       deleteCartCell(e){
         this.totalPrice = this.totalPrice - this.ItemList[e].foodPrice*this.ItemList[e].foodSpinValue;
         this.ItemList.splice(e,1);
-        if(this.totalPrice == 0) {this.totalPrice = null;}
+        if(this.totalPrice == 0) {
+          this.bookingShopName = null;
+          this.totalPrice = null;
+          }
         if(this.ItemList.length == 0) //delete cookie
         { 
           document.cookie = 'shopId=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
@@ -193,6 +205,10 @@
   }
 </script>
 <style scoped>
+  ::placeholder {
+    font-size: 12px;
+    color: #E55B5B;
+  }
   .mb-3{
     padding: 0 0 10px 0;
     margin: 0 !important;
