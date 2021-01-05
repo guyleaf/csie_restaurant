@@ -13,7 +13,7 @@
                                         ＊若商品有瑕疵狀況可以隨時詢問客服，我們一定會完善幫您做好售後服務，謝謝！
                                         台灣總代理 艾海國際有限公司 AIHAI Tech' imgPath="https://picsum.photos/900/250/?image=3" shopName="鄒承軒的牛郎專賣店" commodity="15" fans="2" joinDate="2000-02-04" rate="4.3(300)"/>
             <CouponCardGroup />
-            <FoodCardGroup :foodCategory='test'/>
+            <FoodCardGroup />
         </div>
       </div>
     </div>
@@ -36,13 +36,12 @@ export default {
   },
   data: function() {
     return {
-      test : [  {tag:'Pan', order:1},
-                {tag:'Lee', order:2},
-                {tag:'Ron', order:0} ],
+      category : [],
+      foodCards:[],
     };
   },
   created() {
-    let id = this.$router.currentRoute.params.id
+
   },
   methods: {}
 };

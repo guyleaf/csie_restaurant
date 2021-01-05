@@ -4,7 +4,7 @@
         <div class="col-11">
           <b-card>
             <h3 class="Header">查詢列表</h3>
-                <b-form-select v-model="filter" :options="options" />
+              <b-form-select v-model="filter" :options="options" />
             <OrderTable />
           </b-card>
         </div>
