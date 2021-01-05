@@ -1,15 +1,12 @@
 <template>
     <div class="container">
-        <div class='tag mt-5'>優惠卷</div>
-        <div class='couponField mb-5' style='display:flex; flex-direction:row; '>
-            <CouponCard name='123dasd' discount='100' expire='2000:01:07'/>
-            <CouponCard name='123dasd' discount='100' expire='2000:01:07'/>
-            <CouponCard name='123dasd' discount='100' expire='2000:01:07'/>
-            <CouponCard name='123dasd' discount='100' expire='2000:01:07'/>
-            <CouponCard name='123dasd' discount='100' expire='2000:01:07'/>
-            <CouponCard name='123dasd' discount='100' expire='2000:01:07'/>
-            <CouponCard name='123dasd' discount='100' expire='2000:01:07'/>
-            <CouponCard name='123dasd' discount='100' expire='2000:01:07'/>
+        <div style="background-color:white">
+            <div class='tag mt-5'>優惠卷</div>
+            <div class='couponField mb-5' style='display:flex; flex-direction:row; '>
+                <div v-for="coupon in couponCards" :key="coupon['coupon'].id">
+                    <CouponCard :code="coupon['coupon'].code" :products="coupon['coupon_items']" :discount="coupon['coupon'].discount*100" :expire="coupon['coupon'].end_time" :type="coupon['coupon'].type"/>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -26,30 +23,18 @@ export default {
     data()
     {
         return{
-            foodCategories:[],
-            /*foodCards:
-            [
-                {foodId: 0,  foodName: 'ShopRon',  imgPath: 'https://placekitten.com/300/300', foodDescription: '11111111',  foodTag: 'Ron', price:123},
-                {foodId: 1,  foodName: 'ShopRon',  imgPath: 'https://placekitten.com/300/300', foodDescription: '878787878', foodTag: 'Ron', price:133},
-                {foodId: 2,  foodName: 'ShopPan', imgPath: 'https://placekitten.com/300/300', foodDescription: '3333333',   foodTag: 'Pan', price:13},
-                {foodId: 3,  foodName: 'Lee',  imgPath: 'https://placekitten.com/300/300', foodDescription: '0000000',   foodTag: 'Lee', price:23},
-                {foodId: 4,  foodName: 'Leeaaa',  imgPath: 'https://placekitten.com/300/300', foodDescription: '11111111',  foodTag: 'Lee', price:12},
-                {foodId: 5,  foodName: 'Ron',  imgPath: 'https://placekitten.com/300/300', foodDescription: '878787878', foodTag: 'Ron', price:64},
-                {foodId: 6,  foodName: 'Ronaa', imgPath: 'https://placekitten.com/300/300', foodDescription: '7777777',   foodTag: 'Ron', price:17},
-                {foodId: 7,  foodName: 'Lee',  imgPath: 'https://placekitten.com/300/300', foodDescription: '0000000',   foodTag: 'Lee', price:283},
-                {foodId: 8,  foodName: 'Leeaa',  imgPath: 'https://placekitten.com/300/300', foodDescription: '11111111',  foodTag: 'Lee', price:173},
-                {foodId: 9,  foodName: 'ShopPan',  imgPath: 'https://placekitten.com/300/300', foodDescription: '222222222', foodTag: 'Pan', price:19},
-                {foodId: 10, foodName: 'ShoPanf', imgPath: 'https://placekitten.com/300/300', foodDescription: '5555555',   foodTag: 'Pan', price:26},
-                {foodId: 11, foodName: 'ShPanee',  imgPath: 'https://placekitten.com/300/300', foodDescription: '6666666',   foodTag: 'Pan', price:183},
-                {foodId: 12, foodName: 'ShPanon',  imgPath: 'https://placekitten.com/300/300', foodDescription: '77777777',  foodTag: 'Pan', price:188},
-                {foodId: 13, foodName: 'SPanPan',  imgPath: 'https://placekitten.com/300/300', foodDescription: '888888888', foodTag: 'Pan', price:120},
-                {foodId: 14, foodName: 'ShPanf', imgPath: 'https://placekitten.com/300/300', foodDescription: '9999999',   foodTag: 'Pan', price:73},
-            ] , */
+            couponCards:[] , 
         }
     }, 
     methods:{
     },
     created(){
+        let id = this.$router.currentRoute.params.id
+        this.$http.get('restaurants/' + id + '/coupons' + '?include_expired=1'). //FIXME  ?include_expired=1要移除
+        then(response => {
+            this.couponCards=response.data;
+            console.log(this.couponCards);
+        })
     }
 }
 </script>
