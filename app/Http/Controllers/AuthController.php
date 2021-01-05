@@ -29,6 +29,13 @@ class AuthController extends Controller
         {
             return response()->json(['error' => 'Unauthorized', 'info' => $credential, 'token' => $token], 401);
         }
+
+        $user = $this->jwt->user();
+        if ($user['member_status'] == 1) {
+            $this->jwt->parseToken()->invalidate()->unsetToken();
+            return response()->json(['error' => 'Forbidden', 'info' => $credential, 'token' => $token], 403);
+        }
+
         return $this->respondWithToken($token);
     }
 

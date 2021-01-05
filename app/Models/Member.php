@@ -42,7 +42,13 @@ class Member extends Model implements JWTSubject, AuthenticatableContract, Autho
      */
     function getJWTCustomClaims()
     {
-        return [];
+        return [
+            'user' => [
+                'name' => $this->name,
+                'id' => $this->id,
+                'permission' => $this->permission
+            ]
+        ];
     }
 
     /**
