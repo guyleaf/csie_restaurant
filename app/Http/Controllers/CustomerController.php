@@ -33,9 +33,9 @@ class CustomerController extends Controller
     public function getOrders(Request $request)
     {
         try {
-            // $user = auth()->userOrFail();
-            // $id = $user->id;
-            $result = $this->customerService->getOrders(8);
+            $user = auth()->user();
+            $id = $user->id;
+            $result = $this->customerService->getOrders($id);
         } catch (Exception $e) {
             return response()->json([
                 'status' => $e->getCode(),
@@ -49,9 +49,9 @@ class CustomerController extends Controller
     public function getOrderInfo(Request $request, $orderId)
     {
         try {
-            // $user = auth()->userOrFail();
-            // $id = $user->id;
-            $result = $this->customerService->getOrderInfo(8, $orderId);
+            $user = auth()->user();
+            $id = $user->id;
+            $result = $this->customerService->getOrderInfo($id, $orderId);
         } catch (Exception $e) {
             return response()->json([
                 'status' => $e->getCode(),
@@ -64,9 +64,9 @@ class CustomerController extends Controller
 
     public function checkCoupon(Request $request)
     {
-        // $user = auth()->userOrFail();
-        // $id = $user->id;
-        $code = $this->customerService->checkCoupon(8, $request->query('coupon_code'), $request->query('seller_id'));
+        $user = auth()->user();
+        $id = $user->id;
+        $code = $this->customerService->checkCoupon($id, $request->query('coupon_code'), $request->query('seller_id'));
 
         if ($code == 3)
             return response()->json(['message' => 'You have used this coupon before'], 403);
