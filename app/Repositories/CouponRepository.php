@@ -47,6 +47,7 @@ class CouponRepository
     {
         $result = $this->coupon
         ->where('member_id', '=', $member_id)
+        ->where('is_deleted', '=', true)
         ->get(['id', 'code', 'start_time', 'end_time', 'type', 'discount', 'limit_money']);
 
         return $result;
@@ -56,6 +57,7 @@ class CouponRepository
     {
         $result = $this->coupon
         ->where('id', '=', $coupon_id)
+        ->where('is_deleted', '=', true)
         ->get(['id', 'code', 'member_id', 'start_time', 'end_time', 'type', 'discount', 'limit_money']);
 
         return $result;
@@ -65,9 +67,52 @@ class CouponRepository
     {
         $result = $this->coupon
         ->where('code', '=', $coupon_code)
+        ->where('is_deleted', '=', true)
         ->get(['id', 'code', 'member_id', 'start_time', 'end_time', 'type', 'discount', 'limit_money']);
 
         return $result;
+    }
+
+    public function addCoupon($seller_id, $payload)
+    {
+        $payload['coupon']['member_id'] = $seller_id;
+        $id = $this->coupon
+        ->insertGetId($payload['coupon']);
+
+        if (!empty($payload['coupon_items']))
+        {
+            $payload['coupon_items'] = 
+            array_map(function ($item) use ($id) {
+                $item['coupon_id'] = $id;
+                return $item;
+            }, $payload['coupon_items']);
+            
+
+            $this->coupon_items
+            ->insert($payload['coupon_items']);
+        }
+    }
+
+    public function deleteCoupon($code)
+    {
+        $this->coupon
+        ->where('code', '=', $code)
+        ->update(['is_deleted' => true]);
+    }
+
+    public function updateCoupon($payload)
+    {
+        $this->coupon
+        ->where('code', '=', $payload['coupon']['code'])
+        ->update($payload['coupon']);
+
+        if (!empty($payload['coupon_items']))
+        {
+            $this->coupon_items
+            ->join('coupon as CP', 'CP.id', '=', 'SCP.coupon_id')
+            ->where('CP.code', '=', $payload['coupon']['code'])
+            ->update($payload['coupon_items']);
+        }
     }
 }
 ?>

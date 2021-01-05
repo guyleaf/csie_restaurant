@@ -66,10 +66,10 @@ class ShopService
                 return $origin->diff($start_time)->format("%s") > 0 && $end_time->diff($origin)->format("%s") > 0;
             });
 
-            $result = $filtered->all();
+            $result = $filtered;
         }
 
-        if (!empty($result))
+        if ($result->isNotEmpty())
         {
             $result = $result->toArray();
             foreach ($result as $key => $value) {
