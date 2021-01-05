@@ -94,7 +94,7 @@ class ShopRepository
         $category = $this->shopTable
             ->join('product_category as PC', 'seller_id','=','member_id')
             ->where('member_id','=', $id)
-            ->get(['PC.name']);
+            ->get(['PC.name','display_order']);
         return $category;
     }
 }
