@@ -53,6 +53,12 @@ $router->group(['prefix' => 'seller'], function () use ($router) {
     $router->post('coupons/add', 'SellerController@addCoupon');
     $router->post('coupons/delete', 'SellerController@deleteCoupon');
     $router->post('coupons/update', 'SellerController@updateCoupon');
+    $router->group(['prefix' => 'products'], function () use ($router) {
+        $router->get('', 'SellerController@getProducts');
+        $router->post('add', 'SellerController@addProduct');
+        $router->post('delete', 'SellerController@deleteProduct');
+        $router->post('update', 'SellerController@updateProduct');
+    });
 });
 
 $router->group(['prefix' => 'admin'], function () use ($router) {
