@@ -1,7 +1,6 @@
 <template>
     <div class="container">
         <CategoryTab :foodCategory="foodCategories" />
-        <b-button @click="show">show</b-button>
         <div class="row" v-for="category in foodCategories" :key="category.categoryId">
             <div class="row">
                 <h1>{{category.foodCategory}}</h1>
