@@ -48,7 +48,6 @@
         this.loginMsg = 'Hi ' + name
       },
       logout() {
-        console.log(this.$store.getters['auth/token'])
         let url='/auth/logout';
         this.$axios.post(this.$url + url, {}, {
           headers: {
@@ -81,7 +80,6 @@
           this.$store.dispatch('auth/setExpireDate', token.exp)
           this.$store.dispatch('auth/setUser', token.user)
           this.$emit('success', token.user.name)
-          this.$emit('close')
         })
         .catch(error => {
           this.$store.dispatch('auth/invalidate')
