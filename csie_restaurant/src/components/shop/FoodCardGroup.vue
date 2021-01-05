@@ -28,12 +28,6 @@ export default {
         FoodCard,
         CategoryTab
     },
-    props:{
-        foodToCart: Array,
-        // foodCategory1:String,
-        // foodCategory2:String,
-        // foodCategory3:String
-    },
     data()
     {
         return{

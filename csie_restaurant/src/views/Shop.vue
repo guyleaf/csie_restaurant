@@ -36,12 +36,7 @@ export default {
   },
   data: function() {
     return {
-      category : [],
-      foodCards:[],
     };
-  },
-  created() {
-
   },
   methods: {}
 };
