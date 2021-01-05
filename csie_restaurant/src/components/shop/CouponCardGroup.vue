@@ -3,7 +3,7 @@
         <div style="background-color:white">
             <div class='tag mt-5'>優惠卷</div>
             <div class='couponField mb-5' style='display:flex; flex-direction:row; '>
-                <div v-for="coupon in Coupons" :key="coupon['coupon'].id">
+                <div v-for="coupon in couponCards" :key="coupon['coupon'].id">
                     <CouponCard :code="coupon['coupon'].code" :products="coupon['coupon_items']" :discount="coupon['coupon'].discount*100" :expire="coupon['coupon'].end_time" :type="coupon['coupon'].type"/>
                 </div>
             </div>
@@ -23,35 +23,18 @@ export default {
     data()
     {
         return{
-            Coupons:
-            [
-                {"coupon": {"id": 12,"code": "bPhZha","start_time": "2020-10-09 16:00:00","end_time": "2020-10-09 16:00:00","type": 2,"discount": "0.8","limit_money": null},
-                "coupon_items": [{"coupon_id": 12,"product_id": 7,"quantity": 1,"name": "蜂蜜鬆餅"}]},
-                {"coupon": {"id": 12,"code": "bPhZha","start_time": "2020-10-09 16:00:00","end_time": "2020-10-09 16:00:00","type": 2,"discount": "0.8","limit_money": null},
-                "coupon_items": [{"coupon_id": 12,"product_id": 7,"quantity": 1,"name": "蜂蜜鬆餅"}, {"coupon_id": 12,"product_id": 6,"quantity": 1,"name": "蜂蜜紅茶"}]},
-                {"coupon": {"id": 12,"code": "bPhZha","start_time": "2020-10-09 16:00:00","end_time": "2020-10-09 16:00:00","type": 2,"discount": "0.8","limit_money": null},
-                "coupon_items": [{"coupon_id": 12,"product_id": 7,"quantity": 1,"name": "蜂蜜鬆餅"}]},
-                {"coupon": {"id": 12,"code": "bPhZha","start_time": "2020-10-09 16:00:00","end_time": "2020-10-09 16:00:00","type": 2,"discount": "0.8","limit_money": null},
-                "coupon_items": [{"coupon_id": 12,"product_id": 7,"quantity": 1,"name": "蜂蜜鬆餅"}]},
-                {"coupon": {"id": 12,"code": "bPhZha","start_time": "2020-10-09 16:00:00","end_time": "2020-10-09 16:00:00","type": 2,"discount": "0.8","limit_money": null},
-                "coupon_items": [{"coupon_id": 12,"product_id": 7,"quantity": 1,"name": "蜂蜜鬆餅"}]},
-                /*{"coupon": {"id": 1,"code": "bPhZha","start_time": "2020-10-09 16:00:00","end_time": "2020-10-09 16:00:00","type": 2,"discount": "0.8","limit_money": null},
-                "coupon_items": [{"coupon_id": 12,"product_id": 7,"quantity": 1,"name": "蜂蜜鬆餅"}]},
-                {"coupon": {"id": 2,"code": "bPhZha","start_time": "2020-10-09 16:00:00","end_time": "2020-10-09 16:00:00","type": 2,"discount": "0.8","limit_money": null},
-                "coupon_items": [{"coupon_id": 12,"product_id": 7,"quantity": 1,"name": "蜂蜜鬆餅"}]},
-                {"coupon": {"id": 3,"code": "bPhZha","start_time": "2020-10-09 16:00:00","end_time": "2020-10-09 16:00:00","type": 2,"discount": "0.8","limit_money": null},
-                "coupon_items": [{"coupon_id": 12,"product_id": 7,"quantity": 1,"name": "蜂蜜鬆餅"}]},
-                {"coupon": {"id": 4,"code": "bPhZha","start_time": "2020-10-09 16:00:00","end_time": "2020-10-09 16:00:00","type": 2,"discount": "0.8","limit_money": null},
-                "coupon_items": [{"coupon_id": 12,"product_id": 7,"quantity": 1,"name": "蜂蜜鬆餅"}]},
-                {"coupon": {"id": 5,"code": "bPhZha","start_time": "2020-10-09 16:00:00","end_time": "2020-10-09 16:00:00","type": 2,"discount": "0.8","limit_money": null},
-                "coupon_items": [{"coupon_id": 12,"product_id": 7,"quantity": 1,"name": "蜂蜜鬆餅"}]},*/
-            ] , 
+            couponCards:[] , 
         }
     }, 
     methods:{
     },
     created(){
-        //this.$http.get()
+        let id = this.$router.currentRoute.params.id
+        this.$http.get('restaurants/' + id + '/coupons' + '?include_expired=1'). //FIXME  ?include_expired=1要移除
+        then(response => {
+            this.couponCards=response.data;
+            console.log(this.couponCards);
+        })
     }
 }
 </script>
