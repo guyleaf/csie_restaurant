@@ -47,7 +47,7 @@ class CouponRepository
     {
         $result = $this->coupon
         ->where('member_id', '=', $member_id)
-        ->where('is_deleted', '=', true)
+        ->where('is_deleted', '=', false)
         ->get(['id', 'code', 'start_time', 'end_time', 'type', 'discount', 'limit_money']);
 
         return $result;
@@ -57,7 +57,7 @@ class CouponRepository
     {
         $result = $this->coupon
         ->where('id', '=', $coupon_id)
-        ->where('is_deleted', '=', true)
+        ->where('is_deleted', '=', false)
         ->get(['id', 'code', 'member_id', 'start_time', 'end_time', 'type', 'discount', 'limit_money']);
 
         return $result;
@@ -67,7 +67,7 @@ class CouponRepository
     {
         $result = $this->coupon
         ->where('code', '=', $coupon_code)
-        ->where('is_deleted', '=', true)
+        ->where('is_deleted', '=', false)
         ->get(['id', 'code', 'member_id', 'start_time', 'end_time', 'type', 'discount', 'limit_money']);
 
         return $result;
