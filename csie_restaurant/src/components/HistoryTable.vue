@@ -145,27 +145,35 @@
         this.items[index].ratingdisabled=!this.items[index].ratingdisabled
       },
       show(history){
-        this.$http.get('/customer/orders/'+history.item.id)
-      .then(response => {
-        let datas=response.data
-        history.item.datas=[]
-        history.item.comment=datas.order.comment
-        for(let i=0;i<datas.order_items.length;i++) 
-        {
-          let discount = 1
-          if(datas.coupon_items!=undefined) for (let j =0;j<datas.coupon_items.length;j++)
-            if(datas.coupon_items[j].product_id == datas.order_items[i].product_id && datas.coupon_items[j].quantity<=datas.order_items[i].quantity) discount=datas.order.discount
-          history.item.datas.push({product_name:datas.order_items[i].product_name, price:datas.order_items[i].price, quantity:datas.order_items[i].quantity ,discount:discount})
-        }
-        if(datas.order.coupon_type==1) history.item.isShippingCoupon=true;
-        else history.item.isShippingCoupon=false;
-        history.item.fee=datas.order.fee;
-        history.toggleDetails()
+        this.$http.get('/customer/orders/'+history.item.id, {
+          headers: {
+            'Authorization': 'Bearer ' + this.$store.getters['auth/token']
+          }
+        })
+        .then(response => {
+          let datas=response.data
+          history.item.datas=[]
+          history.item.comment=datas.order.comment
+          for(let i=0;i<datas.order_items.length;i++) 
+          {
+            let discount = 1
+            if(datas.coupon_items!=undefined) for (let j =0;j<datas.coupon_items.length;j++)
+              if(datas.coupon_items[j].product_id == datas.order_items[i].product_id && datas.coupon_items[j].quantity<=datas.order_items[i].quantity) discount=datas.order.discount
+            history.item.datas.push({product_name:datas.order_items[i].product_name, price:datas.order_items[i].price, quantity:datas.order_items[i].quantity ,discount:discount})
+          }
+          if(datas.order.coupon_type==1) history.item.isShippingCoupon=true;
+          else history.item.isShippingCoupon=false;
+          history.item.fee=datas.order.fee;
+          history.toggleDetails()
         })
       }
     },
-    created() {
-      this.$http.get('/customer/orders')
+    mounted() {
+      this.$http.get('/customer/orders', {
+        headers: {
+          'Authorization': 'Bearer ' + this.$store.getters['auth/token']
+        }
+      })
       .then(response => {
           this.items=[];
           let data=response.data;
@@ -184,7 +192,16 @@
             }
             this.items.push({訂單狀態: this.status[data[i].status],ratingStar: data[i].stars, 日期: data[i].order_time, seller_id: data[i].seller_id, 店家: data[i].seller_name ,id: data[i].order_id, isRated: isRated, readonly: readonly, ratingdisabled:ratingdisabled, isClicked: isClicked});
           }
-          })
+      })
+      .catch(error => {
+        this.$store.dispatch('auth/invalidate')
+        this.$router.push('/')
+        // if (error.response) {
+        //   // console.log(this.$refs.loginNav)
+        //   // if (error.response.status == 401)
+        //   //   this.$refs.loginNav.refreshToken(this.$store.getters['auth/token'])
+        // }
+      });
     },
   }
 </script>

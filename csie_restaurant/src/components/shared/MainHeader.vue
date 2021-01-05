@@ -29,7 +29,7 @@
                 <ShoppingCart />
             </b-navbar-nav>
             <b-navbar-nav>
-                <LoginNav />
+                <LoginNav ref="loginNav"></LoginNav>>
             </b-navbar-nav>
             </b-collapse>
         </b-navbar>
@@ -52,6 +52,8 @@ export default {
     },
     method: {
         showHistory() {
+        },
+        search(){
         }
     },
     computed: {
