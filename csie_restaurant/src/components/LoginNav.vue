@@ -63,6 +63,7 @@
             type: "success",
             timer: 5000
           })
+          this.$router.push("/")
         })
       },
       refreshToken(token) {
