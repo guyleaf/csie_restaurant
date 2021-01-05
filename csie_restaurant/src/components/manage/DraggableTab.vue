@@ -39,7 +39,6 @@
           class="list-group-item"
           v-for="element in list"
           :key="element.foodCategory"
-          
         >
           {{ element.foodCategory }}
         </div>
@@ -66,13 +65,23 @@ export default {
     return {
       enabled: true,
       list: [],
-      orgin:[],
       dragging: false
     };
   },
   computed: {
   },
+  watch:{
+    foodCategory: function(){
+      this.list=[]
+      for(let i=0;i<this.foodCategory.length;i++){
+        this.list.push({foodCategory:this.foodCategory[i].foodCategory, order:this.foodCategory[i].order});
+        order += 1;
+    }}
+  },
   methods: {
+    show(){
+      console.log(this.foodCategory)
+    },
     add: function() {
       this.list.push({ foodCategory: "Ron " + order, order: order++ });
     },
@@ -91,11 +100,11 @@ export default {
     }
   },
   created(){
-    for(let i=0;i<this.foodCategory.length;i++)
+    for(let i=0;i<this.foodCategory.length;i++){
         this.list.push({foodCategory:this.foodCategory[i].foodCategory, order:this.foodCategory[i].order});
-        this.orgin.push({foodCategory:this.foodCategory[i].foodCategory, order:this.foodCategory[i].order});
         order += 1;
-    },
+    }
+  },
 
 };
 </script>

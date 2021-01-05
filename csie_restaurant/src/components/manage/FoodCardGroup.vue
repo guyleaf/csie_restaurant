@@ -43,7 +43,6 @@
             </div> 
         </b-modal>
         <CategoryTabManage :foodCategory="foodCategories"/>
-        <b-button @click="show()"/>
         <div class="row" v-for="category in foodCategories" :key="category.categoryId">
             <div class="row">
                 <h1>{{category.foodCategory}}</h1>
@@ -127,9 +126,6 @@ export default {
         }
     },
     methods:{
-        show(){
-            console.log(this.foodCategories)
-        },
         upload(){
             let upload=document.querySelector('#upload')
             upload.click()
@@ -175,10 +171,11 @@ export default {
             return a - b;
         },
         updateTab:function(msg){
-            this.foodCategories = []
-            for(let i=0;i<this.foodCategory.length;i++){
-                this.foodCategories.push({categoryId: i, foodCategory: msg[i].tag,hover:false})
+            this.foodCategories=[]
+            for(let i=0;i<msg.length;i++){
+                this.foodCategories.push({foodCategory: msg[i].foodCategory,order: msg[i].order,hover:false})
             }
+            console.log(this.foodCategories)
         }
     },
     created(){
@@ -203,12 +200,12 @@ export default {
             let data=response.data;
             for (let i=0;i<data.length;i++) this.foodCategories.push({foodCategory: data[i].name, order: data[i].display_order, hover:false});}
             )
-        this.foodCategory.sort(function(a,b){
+        this.foodCategories.sort(function(a,b){
             return a.order - b.order;
         });
-        // this.$bus.$on("updateTab", msg => {
-        //     this.updateTab(msg);
-        // });
+        this.$bus.$on("updateTab", msg => {
+            this.updateTab(msg);
+        });
     }
 }
 </script>
