@@ -3,7 +3,7 @@
     <b-row class="justify-content-md-center mt-5">
       <b-col col lg="4">
         <div class="desField">
-          <div v-for="(item,index) in ItemList" :key="index" >
+          <div v-for="(item,index) in ItemList" :key="index" style="border-bottom:1px solid;" >
             <CartCell v-on:deleteclick="deleteCartCell" v-bind="item" :index="index"/>
           </div>
         </div>
@@ -55,7 +55,8 @@ export default {
         this.ItemList.splice(e,1);
         if(this.ItemList.length == 0) //delete cookie
         { 
-          document.cookie = 'shop=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
+          document.cookie = 'shopId=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
+          document.cookie = 'shopName=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
           document.cookie = 'product=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
         }
         else{ this.$cookie.set('product',JSON.stringify(this.ItemList));}

@@ -82,12 +82,13 @@ export default {
             else productNum = 1;
             if(this.$cookie.get("product")==null) 
             {   
-                this.$cookie.set('shop',this.$router.currentRoute.params.shopName)
+                this.$cookie.set('shopId',this.$router.currentRoute.params.id)
+                this.$cookie.set('shopName',this.$router.currentRoute.params.shopName)
                 this.$cookie.set('product', JSON.stringify(this.data))
             }
             else 
             {
-                let cartShop = this.$cookie.get('shop')
+                let cartShop = this.$cookie.get('shopName')
                 let currentShop = this.$router.currentRoute.params.shopName;
                 let current = JSON.parse(this.$cookie.get("product"));
                 if(cartShop === this.$router.currentRoute.params.shopName)
@@ -104,7 +105,8 @@ export default {
         changeShop(cartShop,currentShop){
             this.$confirm("您的訂單含有"+' '+cartShop+' '+"提供的餐點。建立新訂單，即可新增"+' '+currentShop+' '+"提供的餐點。","","warning").then(() => {
                 this.cleanShopCart()
-                this.$cookie.set('shop',this.$router.currentRoute.params.shopName)
+                this.$cookie.set('shopId',this.$router.currentRoute.params.id)
+                this.$cookie.set('shopName',this.$router.currentRoute.params.shopName)
                 this.$cookie.set('product', JSON.stringify(this.data))
                 // uploadtodatabase
                 this.$alert("成功更改","","success");
@@ -112,7 +114,8 @@ export default {
             })
         },
         cleanShopCart(){
-            document.cookie = 'shop=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
+            document.cookie = 'shopId=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
+            document.cookie = 'shopName=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
             document.cookie = 'product=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
         },
         hoverCard() {   
