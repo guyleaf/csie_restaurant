@@ -6,6 +6,7 @@ import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 import VueCookie from "vue-cookie";
+import VueSimpleAlert from "vue-simple-alert";
 import axios from "axios";
 import {
   cacheAdapterEnhancer,

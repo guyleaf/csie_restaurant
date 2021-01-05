@@ -31,7 +31,7 @@
                     </b-input-group-prepend>
                 </b-input-group>
             </b-nav-form>
-            <b-navbar-nav class="ml-5">
+            <b-navbar-nav class="ml-5 mr-3">
                 <ShoppingCart />
             </b-navbar-nav>
             <b-navbar-nav>
@@ -42,11 +42,6 @@
                     <router-link :to="{name: 'SalesReport'}" class="nav-link manage">Manage</router-link>
                 </b-nav-item>
             </b-navbar-nav> -->
-            <b-navbar-nav>
-                <b-nav-item> 
-                    <router-link :to="{name: 'History'}" class="nav-link history">History</router-link>
-                </b-nav-item>
-            </b-navbar-nav>
             </b-collapse>
         </b-navbar>
     </div>

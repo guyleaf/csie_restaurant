@@ -39,6 +39,7 @@
 </template>
 
 <script>
+  import jwt_decode from "jwt-decode"
   export default {
     name: 'LoginForm',
     data() {
@@ -90,9 +91,17 @@
         .then(response => {
           this.showAlert = false
           let data = response.data
+          let token = jwt_decode(data.access_token)
           this.$store.dispatch('auth/setToken', data.access_token)
-          this.$store.dispatch('auth/setExpireDate', Date.now() + data.expires_in * 1000)
-          this.$emit('success', 'asd')
+          this.$store.dispatch('auth/setExpireDate', Date.now() + token.exp)
+          this.$store.dispatch('auth/setUser', token.user)
+          this.$emit('success', token.user.name)
+          this.$fire({
+            title: "登入成功",
+            text: "Successfully logged in",
+            type: "success",
+            timer: 5000
+          })
           this.$emit('close')
         })
         .catch(error => {
