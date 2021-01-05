@@ -21,6 +21,11 @@ class ShopService
     protected $couponRepository;
 
     /**
+     * @var \App\Repositories\ProductService $productService
+     */
+    protected $productService;
+
+    /**
      * Shop service constructor
      *
      * @param \App\Repositories\ShopRepository $shopRepository
@@ -71,12 +76,16 @@ class ShopService
                 if ($value->type === 2)
                 {
                     $coupon_items = $this->couponRepository->getCouponItems($value->id);
-                    foreach($coupon_items as $key => $value) {
+                    $coupon_items = $coupon_items->map(function ($item, $key)
+                    {
+                        $product = $this->productService->getProductInfo($item->product_id);
+                        $item->name = $product->first()->name;
+                        return $item;
+                    });
 
-                    }
                     $result[$key] = [
                         'coupon' => $value,
-                        'coupon_items' => $coupon_items
+                        'coupon_items' => $coupon_items,
                     ];
                 }
             }

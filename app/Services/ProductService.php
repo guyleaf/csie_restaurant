@@ -31,7 +31,7 @@ class ProductService
 
     public function getProductInfo($product_id)
     {
-        $result = $this->getProductInfo($product_id);
+        $result = $this->productRepository->getProductInfo($product_id);
         return $result;
     }
 }
