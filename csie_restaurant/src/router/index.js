@@ -61,7 +61,7 @@ const routes = [
                     component: () =>import('@/views/SalesReport.vue')
                     },
                     {
-                    name: 'manageShops',
+                    name: 'ManageShops',
                     path: 'manageshops',
                     component: () =>import('@/views/OrderManage.vue')
                     },

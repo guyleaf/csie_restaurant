@@ -38,7 +38,7 @@ export default {
         .then(response => {
           this.Info=[];
           let data=response.data;
-          for (let i=0;i<data.length;i++)this.Info.push({description: data[i].description, joinDate: data[i].created_at.split(" ",1),shopName: data[i].name, imgPath:"https://picsum.photos/900/250/?image=3"});
+          for (let i=0;i<data.length;i++)this.Info.push({description: data[i].description, joinDate: data[i].created_at.split(" ",1)[0],shopName: data[i].name, imgPath:"https://picsum.photos/900/250/?image=3"});
             }
         )
   }
