@@ -80,20 +80,47 @@ export default {
             let productNum = this.parseCookie()['productNum'];
             if (productNum!=undefined) productNum = parseInt(productNum, 10) + 1;
             else productNum = 1;
-            if(this.$cookie.get("product")==null) this.$cookie.set('product', JSON.stringify(this.data))
+            if(this.$cookie.get("product")==null) 
+            {   
+                this.$cookie.set('shop',this.$router.currentRoute.params.shopName)
+                this.$cookie.set('product', JSON.stringify(this.data))
+            }
             else 
             {
+                let cartShop = this.$cookie.get('shop')
+                let currentShop = this.$router.currentRoute.params.shopName;
                 let current = JSON.parse(this.$cookie.get("product"));
-                current.push(this.data[0])
-                this.$cookie.set('product', JSON.stringify(current));
-                console.log(JSON.parse(this.$cookie.get("product")))
+                if(cartShop === this.$router.currentRoute.params.shopName)
+                {
+                    current.push(this.data[0])
+                    this.$cookie.set('product', JSON.stringify(current));
+                }
+                else
+                {
+                    this.changeShop(cartShop,currentShop);
+                }
+r
             }
+        },
+        changeShop(cartShop,currentShop){
+            this.$confirm("您的訂單含有"+' '+cartShop+' '+"提供的餐點。建立新訂單，即可新增"+' '+currentShop+' '+"提供的餐點。","","warning").then(() => {
+                this.cleanShopCart()
+                this.$cookie.set('shop',this.$router.currentRoute.params.shopName)
+                this.$cookie.set('product', JSON.stringify(this.data))
+                // uploadtodatabase
+                this.$alert("成功更改","","success");
+            })
+        },
+        cleanShopCart(){
+            document.cookie = 'shop=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
+            document.cookie = 'product=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
         },
         hoverCard() {   
             //缺：lack of the responsive action when hover on the card
         },
         showModal() {
             this.$refs['my-modal'].show();
+            console.log(this.$cookie.get('shop'));
         },
         confirmModal() {
             // this.$cookie.delete('product')
