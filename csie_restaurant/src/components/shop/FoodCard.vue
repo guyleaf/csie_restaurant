@@ -99,7 +99,6 @@ export default {
                 {
                     this.changeShop(cartShop,currentShop);
                 }
-r
             }
         },
         changeShop(cartShop,currentShop){
@@ -109,6 +108,7 @@ r
                 this.$cookie.set('product', JSON.stringify(this.data))
                 // uploadtodatabase
                 this.$alert("成功更改","","success");
+                this.$refs['my-modal'].hide();
             })
         },
         cleanShopCart(){
@@ -120,7 +120,6 @@ r
         },
         showModal() {
             this.$refs['my-modal'].show();
-            console.log(this.$cookie.get('shop'));
         },
         confirmModal() {
             // this.$cookie.delete('product')
