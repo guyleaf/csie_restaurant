@@ -1,7 +1,7 @@
 <template>
     <div>
         <b-tabs content-class="mt-3" class="CategoryTab">
-            <b-tab v-for="(item,index) in tabs" :key="index" :title="item.title" :name="index" @click="jump(index)"></b-tab>
+            <b-tab v-for="(item,index) in foodCategory" :key="index" :title="item.foodCategory" :name="index" @click="jump(index)"></b-tab>
         </b-tabs>
     </div>
 </template>
