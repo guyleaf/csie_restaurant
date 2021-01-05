@@ -74,11 +74,6 @@ class ShopController extends Controller
         return response()->json($result);
     }
 
-    public function getImage(Request $request, $id, $filename)
-    {
-        return response(app('filesystem')->url('test.txt'));
-    }
-
     public function getItems(Request $request, $id)
     {
         try {
@@ -115,6 +110,15 @@ class ShopController extends Controller
                 'messages' => unserialize($e->getMessage())
             ], $e->getCode());
         }
+        return response()->json($result);
+    }
+
+    public function getCoupons(Request $request, $id)
+    {
+        $include_expired = false;
+        if ($request->exists('include_expired'))
+            $include_expired = $request->query('include_expired');
+        $result = $this->shopService->getCoupons($id, $include_expired);
         return response()->json($result);
     }
 }
