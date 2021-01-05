@@ -42,6 +42,7 @@ export default {
     name: 'FoodCard',
     data() {
       return {
+        change: false,
         spinValue: 1,
         text:'',
         noStock: require('../../assets/noStock.png'),
@@ -98,11 +99,13 @@ export default {
                 let current = JSON.parse(this.$cookie.get("product"));
                 if(cartShop === this.$router.currentRoute.params.shopName)
                 {
+                    this.change = false;
                     current.push(this.data[0])
                     this.$cookie.set('product', JSON.stringify(current));
                 }
                 else
                 {
+                    this.change = true;
                     this.changeShop(cartShop,currentShop);
                 }
             }
@@ -115,6 +118,7 @@ export default {
                 this.$cookie.set('product', JSON.stringify(this.data))
                 // uploadtodatabase
                 this.$alert("成功更改","","success");
+                this.$bus.$emit("addfunction",this.dataToCart);
                 this.$refs['my-modal'].hide();
             })
         },
@@ -130,17 +134,11 @@ export default {
             this.$refs['my-modal'].show();
         },
         confirmModal() {
-            // this.$cookie.delete('product')
-            // document.cookie = 'data=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; //delete cookie
-            // document.cookie = 'products=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; //delete cookie
-            // document.cookie = 'productNum=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; //delete cookie
-            // document.cookie = 'product5=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; //delete cookie
-            // document.cookie = 'pinValue5=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; //delete cookie
-            // document.cookie = 'price5=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; //delete cookie
             this.addToCookie()
-            this.$bus.$emit("addfunction",this.dataToCart);
-            //缺：lack of return this.dataToCart to ShoppingCart.vue/CartCell.vue
-            this.$refs['my-modal'].hide();
+            if(!this.change){
+                this.$bus.$emit("addfunction",this.dataToCart);
+                this.$refs['my-modal'].hide();
+            }
         },
     }
 }
