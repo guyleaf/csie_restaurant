@@ -33,6 +33,7 @@ $router->group(['prefix' => 'restaurants'], function () use ($router) {
     $router->get('{id}/products', 'ShopController@getItems');
     $router->get('{id}/category', 'ShopController@getProductCategories');
     $router->get('{id}/Info', 'ShopController@getShopInfo');
+    $router->get('{id}/coupons', 'ShopController@getCoupons');
 });
 
 $router->group(['prefix' => 'members'], function () use ($router) {
@@ -40,14 +41,25 @@ $router->group(['prefix' => 'members'], function () use ($router) {
 });
 
 $router->group(['prefix' => 'customer'], function () use ($router) {
-    $router->get('orders', 'CustomerController@getOrders');
-    $router->get('orders/{orderId}', 'CustomerController@getOrderInfo');
-    $router->group(['middleware' => 'jwt.auth'], function () use ($router) {
-        
+    $router->group(['middleware' => 'jwt.customer'], function () use ($router) {
+        $router->get('orders', 'CustomerController@getOrders');
+        $router->get('orders/{orderId}', 'CustomerController@getOrderInfo');
+        $router->get('coupon/check', 'CustomerController@checkCoupon');
     });
 });
 
-$router->group(['prefix' => 'order'], function () use ($router) {
-    $router->get('{id}/items', 'OrderController@getOrderItems');
+$router->group(['prefix' => 'seller'], function () use ($router) {
+    $router->get('coupons', 'SellerController@getCoupons');
+    $router->post('coupons/add', 'SellerController@addCoupon');
+    $router->post('coupons/delete', 'SellerController@deleteCoupon');
+    $router->post('coupons/update', 'SellerController@updateCoupon');
+});
+
+$router->group(['prefix' => 'admin'], function () use ($router) {
+    $router->get('coupons', '');
+});
+
+$router->group(['prefix' => 'mall'], function () use ($router) {
+    $router->get('coupons', '');
 });
 ?>
