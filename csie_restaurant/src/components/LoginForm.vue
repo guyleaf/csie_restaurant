@@ -96,15 +96,18 @@
           this.$store.dispatch('auth/setExpireDate', Date.now() + token.exp)
           this.$store.dispatch('auth/setUser', token.user)
           this.$emit('success', token.user.name)
-          this.$fire({
+          setTimeout(() => {
+            this.$fire({
             title: "登入成功",
             text: "Successfully logged in",
             type: "success",
             timer: 5000
           })
+          }, 300)
           this.$emit('close')
         })
         .catch(error => {
+          console.log(error)
           let status = error.response.status
           switch (status) {
             case 401:
