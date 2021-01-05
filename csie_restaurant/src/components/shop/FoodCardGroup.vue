@@ -7,7 +7,7 @@
             </div>
             <div class="row fback" >
                 <FoodCard 
-                    v-for="card in sameTag(category.foodCategory)" :key="card.foodId"
+                    v-for="card in sameTag(category.foodCategory,1)" :key="card.foodId"
                     v-bind="card"
                     :foodName="card.foodName" 
                     :imgPath="card.imgPath" 
@@ -36,15 +36,12 @@ export default {
         }
     }, 
     methods:{
-        sameTag:function(category){
-            return this.foodCards.filter(i => i.foodTag === category)
+        sameTag:function(category,state){
+            return this.foodCards.filter(i => i.foodTag === category && i.sellingState === state)
         },
-        show(){
-            console.log(this.foodCategories)
-        }
     },
     created(){
-            let id = this.$router.currentRoute.params.id
+    let id = this.$router.currentRoute.params.id
     this.$http.get('restaurants/'+id+'/products')
         .then(response => {
           this.foodCards=[];

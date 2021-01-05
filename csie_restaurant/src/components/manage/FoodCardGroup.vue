@@ -1,5 +1,47 @@
 <template>
     <div class="container">
+        <b-modal id="modal-sm" size="sm" ref="my-modal" hide-header hide-footer hide-header-close>
+            <div class="container">
+                <input type="file" accept="image/*" @change="previewImage" id="upload">
+                <img :src="preview" @click="upload" class="preview"/>
+                <div class="m-2">
+                    <b-form-group
+                    label="Name"
+                    label-for="name-input"
+                    invalid-feedback="name is required" type="text"
+                    :state="nameState">
+                    <b-form-input
+                        ref="name-input"
+                        :state="nameState"
+                        required></b-form-input>
+                    </b-form-group>
+                    <b-form-group
+                    label="Description"
+                    label-for="description-input"
+                    invalid-feedback="description is required"
+                    :state="descriptionState">
+                    <b-form-input
+                        ref="description-input"
+                        :state="descriptionState"   type="text"
+                        required></b-form-input>
+                    </b-form-group>
+                    <b-form-group
+                    label="Price"
+                    label-for="price-input"
+                    invalid-feedback="price is required"
+                    :state="priceState">
+                    <b-form-input
+                        ref="price-input"
+                        :state="priceState" type="text"
+                        required></b-form-input>
+                    </b-form-group>
+                    <div class="row m-2" style="justify-content:space-around">
+                        <b-button variant="primary" @click="confirmModal" size="sm">ADD</b-button>
+                        <b-button variant="info" @click="cancelModal" size="sm">CANCEL</b-button>
+                    </div>
+                </div>
+            </div> 
+        </b-modal>
         <CategoryTabManage :foodCategory="foodCategory"/>
         <div class="row" v-for="category in foodCategories" :key="category.categoryId">
             <div class="row">
@@ -10,7 +52,7 @@
                 <div class="row" >
                     <FoodCard 
                         v-on="{changeStock:changeStock, changeState:changeSellingState, deleteProduct:deleteProduct}"
-                        v-for="card in sameTag(category.foodCategory,true)" :key="card.foodId"
+                        v-for="card in sameTag(category.foodCategory,1)" :key="card.foodId"
                         v-bind="card"
                         :foodName="card.foodName" 
                         :imgPath="card.imgPath" 
@@ -32,7 +74,7 @@
                 <div class="row" >
                     <FoodCard 
                         v-on="{changeState:changeSellingState, deleteProduct:deleteProduct}"
-                        v-for="card in sameTag(category.foodCategory,false)" :key="card.foodId"
+                        v-for="card in sameTag(category.foodCategory,0)" :key="card.foodId"
                         v-bind="card"
                         :foodName="card.foodName" 
                         :imgPath="card.imgPath" 
@@ -61,7 +103,7 @@ export default {
     data()
     {
         return{
-
+            preview: require('../../assets/photoupload.png'),
             foodCategories:[],
             foodCards:
             [
@@ -84,6 +126,28 @@ export default {
         }
     },
     methods:{
+        upload(){
+            let upload=document.querySelector('#upload')
+            upload.click()
+        },
+        previewImage: function(event) {
+        var input = event.target;
+        if (input.files) {
+            var reader = new FileReader();
+            reader.onload = (e) => {
+            this.preview = e.target.result;
+            }
+            this.image=input.files[0];
+            reader.readAsDataURL(input.files[0]);
+            console.log(this.preview)
+        }
+        },
+        cancelModal() {
+            this.$refs['my-modal'].hide();
+        },
+        deleteModal() {
+            this.$refs['my-modal'].hide();
+        },
         sameTag:function(category,state){
             return this.foodCards.filter(i => i.foodTag === category && i.sellingState === state)
         },
@@ -114,6 +178,19 @@ export default {
         }
     },
     created(){
+        let id =this.$store.getters['auth/user'].id
+        this.$http.get('restaurants/'+id+'/products')
+        .then(response => {
+          this.foodCards=[];
+          let data=response.data;
+          for (let i=0;i<data.length;i++) this.foodCards.push({sellingState:data[i].status, soldOut:data[i].sold_out, foodId: data[i].id, foodName: data[i].name, price:data[i].price, imgPath: 'https://placekitten.com/300/300', foodDescription: data[i].description, foodTag:data[i].category_name});}
+        )
+        this.$http.get('/restaurants/'+id+'/category')
+            .then(response => {
+            this.foodCategories=[];
+            let data=response.data;
+            for (let i=0;i<data.length;i++) this.foodCategories.push({foodCategory: data[i].name, order: data[i].display_order});}
+            )
         this.foodCategory.sort(function(a,b){
             return a.order - b.order;
         });
@@ -128,6 +205,13 @@ export default {
 </script>
 
 <style scoped>
+#upload{
+    display: none;
+}
+.preview{
+    width: 100%;
+    height: 250px;
+}
 .row{
     margin:1% 0 1% 0;   
 }

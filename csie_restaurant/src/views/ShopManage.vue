@@ -39,8 +39,7 @@ export default {
     ShopIntro,
     ShopDescription,
     FoodCardGroup,
-    CouponCardGroup
-  },
+    CouponCardGroup  },
   data: function() {
     return {
       test : [  {tag:'Pan', order:1},

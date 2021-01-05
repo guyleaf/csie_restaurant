@@ -12,7 +12,7 @@
                     :state="nameState">
                     <b-form-input
                         ref="name-input"
-                        v-model="vName"
+                        v-model="foodName"
                         :state="nameState"
                         required>{{foodName}}</b-form-input>
                     </b-form-group>
@@ -23,20 +23,20 @@
                     :state="descriptionState">
                     <b-form-input
                         ref="description-input"
-                        v-model="vDescription"
+                        v-model="foodDescription"
                         :state="descriptionState"   type="text"
-                        required>kl;ffsdkkfs</b-form-input>
+                        required>{{ foodDescription }}</b-form-input>
                     </b-form-group>
                     <b-form-group
-                    label="price"
+                    label="Price"
                     label-for="price-input"
                     invalid-feedback="price is required"
                     :state="priceState">
                     <b-form-input
                         ref="price-input"
-                        v-model="vPrice"
+                        v-model="price"
                         :state="priceState" type="text"
-                        required></b-form-input>
+                        required>{{ price }}</b-form-input>
                     </b-form-group>
                     <div class="row m-2" style="justify-content:space-around">
                         <b-button variant="primary" @click="confirmModal" size="sm">ADD</b-button>
@@ -227,14 +227,14 @@ export default {
 </script>
 
 <style scoped>
-#upload{
-    display: none;
-}
 .brow{
     margin: 0;
 }
+#upload{
+    display: none;
+}
 .preview{
-    width: 250px;
+    width: 100%;
     height: 250px;
 }
 .outOfStock{

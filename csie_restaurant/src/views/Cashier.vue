@@ -52,12 +52,13 @@ export default {
         }
       },
       deleteCartCell(e){
-        // this.ItemList.splice(e,1);
-        this.ItemList.pop();
-        console.log(this.ItemList,e);
-        // this.$cookie.delete('product');
-        this.$cookie.set('product',JSON.stringify(this.ItemList));
-        console.log(JSON.parse(this.$cookie.get("product")));
+        this.ItemList.splice(e,1);
+        if(this.ItemList.length == 0) //delete cookie
+        { 
+          document.cookie = 'shop=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
+          document.cookie = 'product=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
+        }
+        else{ this.$cookie.set('product',JSON.stringify(this.ItemList));}
       },
   },
   created(){
