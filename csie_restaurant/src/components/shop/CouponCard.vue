@@ -1,7 +1,12 @@
 <template>
-        <b-card overlay class='m-2' style="min-width:300px; height:180px">
-            <b-card-title>{{name}}</b-card-title>
-            <b-card-text >{{discount}} % off</b-card-text>
+        <b-card overlay class='m-2' style="min-width:300px; height:140px">
+            <b-card-title>{{code}}</b-card-title>
+            <b-card-text>
+                <a v-for="(product, index) in products" :key="product.product_id">
+                    {{product.quantity}}{{product.name}}
+                    <a v-if="index != products.length-1 ">+</a>  
+                </a>{{discount}}%off
+            </b-card-text>
             <b-card-text>期限:{{expire}}</b-card-text>
                 <!--b-col md='6'>
                     <b-card-img
@@ -21,9 +26,13 @@ export default {
       }
     },
     props:{
-        name: String,
+        code: String,
+        products: Array,
         discount: Number,
-        expire: Date
+        expire: Date,
+        type: Number,
+    },
+    created:{
     },
     computed:{
     },
