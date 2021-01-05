@@ -26,7 +26,7 @@ export default {
             selected:this.$router.history.current.name,
             options:[
                 {id:1, label:"會員管理", path:'Member',premission:0},
-                {id:2, label:"店家管理", path:'manageshops',premission:1},
+                {id:2, label:"店家管理", path:'ManageShops',premission:1},
                 {id:3, label:"報表統計", path:"SalesReport",premission:1}
                 ],  
         }

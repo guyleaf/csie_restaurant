@@ -30,8 +30,7 @@ export default {
         var header = document.querySelector('.header')
         var footer = document.querySelector('.bottom')
         var footerHeight = footer.clientHeight 
-        body.style.minHeight ="100vh"
-        var bodyHeight = body.clientHeight - footerHeight - header.clientHeight
+        var bodyHeight = screen.height - footerHeight - header.clientHeight
         body.style.minHeight= bodyHeight.toString()+"px"
     },  
     beforeUpdate: function() {},
