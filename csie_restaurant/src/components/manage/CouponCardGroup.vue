@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import CouponCard from "@/components/shop/CouponCard.vue";
+import CouponCard from "@/components/manage/CouponCard.vue";
 export default {
     name: "CouponCardGroup",
     components: {

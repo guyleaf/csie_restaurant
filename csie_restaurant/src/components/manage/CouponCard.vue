@@ -16,6 +16,17 @@
                 <a style="color:red;">{{discount}}%off</a>
             </b-card-text>
             <b-card-text>期限:{{expire}}</b-card-text>
+            <b-card-footer footer-bg-variant="gray" footer-border-variant="white" class="foodCardHeader">
+                <b-row class='brow'>
+                    <b-button-group class="bgoption">
+                        <b-button size='sm' block  class="boption" variant="primary" @click="showModal">修改</b-button>
+                        <b-button size='sm' block  v-if="this.sellingState" class="boption" :variant="this.soldOut ? 'secondary' : 'success'" @click="changeStock">售完</b-button>
+                        <b-button size='sm' block  class="boption" :variant="this.sellingState ? 'info' : 'success'" @click="changeShelf">{{ this.sellingState ?  '下' : '上'}}架</b-button>
+                        <b-button size='sm' block  class="boption" variant="danger"  @click="deleteProduct">刪除</b-button>
+                    </b-button-group>
+                </b-row>
+                <!-- <b-icon icon="list" :id="'target-'+this.foodId" font-scale="1.2"/> -->
+            </b-card-footer>
         </b-card>
 </template>
 
