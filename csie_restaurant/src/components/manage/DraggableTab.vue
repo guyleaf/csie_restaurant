@@ -38,10 +38,9 @@
         <div
           class="list-group-item"
           v-for="element in list"
-          :key="element.tag"
-          
+          :key="element.foodCategory"
         >
-          {{ element.tag }}
+          {{ element.foodCategory }}
         </div>
       </draggable>
     </div>
@@ -66,15 +65,25 @@ export default {
     return {
       enabled: true,
       list: [],
-      orgin:[],
       dragging: false
     };
   },
   computed: {
   },
+  watch:{
+    foodCategory: function(){
+      this.list=[]
+      for(let i=0;i<this.foodCategory.length;i++){
+        this.list.push({foodCategory:this.foodCategory[i].foodCategory, order:this.foodCategory[i].order});
+        order += 1;
+    }}
+  },
   methods: {
+    show(){
+      console.log(this.foodCategory)
+    },
     add: function() {
-      this.list.push({ tag: "Ron " + order, order: order++ });
+      this.list.push({ foodCategory: "Ron " + order, order: order++ });
     },
     finish: function(){
         this.$bus.$emit('updateTab',this.list);
@@ -86,16 +95,16 @@ export default {
     dragEnd: function(e) {
         for(let i=0;i<this.foodCategory.length;i++){
             this.list[i].order = i;
-            console.log('now:',this.list[i].tag,this.list[i].order);
+            console.log('now:',this.list[i].foodCategory,this.list[i].order);
         }
     }
   },
   created(){
-    for(let i=0;i<this.foodCategory.length;i++)
-        this.list.push({tag:this.foodCategory[i].tag, order:this.foodCategory[i].order});
-        this.orgin.push({tag:this.foodCategory[i].tag, order:this.foodCategory[i].order});
+    for(let i=0;i<this.foodCategory.length;i++){
+        this.list.push({foodCategory:this.foodCategory[i].foodCategory, order:this.foodCategory[i].order});
         order += 1;
-    },
+    }
+  },
 
 };
 </script>

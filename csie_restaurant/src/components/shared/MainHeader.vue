@@ -21,7 +21,7 @@
                 <b-input-group size="sm">
                     <b-form-input type="search" placeholder="Search terms"></b-form-input>
                     <b-input-group-prepend is-text>
-                        <b-icon icon="search" @click="search"></b-icon>
+                        <b-icon icon="search"></b-icon>
                     </b-input-group-prepend>
                 </b-input-group>
             </b-nav-form>

@@ -1,10 +1,7 @@
 <template>
     <div>
         <b-row>
-            <b-col md="8"><CategoryTab :foodCategory='foodCategory'/></b-col>
-            <b-col md="4">
-                <button @click="addTab">+</button>
-            </b-col>
+            <b-col><CategoryTab :foodCategory='foodCategory'/></b-col>
         </b-row>
         <div>
             <DraggableTab :foodCategory='foodCategory'/>
@@ -28,7 +25,6 @@ import DraggableTab from "@/components/manage/DraggableTab.vue";
       return {
         }
     },
-    // methods: {
     //     jump(index) 
     //     {
     //         let scrollItems = document.querySelectorAll('h1')
