@@ -5,7 +5,7 @@
       <b-form-radio class="mb-1 checkbox"
         v-model="selected"
         @change="onChange()"
-        v-for="option in options"
+        v-for="option in premission()"
         :key="option.id"
         :value="option.path"
         button
@@ -25,13 +25,16 @@ export default {
         return{
             selected:this.$router.history.current.name,
             options:[
-                {id:1, label:"會員管理", path:'Member'},
-                {id:2, label:"店家管理", path:'manageshops'},
-                {id:3, label:"報表統計", path:"SalesReport"}
+                {id:1, label:"會員管理", path:'Member',premission:0},
+                {id:2, label:"店家管理", path:'manageshops',premission:1},
+                {id:3, label:"報表統計", path:"SalesReport",premission:1}
                 ],  
         }
     },
     methods:{
+        premission:function(){
+            return this.options.filter(i => i.premission >= this.$store.getters['auth/user'].permission)
+        },
         onChange(){
             if(!this.selected) this.$router.push("/manage/")
             else this.$router.push("/manage/"+this.selected)

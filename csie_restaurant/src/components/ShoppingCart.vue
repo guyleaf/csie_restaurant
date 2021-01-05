@@ -91,7 +91,12 @@
       },
       deleteCartCell(e){
         this.ItemList.splice(e,1);
-        this.$cookie.set('product',JSON.stringify(this.ItemList));
+        if(this.ItemList.length == 0) //delete cookie
+        { 
+          document.cookie = 'shop=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
+          document.cookie = 'product=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
+        }
+        else{ this.$cookie.set('product',JSON.stringify(this.ItemList));}
       },
       onClose() {
         this.popoverShow = false
