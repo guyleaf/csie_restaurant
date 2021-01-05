@@ -7,9 +7,14 @@ class CustomerRepository
 {
 
     /**
-     * @var \Illuminate\Database\Query\Builder $order
+     * @var \Illuminate\Database\Query\Builder $customer
      */
-    protected $order;
+    protected $customer;
+
+    /**
+     * @var \Illuminate\Database\Query\Builder $coupon
+     */
+    protected $usedCoupon;
 
     /**
      * Member Repository constructor
@@ -18,17 +23,19 @@ class CustomerRepository
      */
     public function __construct()
     {
-        $this->order = DB::table('order', 'O');
+        $this->customer = DB::table('customer', 'C');
+        $this->usedCoupon = DB::table('used_coupon', 'UC');
     }
 
-    public function getOrderByCustomerId($id)
+    public function getUsedCoupon($id, $coupon_code)
     {
-        $order = $this->order
-            ->join('member as M', 'O.seller_id','=','M.id')
-            ->where('O.customer_id', '=', $id)
-            ->get(['O.id as order_id', 'M.name', 'O.order_time', 'O.stars']);
+        $result = DB::table('used_coupon', 'UC')
+        ->join('coupon as CP', 'CP.id', '=', 'UC.coupon_id')
+        ->where('UC.customer_id', '=', $id)
+        ->where('CP.code', '=', $coupon_code)
+        ->get(['*']);
 
-        return $order;
+        return $result;
     }
 }
 ?>

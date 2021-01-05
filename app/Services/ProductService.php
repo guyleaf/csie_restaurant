@@ -28,5 +28,11 @@ class ProductService
             ->getShopItemsByShopId($id);
         return $result;
     }
+
+    public function getProductInfo($product_id)
+    {
+        $result = $this->productRepository->getProductInfo($product_id);
+        return $result;
+    }
 }
 ?>
