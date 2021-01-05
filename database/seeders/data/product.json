@@ -615,7 +615,7 @@
 		"category_id" : 14,
 		"category_name" : "涼夏沙拉"
 	},
-		{
+	{
 		"id" : 45,
 		"seller_id" : 11,
 		"name" : "香草奶昔",
@@ -629,7 +629,7 @@
 		"category_id" : 13,
 		"category_name" : "奶昔"
 	},
-		{
+	{
 		"id" : 46,
 		"seller_id" : 11,
 		"name" : "巧克力奶昔",
@@ -642,5 +642,131 @@
 		"is_deleted" : false,
 		"category_id" : 13,
 		"category_name" : "奶昔"
+	},
+	{
+		"id" : 54,
+		"seller_id" : 14,
+		"name" : "泰式紅咖哩雞",
+		"price" : 109,
+		"sold_out" : false,
+		"description" : "紅辣椒的辣味與香味撲鼻，適合喜歡吃辣的你。",
+		"publish_time" : "2020-06-19T07:39:30.000Z",
+		"modified_time" : "2020-06-18T16:00:00.000Z",
+		"status" : 1,
+		"is_deleted" : false,
+		"category_id" : 14,
+		"category_name" : "泰好吃咖哩"
+	},
+	{
+		"id" : 55,
+		"seller_id" : 14,
+		"name" : "泰式綠咖哩雞",
+		"price" : 109,
+		"sold_out" : false,
+		"description" : "綠辣椒、茄子、大蒜、青蔥、香茅等香料互相搭配，融合成經典泰式綠咖哩雞，只吃小辣的人也能大快朵頤。",
+		"publish_time" : "2020-06-19T07:39:30.000Z",
+		"modified_time" : "2020-06-18T16:00:00.000Z",
+		"status" : 1,
+		"is_deleted" : false,
+		"category_id" : 14,
+		"category_name" : "泰好吃咖哩"
+	},
+	{
+		"id" : 56,
+		"seller_id" : 14,
+		"name" : "泰式沙嗲雞",
+		"price" : 119,
+		"sold_out" : false,
+		"description" : "以薑黃、花生與蝦醬為主要調味，味道較溫和，香氣濃郁感十足，是東南亞最為盛行的口味之一，非常下飯。",
+		"publish_time" : "2020-06-19T07:39:30.000Z",
+		"modified_time" : "2020-06-18T16:00:00.000Z",
+		"status" : 1,
+		"is_deleted" : false,
+		"category_id" : 14,
+		"category_name" : "泰好吃咖哩"
+	},
+	{
+		"id" : 57,
+		"seller_id" : 14,
+		"name" : "泰式打拋雞肉",
+		"price" : 129,
+		"sold_out" : false,
+		"description" : "香辣的氣味令人神魂顛倒！內含打拋雞肉丁，炒菜炒肉都適合，加入辣椒、羅勒葉、大蒜與洋蔥，道地泰式風味馬上上桌。",
+		"publish_time" : "2020-06-19T07:39:30.000Z",
+		"modified_time" : "2020-06-18T16:00:00.000Z",
+		"status" : 1,
+		"is_deleted" : false,
+		"category_id" : 14,
+		"category_name" : "泰好吃咖哩"
+	},
+	{
+		"id" : 58,
+		"seller_id" : 14,
+		"name" : "印度 KORMA 咖哩雞",
+		"price" : 119,
+		"sold_out" : false,
+		"description" : "源自於北印度的 KORMA 咖哩，有「燉煮」的意思，加入優格／鮮奶油、洋蔥、大蒜、薑等整粒香料，搭配雞肉丁，風味濃郁滑順，充滿堅果香。",
+		"publish_time" : "2020-06-19T07:39:30.000Z",
+		"modified_time" : "2020-06-18T16:00:00.000Z",
+		"status" : 1,
+		"is_deleted" : false,
+		"category_id" : 14,
+		"category_name" : "泰好吃咖哩"
+	},
+	{
+		"id" : 59,
+		"seller_id" : 14,
+		"name" : "印度奶香雞肉咖哩",
+		"price" : 99,
+		"sold_out" : false,
+		"description" : "在咖哩中加入奶汁，打造濃郁下飯風味，香辣咖哩多了醇厚奶香，孩子們也開心享用。",
+		"publish_time" : "2020-06-19T07:39:30.000Z",
+		"modified_time" : "2020-06-18T16:00:00.000Z",
+		"status" : 1,
+		"is_deleted" : false,
+		"category_id" : 14,
+		"category_name" : "泰好吃咖哩"
+	},
+	{
+		"id" : 60,
+		"seller_id" : 14,
+		"name" : "deSIAM 泰式咖哩膏",
+		"price" : 149,
+		"sold_out" : false,
+		"description" : "咖哩膏是咖哩料理的主要香氣來源，加入咖哩膏，更容易做出色香味俱全的餐點！",
+		"publish_time" : "2020-06-19T07:39:30.000Z",
+		"modified_time" : "2020-06-18T16:00:00.000Z",
+		"status" : 1,
+		"is_deleted" : false,
+		"category_id" : 14,
+		"category_name" : "泰好吃咖哩"
+	},
+	{
+		"id" : 61,
+		"seller_id" : 14,
+		"name" : "deSIAM 花生椰奶沙嗲",
+		"price" : 139,
+		"sold_out" : false,
+		"description" : "融合了椰漿、花生、羅旺子、咖哩、魚露、大蒜與芝麻的花生椰奶沙嗲醬。",
+		"publish_time" : "2020-06-19T07:39:30.000Z",
+		"modified_time" : "2020-06-18T16:00:00.000Z",
+		"status" : 1,
+		"is_deleted" : false,
+		"category_id" : 14,
+		"category_name" : "泰好吃咖哩"
+	},
+	{
+		"id" : 62,
+		"seller_id" : 14,
+		"name" : "泰式黃咖哩",
+		"price" : 129,
+		"sold_out" : false,
+		"description" : "正宗泰式料理。",
+		"publish_time" : "2020-06-19T07:39:30.000Z",
+		"modified_time" : "2020-06-18T16:00:00.000Z",
+		"status" : 1,
+		"is_deleted" : false,
+		"category_id" : 14,
+		"category_name" : "泰好吃咖哩"
 	}
 ]
