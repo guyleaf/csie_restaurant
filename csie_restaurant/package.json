@@ -20,6 +20,7 @@
     "jwt-decode": "^3.1.2",
     "secure-ls": "^1.2.6",
     "vue": "^2.6.11",
+    "vue-bootstrap-datetimepicker": "^5.0.1",
     "vue-chartjs": "^3.5.1",
     "vue-cookie": "^1.1.4",
     "vue-router": "^3.4.9",
