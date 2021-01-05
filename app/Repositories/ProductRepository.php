@@ -27,7 +27,17 @@ class ProductRepository
             ->join('seller as S', 'seller_id', '=', 'S.member_id')
             ->where('S.member_id','=', $id)
             ->distinct()
-            ->get(['id', 'name', 'price', 'product.description', 'category_name']);
+            ->get(['id', 'name', 'price', 'product.description', 'category_name','sold_out','status']);
+
+        return $items;
+    }
+
+    public function getProductInfo($product_id)
+    {
+        $this->productTable = DB::table('product');
+        $items = $this->productTable
+            ->where('id', '=', $product_id)
+            ->get(['*']);
 
         return $items;
     }
