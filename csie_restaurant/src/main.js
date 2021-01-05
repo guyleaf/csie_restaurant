@@ -25,10 +25,10 @@ Vue.prototype.$http = axios.create({
 // Install BootstrapVue
 Vue.use(BootstrapVue);
 // Optionally install the BootstrapVue icon components plugin
-Vue.use(IconsPlugin);
-Vue.use(VueCookie);
-
-Vue.config.productionTip = false;
+Vue.use(IconsPlugin)
+Vue.use(VueCookie)
+Vue.use(VueSimpleAlert);
+Vue.config.productionTip = false
 
 new Vue({
   el: "#app",

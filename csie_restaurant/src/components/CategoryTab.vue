@@ -11,7 +11,7 @@
   export default {
       name:'CategoryTab',
       props:{
-          foodCategory:Array
+          foodCategory:Array,
       },
     data() {
       return {
@@ -82,7 +82,7 @@
     },
     created(){
         for(let i=0;i<this.foodCategory.length;i++)
-            this.tabs.push({title:this.foodCategory[i]})
+            this.tabs.push({title:this.foodCategory[i].tag})
     },
     mounted () {
     window.addEventListener('scroll', this.handleScroll)

@@ -6,8 +6,12 @@
           <b-card>
             <h1 class="Header">會員列表</h1>
             <b-nav-form class="ml-auto row">
-                <b-form-input size="sm" class="mr-sm-2" placeholder="會員編號,名稱,帳號,電話"></b-form-input>
-                <b-button size="sm" class="my-2 my-sm-0 mr-2" type="submit" variant="success">button</b-button> <!--input type="image" src="" /-->
+                <b-input-group size="sm" class="mr-2">
+                  <b-form-input type="search" placeholder="會員編號,名稱,帳號,電話"></b-form-input>
+                  <b-input-group-prepend is-text>
+                      <b-icon icon="search" @click="search"></b-icon>
+                  </b-input-group-prepend>
+                </b-input-group>
                 <h4 class="center">全部人數：{{amount}}</h4>
             </b-nav-form>
             <MemberTable />

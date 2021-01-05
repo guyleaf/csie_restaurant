@@ -40,7 +40,9 @@ export default {
   },
   data: function() {
     return {
-      test : ['Pan','Lee','Ron']
+      test : [  {tag:'Pan', order:1},
+                {tag:'Lee', order:2},
+                {tag:'Ron', order:0} ],
     };
   },
   methods: {}
