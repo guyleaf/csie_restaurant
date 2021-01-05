@@ -29,7 +29,7 @@
       </div>
       <!-- <b-button @click="add" variant="outline-info" vertical>+</b-button> -->
 
-      <b-button @click="onOk" variant="outline-info" vertical>OK</b-button>
+      <b-button @click="onOk" variant="outline-info" vertical>結帳</b-button>
       <!-- <b-nav-item @click="onOk" variant="outline-info" vertical>  
         <router-link :to="{name: 'Cashier'}" class="nav-link">Ok</router-link>
       </b-nav-item> -->
