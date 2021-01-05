@@ -41,6 +41,9 @@ export default {
                 {tag:'Ron', order:0} ],
     };
   },
+  created() {
+    let id = this.$router.currentRoute.params.id
+  },
   methods: {}
 };
 </script>

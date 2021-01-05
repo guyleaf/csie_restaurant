@@ -11,7 +11,7 @@
             <b-card-text>{{shopDescription}}</b-card-text>
             <b-form-rating v-model="rating" id="rating-inline" class="mb-1" size="sm" no-border readonly show-value inline precision="1"></b-form-rating>
             <b-button variant="light">
-                <router-link :to="{name: 'Shop', params:{shopName: shopName}}" class="link">GO TO SHOP</router-link>
+                <router-link :to="{name: 'Shop', params:{id:shopId, shopName: shopName}}" class="link">GO TO SHOP</router-link>
             </b-button>
         </b-card>
     </div>
@@ -21,6 +21,7 @@
 export default {
     name: 'ShopCard',
     props:{
+        shopId: Number,
         shopTag: String,
         shopName: String,
         imgPath: String,

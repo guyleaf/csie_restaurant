@@ -31,6 +31,7 @@ export default {
     props:{
         foodCategory:Array,
         foodToCart: Array,
+        foodCards: Array,
         // foodCategory1:String,
         // foodCategory2:String,
         // foodCategory3:String
@@ -64,7 +65,7 @@ export default {
             return this.foodCards.filter(i => i.foodTag === category)
         },
     },
-    created(){
+    created(){      
         this.foodCategory.sort(function(a,b){
             return a.order - b.order;
         });
