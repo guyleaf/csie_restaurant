@@ -61,4 +61,20 @@ class CustomerController extends Controller
 
         return response()->json($result);
     }
+
+    public function checkCoupon(Request $request)
+    {
+        // $user = auth()->userOrFail();
+        // $id = $user->id;
+        $code = $this->customerService->checkCoupon(8, $request->query('coupon_code'), $request->query('seller_id'));
+
+        if ($code == 3)
+            return response()->json(['message' => 'You have used this coupon before'], 403);
+        else if ($code == 2)
+            return response()->json(['message' => 'This coupon is not for this seller'], 403);
+        else if ($code == 1)
+            return response()->json(['message' => 'Unknown coupon'], 403);
+        else
+            return response()->json(['message' => 'Valid coupon'], 200);
+    }
 }

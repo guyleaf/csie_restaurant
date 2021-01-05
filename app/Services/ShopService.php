@@ -55,7 +55,7 @@ class ShopService
     public function getCoupons($id, $include_expired=false)
     {
         $result = $this->couponRepository
-        ->getCoupons($id);
+        ->getCouponsBymemberId($id);
 
         if (!$include_expired)
         {
@@ -92,6 +92,22 @@ class ShopService
         }
 
         return $result;
+    }
+
+    public function checkCoupon($coupon_code, $seller_id)
+    {
+        $result = $this->couponRepository
+        ->getCouponBycouponCode($coupon_code);
+        
+        if ($result->isEmpty())
+            return 1;
+
+        $result = $result->where('member_id', $seller_id);
+
+        if ($result->isEmpty())
+            return 2;
+        
+        return 0;
     }
 }
 ?>

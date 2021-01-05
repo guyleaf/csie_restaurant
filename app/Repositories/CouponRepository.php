@@ -43,11 +43,29 @@ class CouponRepository
         return $result;
     }
 
-    public function getCoupons($member_id)
+    public function getCouponsBymemberId($member_id)
     {
         $result = $this->coupon
         ->where('member_id', '=', $member_id)
         ->get(['id', 'code', 'start_time', 'end_time', 'type', 'discount', 'limit_money']);
+
+        return $result;
+    }
+
+    public function getCouponBycouponId($coupon_id)
+    {
+        $result = $this->coupon
+        ->where('id', '=', $coupon_id)
+        ->get(['id', 'code', 'member_id', 'start_time', 'end_time', 'type', 'discount', 'limit_money']);
+
+        return $result;
+    }
+
+    public function getCouponBycouponCode($coupon_code)
+    {
+        $result = $this->coupon
+        ->where('code', '=', $coupon_code)
+        ->get(['id', 'code', 'member_id', 'start_time', 'end_time', 'type', 'discount', 'limit_money']);
 
         return $result;
     }
