@@ -28,9 +28,40 @@
                         <div class ='grid-item'>加入時間:{{joinDate}}</div>
                 </div>
             </div>
-            <div class='desField col-md-6' >
-               <div class='desStyle'>{{description}}</div>
-           </div>
+            <div class='desField col-md-6'>
+                <b-modal id="modal-lg" size="lg" ref="my-modal" hide-header hide-footer hide-header-close>
+                    <div class="container" style="height:500px">
+                        <div class="m-1" style="height:100%">
+                            <b-form-group
+                                label="Name"
+                                label-for="name-input"
+                                invalid-feedback="name is required" type="text"
+                                >
+                            </b-form-group>
+                            <b-form-textarea
+                                    no-resize
+                                    id="textarea-plaintext"
+                                    ref="name-input"
+                                    style="height:80%"
+                                    debounce="500"
+                                    :value="description"
+                                    required>
+                                </b-form-textarea>
+                        </div>
+                    </div>
+                </b-modal>
+               <div class='desStyle' @click="showModal">
+                   <b-form-textarea
+                        no-resize
+                        id="textarea-plaintext"
+                        ref="name-input"
+                        plaintext
+                        style="height:100%; width:100%"
+                        debounce="500"
+                        :value="description"
+                    />
+               </div>
+            </div>
         </div>
     </div>
 </template>
@@ -45,8 +76,13 @@
         commodity: Number,
         fans: Number,
         joinDate: Date,
-        rate: Number
-        
+        rate: Number,
+        // editable: Boolean,
+    },
+    methods:{
+        showModal() {
+            this.$refs['my-modal'].show();
+        },
     }
 }
 </script>
@@ -70,9 +106,10 @@
     height: 250px;
 }
 .desStyle{
-    line-height: 1.625rem;
+    line-height: 1.25rem;
     font-family: Arial, Helvetica, sans-serif;
     font-size: .675rem;
+    height: 100%;
 }
 .tag{
     color: #d0011b;
