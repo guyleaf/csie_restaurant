@@ -5,7 +5,7 @@
             <div class='couponField mb-5' style='display:flex; flex-direction:row; '>
                 <div v-for="coupon in couponCards" :key="coupon['coupon'].id">
                     <CouponCard :code="coupon['coupon'].code" :products="coupon['coupon_items']" :discount="coupon['coupon'].discount*100" 
-                    :money="coupon['coupon'].limit_money" :expire="coupon['coupon'].end_time" :type="coupon['coupon'].type"/>
+                    :money="coupon['coupon'].limit_money" :start="coupon['coupon'].start_time" :expire="coupon['coupon'].end_time" :type="coupon['coupon'].type"/>
                 </div>
             </div>
         </div>
@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import CouponCard from "@/components/shop/CouponCard.vue";
+import CouponCard from "@/components/manage/CouponCard.vue";
 export default {
     name: "CouponCardGroup",
     components: {
@@ -30,11 +30,11 @@ export default {
     methods:{
     },
     created(){
-        let id = this.$router.currentRoute.params.id
+        let id =this.$store.getters['auth/user'].id
         this.$http.get('restaurants/' + id + '/coupons' + '?include_expired=1'). //FIXME  ?include_expired=1要移除
         then(response => {
             this.couponCards=response.data;
-            console.log(this.couponCards);
+            console.log('Get啦coupons:',this.couponCards);
         })
     }
 }
@@ -55,8 +55,7 @@ export default {
     overflow-x: scroll;
     overflow-y: hidden;
     padding:  1%;
-
     border-color: #000000;
-    height: 180px;
+    height: 280px;
 }
 </style>

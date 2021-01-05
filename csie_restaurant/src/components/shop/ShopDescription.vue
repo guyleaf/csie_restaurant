@@ -75,7 +75,7 @@
         imgPath: String,
         commodity: Number,
         fans: Number,
-        joinDate: Date,
+        joinDate: String,
         rate: Number,
         // editable: Boolean,
     },

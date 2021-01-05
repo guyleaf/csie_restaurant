@@ -78,7 +78,7 @@
                         </b-list-group>
                 </b-popover> -->
             </div>
-                          <b-card-footer footer-bg-variant="gray" footer-border-variant="white" class="foodCardHeader">
+            <b-card-footer footer-bg-variant="gray" footer-border-variant="white" class="foodCardHeader">
                 <b-row class='brow'>
                     <b-button-group class="bgoption">
                         <b-button size='sm' block  class="boption" variant="primary" @click="showModal">修改</b-button>

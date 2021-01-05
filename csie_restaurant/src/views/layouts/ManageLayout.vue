@@ -4,7 +4,7 @@
             <ManageTab />
         </div>
         <div class="col-md-9">
-            <router-view />
+            <router-view v-if="this.$store.getters['auth/user'].permission<=1"/>
         </div>
     </div>
 </template>
