@@ -35,6 +35,7 @@ class CouponRepository
      */
     public function getCouponItems($id)
     {
+        $this->coupon_items = DB::table('specified_coupon_product', 'SCP');
         $result = $this->coupon_items
         ->where('SCP.coupon_id', '=', $id)
         ->get(['coupon_id', 'product_id', 'quantity']);

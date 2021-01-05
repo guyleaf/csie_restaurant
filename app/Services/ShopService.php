@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Repositories\ShopRepository;
 use App\Repositories\CouponRepository;
+use App\Services\ProductService;
 use DateTime, DateTimeZone;
 
 class ShopService
@@ -23,11 +24,13 @@ class ShopService
      * Shop service constructor
      *
      * @param \App\Repositories\ShopRepository $shopRepository
+     * @param \App\Repositories\CouponRepository $couponRepository
      */
-    public function __construct(ShopRepository $shopRepository, CouponRepository $couponRepository)
+    public function __construct(ShopRepository $shopRepository, CouponRepository $couponRepository, ProductService $productService)
     {
         $this->shopRepository = $shopRepository;
         $this->couponRepository = $couponRepository;
+        $this->productService = $productService;
     }
 
     public function getShopInfo($id)
@@ -67,12 +70,14 @@ class ShopService
             foreach ($result as $key => $value) {
                 if ($value->type === 2)
                 {
+                    $coupon_items = $this->couponRepository->getCouponItems($value->id);
+                    foreach($coupon_items as $key => $value) {
+
+                    }
                     $result[$key] = [
                         'coupon' => $value,
-                        'coupon_items' => $this->couponRepository->getCouponItems($value->id)
+                        'coupon_items' => $coupon_items
                     ];
-
-                    echo $this->couponRepository->getCouponItems($value->id)->toJson();
                 }
             }
         }
