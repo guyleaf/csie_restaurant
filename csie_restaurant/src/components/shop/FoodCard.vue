@@ -17,7 +17,9 @@
             </div> 
         </b-modal>
         <b-card tag="article">
-            <div class='row'>
+            <img :src="noStock" class="soldOut" v-if="this.soldOut" /> 
+
+            <div class='row' v-bind:class="{'outOfStock':this.soldOut}">
                 <b-col md='6' >
                     <b-card-title> {{foodName}} </b-card-title>
                     <b-card-text class="ellipsis" >{{foodDescription}}</b-card-text>
@@ -42,6 +44,7 @@ export default {
       return {
         spinValue: 1,
         text:'',
+        noStock: require('../../assets/noStock.png'),
       }
     },
     props:{
@@ -49,7 +52,9 @@ export default {
         foodName: String,
         imgPath: String,
         foodDescription: String,
-        price: Number
+        price: Number,
+        soldOut: Boolean,
+        sellingState: Boolean
     },
     computed:{
         total: function() {
@@ -150,5 +155,15 @@ export default {
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     white-space: normal;
+}
+.outOfStock{
+    background-color: rgb(255,255,255) !important;
+    opacity: 0.3;
+}
+.soldOut{
+    position: absolute;
+    z-index: 100;
+    width: 100%;
+    height: 100%;
 }
 </style>
