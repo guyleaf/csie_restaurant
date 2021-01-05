@@ -88,6 +88,11 @@ class ShopService
                         'coupon_items' => $coupon_items,
                     ];
                 }
+                else
+                    $result[$key] = [
+                        'coupon' => $value,
+                        'coupon_items' => null,
+                    ];
             }
         }
 
