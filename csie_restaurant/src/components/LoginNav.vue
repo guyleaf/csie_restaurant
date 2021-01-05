@@ -3,7 +3,7 @@
     <b-button v-if="!logined" @click="showModal">Login</b-button>
     <b-dropdown v-else id="dropdown" :text="loginMsg" class="m-md-2" right style="min-width: 4rem">
       <b-dropdown-item><b-link :to="{name: 'History'}">History</b-link></b-dropdown-item>
-      <b-dropdown-item v-if="this.$store.getters['auth/user'].permission==1"><b-link :to="{name: 'ShopManage'}">ProductsManage</b-link></b-dropdown-item>
+      <b-dropdown-item v-if="this.$store.getters['auth/user'].permission==1"><b-link :to="{name: 'ShopManage'}">ShopManage</b-link></b-dropdown-item>
       <b-dropdown-item v-if="this.$store.getters['auth/user'].permission<=1"><b-link :to="{name: 'SalesReport'}">Manage</b-link></b-dropdown-item>
       <b-dropdown-item @click="logout">Logout</b-dropdown-item>
     </b-dropdown>

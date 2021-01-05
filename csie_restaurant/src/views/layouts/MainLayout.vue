@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="html">
         <MainHeader />
         <div class="container body">
             <router-view />
@@ -26,11 +26,13 @@ export default {
     created: function() {},
     beforeMount: function() {},
     mounted: function() {
+        var html = document.querySelector('.html')
         var body = document.querySelector('.body')
         var header = document.querySelector('.header')
         var footer = document.querySelector('.bottom')
-        var footerHeight = footer.clientHeight 
-        var bodyHeight = screen.height - footerHeight - header.clientHeight
+        var footerHeight = footer.clientHeight
+        console.log(html.clientHeight)
+        var bodyHeight =html.clientHeight - footerHeight - header.clientHeight
         body.style.minHeight= bodyHeight.toString()+"px"
     },  
     beforeUpdate: function() {},
@@ -45,6 +47,9 @@ export default {
 </script>
 
 <style>
+  .html{
+      min-height: 100vh
+  }
   .container{
     min-width:100% !important; 
     margin: 0 !important;
