@@ -31,5 +31,15 @@ class ProductRepository
 
         return $items;
     }
+
+    public function getProductInfo($product_id)
+    {
+        $this->productTable = DB::table('product');
+        $items = $this->productTable
+            ->where('id', '=', $product_id)
+            ->get(['*']);
+
+        return $items;
+    }
 }
 ?>
