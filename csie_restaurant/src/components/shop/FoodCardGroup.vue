@@ -7,7 +7,7 @@
             </div>
             <div class="row fback" >
                 <FoodCard 
-                    v-for="card in sameTag(category.foodCategory,1)" :key="card.foodId"
+                    v-for="card in sameTag(category.foodCategory,true)" :key="card.foodId"
                     v-bind="card"
                     :foodName="card.foodName" 
                     :imgPath="card.imgPath" 
@@ -46,7 +46,17 @@ export default {
         .then(response => {
           this.foodCards=[];
           let data=response.data;
-          for (let i=0;i<data.length;i++) this.foodCards.push({sellingState:data[i].status, soldOut:data[i].sold_out, foodId: data[i].id, foodName: data[i].name, price:data[i].price, imgPath: 'https://placekitten.com/300/300', foodDescription: data[i].description, foodTag:data[i].category_name});}
+          let soldout= false
+          let status= false
+          for (let i=0;i<data.length;i++) 
+            {
+              soldout= false
+              status= false
+              if(data[i].sold_out==1) soldout = true
+              if(data[i].status==1) status = true
+              console.log(soldout,status)
+              this.foodCards.push({sellingState:status, soldOut:soldout, foodId: data[i].id, foodName: data[i].name, price:data[i].price, imgPath: 'https://placekitten.com/300/300', foodDescription: data[i].description, foodTag:data[i].category_name});}
+            }
         )
     this.$http.get('/restaurants/'+id+'/category')
         .then(response => {
