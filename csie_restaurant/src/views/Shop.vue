@@ -1,13 +1,6 @@
 <template>
   <body>
     <div class='container'>
-      <div class='introBack'>
-        <div class='row justify-content-center'>
-          <div class='col-md-6'>
-            <ShopIntro imgPath="https://picsum.photos/900/250/?image=3" shopName="鄒承軒的牛郎專賣店" commodity="15" fans="2" joinDate="2000-02-04" rate="4.3(300)"/>
-          </div>
-        </div>
-      </div>
       <div class='row justify-content-center'>
         <div class='col-md-8'>
             <ShopDescription description='AHAStyle 官方旗艦店
@@ -19,7 +12,8 @@
                                         ＊退換貨規則：15天內皆可退換貨，退貨會有物流司機與您聯絡收取商品。
                                         ＊若商品有瑕疵狀況可以隨時詢問客服，我們一定會完善幫您做好售後服務，謝謝！
                                         台灣總代理 艾海國際有限公司 AIHAI Tech' imgPath="https://picsum.photos/900/250/?image=3" shopName="鄒承軒的牛郎專賣店" commodity="15" fans="2" joinDate="2000-02-04" rate="4.3(300)"/>
-            <FoodCardGroup :foodCategory='test'/>
+            <CouponCardGroup />
+            <FoodCardGroup />
         </div>
       </div>
     </div>
@@ -30,20 +24,24 @@
 // @ is an alias to /src
 import ShopIntro from '@/components/shop/ShopIntro.vue';
 import FoodCardGroup from '@/components/shop/FoodCardGroup.vue';
+import CouponCardGroup from '@/components/shop/CouponCardGroup.vue';
 import ShopDescription from '@/components/shop/ShopDescription.vue';
 export default {
   name: "Shop",
   components: {
     ShopIntro,
     ShopDescription,
-    FoodCardGroup  
+    FoodCardGroup,
+    CouponCardGroup
   },
   data: function() {
     return {
-      test : [  {tag:'Pan', order:1},
-                {tag:'Lee', order:2},
-                {tag:'Ron', order:0} ],
+      category : [],
+      foodCards:[],
     };
+  },
+  created() {
+
   },
   methods: {}
 };
