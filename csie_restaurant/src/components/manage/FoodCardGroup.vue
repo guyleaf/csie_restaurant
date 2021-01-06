@@ -9,34 +9,36 @@
                     label="Name"
                     label-for="name-input"
                     invalid-feedback="name is required" type="text"
-                    :state="nameState">
+                    >
                     <b-form-input
+                        v-model="Name"
                         ref="name-input"
-                        :state="nameState"
                         required></b-form-input>
                     </b-form-group>
                     <b-form-group
                     label="Description"
                     label-for="description-input"
                     invalid-feedback="description is required"
-                    :state="descriptionState">
+                    >
                     <b-form-input
+                        v-model="Description"
                         ref="description-input"
-                        :state="descriptionState"   type="text"
+                        type="text"
                         required></b-form-input>
                     </b-form-group>
                     <b-form-group
                     label="Price"
                     label-for="price-input"
                     invalid-feedback="price is required"
-                    :state="priceState">
+                    >
                     <b-form-input
+                        v-model="Price"
                         ref="price-input"
-                        :state="priceState" type="text"
+                        oninput = "value=value.replace(/[^\d]/g,'')"
                         required></b-form-input>
                     </b-form-group>
                     <div class="row m-2" style="justify-content:space-around">
-                        <b-button variant="primary" @click="confirmModal" size="sm">ADD</b-button>
+                        <b-button variant="primary" @click="confirmModal()" size="sm">ADD</b-button>
                         <b-button variant="info" @click="cancelModal" size="sm">CANCEL</b-button>
                     </div>
                 </div>
@@ -64,7 +66,7 @@
                     <div class="col-md-4 card-body">
                         <b-card tag="article" class="addFoodCard">
                             <div class='row'>
-                                <b-icon @mouseleave="category.hover=false" v-if="category.hover" icon="plus-circle-fill" font-scale="4" class="addProduct" @click="showModal"/>
+                                <b-icon @mouseleave="category.hover=false" v-if="category.hover" icon="plus-circle-fill" font-scale="4" class="addProduct" @click="showModal(category.foodCategory)"/>
                                 <b-icon @mouseover="category.hover=true" v-else icon="plus-circle" font-scale="4" class="addProduct"/>
                             </div>  
                         </b-card>
@@ -98,11 +100,15 @@ export default {
         CategoryTabManage
     },
     props:{
-        foodCategory:Array,
     },
     data()
     {
         return{
+            Price:'',
+            Description:'',
+            Name:'',
+            image:'',
+            foodCategory:'',
             preview: require('../../assets/photoupload.png'),
             foodCategories:[],
             foodCards:
@@ -139,8 +145,35 @@ export default {
             }
             this.image=input.files[0];
             reader.readAsDataURL(input.files[0]);
-            console.log(this.preview)
         }
+        },
+        confirmModal() {
+            let formdata = new FormData();
+            formdata.append('image',this.image);
+            formdata.append('name',this.Name);
+            formdata.append('price',this.Price);
+            formdata.append('sold_out',false);
+            formdata.append('description',this.Description);
+            formdata.append('status',1);
+            formdata.append('is_deleted',false);
+            formdata.append('category_name',this.foodCategory);
+            console.log(this.Price,this.Description,this.Name,this.foodCategory,formdata.getAll('image'))
+                //             'name': this.Name,
+                // 'price': this.Price,
+                // 'sold_out': false,
+                // 'description': this.Description,
+                // 'status': 1,
+                // 'is_deleted': false,
+                // 'category_name': this.foodCategor,
+            this.$http.post('/seller/products/add',formdata,{
+                headers: {
+                'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
+                }
+            })
+            .then(response => {
+                this.couponCards=response.data;
+                console.log(this.couponCards);
+            })
         },
         cancelModal() {
             this.$refs['my-modal'].hide();
@@ -151,7 +184,9 @@ export default {
         sameTag:function(category,state){
             return this.foodCards.filter(i => i.foodTag === category && i.sellingState === state)
         },
-        showModal() {
+        showModal(foodCategory) {
+            this.foodCategory=foodCategory
+            console.log(foodCategory)
             this.$refs['my-modal'].show();
         },
         changeStock(id){

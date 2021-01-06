@@ -24,6 +24,7 @@
           <b-form-input
             ref="password-input"
             v-model="password"
+            type="password"
             :state="passwordState"
             required
           ></b-form-input>

@@ -31,7 +31,6 @@ export default {
         var header = document.querySelector('.header')
         var footer = document.querySelector('.bottom')
         var footerHeight = footer.clientHeight
-        console.log(html.clientHeight)
         var bodyHeight =html.clientHeight - footerHeight - header.clientHeight
         body.style.minHeight= bodyHeight.toString()+"px"
     },  
