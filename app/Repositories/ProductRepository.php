@@ -59,8 +59,16 @@ class ProductRepository
         $payload['publish_time'] = new DateTime('now', new DateTimeZone('Asia/Taipei'));
         $payload['publish_time'] = $payload['publish_time']->format('Y-m-d H:i:s');
         $payload['modified_time'] = $payload['publish_time'];
+
         $id = $this->productTable
-        ->insertGetId($payload);
+        ->orderByDesc('id')
+        ->limit(1)
+        ->get(['id'])->first();
+
+        $payload['id'] = $id;
+
+        $this->productTable
+        ->insert($payload);
 
         $this->productImageTable
         ->insert([
