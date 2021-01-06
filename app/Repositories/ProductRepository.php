@@ -65,6 +65,8 @@ class ProductRepository
         ->limit(1)
         ->get(['id'])->first();
 
+        var_dump($id);
+
         $payload['id'] = $id;
 
         $this->productTable
