@@ -37,7 +37,7 @@ class ProductRepository
             ->where('S.member_id','=', $id)
             ->where('is_deleted', '=', false)
             ->distinct()
-            ->get(['id', 'name', 'price', 'P.description', 'category_name','sold_out','status', 'PI.image_path']);
+            ->get(['P.id', 'name', 'price', 'P.description', 'category_name','sold_out','status', 'PI.image_path']);
 
         return $items;
     }
