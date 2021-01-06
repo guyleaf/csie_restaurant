@@ -66,13 +66,14 @@ class ProductRepository
         ->get(['id'])->first();
 
 
-        var_dump($payload);
+        //var_dump($payload);
 
         $payload['id'] = $id;
 
         $this->productTable
         ->insert($payload);
 
+        var_dump($image_extension);
         $this->productImageTable
         ->insert([
             'image_path' => 'public/restaurant/' . strval($seller_id) . strval($id) . '.' . $image_extension,
