@@ -157,7 +157,17 @@ export default {
             formdata.append('status',1);
             formdata.append('is_deleted',false);
             formdata.append('category_name',this.foodCategory);
-            console.log(this.Price,this.Description,this.Name,this.foodCategory,formdata.getAll('image'))
+            console.log(this.Price,this.Description,this.Name,this.foodCategory,formdata.get('image'))
+            let foodCard = [{
+                'name': this.Name,
+                'price': this.Price,
+                'sold_out': false,
+                'description': this.Description,
+                'status': 1,
+                'is_deleted': false,
+                'category_name': this.foodCategor,
+                'image':formdata.getAll('image')
+                }]
                 //             'name': this.Name,
                 // 'price': this.Price,
                 // 'sold_out': false,
@@ -170,18 +180,22 @@ export default {
                 'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
                 }
             })
-            .then(response => {
-                this.couponCards=response.data;
-                console.log(this.couponCards);
-            })
+            .catch(error=>{
+                console.log(error.response)
+            }
+            )
         },
         cancelModal() {
+            this.preview= require('../../assets/photoupload.png'),
+            this.image=''
             this.$refs['my-modal'].hide();
         },
         deleteModal() {
             this.$refs['my-modal'].hide();
         },
         sameTag:function(category,state){
+            if(state) state = 1;
+            else state = 0;
             return this.foodCards.filter(i => i.foodTag === category && i.sellingState === state)
         },
         showModal(foodCategory) {
@@ -192,6 +206,14 @@ export default {
         changeStock(id){
             var index = this.foodCards.findIndex(i => i.foodId === id);
             this.foodCards[index].soldOut = !this.foodCards[index].soldOut 
+            let foodCards = [{id:id, sold_out:this.foodCards[index].soldOut}]
+            this.$http.post('/seller/products/update',foodCards[0],{
+                headers: {
+                'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
+                }
+            }).catch(error=>{
+                console.log(error.response)
+            })
         },
         changeSellingState(id){
             var index = this.foodCards.findIndex(i => i.foodId === id);
@@ -219,14 +241,8 @@ export default {
         .then(response => {
           this.foodCards=[];
           let data=response.data;
-          let soldout= false
-          let status= false
           for (let i=0;i<data.length;i++) {     
-              soldout= false
-              status= false
-              if(data[i].sold_out==1) soldout = true
-              if(data[i].status==1) status = true
-              this.foodCards.push({sellingState:status, soldOut:soldout, foodId: data[i].id, foodName: data[i].name, price:data[i].price, imgPath: 'https://placekitten.com/300/300', foodDescription: data[i].description, foodTag:data[i].category_name});}
+              this.foodCards.push({sellingState:data[i].status, soldOut:data[i].sold_out, foodId: data[i].id, foodName: data[i].name, price:data[i].price, imgPath: 'https://placekitten.com/300/300', foodDescription: data[i].description, foodTag:data[i].category_name});}
             }
         )
         this.$http.get('/restaurants/'+id+'/category')

@@ -105,6 +105,10 @@ export default {
         preview: require('../../assets/photoupload.png'),
         noStock: require('../../assets/noStock.png'),
         image: null,
+        foodCards:
+            [
+                {id: this.foodId,  name: 'ShopRon', price:1023},
+            ] ,
       }
     },
     props:{
@@ -186,15 +190,22 @@ export default {
             // document.cookie = 'product5=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; //delete cookie
             // document.cookie = 'pinValue5=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; //delete cookie
             // document.cookie = 'price5=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; //delete cookie
-            if (!this.checkFormValidity()) {
-                return
-            }
-            this.addToCookie()
-            this.$bus.$emit("addfunction",this.dataToCart);
-            //缺：lack of return this.dataToCart to ShoppingCart.vue/CartCell.vue
-            this.foodName = this.vName;
-            this.foodDescription = this.vDescription;
-            this.price = this.vPrice;
+            // if (!this.checkFormValidity()) {
+            //     return
+            // }
+            // this.addToCookie()
+            // this.$bus.$emit("addfunction",this.dataToCart);
+            // //缺：lack of return this.dataToCart to ShoppingCart.vue/CartCell.vue
+            // this.foodName = this.vName;
+            // this.foodDescription = this.vDescription;
+            // this.price = this.vPrice;
+            this.$http.post('/seller/products/update',this.foodCards[0],{
+                headers: {
+                'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
+                }
+            }).catch(error=>{
+                console.log(error.response)
+            })
             this.$refs['my-modal'].hide();
         },
         cancelModal() {
@@ -208,7 +219,15 @@ export default {
         },
         changeShelf(){
             this.sellingState = !this.sellingState;
-            this.$emit("changeState",this.foodId)
+            let foodCards = [{id:this.foodId,status:this.sellingState}]
+            this.$emit("changeState",this.foodId) //Fixme
+            this.$http.post('/seller/products/update',foodCards[0],{
+                headers: {
+                'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
+                }
+            }).catch(error=>{
+                console.log(error.response)
+            })
         },
         deleteProduct(){
             this.$emit("deleteProduct",this.foodId)
