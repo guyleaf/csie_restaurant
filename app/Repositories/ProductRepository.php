@@ -66,7 +66,7 @@ class ProductRepository
         ->get(['id'])->first();
 
 
-        //var_dump($payload);
+        var_dump($payload);
 
         $payload['id'] = $id;
 
