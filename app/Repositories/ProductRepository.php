@@ -63,17 +63,13 @@ class ProductRepository
         $id = $this->productTable
         ->orderByDesc('id')
         ->limit(1)
-        ->get(['id'])->first();
-
-
-        //var_dump($payload);
+        ->get(['id'])->first()->id;
 
         $payload['id'] = $id;
 
         $this->productTable
         ->insert($payload);
 
-        var_dump($image_extension);
         $this->productImageTable
         ->insert([
             'image_path' => 'public/restaurant/' . strval($seller_id) . strval($id) . '.' . $image_extension,
