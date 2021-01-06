@@ -40,6 +40,11 @@
 		"display_order" : 2
 	},
 	{
+		"seller_id" : 12,
+		"name" : "單點",
+		"display_order" : 3
+	},
+	{
 		"seller_id" : 13,
 		"name" : "原葉鮮萃茶 Tea",
 		"display_order" : 1
@@ -48,6 +53,11 @@
 		"seller_id" : 13,
 		"name" : "奶茶及拿鐵",
 		"display_order" : 2
+	},
+	{
+		"seller_id" : 13,
+		"name" : "奶昔",
+		"display_order" : 3
 	},
 	{
 		"seller_id" : 14,
