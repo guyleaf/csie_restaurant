@@ -73,16 +73,18 @@ class ProductRepository
 
     public function deleteProduct($id)
     {
+        $now = new DateTime('now', new DateTimeZone('Asia/Taipei'));
         $this->productTable
         ->where('id', '=', $id)
-        ->update(['is_deleted' => true, 'modified_time' => DateTime('now', new DateTimeZone('Asia/Taipei'))->format('Y-m-d H:i:s')]);
+        ->update(['is_deleted' => true, 'modified_time' => $now->format('Y-m-d H:i:s')]);
     }
 
     public function updateProduct($payload)
     {
+        $now = new DateTime('now', new DateTimeZone('Asia/Taipei'));
         $this->productTable
         ->where('id', '=', $payload['id'])
-        ->update([$payload, 'modified_time' => DateTime('now', new DateTimeZone('Asia/Taipei'))->format('Y-m-d H:i:s')]);
+        ->update([$payload, 'modified_time' => $now->format('Y-m-d H:i:s')]);
     }
 }
 ?>
