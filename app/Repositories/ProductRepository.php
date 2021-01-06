@@ -82,9 +82,11 @@ class ProductRepository
     public function updateProduct($payload)
     {
         $now = new DateTime('now', new DateTimeZone('Asia/Taipei'));
+        $payload['modified_time'] = $now->format('Y-m-d H:i:s');
+
         $this->productTable
         ->where('id', '=', $payload['id'])
-        ->update([$payload, 'modified_time' => $now->format('Y-m-d H:i:s')]);
+        ->update($payload);
     }
 }
 ?>
