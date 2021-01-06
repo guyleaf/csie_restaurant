@@ -64,7 +64,7 @@ class ProductRepository
 
         $this->productImageTable
         ->insert([
-            'image_path' => 'restaurant/' . strval($seller_id) . strval($id) . $image_extension,
+            'image_path' => 'public/restaurant/' . strval($seller_id) . strval($id) . '.' . $image_extension,
             'id' => $id
         ]);
 
