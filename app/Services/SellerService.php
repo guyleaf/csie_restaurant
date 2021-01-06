@@ -42,7 +42,7 @@ class SellerService
 
     public function updateCoupon($payload)
     {
-        $this->couponRepository->updateCoupon($request->all());
+        $this->couponRepository->updateCoupon($payload);
     }
 
     public function addProduct($seller_id, $payload)
@@ -63,7 +63,7 @@ class SellerService
 
     public function updateProduct($seller_id, $payload)
     {
-        if ($payload['image'])
+        if (!empty($payload['image']))
         {
             $image = $payload['image'];
             unset($payload['image']);
