@@ -68,5 +68,10 @@
 		"seller_id" : 14,
 		"name" : "涼夏沙拉",
 		"display_order" : 2
+	},
+	{
+		"seller_id" : 14,
+		"name" : "地驚蔥有餅",
+		"display_order" : 3
 	}
 ]

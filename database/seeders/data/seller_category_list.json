@@ -41,6 +41,10 @@
 	},
 	{
 		"seller_id" : 14,
+		"category_id" : 2
+	},
+	{
+		"seller_id" : 14,
 		"category_id" : 8
 	}
 ]
