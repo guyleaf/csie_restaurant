@@ -88,7 +88,6 @@ export default {
             else productNum = 1;
             if(this.$cookie.get("product")==null) 
             {   
-                console.log(this.data)
                 this.$cookie.set('shopId',this.$router.currentRoute.params.id)
                 this.$cookie.set('shopName',this.$router.currentRoute.params.shopName)
                 this.$cookie.set('product', JSON.stringify(this.data))
@@ -97,12 +96,14 @@ export default {
             {
                 let cartShop = this.$cookie.get('shopName')
                 let currentShop = this.$router.currentRoute.params.shopName;
-                let current = JSON.parse(this.$cookie.get("product"));
+                let cartProduct = JSON.parse(this.$cookie.get("product"));
                 if(cartShop === this.$router.currentRoute.params.shopName)
                 {
                     this.change = false;
-                    current.push(this.data[0])
-                    this.$cookie.set('product', JSON.stringify(current));
+                    let checkIndex = this.checkItemExistCart(cartProduct,this.data[0])
+                    if(checkIndex != -1) cartProduct[checkIndex].foodSpinValue += this.data[0].foodSpinValue;
+                    else cartProduct.push(this.data[0])
+                    this.$cookie.set('product', JSON.stringify(cartProduct));
                 }
                 else
                 {
@@ -110,6 +111,15 @@ export default {
                     this.changeShop(cartShop,currentShop);
                 }
             }
+        },
+        checkItemExistCart(cart,item){
+            let index = -1;
+            var filteredObj = cart.find(function(cart, i){
+                if(cart.foodName === item.foodName){
+                    index = i;
+                }
+            });
+            return index;
         },
         changeShop(cartShop,currentShop){
             this.$confirm("您的訂單含有"+' '+cartShop+' '+"提供的餐點。建立新訂單，即可新增"+' '+currentShop+' '+"提供的餐點。","","warning").then(() => {

@@ -27,43 +27,18 @@ export default {
         index: Number
     },
     methods: {
-        // modifySpinValue(){
-        //     if(this.foodSpinValue >=1 ){
-        //         let productCookie = JSON.parse(this.$cookie.get("product"));
-                
-        //         for (let i = 0; i<productCookie.length; i++){
-        //             if(productCookie[i].foodName == this.foodName){
-        //                 productCookie[i].foodSpinValue = this.foodSpinValue
-        //                 console.log(productCookie)
-        //             }
-        //         }
-        //         document.cookie = 'product=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
-        //         this.$cookie.set('product', JSON.stringify(productCookie))
-        //         this.$emit("spinClick",this.foodSpinValue); 
-        //     }
-        // },
         deleteitem(){
             this.$emit("deleteclick",this.index)
         }
     },
     computed: {
-    totalPrice: function() {
-       return this.foodPrice*this.foodSpinValue;
+        totalPrice: function() {
+            return this.foodPrice*this.foodSpinValue;
+        }
     },
-  },
     watch: {
         foodSpinValue: function(){
             if(this.foodSpinValue >=1 ){
-                let productCookie = JSON.parse(this.$cookie.get("product"));
-                
-                for (let i = 0; i<productCookie.length; i++){
-                    if(productCookie[i].foodName == this.foodName){
-                        productCookie[i].foodSpinValue = this.foodSpinValue
-                        console.log(productCookie)
-                    }
-                }
-                document.cookie = 'product=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
-                this.$cookie.set('product', JSON.stringify(productCookie))
                 this.$emit("spinClick",this.index,this.foodSpinValue)
             }
         }

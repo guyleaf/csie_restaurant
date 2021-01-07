@@ -2,9 +2,7 @@
   <div id="my-container">
     <div class="my-3">
       <!-- Our triggering (target) element -->
-      <b-button id="popover-reactive-1" ref="button" @click="loadingData()">
-        ShoppingCart
-      </b-button>
+      <b-icon icon='cart4' font-scale='2.5' id="popover-reactive-1" ref="button" @click="loadingData()"></b-icon>
     </div>
     <!-- Our popover title and content render container -->
     <!-- We use placement 'auto' so popover fits in the best spot on viewport -->
@@ -226,6 +224,10 @@
         this.$bus.$emit("cashier",this.dataToCashier());
       },
       modifySpinValue(index,value){
+        let productCookie = JSON.parse(this.$cookie.get("product"));
+        productCookie[index].foodSpinValue = value
+        document.cookie = 'product=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
+        this.$cookie.set('product', JSON.stringify(productCookie))
         this.totalPrice = this.totalPrice + (value - this.ItemList[index].foodSpinValue) * this.ItemList[index].foodPrice
         this.ItemList[index].foodSpinValue = value;
       },
