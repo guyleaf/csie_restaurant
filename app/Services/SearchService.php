@@ -120,9 +120,9 @@ class SearchService
         return $this->filterNull($result, 0);
     }
 
-    public function getShopsBykeywords($keywords)
+    public function searchShops($keywords)
     {
-
+        
     }
 
     public function getCategories()
