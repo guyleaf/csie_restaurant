@@ -71,7 +71,6 @@ class CustomerService
 
     public function useCoupon($id, $coupon_code, $seller_id, $order)
     {
-
         $coupon = $this->shopService->useCoupon($coupon_code, $seller_id);
 
         if (gettype($coupon) != "array")

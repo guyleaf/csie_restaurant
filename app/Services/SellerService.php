@@ -55,7 +55,13 @@ class SellerService
 
         $product_id = $this->productRepository->addProduct($seller_id, $payload, $image_extension);
 
-        $image->storeAs('public/restaurant/' . strval($seller_id), strval($product_id) . '.' . $image_extension);
+        $image_path = 'public/restaurant/' . strval($seller_id);
+        $image_name = strval($product_id) . '.' . $image_extension;
+
+        $image->storeAs($image_path, $image_name);
+
+        $image_path = '/storage/restaurant/' . strval($seller_id);
+        return ['product_id' => $product_id, 'image_path' => $image_path . '/' . $image_name];
     }
 
     public function deleteProduct($id)
