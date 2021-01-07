@@ -18,22 +18,20 @@
                     label="優惠類型"
                     label-for="type-input"
                     invalid-feedback="type is required">
+                    <b-form-radio-group v-model="typeSelected">
                    <div style="display:flex; justify-content:space-around;">
-                    <div style="display:inline-flex; flex-wrap:wrap;">
-                        <b-form-radio  v-model="typeSelected" name="some-radios" value="0">滿額免運費</b-form-radio>
+                        <b-form-radio value="0">滿額免運費</b-form-radio>
+                        <b-form-radio value="1">滿額打折</b-form-radio>
+                        <b-form-radio value="2">優惠套餐</b-form-radio>
                     </div>
-                    <div style="display:inline-flex; flex-wrap:wrap;">
-                        <b-form-radio v-model="typeSelected" name="some-radios" value="1">滿額打折</b-form-radio>
-                    </div>
-                    <b-form-radio v-model="typeSelected" name="some-radios" value="2">優惠套餐</b-form-radio>
-                    </div>
+                    </b-form-radio-group>
                     </b-form-group>
-                    <a v-if="typeSelected==='0'">滿額</a><b-form-input v-if="typeSelected==='0'" v-model="money" :placeholder="limitMoney+shipFreeHint" type="text" style="width:50%;" required></b-form-input>
-                    <a v-if="typeSelected==='1'">滿額</a><b-form-input v-if="typeSelected==='1'" v-model="money" :placeholder="limitMoney+limitHint" type="text" style="width:50%;" required></b-form-input>
-                    <a v-if="typeSelected==='1'">折扣</a><b-form-input v-if="typeSelected==='1'" v-model="money" :placeholder="discount+discountHint" type="text" style="width:50%;" required></b-form-input>
+                    <a v-if="typeSelected==0">滿額</a><b-form-input v-if="typeSelected==0" v-model="money" :placeholder="limitMoney+shipFreeHint" type="text" style="width:50%;" required></b-form-input>
+                    <a v-if="typeSelected==1">滿額</a><b-form-input v-if="typeSelected==1" v-model="money" :placeholder="limitMoney+limitHint" type="text" style="width:50%;" required></b-form-input>
+                    <a v-if="typeSelected==1">折扣</a><b-form-input v-if="typeSelected==1" v-model="discount" :placeholder="discount+discountHint" type="text" style="width:50%;" required></b-form-input>
                     <b-form-group
                         label="新增商品"
-                        v-if="typeSelected==='2'"
+                        v-if="typeSelected==2"
                         >
                         <div :id="'coupon_product_'+num" class="row cp_pd" v-for="num in productNum" :key="num">
                             <div class="col-md-8 ">
@@ -84,7 +82,7 @@ export default {
     data()
     {
         return{
-            typeSelected:'',
+            typeSelected:null,
             code:'',
             couponCards:[] , 
             options: {
