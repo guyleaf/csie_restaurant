@@ -24,6 +24,7 @@ class CreateCouponsTable extends Migration
             $table->unsignedDouble("discount")->nullable()->comment("優惠券折扣數");
             $table->unsignedDouble("limit_money")->nullable()->comment("優惠券金額下限");
             $table->boolean("is_deleted")->default(false)->comment("優惠券金額下限");
+            $table->unsignedInteger("numberOfUsage")->comment("優惠券可使用次數");
             // $table->enum("type", [0, 1, 2])->comment("優惠券種類");
             $table->foreign("member_id")->references("id")->on("member")
             ->onUpdate("cascade")->onDelete("cascade");

@@ -73,17 +73,17 @@ class CustomerController extends Controller
         {
             $code = $result;
             if ($code == 5)
-                return response()->json(['message' => 'Coupon usage limit has been reached.'], 403);
+                return response()->json(['message' => '優惠券使用次數到達上限'], 403);
             else if ($code == 4)
-                return response()->json(['message' => 'Unknown coupon.'], 403);
+                return response()->json(['message' => '無效的優惠券'], 403);
             else if ($code == 3)
-                return response()->json(['message' => 'Expired coupon.'], 403);
+                return response()->json(['message' => '優惠券已過期'], 403);
             else if ($code == 2)
-                return response()->json(['message' => 'This coupon is not for this seller.'], 403);
+                return response()->json(['message' => '優惠券不適用於此店家'], 403);
             else if ($code == 1)
-                return response()->json(['message' => 'You are not applicable to use this coupon.'], 403);
+                return response()->json(['message' => '未滿足優惠券之條件'], 403);
         }
         else
-            return response()->json(['message' => 'You can use this coupon.', 'coupon' => $result], 200);
+            return response()->json(['message' => '恭喜! 優惠券可以使用', 'coupon' => $result], 200);
     }
 }

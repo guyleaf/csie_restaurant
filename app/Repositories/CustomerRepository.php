@@ -27,15 +27,25 @@ class CustomerRepository
         $this->usedCoupon = DB::table('used_coupon', 'UC');
     }
 
-    public function getUsedCoupon($id, $coupon_code)
-    {
-        $result = DB::table('used_coupon', 'UC')
-        ->join('coupon as CP', 'CP.id', '=', 'UC.coupon_id')
-        ->where('UC.customer_id', '=', $id)
-        ->where('CP.code', '=', $coupon_code)
-        ->get(['*']);
+    // public function getUsedCoupons($id, $coupon_code)
+    // {
+    //     $result = DB::table('used_coupon', 'UC')
+    //     ->join('coupon as CP', 'CP.id', '=', 'UC.coupon_id')
+    //     ->where('UC.customer_id', '=', $id)
+    //     ->where('CP.code', '=', $coupon_code)
+    //     ->get(['*']);
 
-        return $result;
+    //     return $result;
+    // }
+
+    public function countUsageNumberOfUsedCoupon($id, $coupon_code)
+    {
+        $result = $this->usedCoupon
+        ->join('coupon as CP', 'CP.id', '=', 'UC.coupon_id')
+        ->where('CP.code', '=', $coupon_code)
+        ->get(['COUNT(*) as numberOfUsage']);
+
+        return $result->first()->numberOfUsage;
     }
 }
 ?>
