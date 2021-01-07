@@ -34,7 +34,6 @@ export default {
         this.$http.get('restaurants/' + id + '/coupons' + '?include_expired=1'). //FIXME  ?include_expired=1要移除
         then(response => {
             this.couponCards=response.data;
-            console.log(this.couponCards);
         })
     }
 }

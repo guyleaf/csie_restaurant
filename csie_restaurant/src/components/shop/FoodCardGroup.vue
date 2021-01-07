@@ -51,7 +51,7 @@ export default {
           let data=response.data;
           for (let i=0;i<data.length;i++) 
             {
-              this.foodCards.push({sellingState:data[i].status, soldOut:data[i].sold_out, foodId: data[i].id, foodName: data[i].name, price:data[i].price, imgPath: 'https://placekitten.com/300/300', foodDescription: data[i].description, foodTag:data[i].category_name});}
+              this.foodCards.push({sellingState:data[i].status, soldOut:data[i].sold_out, foodId: data[i].id, foodName: data[i].name, price:data[i].price, imgPath: this.$url + data[i].image_path, foodDescription: data[i].description, foodTag:data[i].category_name});}
             }
         )
     this.$http.get('/restaurants/'+id+'/category')
@@ -76,13 +76,7 @@ export default {
           }
           else {
             console.log(back)
-          for(let i=0;i<back.length;i++)
-            {
-                console.log(back[i])
-                console.log(food.clientWidth)
-                back[i].style.minWidth= (food.clientWidth).toString() +'px'
-            }
-                
+          for(let i=0;i<back.length;i++) back[i].style.minWidth= (food.clientWidth).toString() +'px'
           }
         }
         setfbacksize()
@@ -91,6 +85,7 @@ export default {
 </script>
 
 <style scoped>
+
 .row{
     margin:1% 0 1% 0;   
 }

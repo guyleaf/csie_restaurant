@@ -112,7 +112,6 @@
       },
       total(datas){
         let total=0;
-        console.log(datas)
         for(let i=0;i<datas.length;i++) total=total+parseFloat(parseFloat(datas[i].price * datas[i].quantity * datas[i].discount).toFixed(0))
         return total
       },

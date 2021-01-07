@@ -8,10 +8,11 @@
                     <b-form-group
                     label="Name"
                     label-for="name-input"
-                    invalid-feedback="name is required" type="text"
+                    invalid-feedback="商品名不能為空"
                     :state="nameState">
                     <b-form-input
                         ref="name-input"
+                        type="text"
                         v-model="vfoodName"
                         :state="nameState"
                         required>{{foodName}}</b-form-input>
@@ -30,16 +31,17 @@
                     <b-form-group
                     label="Price"
                     label-for="price-input"
-                    invalid-feedback="price is required"
+                    invalid-feedback="價錢不能為空"
+                    
                     :state="priceState">
                     <b-form-input
                         ref="price-input"
                         v-model="vprice"
-                        :state="priceState" type="text"
+                        :state="priceState" type="number"
                         required>{{ price }}</b-form-input>
                     </b-form-group>
                     <div class="row m-2" style="justify-content:space-around">
-                        <b-button variant="primary" @click="confirmModal" size="sm">ADD</b-button>
+                        <b-button variant="primary" @click="confirmModal" size="sm">MODIFY</b-button>
                         <b-button variant="info" @click="cancelModal" size="sm">CANCEL</b-button>
                     </div>
                 </div>
@@ -101,7 +103,8 @@ export default {
         price: Number,
         foodId: Number,
         soldOut: Boolean,
-        sellingState: Number
+        sellingState: Number,
+        foodId: Number,
     },
     computed:{
         total: function() {
@@ -166,23 +169,18 @@ export default {
             this.vfoodName=this.foodName
             this.vfoodDescription=this.foodDescription
             this.vprice=this.price
+            this.nameState=null,
+            this.descriptionState=null,
+            this.priceState=null,
             this.$refs['my-modal'].show();
         },
         confirmModal() {
-            // this.$cookie.delete('product')
-            // document.cookie = 'data=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; //delete cookie
-            // document.cookie = 'products=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; //delete cookie
-            // document.cookie = 'productNum=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; //delete cookie
-            // document.cookie = 'product5=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; //delete cookie
-            // document.cookie = 'pinValue5=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; //delete cookie
-            // document.cookie = 'price5=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; //delete cookie
-            // if (!this.checkFormValidity()) {
-            //     return
-            // }
-            // this.addToCookie()
-            // this.$bus.$emit("addfunction",this.dataToCart);
-            //缺：lack of return this.dataToCart to ShoppingCart.vue/CartCell.vue
             let food={id: this.foodId}
+            if(this.vfoodName == '') {this.nameState=false}
+            if(this.vprice == '') {this.priceState=false}
+            if(this.nameState!=false && this.priceState!=false)
+            {
+            this.$confirm("確定要更改此商品？","","question").then(() => {
             if(this.foodName != this.vfoodName) {this.foodName = this.vfoodName; food.name=this.vfoodName}
             if(this.foodDescription != this.vfoodDescription) {this.foodDescription = this.vfoodDescription; food.description=this.vfoodDescription}
             if(this.price != this.vprice) {this.price = this.vprice; food.price=this.vprice}
@@ -192,9 +190,11 @@ export default {
                 'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
                 }
             }).catch(error=>{
+                this.$alert("修改失敗","","error");
                 console.log(error.response)
             })
             this.$refs['my-modal'].hide();
+            })}  
         },
         cancelModal() {
             this.$refs['my-modal'].hide();
@@ -203,13 +203,26 @@ export default {
             this.$refs['my-modal'].hide();
         },
         changeStock(){
+            let msg=''
+            if(!this.soldOut)  msg='是否標記為售完？'
+            else msg='是否確定已補足庫存？'
+            this.$confirm(msg,"","question").then(() => {
             this.$emit("changeStock",this.foodId)
+            })  
         },
         changeShelf(){
+            let msg=''
+            if(!this.sellingState)  msg='你確定要上架？'
+            else  msg='你確定要下架？'
+            this.$confirm(msg,"","question").then(() => {
             this.$emit("changeState",this.foodId)
+        })
         },
         deleteProduct(){
+            this.$confirm("你確定要刪除？","","question").then(() => {
             this.$emit("deleteProduct",this.foodId)
+        });
+
         },
         checkFormValidity() {
             const valid1 = this.$refs['name-input'].checkValidity()
