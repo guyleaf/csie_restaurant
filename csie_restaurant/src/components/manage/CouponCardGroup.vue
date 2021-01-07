@@ -37,6 +37,21 @@
                         ref="discount-input"
                         v-model="discount" required>{{ discount }}</b-form-input>
                     </b-form-group>
+                    <b-form-group
+                    label="新增商品"
+                    >
+                    <div :id="'coupon_product_'+num" class="row cp_pd" v-for="num in productNum" :key="num">
+                        <div class="col-md-8 ">
+                            <b-form-input :id="'option_'+num" :list="'my-list-id_'+num" v-model="option"></b-form-input>
+                                <datalist :id="'my-list-id_'+num" >
+                                <option v-for="size in sizes" :key="size" > {{size}}</option>
+                            </datalist>
+                        </div>
+                        <div class="col-md-4">
+                            <b-form-spinbutton :id="'sb_'+num" min="1" max="100" :v-model="spinValue"></b-form-spinbutton>
+                        </div>
+                    </div>
+                    </b-form-group>
                     <div style="display:flex; justify-content:space-around;">
                         <div style="display:inline-flex; flex-wrap:nowrap;"> 
                             <div class="mt-2 mr-3">開始時間 </div>
@@ -80,7 +95,11 @@ export default {
                 format: 'YYYY-MM-DD hh:mm:ss',
                 sideBySide: true,
                 useCurrent: false,
-            }    
+            },
+            couponProduct:[],
+            spinValue:1,
+            productNum:3,
+            sizes: ['Small', 'Medium', 'Large', 'Extra Large']    
         }
     }, 
     methods:{
@@ -98,6 +117,12 @@ export default {
             return result;
         },
         confirmModal(){
+            for (let i = 1; i<this.productNum+1; i++){
+                let option = document.querySelector('#option_'+i).value
+                let spinValue = document.querySelector('#sb_'+i).value
+                this.couponProduct.push({option:option, spinValue:spinValue})
+            }
+            console.log(this.couponProduct)
             this.$refs['my-modal'].hide();
         },
         cancelModal(){
@@ -120,6 +145,9 @@ export default {
 </script>
 
 <style scoped>
+.cp_pd{
+    margin-bottom:1%;
+}
 .tag{
     color: #d0011b;
     font-size: .675rem;
