@@ -78,5 +78,10 @@
 		"seller_id" : 15,
 		"name" : "經典蔥抓餅",
 		"display_order" : 1
+	},
+	{
+		"seller_id" : 15,
+		"name" : "飲品",
+		"display_order" : 2
 	}
 ]
