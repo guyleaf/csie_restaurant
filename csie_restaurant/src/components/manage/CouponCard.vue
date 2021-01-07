@@ -7,14 +7,14 @@
                 <a>滿{{limitMoney}}元 </a><a style="color:red;">免運費</a>
             </b-card-text>
             <b-card-text v-if="type === 1">
-                <a>滿{{limitMoney}}元 </a><a style="color:red;">{{discount}}%off</a>
+                <a>滿{{limitMoney}}元 </a><a style="color:red;">{{discount*100}}%off</a>
             </b-card-text>
             <b-card-text v-if="type === 2">
                 <a v-for="(product, index) in products" :key="product.product_id">
                     {{product.quantity}} {{product.name}}
                     <a v-if="index != products.length-1 ">+</a>  
                 </a>
-                <a style="color:red;">{{discount}}%off</a>
+                <a style="color:red;">{{discount*100}}%off</a>
             </b-card-text>
             <b-card-text>開始:{{start}}</b-card-text>
             <b-card-text>結束:{{expire}}</b-card-text>
@@ -37,22 +37,36 @@
                     label="優惠類型"
                     label-for="type-input"
                     invalid-feedback="type is required">
-                    <b-form-radio v-model="typeSelected" name="some-radios" value="0">免運費</b-form-radio>
-                    <b-form-radio v-model="typeSelected" name="some-radios" value="1">滿額折扣</b-form-radio>
-                    <b-form-radio v-model="typeSelected" name="some-radios" value="2">優惠套餐</b-form-radio>
-                    <b-form-input v-if="typeSelected==='1'"
-                        ref="type-input"
-                        v-model="money"  type="text" required></b-form-input>
-                    </b-form-group>
-                    <b-form-group
-                    label="折扣"
-                    label-for="discount-input"
-                    invalid-feedback="discount is required">
-                    <b-form-input 
-                        ref="discount-input"
-                        v-model="discount" required>{{ discount }}</b-form-input>
-                    </b-form-group>
                     <div style="display:flex; justify-content:space-around;">
+                    <div style="display:inline-flex; flex-wrap:wrap;">
+                        <b-form-radio  v-model="typeSelected" name="some-radios" value="0">滿額免運費</b-form-radio>
+                    </div>
+                    <div style="display:inline-flex; flex-wrap:wrap;">
+                        <b-form-radio v-model="typeSelected" name="some-radios" value="1">滿額打折</b-form-radio>
+                    </div>
+                    <b-form-radio v-model="typeSelected" name="some-radios" value="2">優惠套餐</b-form-radio>
+                    </div>
+                    </b-form-group>
+                    <a v-if="typeSelected==='0'">滿額</a><b-form-input v-if="typeSelected==='0'" v-model="money" :placeholder="limitMoney+shipFreeHint" type="text" style="width:50%;" required></b-form-input>
+                    <a v-if="typeSelected==='1'">滿額</a><b-form-input v-if="typeSelected==='1'" v-model="money" :placeholder="limitMoney+limitHint" type="text" style="width:50%;" required></b-form-input>
+                    <a v-if="typeSelected==='1'">折扣</a><b-form-input v-if="typeSelected==='1'" v-model="money" :placeholder="discount+discountHint" type="text" style="width:50%;" required></b-form-input>
+                     <b-form-group
+                        v-if="typeSelected==='2'"
+                        label="新增商品"
+                        >
+                        <div :id="'coupon_product_'+num" class="row cp_pd" v-for="num in productNum" :key="num">
+                            <div class="col-md-8 ">
+                                <b-form-input :id="'option_'+num" :list="'my-list-id_'+num" v-model="option"></b-form-input>
+                                    <datalist :id="'my-list-id_'+num" >
+                                    <option v-for="size in sizes" :key="size" > {{size}}</option>
+                                </datalist>
+                            </div>
+                            <div class="col-md-4">
+                                <b-form-spinbutton :id="'sb_'+num" min="1" max="100" :v-model="spinValue"></b-form-spinbutton>
+                            </div>
+                        </div>
+                    </b-form-group>
+                    <div class="mt-3" style="display:flex; justify-content:space-around;">
                         <div style="display:inline-flex; flex-wrap:nowrap;"> 
                             <div class="mt-2 mr-3">開始時間 </div>
                             <div>
@@ -86,15 +100,23 @@ export default {
     data() {
       return {
         info:{},    
+        shipFreeHint:'元免運費',
+        limitHint:'元',
+        discountHint:'(請輸入小數)',
         typeSelected:'',
         options: {
             format: 'YYYY-MM-DD hh:mm:ss',
             sideBySide: true,
             useCurrent: false,
-        }    
+        },
+        couponProduct:[],
+        spinValue:1,
+        productNum:3,    
+        sizes: ['Small', 'Medium', 'Large', 'Extra Large']
       }
     },
     props:{
+        id: Number,
         code: String,
         products: Array,
         discount: Number,
@@ -164,7 +186,12 @@ export default {
                 this.expire = this.expireDate;
                 this.$refs['my-modal'].hide();
             }
-            JSON.stringify(this.products);
+            for (let i = 1; i<this.productNum+1; i++){
+                let option = document.querySelector('#option_'+i).value
+                let spinValue = document.querySelector('#sb_'+i).value
+                this.couponProduct.push({option:option, spinValue:spinValue})
+            }
+            console.log(this.couponProduct)
     /*"coupon": {
       "id": 12,
       "code": "bPhZha",
@@ -183,9 +210,9 @@ export default {
       }
     ]
   },*/
-            this.info = [{'coupon':{code:this.code, start_time:this.start, end_time:this.expire, type:this.type, discount:this.discount, limit_money:this.limitMoney}}]
+            this.info = {'coupon':{code:this.code, start_time:this.start, end_time:this.expire, type:this.type, discount:this.discount, limit_money:this.limitMoney}}
             //api
-            this.$http.post('/seller/coupons/update',this.info[0],{
+            this.$http.post('/seller/coupons/update',this.info,{
                 headers: {
                 'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
                 }

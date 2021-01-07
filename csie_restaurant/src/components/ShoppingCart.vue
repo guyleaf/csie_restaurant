@@ -2,9 +2,7 @@
   <div id="my-container">
     <div class="my-3">
       <!-- Our triggering (target) element -->
-      <b-button id="popover-reactive-1" ref="button" @click="loadingData()">
-        ShoppingCart
-      </b-button>
+      <b-icon icon='cart4' font-scale='2.5' id="popover-reactive-1" ref="button" @click="loadingData()"></b-icon>
     </div>
     <!-- Our popover title and content render container -->
     <!-- We use placement 'auto' so popover fits in the best spot on viewport -->
@@ -111,7 +109,6 @@
         if(coupon != null)
         {
           this.coupon = coupon;
-          console.log(coupon +'113213')
           this.useValidCoupon();
         }
       },
@@ -141,12 +138,10 @@
         then(response => {
             let couponCards = response.data;
             for (let i = 0 ; i<couponCards.length; i++){
-              console.log(couponName)
               if(couponCards[i].coupon.code === couponName){
                 this.$cookie.set('coupon', JSON.stringify(couponCards[i]))
                 this.$cookie.set('couponId',couponCards[i].coupon.id);
                 this.$cookie.set('couponName',couponCards[i].coupon.code);
-                console.log(this.$cookie.get('coupon'))
                 break;
               }
             }
@@ -160,16 +155,22 @@
             for (let i = 0 ; i<couponCards.length; i++){
               if(couponCards[i].coupon.code === couponName){
                 this.CouponItems = couponCards[i].coupon_items;
-                console.log(this.CouponItems);
                 break;
               }
             }
         })
       },
       checkItemsInCoupon(){
-        // let
-        // let coupon = JSON.parse(this.$cookie.get('coupon'))
-        // let apply = coupon.coupon_items.filter(i=>i.name of this.$cookie)
+        let matchProduct = [];
+        let product = JSON.parse(this.$cookie.get('product'))
+        let coupon = JSON.parse(this.$cookie.get('coupon'))
+        console.log(product,coupon)
+        for (let i = 0; i<coupon.coupon_items.length; i++){
+          let match = product.filter(array=>array.foodName == coupon.coupon_items[i].name && array.foodSpinValue == coupon.coupon_items[i].quantity)
+          if(match.length != 0){
+            matchProduct.push(match);
+          }
+        }
       },
       checkCoupon(coupon){
         if(this.checkLogin()){
@@ -183,6 +184,7 @@
             this.useValidCoupon()
             this.addCouponToCookie(coupon)
             this.getCouponItems(coupon)
+            this.checkItemsInCoupon()
           })
           .catch(error => {
             this.couponState = false;
@@ -222,6 +224,10 @@
         this.$bus.$emit("cashier",this.dataToCashier());
       },
       modifySpinValue(index,value){
+        let productCookie = JSON.parse(this.$cookie.get("product"));
+        productCookie[index].foodSpinValue = value
+        document.cookie = 'product=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
+        this.$cookie.set('product', JSON.stringify(productCookie))
         this.totalPrice = this.totalPrice + (value - this.ItemList[index].foodSpinValue) * this.ItemList[index].foodPrice
         this.ItemList[index].foodSpinValue = value;
       },

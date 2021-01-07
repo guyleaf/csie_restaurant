@@ -25,7 +25,7 @@
                     </b-input-group-prepend>
                 </b-input-group>
             </b-nav-form>
-            <b-navbar-nav class="ml-5 mr-3">
+            <b-navbar-nav class="ml-4 mr-3">
                 <ShoppingCart />
             </b-navbar-nav>
             <b-navbar-nav>
