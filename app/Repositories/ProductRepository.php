@@ -88,7 +88,7 @@ class ProductRepository
             DB::rollBack();
             throw $e;
         }
-        
+
         return $id;
     }
 
