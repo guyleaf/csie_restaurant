@@ -37,35 +37,35 @@
                     label="優惠類型"
                     label-for="type-input"
                     invalid-feedback="type is required">
+                    <b-form-radio-group v-model="typeSelected">
                     <div style="display:flex; justify-content:space-around;">
-                    <div style="display:inline-flex; flex-wrap:wrap;">
-                        <b-form-radio  v-model="typeSelected" name="some-radios" value="0">滿額免運費</b-form-radio>
+                        <b-form-radio value="0">滿額免運費</b-form-radio>
+                        <b-form-radio value="1">滿額打折</b-form-radio>
+                        <b-form-radio value="2">優惠套餐</b-form-radio>
                     </div>
-                    <div style="display:inline-flex; flex-wrap:wrap;">
-                        <b-form-radio v-model="typeSelected" name="some-radios" value="1">滿額打折</b-form-radio>
-                    </div>
-                    <b-form-radio v-model="typeSelected" name="some-radios" value="2">優惠套餐</b-form-radio>
-                    </div>
+                    </b-form-radio-group>
                     </b-form-group>
-                    <a v-if="typeSelected==='0'">滿額</a><b-form-input v-if="typeSelected==='0'" v-model="money" :placeholder="limitMoney+shipFreeHint" type="text" style="width:50%;" required></b-form-input>
-                    <a v-if="typeSelected==='1'">滿額</a><b-form-input v-if="typeSelected==='1'" v-model="money" :placeholder="limitMoney+limitHint" type="text" style="width:50%;" required></b-form-input>
-                    <a v-if="typeSelected==='1'">折扣</a><b-form-input v-if="typeSelected==='1'" v-model="money" :placeholder="discount+discountHint" type="text" style="width:50%;" required></b-form-input>
+                    <a v-if="typeSelected==0">滿額</a><b-form-input v-if="typeSelected==0" v-model="money" :placeholder="limitMoney+shipFreeHint" type="text" style="width:50%;" required></b-form-input>
+                    <a v-if="typeSelected==1">滿額</a><b-form-input v-if="typeSelected==1" v-model="money" :placeholder="limitMoney+limitHint" type="text" style="width:50%;" required></b-form-input>
+                    <a v-if="typeSelected==1">折扣</a><b-form-input v-if="typeSelected==1" v-model="discount" :placeholder="discount+discountHint" typeSelected="text" style="width:50%;" required></b-form-input>
                      <b-form-group
-                        v-if="typeSelected==='2'"
-                        label="新增商品"
+                        v-if="typeSelected==2"
+                        label="優惠商品"
                         >
-                        <div :id="'coupon_product_'+num" class="row cp_pd" v-for="num in productNum" :key="num">
+                        <div :id="'coupon_product_'+num" class="row cp_pd" v-for="num in couponProductNum" :key="num">
                             <div class="col-md-8 ">
                                 <b-form-input :id="'option_'+num" :list="'my-list-id_'+num" v-model="option"></b-form-input>
                                     <datalist :id="'my-list-id_'+num" >
-                                    <option v-for="size in sizes" :key="size" > {{size}}</option>
+                                    <option v-for="product in allProducts" :key="product.id" > {{product.name}}</option>
                                 </datalist>
                             </div>
                             <div class="col-md-4">
                                 <b-form-spinbutton :id="'sb_'+num" min="1" max="100" :v-model="spinValue"></b-form-spinbutton>
                             </div>
                         </div>
+                        <b-button variant="outline-primary" @click="addCouponProduct">新增優惠商品</b-button>
                     </b-form-group>
+                    
                     <div class="mt-3" style="display:flex; justify-content:space-around;">
                         <div style="display:inline-flex; flex-wrap:nowrap;"> 
                             <div class="mt-2 mr-3">開始時間 </div>
@@ -103,16 +103,16 @@ export default {
         shipFreeHint:'元免運費',
         limitHint:'元',
         discountHint:'(請輸入小數)',
-        typeSelected:'',
+        typeSelected: this.type,
         options: {
             format: 'YYYY-MM-DD hh:mm:ss',
             sideBySide: true,
             useCurrent: false,
         },
         couponProduct:[],
+        couponProductNum:1,
         spinValue:1,
-        productNum:3,    
-        sizes: ['Small', 'Medium', 'Large', 'Extra Large']
+        AllProducts: this.allProducts
       }
     },
     props:{
@@ -124,9 +124,10 @@ export default {
         start: Date,
         expire: Date,
         type: Number,
+        allProducts: Array,
     },
     created:{
-        
+
     },
     computed:{
     },
@@ -175,7 +176,7 @@ export default {
                 this.expire = this.expireDate;
                 this.$refs['my-modal'].hide();
             }
-            for (let i = 1; i<this.productNum+1; i++){
+            for (let i = 1; i<this.allProducts.length +1; i++){
                 let option = document.querySelector('#option_'+i).value
                 let spinValue = document.querySelector('#sb_'+i).value
                 this.couponProduct.push({option:option, spinValue:spinValue})
@@ -195,6 +196,9 @@ export default {
         },
         deleteCoupon(){
             //api delete
+        },
+        addCouponProduct(){
+            this.couponProductNum +=1;
         }
     }
 }
@@ -211,5 +215,8 @@ export default {
 }
 .boption{
     margin:0;
+}
+.cp_pd{
+    margin-bottom:1%;
 }
 </style>
