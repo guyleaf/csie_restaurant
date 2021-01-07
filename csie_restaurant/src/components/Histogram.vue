@@ -35,18 +35,14 @@ export default {
   methods:{
       getLabelname(){
           let labels=[]
-          // console.log(this.foodData.length);
           for (let i=0;i<this.foodData.length;i++) labels.push(this.foodData[i].foodName);
-          // console.log(labels)
           return labels
       },
       getLabelData(min,max){
           let labels=[]
-          // console.log(this.foodData.length);
           for (let i=0;i<this.foodData.length;i++) labels.push(this.foodData[i].data);
           labels.push(min)
           labels.push(max)
-          // console.log(labels)
           return labels
       }
   }

@@ -63,7 +63,6 @@ export default {
       },
   },
   created(){
-    console.log(123123123)
     this.loadingData()
   },
   computed: {

@@ -149,7 +149,6 @@ export default {
             this.modityName=this.foodCategories[index].foodCategory;
         },
         modityfoodcategory(index){
-            console.log(index)
             this.updateTab(this.foodCategories)
             this.foodCategories[index].foodCategory=this.modityName;
             this.modityName='';
@@ -174,7 +173,6 @@ export default {
             if(this.Name == null) {this.nameState=false}
             if(this.Price == null) {this.priceState=false}
             if(this.image == null) {this.imageState=false}
-            console.log(this.Name)
             if(this.nameState!=false && this.priceState!=false){
             this.$confirm("確定要新增此商品？","","question").then(() => {
             this.addProduct()
@@ -199,7 +197,6 @@ export default {
         },
         showModal(foodCategory) {
             this.foodCategory=foodCategory
-            console.log(foodCategory)
             this.$refs['my-modal'].show();
         },
         changeStock(id){
@@ -294,7 +291,7 @@ export default {
             {
             let food = document.querySelector('#shopbody')
             let back = document.querySelector(id)
-            console.log(back)
+
             if(food == null || back==null) {
                 setTimeout(setfbacksize.bind(this,id),100)
             }
@@ -308,13 +305,11 @@ export default {
         .then(response => {
           this.foodCards=[];
           let data=response.data;
-          console.log(response.data)
           for (let i=0;i<data.length;i++) {     
               this.foodCards.push({sellingState:data[i].status, soldOut:data[i].sold_out, foodId: data[i].id, foodName: data[i].name, price:data[i].price, imgPath: this.$url + data[i].image_path, foodDescription: data[i].description, foodTag:data[i].category_name});}
               this.foodCards = this.foodCards.sort(function (a, b) {
                 return a.foodName - b.foodName
                 });
-            console.log(this.foodCards)
 
             }
         )
@@ -322,7 +317,6 @@ export default {
             .then(response => {
             this.foodCategories=[];
             let data=response.data;
-            console.log(data)
             for (let i=0;i<data.length;i++) this.foodCategories.push({foodCategory: data[i].name, order: data[i].display_order, hover:false});}
             )
         this.foodCategories.sort(function(a,b){

@@ -1,6 +1,6 @@
 <template>
     <div class="html">
-        <MainHeader />
+        <MainHeader class="navigation"/>
         <div class="container body">
             <router-view />
         </div>
@@ -54,5 +54,12 @@ export default {
     margin: 0 !important;
     padding: 0% !important;
     overflow: hidden;
+  }
+  .navigation{
+      width: 100%;
+      top: 0;
+      left: 0;
+      z-index: 10000;          
+      position: fixed;
   }
 </style>

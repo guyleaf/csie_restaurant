@@ -77,9 +77,6 @@ export default {
     }}
   },
   methods: {
-    show(){
-      console.log(this.foodCategory)
-    },
     add: function() {
       let name="新類別"
       let i=1
@@ -94,13 +91,10 @@ export default {
         this.$bus.$emit('updateTab',this.list);
     },
     checkMove: function(e) {
-        window.console.log("Dragging:" + e.draggedContext.index + " Future index: " + e.draggedContext.futureIndex);
-        
     },
     dragEnd: function(e) {
         for(let i=0;i<this.foodCategory.length;i++){
             this.list[i].order = i;
-            console.log('now:',this.list[i].foodCategory,this.list[i].order);
         }
     }
   },

@@ -115,7 +115,6 @@ export default {
                 let current = JSON.parse(this.$cookie.get("product"));
                 current.push(this.data[0])
                 this.$cookie.set('product', JSON.stringify(current));
-                console.log(JSON.parse(this.$cookie.get("product")))
             }
         },
         hoverCard() {   

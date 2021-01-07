@@ -1,6 +1,6 @@
 <template>
-    <div class="container">
-        <CategoryTab :foodCategory="foodCategories" />
+    <div class="container" >
+        <CategoryTab :foodCategory="foodCategories" class="tab"/>
         <div class="row" v-for="category in hasProducts(foodCards)" :key="category.categoryId">
             <div class="row">
                 <h1>{{category.foodCategory}}</h1>
@@ -41,7 +41,7 @@ export default {
         },
         hasProducts:function(foodcard){
             return this.foodCategories.filter(i => foodcard.find(j => i.foodCategory === j.foodTag))
-        }
+        },
     },
     created(){
     let id = this.$router.currentRoute.params.id
@@ -75,12 +75,12 @@ export default {
               setTimeout(setfbacksize.bind(this),100)
           }
           else {
-            console.log(back)
           for(let i=0;i<back.length;i++) back[i].style.minWidth= (food.clientWidth).toString() +'px'
           }
         }
         setfbacksize()
-    }
+    },
+
 }
 </script>
 

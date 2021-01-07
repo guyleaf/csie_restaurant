@@ -38,13 +38,11 @@ export default {
         onChange(){
             if(!this.selected) this.$router.push("/manage/")
             else this.$router.push("/manage/"+this.selected)
-            console.log(this.selected)
         }
     },
     watch: {
       $route: {
         handler: function() {
-        console.log(this.$router.history.current.name)
         this.selected = this.$router.history.current.name
       },
       }

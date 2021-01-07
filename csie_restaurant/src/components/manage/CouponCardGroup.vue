@@ -118,7 +118,6 @@ export default {
                 let spinValue = document.querySelector('#sb_'+i).value
                 this.couponProduct.push({option:option, spinValue:spinValue})
             }
-            console.log(this.couponProduct)
             this.$refs['my-modal'].hide();
         },
         cancelModal(){

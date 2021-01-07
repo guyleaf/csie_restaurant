@@ -131,17 +131,6 @@ export default {
     computed:{
     },
     methods:{
-        /*show(){
-            console.log(code);
-            
-                    code: String,
-        products: Array,
-        discount: Number,
-        limitMoney: Number,
-        start: Date,
-        expire: Date,
-        type: Number,
-        }*/
         showModal(){
             this.$refs['my-modal'].show();
         },
@@ -191,25 +180,6 @@ export default {
                 let spinValue = document.querySelector('#sb_'+i).value
                 this.couponProduct.push({option:option, spinValue:spinValue})
             }
-            console.log(this.couponProduct)
-    /*"coupon": {
-      "id": 12,
-      "code": "bPhZha",
-      "start_time": "2020-10-09 16:00:00",
-      "end_time": "2020-10-09 16:00:00",
-      "type": 2,
-      "discount": "0.8",
-      "limit_money": null
-    },
-    "coupon_items": [
-      {
-        "coupon_id": 12,
-        "product_id": 7,
-        "quantity": 1,
-        "name": "蜂蜜鬆餅"
-      }
-    ]
-  },*/
             this.info = {'coupon':{code:this.code, start_time:this.start, end_time:this.expire, type:this.type, discount:this.discount, limit_money:this.limitMoney}}
             //api
             this.$http.post('/seller/coupons/update',this.info,{
