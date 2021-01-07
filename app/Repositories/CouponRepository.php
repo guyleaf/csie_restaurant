@@ -75,7 +75,10 @@ class CouponRepository
 
     public function addCoupon($seller_id, $payload)
     {
-        DB::transaction(function () use ($seller_id, $payload) {
+        DB::beginTransaction();
+
+        try
+        {
             $payload['coupon']['member_id'] = $seller_id;
 
             $id = DB::table('coupon', 'CP')
@@ -101,7 +104,16 @@ class CouponRepository
                 DB::table('specified_coupon_product', 'SCP')
                 ->insert($payload['coupon_items']);
             }
-        }, 3);
+
+            DB::commit();
+        }
+        catch (Exception $e)
+        {
+            DB::rollBack();
+            throw $e;
+        }
+
+        return $id;
     }
 
     public function deleteCoupon($code)
