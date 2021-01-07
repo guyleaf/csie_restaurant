@@ -165,7 +165,7 @@ export default {
                 'description': this.Description,
                 'status': 1,
                 'is_deleted': false,
-                'category_name': this.foodCategor,
+                'category_name': this.foodCategory,
                 'image':formdata.getAll('image')
                 }]
                 //             'name': this.Name,
@@ -174,7 +174,7 @@ export default {
                 // 'description': this.Description,
                 // 'status': 1,
                 // 'is_deleted': false,
-                // 'category_name': this.foodCategor,
+                // 'category_name': this.foodCategory,
             this.$http.post('/seller/products/add',formdata,{
                 headers: {
                 'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
