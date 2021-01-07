@@ -2,7 +2,7 @@
     <div class="col-md-6 card-body" v-b-hover="hoverCard" @click="showModal">
         <b-modal id="modal-sm" size="sm" ref="my-modal" hide-header hide-footer hide-header-close>
             <div class="container">
-                <b-img :src="imgPath" fluid alt="Responsive image"></b-img>
+                <b-img :src="imgPath" fluid alt="Responsive image" class="productImage"></b-img>
                 <div class="m-2">
                     <h3 class="mt-3">{{foodName}} </h3>
                     <p>{{foodDescription}} </p>
@@ -145,6 +145,10 @@ export default {
 </script>
 
 <style scoped>
+.productImage{
+    width: 100%;
+    height: 250px;
+}
 .card-body{
     margin-bottom: 0.5%;
 }
