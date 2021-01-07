@@ -75,7 +75,6 @@
                         :foodTag="card.foodTag"
                         :sellingState="card.sellingState"
                     />
-<!-- /////////////////////////////////////      -->
                     <div class="col-md-6 card-body">
                         <b-card tag="article" class="addFoodCard">
                             <div class='row'>
@@ -124,7 +123,7 @@ export default {
             foodCategory:'',
             nameState:null,
             descriptionState:null,
-            imageState:null,
+            imageState:true,
             priceState:null,
             editable:-1,
             modityName:'',
@@ -193,7 +192,7 @@ export default {
             this.Price=null,
             this.Name=null,
             this.Description=null,
-            this.imageState=null,
+            this.imageState=true,
             this.priceState=null,
             this.nameState=null,
             this.$refs['my-modal'].hide();
