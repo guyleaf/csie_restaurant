@@ -32,7 +32,9 @@ class SellerService
 
     public function addCoupon($seller_id, $payload)
     {
-        $this->couponRepository->addCoupon($seller_id, $payload);
+        $coupon_id = $this->couponRepository->addCoupon($seller_id, $payload);
+
+        return $coupon_id;
     }
 
     public function deleteCoupon($code)
