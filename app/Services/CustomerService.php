@@ -71,16 +71,17 @@ class CustomerService
 
     public function useCoupon($id, $coupon_code, $seller_id, $order)
     {
-        $state = $this->customerRepository->getUsedCoupon($id, $coupon_code);
-        
-        if ($state->isNotEmpty())
-            return 5;
-
         $coupon = $this->shopService->useCoupon($coupon_code, $seller_id);
 
         if (gettype($coupon) != "array")
             return $coupon;
         
+        $numberOfUsage = $this->customerRepository->countUsageNumberOfUsedCoupon($id, $coupon_code);
+        
+
+        if ($coupon['coupon']->numberOfUsage - $numberOfUsage === 0)
+            return 5;
+
         if (!$this->isApplicable($coupon, $order))
             return 1;
 
