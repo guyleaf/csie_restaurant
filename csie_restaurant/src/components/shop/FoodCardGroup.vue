@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <CategoryTab :foodCategory="foodCategories" />
-        <div class="row" v-for="category in foodCategories" :key="category.categoryId">
+        <div class="row" v-for="category in hasProducts(foodCards)" :key="category.categoryId">
             <div class="row">
                 <h1>{{category.foodCategory}}</h1>
             </div>
@@ -37,8 +37,11 @@ export default {
     }, 
     methods:{
         sameTag:function(category,state){
-            return this.foodCards.filter(i => i.foodTag === category && i.sellingState === state)
+            return this.foodCards.filter(i => i.foodTag === category && i.sellingState == state)
         },
+        hasProducts:function(foodcard){
+            return this.foodCategories.filter(i => foodcard.find(j => i.foodCategory === j.foodTag))
+        }
     },
     created(){
     let id = this.$router.currentRoute.params.id
@@ -46,16 +49,9 @@ export default {
         .then(response => {
           this.foodCards=[];
           let data=response.data;
-          let soldout= false
-          let status= false
           for (let i=0;i<data.length;i++) 
             {
-              soldout= false
-              status= false
-              if(data[i].sold_out==1) soldout = true
-              if(data[i].status==1) status = true
-              console.log(soldout,status)
-              this.foodCards.push({sellingState:status, soldOut:soldout, foodId: data[i].id, foodName: data[i].name, price:data[i].price, imgPath: 'https://placekitten.com/300/300', foodDescription: data[i].description, foodTag:data[i].category_name});}
+              this.foodCards.push({sellingState:data[i].status, soldOut:data[i].sold_out, foodId: data[i].id, foodName: data[i].name, price:data[i].price, imgPath: 'https://placekitten.com/300/300', foodDescription: data[i].description, foodTag:data[i].category_name});}
             }
         )
     this.$http.get('/restaurants/'+id+'/category')
@@ -69,6 +65,27 @@ export default {
         });
         for(let i=0;i<this.foodCategory.length;i++)
             this.foodCategories.push({categoryId: i, foodCategory: this.foodCategory[i].tag,hover:false})
+    },
+    mounted(){
+         function setfbacksize()
+        {
+          let food = document.querySelector('#shopbody')
+          let back = document.querySelectorAll('.fback')
+          if(food == null || back.length==0) {
+              setTimeout(setfbacksize.bind(this),100)
+          }
+          else {
+            console.log(back)
+          for(let i=0;i<back.length;i++)
+            {
+                console.log(back[i])
+                console.log(food.clientWidth)
+                back[i].style.minWidth= (food.clientWidth).toString() +'px'
+            }
+                
+          }
+        }
+        setfbacksize()
     }
 }
 </script>

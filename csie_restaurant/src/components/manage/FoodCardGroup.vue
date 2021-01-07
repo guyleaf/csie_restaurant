@@ -70,7 +70,7 @@
                         :sellingState="card.sellingState"
                     />
 <!-- /////////////////////////////////////      -->
-                    <div class="col-md-4 card-body">
+                    <div class="col-md-6 card-body">
                         <b-card tag="article" class="addFoodCard">
                             <div class='row'>
                                 <b-icon @mouseleave="category.hover=false" v-if="category.hover" icon="plus-circle-fill" font-scale="4" class="addProduct" @click="showModal(category.foodCategory)"/>
@@ -230,11 +230,17 @@ export default {
             }).catch(error=>{
                 console.log(error.response)
             })
-            console.log(this.foodCards[index].sellingState)
         },
         deleteProduct(id){
             var index = this.foodCards.findIndex(i => i.foodId === id);
-            console.log(index)
+            let foodCards = {id:id}
+            this.$http.post('/seller/products/delete',foodCards,{
+                headers: {
+                'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
+                }
+            }).catch(error=>{
+                console.log(error.response)
+            })
             this.foodCards.splice(index,1);
         },
         sortOrder:function(a, b){
@@ -256,12 +262,16 @@ export default {
           let data=response.data;
           for (let i=0;i<data.length;i++) {     
               this.foodCards.push({sellingState:data[i].status, soldOut:data[i].sold_out, foodId: data[i].id, foodName: data[i].name, price:data[i].price, imgPath: 'https://placekitten.com/300/300', foodDescription: data[i].description, foodTag:data[i].category_name});}
+              this.foodCards = this.foodCards.sort(function (a, b) {
+                return a.foodName - b.foodName
+                });
             }
         )
         this.$http.get('/restaurants/'+id+'/category')
             .then(response => {
             this.foodCategories=[];
             let data=response.data;
+            console.log(data)
             for (let i=0;i<data.length;i++) this.foodCategories.push({foodCategory: data[i].name, order: data[i].display_order, hover:false});}
             )
         this.foodCategories.sort(function(a,b){
@@ -273,8 +283,23 @@ export default {
 
     },
     mounted(){
-        let food = document.querySelector("#foodcard")
-        console.log(food)
+        function setfbacksize()
+        {
+          let food = document.querySelector('#shopbody')
+          let back = document.querySelectorAll('.fback')
+          if(food == null || back==null) {
+            setTimeout(setfbacksize.bind(this),100)
+          }
+          else {
+            for(let i=0;i<back.length;i++)
+            {
+                console.log(food)
+                back[i].style.minWidth= (shopbody.clientWidth).toString() +'px'
+            }
+                
+          }
+        }
+        setfbacksize()
     }
 }
 </script>

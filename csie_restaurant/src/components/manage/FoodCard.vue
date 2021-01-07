@@ -1,5 +1,5 @@
 <template>
-    <div class="col-md-4 card-body" v-b-hover="hoverCard">
+    <div class="col-md-6 card-body" v-b-hover="hoverCard">
         <b-modal id="modal-sm" size="sm" ref="my-modal" hide-header hide-footer hide-header-close>
             <div class="container">
                 <input type="file" accept="image/*" @change="previewImage" id="upload">
@@ -12,7 +12,7 @@
                     :state="nameState">
                     <b-form-input
                         ref="name-input"
-                        v-model="foodName"
+                        v-model="vfoodName"
                         :state="nameState"
                         required>{{foodName}}</b-form-input>
                     </b-form-group>
@@ -23,7 +23,7 @@
                     :state="descriptionState">
                     <b-form-input
                         ref="description-input"
-                        v-model="foodDescription"
+                        v-model="vfoodDescription"
                         :state="descriptionState"   type="text"
                         required>{{ foodDescription }}</b-form-input>
                     </b-form-group>
@@ -34,7 +34,7 @@
                     :state="priceState">
                     <b-form-input
                         ref="price-input"
-                        v-model="price"
+                        v-model="vprice"
                         :state="priceState" type="text"
                         required>{{ price }}</b-form-input>
                     </b-form-group>
@@ -47,7 +47,6 @@
         </b-modal>
         <b-card tag="article" no-body>
             <img :src="noStock" class="soldOut" v-if="this.soldOut" /> 
-       
             <div class='row card-body' v-bind:class="{'outOfStock':this.soldOut}">
                 <b-col md='6' >
                     <b-card-title> {{foodName}} </b-card-title>
@@ -86,6 +85,9 @@ export default {
         nameState:null,
         descriptionState:null,
         priceState:null,
+        vfoodName:'',
+        vfoodDescription:'',
+        vprice:'',
         preview: require('../../assets/photoupload.png'),
         noStock: require('../../assets/noStock.png'),
         image: null,
@@ -98,7 +100,7 @@ export default {
         foodDescription: String,
         price: Number,
         foodId: Number,
-        soldOut: Number,
+        soldOut: Boolean,
         sellingState: Number
     },
     computed:{
@@ -159,7 +161,11 @@ export default {
             //缺：lack of the responsive action when hover on the card
         },
         showModal() {
-            this.preview=this.imgPath,
+            this.preview=this.imgPath
+            this.image=this.imgPath
+            this.vfoodName=this.foodName
+            this.vfoodDescription=this.foodDescription
+            this.vprice=this.price
             this.$refs['my-modal'].show();
         },
         confirmModal() {
@@ -176,10 +182,12 @@ export default {
             // this.addToCookie()
             // this.$bus.$emit("addfunction",this.dataToCart);
             //缺：lack of return this.dataToCart to ShoppingCart.vue/CartCell.vue
-            // this.foodName = this.vName;
-            // this.foodDescription = this.vDescription;
-            // this.price = this.vPrice;
-            this.$http.post('/seller/products/update',this.foodCards[0],{
+            let food={id: this.foodId}
+            if(this.foodName != this.vfoodName) {this.foodName = this.vfoodName; food.name=this.vfoodName}
+            if(this.foodDescription != this.vfoodDescription) {this.foodDescription = this.vfoodDescription; food.description=this.vfoodDescription}
+            if(this.price != this.vprice) {this.price = this.vprice; food.price=this.vprice}
+            if(this.imgPath != this.image) {this.imgPath = this.image; food.image=this.image}
+            this.$http.post('/seller/products/update',food,{
                 headers: {
                 'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
                 }
@@ -214,7 +222,6 @@ export default {
         },
     },
     created(){
-        this.image=this.imgPath
         this.preview=this.imgPath
     }
 }
