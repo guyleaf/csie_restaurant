@@ -125,7 +125,7 @@ export default {
             foodCategories:[],
             foodCards:
             [
-                {sellingState:true, soldOut:false, foodId: 0,  foodName: 'ShopRon',  imgPath: 'https://placekitten.com/300/300', foodDescription: '11111111',  foodTag: 'Ron', price:123},
+                /*{sellingState:true, soldOut:false, foodId: 0,  foodName: 'ShopRon',  imgPath: 'https://placekitten.com/300/300', foodDescription: '11111111',  foodTag: 'Ron', price:123},
                 {sellingState:true, soldOut:false, foodId: 1,  foodName: 'ShopRon',  imgPath: 'https://placekitten.com/300/300', foodDescription: '878787878', foodTag: 'Ron', price:133},
                 {sellingState:true, soldOut:false, foodId: 2,  foodName: 'ShopPan', imgPath: 'https://placekitten.com/300/300', foodDescription: '3333333',   foodTag: 'Pan', price:13},
                 {sellingState:true, soldOut:false, foodId: 3,  foodName: 'Lee',  imgPath: 'https://placekitten.com/300/300', foodDescription: '0000000',   foodTag: 'Lee', price:23},
@@ -140,6 +140,7 @@ export default {
                 {sellingState:true, soldOut:false, foodId: 12, foodName: 'ShPanon',  imgPath: 'https://placekitten.com/300/300', foodDescription: '77777777',  foodTag: 'Pan', price:188},
                 {sellingState:true, soldOut:false, foodId: 13, foodName: 'SPanPan',  imgPath: 'https://placekitten.com/300/300', foodDescription: '888888888', foodTag: 'Pan', price:120},
                 {sellingState:true, soldOut:false, foodId: 14, foodName: 'ShPanf', imgPath: 'https://placekitten.com/300/300', foodDescription: '9999999',   foodTag: 'Pan', price:73},
+                FIXME*/
             ], 
         }
     },
@@ -148,7 +149,7 @@ export default {
             this.editable=index;
             this.modityName=this.foodCategories[index].foodCategory;
         },
-        modityfoodcategory(index){
+        modityfoodcategory(index){ //FIXME
             console.log(index)
             this.updateTab(this.foodCategories)
             this.foodCategories[index].foodCategory=this.modityName;
@@ -314,10 +315,10 @@ export default {
               this.foodCards = this.foodCards.sort(function (a, b) {
                 return a.foodName - b.foodName
                 });
-            console.log(this.foodCards)
-
-            }
-        )
+            this.$bus.$emit("getAllProducts",this.foodCards);
+            console.log('emit', this.foodCards);
+            
+        })
         this.$http.get('/restaurants/'+id+'/category')
             .then(response => {
             this.foodCategories=[];
@@ -331,6 +332,7 @@ export default {
         this.$bus.$on("updateTab", msg => {
             this.updateTab(msg);
         });
+        
 
     },
     mounted(){
