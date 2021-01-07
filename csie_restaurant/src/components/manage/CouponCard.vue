@@ -37,22 +37,20 @@
                     label="優惠類型"
                     label-for="type-input"
                     invalid-feedback="type is required">
-                    <b-form-radio v-model="typeSelected" name="some-radios" value="0">免運費</b-form-radio>
-                    <b-form-radio v-model="typeSelected" name="some-radios" value="1">滿額折扣</b-form-radio>
-                    <b-form-radio v-model="typeSelected" name="some-radios" value="2">優惠套餐</b-form-radio>
-                    <b-form-input v-if="typeSelected==='1'"
-                        ref="type-input"
-                        v-model="money"  type="text" required></b-form-input>
-                    </b-form-group>
-                    <b-form-group
-                    label="折扣(請輸入小數)"
-                    label-for="discount-input"
-                    invalid-feedback="discount is required">
-                    <b-form-input 
-                        ref="discount-input"
-                        v-model="discount" required>{{ discount }}</b-form-input>
-                    </b-form-group>
                     <div style="display:flex; justify-content:space-around;">
+                    <div style="display:inline-flex; flex-wrap:wrap;">
+                        <b-form-radio  v-model="typeSelected" name="some-radios" value="0">滿額免運費</b-form-radio>
+                    </div>
+                    <div style="display:inline-flex; flex-wrap:wrap;">
+                        <b-form-radio v-model="typeSelected" name="some-radios" value="1">滿額打折</b-form-radio>
+                    </div>
+                    <b-form-radio v-model="typeSelected" name="some-radios" value="2">優惠套餐</b-form-radio>
+                    </div>
+                    </b-form-group>
+                    <a v-if="typeSelected==='0'">滿額</a><b-form-input v-if="typeSelected==='0'" v-model="money" :placeholder="limitMoney+shipFreeHint" type="text" style="width:50%;" required></b-form-input>
+                    <a v-if="typeSelected==='1'">滿額</a><b-form-input v-if="typeSelected==='1'" v-model="money" :placeholder="limitMoney+limitHint" type="text" style="width:50%;" required></b-form-input>
+                    <a v-if="typeSelected==='1'">折扣</a><b-form-input v-if="typeSelected==='1'" v-model="money" :placeholder="discount+discountHint" type="text" style="width:50%;" required></b-form-input>
+                    <div class="mt-3" style="display:flex; justify-content:space-around;">
                         <div style="display:inline-flex; flex-wrap:nowrap;"> 
                             <div class="mt-2 mr-3">開始時間 </div>
                             <div>
@@ -86,6 +84,9 @@ export default {
     data() {
       return {
         info:{},    
+        shipFreeHint:'元免運費',
+        limitHint:'元',
+        discountHint:'(請輸入小數)',
         typeSelected:'',
         options: {
             format: 'YYYY-MM-DD hh:mm:ss',
