@@ -166,7 +166,7 @@
 		"start_time" : "2021-05-22T16:00:00.000Z",
 		"end_time" : "2021-05-28T16:00:00.000Z",
 		"type" : 0,
-		"discount" : 0.89,
+		"discount" : 1.0,
 		"limit_money" : 199.0
 	},
 	{
@@ -176,7 +176,7 @@
 		"start_time" : "2021-09-22T16:00:00.000Z",
 		"end_time" : "2021-10-22T16:00:00.000Z",
 		"type" : 0,
-		"discount" : 0.95,
+		"discount" : 1.0,
 		"limit_money" : 79.0
 	},
 	{
