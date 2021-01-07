@@ -63,7 +63,7 @@ class ProductRepository
         $id = $this->productTable
         ->orderByDesc('id')
         ->limit(1)
-        ->get(['id'])->first()->id;
+        ->get(['id'])->first()->id + 1;
 
         $payload['id'] = $id;
 
