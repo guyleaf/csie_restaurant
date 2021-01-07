@@ -22,6 +22,15 @@
                     <b-form-radio v-model="typeSelected" name="some-radios" value="1">滿額折扣</b-form-radio>
                     <b-form-radio v-model="typeSelected" name="some-radios" value="2">優惠套餐</b-form-radio>
                     </b-form-group>
+                    <div>
+                        <b-form-input list="my-list-id"></b-form-input>
+
+                        <datalist id="my-list-id">
+                        <option>Manual Option</option>
+                        <option v-for="size in sizes">{{ size }}</option>
+                        </datalist>
+                    </div>
+
                     <b-form-group  v-if="typeSelected==2"
                     label="滿額"
                     label-for="discount-input"
@@ -89,6 +98,7 @@ export default {
     data()
     {
         return{
+            sizes: ['Small', 'Medium', 'Large', 'Extra Large'],
             code:'',
             couponCards:[] , 
             options: {
