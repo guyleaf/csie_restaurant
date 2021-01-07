@@ -224,7 +224,7 @@
 		"code" : "QsD26W",
 		"member_id" : 12,
 		"start_time" : "2021-01-01T00:00:00.000Z",
-		"end_time" : "2021-01-10T23:99:00.000Z",
+		"end_time" : "2021-01-10T23:00:00.000Z",
 		"type" : 1,
 		"discount" : 0.9,
 		"limit_money" : 188.0
@@ -237,5 +237,6 @@
 		"end_time" : "2021-12-26T16:00:00.000Z",
 		"type" : 1,
 		"discount" : 0.79,
-		"limit_money" : 399.0	}
+		"limit_money" : 399.0	
+	}
 ]
