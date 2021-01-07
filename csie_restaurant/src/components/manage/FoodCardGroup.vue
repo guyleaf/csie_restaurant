@@ -342,11 +342,7 @@ export default {
             setTimeout(setfbacksize.bind(this),100)
           }
           else {
-            for(let i=0;i<back.length;i++)
-            {
-                back[i].style.minWidth= (shopbody.clientWidth).toString() +'px'
-            }
-                
+            for(let i=0;i<back.length;i++) back[i].style.minWidth= (shopbody.clientWidth).toString() +'px'
           }
         }
         setfbacksize()

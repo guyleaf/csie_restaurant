@@ -76,13 +76,7 @@ export default {
           }
           else {
             console.log(back)
-          for(let i=0;i<back.length;i++)
-            {
-                console.log(back[i])
-                console.log(food.clientWidth)
-                back[i].style.minWidth= (food.clientWidth).toString() +'px'
-            }
-                
+          for(let i=0;i<back.length;i++) back[i].style.minWidth= (food.clientWidth).toString() +'px'
           }
         }
         setfbacksize()
