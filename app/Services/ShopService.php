@@ -99,20 +99,35 @@ class ShopService
         return $result;
     }
 
-    public function checkCoupon($coupon_code, $seller_id)
+    public function useCoupon($coupon_code, $seller_id)
     {
         $result = $this->couponRepository
         ->getCouponBycouponCode($coupon_code);
-        
-        if ($result->isEmpty())
-            return 1;
 
+        if ($result->isEmpty())
+            return 4;
+
+        $now = new DateTime('now', new DateTimeZone('Asia/Taipei'));
+        $start_time = new DateTime($result->first()->start_time, new DateTimeZone('Asia/Taipei'));
+        $end_time = new DateTime($result->first()->end_time, new DateTimeZone('Asia/Taipei'));
+
+        if ($start_time->diff($now)->format("%s") > 0 || $now->diff($end_time)->format("%s") > 0)
+            return 3;
+        
         $result = $result->where('member_id', $seller_id);
 
         if ($result->isEmpty())
             return 2;
+
+        $result = $result->first();
         
-        return 0;
+        if ($result->type == 2)
+        {
+            $coupon_items = $this->couponRepository->getCouponItems($result->id);
+            $result = ['coupon' => $result, 'coupon_items' => $coupon_items];
+        }
+
+        return ['coupon' => $result];
     }
 }
 ?>

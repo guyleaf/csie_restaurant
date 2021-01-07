@@ -62,19 +62,28 @@ class CustomerController extends Controller
         return response()->json($result);
     }
 
-    public function checkCoupon(Request $request)
+    public function useCoupon(Request $request)
     {
         $user = auth()->user();
         $id = $user->id;
-        $code = $this->customerService->checkCoupon($id, $request->query('coupon_code'), $request->query('seller_id'));
+        $result = $this->customerService
+        ->useCoupon($id, $request->input('coupon_code'), $request->input('seller_id'), $request->except(['coupon_code', 'seller_id']));
 
-        if ($code == 3)
-            return response()->json(['message' => 'You have used this coupon before'], 403);
-        else if ($code == 2)
-            return response()->json(['message' => 'This coupon is not for this seller'], 403);
-        else if ($code == 1)
-            return response()->json(['message' => 'Unknown coupon'], 403);
+        if (gettype($result) != 'array')
+        {
+            $code = $result;
+            if ($code == 5)
+                return response()->json(['message' => 'Coupon usage limit has been reached.'], 403);
+            else if ($code == 4)
+                return response()->json(['message' => 'Unknown coupon.'], 403);
+            else if ($code == 3)
+                return response()->json(['message' => 'Expired coupon.'], 403);
+            else if ($code == 2)
+                return response()->json(['message' => 'This coupon is not for this seller.'], 403);
+            else if ($code == 1)
+                return response()->json(['message' => 'You are not applicable to use this coupon.'], 403);
+        }
         else
-            return response()->json(['message' => 'Valid coupon'], 200);
+            return response()->json(['message' => 'You can use this coupon.', 'coupon' => $result], 200);
     }
 }

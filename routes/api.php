@@ -44,7 +44,7 @@ $router->group(['prefix' => 'customer'], function () use ($router) {
     $router->group(['middleware' => 'jwt.customer'], function () use ($router) {
         $router->get('orders', 'CustomerController@getOrders');
         $router->get('orders/{orderId}', 'CustomerController@getOrderInfo');
-        $router->get('coupon/check', 'CustomerController@checkCoupon');
+        $router->post('coupon/use', 'CustomerController@useCoupon');
     });
 });
 
