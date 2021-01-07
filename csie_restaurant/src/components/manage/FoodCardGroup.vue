@@ -9,19 +9,23 @@
                     label="Name"
                     label-for="name-input"
                     invalid-feedback="name is required" type="text"
+                    :state="nameState"
                     >
                     <b-form-input
                         v-model="Name"
                         ref="name-input"
+                        :state="nameState"
                         required></b-form-input>
                     </b-form-group>
                     <b-form-group
                     label="Description"
                     label-for="description-input"
                     invalid-feedback="description is required"
+                    :state="descriptionState"
                     >
                     <b-form-input
                         v-model="Description"
+                        :state="descriptionState"
                         ref="description-input"
                         type="text"
                         required></b-form-input>
@@ -30,11 +34,13 @@
                     label="Price"
                     label-for="price-input"
                     invalid-feedback="price is required"
+                    :state="priceState"
                     >
                     <b-form-input
                         v-model="Price"
                         ref="price-input"
                         oninput = "value=value.replace(/[^\d]/g,'')"
+                        :state="priceState"
                         required></b-form-input>
                     </b-form-group>
                     <div class="row m-2" style="justify-content:space-around">
@@ -56,6 +62,7 @@
                         v-on="{changeStock:changeStock, changeState:changeSellingState, deleteProduct:deleteProduct}"
                         v-for="card in sameTag(category.foodCategory,true)" :key="card.foodId"
                         v-bind="card"
+                        id="foodcard"
                         :foodName="card.foodName" 
                         :imgPath="card.imgPath" 
                         :foodDescription="card.foodDescription" 
@@ -63,7 +70,7 @@
                         :sellingState="card.sellingState"
                     />
 <!-- /////////////////////////////////////      -->
-                    <div class="col-md-4 card-body">
+                    <div class="col-md-6 card-body">
                         <b-card tag="article" class="addFoodCard">
                             <div class='row'>
                                 <b-icon @mouseleave="category.hover=false" v-if="category.hover" icon="plus-circle-fill" font-scale="4" class="addProduct" @click="showModal(category.foodCategory)"/>
@@ -104,11 +111,14 @@ export default {
     data()
     {
         return{
-            Price:'',
-            Description:'',
-            Name:'',
+            Price:null,
+            Description:null,
+            Name:null,
             image:'',
             foodCategory:'',
+            nameState:null,
+            descriptionState:null,
+            priceState:null,
             preview: require('../../assets/photoupload.png'),
             foodCategories:[],
             foodCards:
@@ -165,16 +175,9 @@ export default {
                 'description': this.Description,
                 'status': 1,
                 'is_deleted': false,
-                'category_name': this.foodCategory,
+                'category_name': this.foodCategor,
                 'image':formdata.getAll('image')
                 }]
-                //             'name': this.Name,
-                // 'price': this.Price,
-                // 'sold_out': false,
-                // 'description': this.Description,
-                // 'status': 1,
-                // 'is_deleted': false,
-                // 'category_name': this.foodCategory,
             this.$http.post('/seller/products/add',formdata,{
                 headers: {
                 'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
@@ -188,15 +191,16 @@ export default {
         cancelModal() {
             this.preview= require('../../assets/photoupload.png'),
             this.image=''
+            this.Price=null,
+            this.Name=null,
+            this.Description=null,
             this.$refs['my-modal'].hide();
         },
         deleteModal() {
             this.$refs['my-modal'].hide();
         },
         sameTag:function(category,state){
-            if(state) state = 1;
-            else state = 0;
-            return this.foodCards.filter(i => i.foodTag === category && i.sellingState === state)
+            return this.foodCards.filter(i => i.foodTag === category && i.sellingState == state)
         },
         showModal(foodCategory) {
             this.foodCategory=foodCategory
@@ -206,8 +210,8 @@ export default {
         changeStock(id){
             var index = this.foodCards.findIndex(i => i.foodId === id);
             this.foodCards[index].soldOut = !this.foodCards[index].soldOut 
-            let foodCards = [{id:id, sold_out:this.foodCards[index].soldOut}]
-            this.$http.post('/seller/products/update',foodCards[0],{
+            let foodCards = {id:id, sold_out:this.foodCards[index].soldOut}
+            this.$http.post('/seller/products/update',foodCards,{
                 headers: {
                 'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
                 }
@@ -217,11 +221,26 @@ export default {
         },
         changeSellingState(id){
             var index = this.foodCards.findIndex(i => i.foodId === id);
-            this.foodCards[index].sellingState = !this.foodCards[index].sellingState;
+            this.foodCards[index].sellingState = !this.foodCards[index].sellingState
+            let foodCards = {id:id, status:this.foodCards[index].sellingState}
+            this.$http.post('/seller/products/update',foodCards,{
+                headers: {
+                'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
+                }
+            }).catch(error=>{
+                console.log(error.response)
+            })
         },
         deleteProduct(id){
             var index = this.foodCards.findIndex(i => i.foodId === id);
-            console.log(index)
+            let foodCards = {id:id}
+            this.$http.post('/seller/products/delete',foodCards,{
+                headers: {
+                'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
+                }
+            }).catch(error=>{
+                console.log(error.response)
+            })
             this.foodCards.splice(index,1);
         },
         sortOrder:function(a, b){
@@ -243,12 +262,16 @@ export default {
           let data=response.data;
           for (let i=0;i<data.length;i++) {     
               this.foodCards.push({sellingState:data[i].status, soldOut:data[i].sold_out, foodId: data[i].id, foodName: data[i].name, price:data[i].price, imgPath: 'https://placekitten.com/300/300', foodDescription: data[i].description, foodTag:data[i].category_name});}
+              this.foodCards = this.foodCards.sort(function (a, b) {
+                return a.foodName - b.foodName
+                });
             }
         )
         this.$http.get('/restaurants/'+id+'/category')
             .then(response => {
             this.foodCategories=[];
             let data=response.data;
+            console.log(data)
             for (let i=0;i<data.length;i++) this.foodCategories.push({foodCategory: data[i].name, order: data[i].display_order, hover:false});}
             )
         this.foodCategories.sort(function(a,b){
@@ -257,6 +280,26 @@ export default {
         this.$bus.$on("updateTab", msg => {
             this.updateTab(msg);
         });
+
+    },
+    mounted(){
+        function setfbacksize()
+        {
+          let food = document.querySelector('#shopbody')
+          let back = document.querySelectorAll('.fback')
+          if(food == null || back==null) {
+            setTimeout(setfbacksize.bind(this),100)
+          }
+          else {
+            for(let i=0;i<back.length;i++)
+            {
+                console.log(food)
+                back[i].style.minWidth= (shopbody.clientWidth).toString() +'px'
+            }
+                
+          }
+        }
+        setfbacksize()
     }
 }
 </script>
@@ -274,6 +317,7 @@ export default {
 }
 .fback{
     background-color:#FFFFFF
+    
 }
 .addFoodCard{
     min-height: 188.36px;

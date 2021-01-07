@@ -1,5 +1,5 @@
 <template>
-    <div class="col-md-4 card-body" v-b-hover="hoverCard" @click="showModal">
+    <div class="col-md-6 card-body" v-b-hover="hoverCard" @click="showModal">
         <b-modal id="modal-sm" size="sm" ref="my-modal" hide-header hide-footer hide-header-close>
             <div class="container">
                 <b-img :src="imgPath" fluid alt="Responsive image"></b-img>

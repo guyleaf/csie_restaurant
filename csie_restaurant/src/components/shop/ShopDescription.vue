@@ -1,5 +1,5 @@
 <template>
-    <div class='container'>
+    <div class='container' id="shopbody">
         <div class='row'>
             <div class='tag'>關於賣場</div>
         </div>

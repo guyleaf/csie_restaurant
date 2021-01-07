@@ -38,10 +38,10 @@
     props:{
         shopName: String,
         imgPath: String,
-        commodity: Number,
-        fans: Number,
-        joinDate: Date,
-        rate: Number
+        commodity: String,
+        fans: String,
+        joinDate: String,
+        rate: String
         
     }
 }

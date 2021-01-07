@@ -31,7 +31,7 @@ export default {
         products: Array,
         discount: Number,
         money: Number,
-        expire: Date,
+        expire: String,
         type: Number,
     },
     created:{

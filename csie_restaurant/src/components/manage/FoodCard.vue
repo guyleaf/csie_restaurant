@@ -1,5 +1,5 @@
 <template>
-    <div class="col-md-4 card-body" v-b-hover="hoverCard">
+    <div class="col-md-6 card-body" v-b-hover="hoverCard">
         <b-modal id="modal-sm" size="sm" ref="my-modal" hide-header hide-footer hide-header-close>
             <div class="container">
                 <input type="file" accept="image/*" @change="previewImage" id="upload">
@@ -12,7 +12,7 @@
                     :state="nameState">
                     <b-form-input
                         ref="name-input"
-                        v-model="foodName"
+                        v-model="vfoodName"
                         :state="nameState"
                         required>{{foodName}}</b-form-input>
                     </b-form-group>
@@ -23,7 +23,7 @@
                     :state="descriptionState">
                     <b-form-input
                         ref="description-input"
-                        v-model="foodDescription"
+                        v-model="vfoodDescription"
                         :state="descriptionState"   type="text"
                         required>{{ foodDescription }}</b-form-input>
                     </b-form-group>
@@ -34,7 +34,7 @@
                     :state="priceState">
                     <b-form-input
                         ref="price-input"
-                        v-model="price"
+                        v-model="vprice"
                         :state="priceState" type="text"
                         required>{{ price }}</b-form-input>
                     </b-form-group>
@@ -47,7 +47,6 @@
         </b-modal>
         <b-card tag="article" no-body>
             <img :src="noStock" class="soldOut" v-if="this.soldOut" /> 
-       
             <div class='row card-body' v-bind:class="{'outOfStock':this.soldOut}">
                 <b-col md='6' >
                     <b-card-title> {{foodName}} </b-card-title>
@@ -61,22 +60,6 @@
                     class="rounded-0">
                     </b-card-img>
                 </b-col>
-       
-                <!-- <b-popover 
-                    :target="'target-'+this.foodId" 
-                    triggers="hover" 
-                    fallback-placement="clockwise" 
-                    placement="bottom"
-                    custom-class="option"
-                    >
-                    <template #title>操作選項</template>
-                        <b-list-group>
-                            <b-list-group-item href="#" variant="primary" @click="showModal">修改商品</b-list-group-item>
-                            <b-list-group-item href="#" v-if="this.sellingState" :variant="this.soldOut ? 'secondary' : 'success'" @click="changeStock">售完商品</b-list-group-item>
-                            <b-list-group-item href="#" :variant="this.sellingState ? 'warning' : 'success'" @click="changeShelf">{{ this.sellingState ?  '下' : '上'}}架商品</b-list-group-item>
-                            <b-list-group-item href="#" variant="danger"  @click="deleteProduct">刪除商品</b-list-group-item>
-                        </b-list-group>
-                </b-popover> -->
             </div>
             <b-card-footer footer-bg-variant="gray" footer-border-variant="white" class="foodCardHeader">
                 <b-row class='brow'>
@@ -102,13 +85,12 @@ export default {
         nameState:null,
         descriptionState:null,
         priceState:null,
+        vfoodName:'',
+        vfoodDescription:'',
+        vprice:'',
         preview: require('../../assets/photoupload.png'),
         noStock: require('../../assets/noStock.png'),
         image: null,
-        foodCards:
-            [
-                {id: this.foodId,  name: 'ShopRon', price:1023},
-            ] ,
       }
     },
     props:{
@@ -119,7 +101,7 @@ export default {
         price: Number,
         foodId: Number,
         soldOut: Boolean,
-        sellingState: Boolean
+        sellingState: Number
     },
     computed:{
         total: function() {
@@ -179,7 +161,11 @@ export default {
             //缺：lack of the responsive action when hover on the card
         },
         showModal() {
-            this.preview=require('../../assets/photoupload.png'),
+            this.preview=this.imgPath
+            this.image=this.imgPath
+            this.vfoodName=this.foodName
+            this.vfoodDescription=this.foodDescription
+            this.vprice=this.price
             this.$refs['my-modal'].show();
         },
         confirmModal() {
@@ -195,11 +181,13 @@ export default {
             // }
             // this.addToCookie()
             // this.$bus.$emit("addfunction",this.dataToCart);
-            // //缺：lack of return this.dataToCart to ShoppingCart.vue/CartCell.vue
-            // this.foodName = this.vName;
-            // this.foodDescription = this.vDescription;
-            // this.price = this.vPrice;
-            this.$http.post('/seller/products/update',this.foodCards[0],{
+            //缺：lack of return this.dataToCart to ShoppingCart.vue/CartCell.vue
+            let food={id: this.foodId}
+            if(this.foodName != this.vfoodName) {this.foodName = this.vfoodName; food.name=this.vfoodName}
+            if(this.foodDescription != this.vfoodDescription) {this.foodDescription = this.vfoodDescription; food.description=this.vfoodDescription}
+            if(this.price != this.vprice) {this.price = this.vprice; food.price=this.vprice}
+            if(this.imgPath != this.image) {this.imgPath = this.image; food.image=this.image}
+            this.$http.post('/seller/products/update',food,{
                 headers: {
                 'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
                 }
@@ -218,16 +206,7 @@ export default {
             this.$emit("changeStock",this.foodId)
         },
         changeShelf(){
-            this.sellingState = !this.sellingState;
-            let foodCards = [{id:this.foodId,status:this.sellingState}]
-            this.$emit("changeState",this.foodId) //Fixme
-            this.$http.post('/seller/products/update',foodCards[0],{
-                headers: {
-                'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
-                }
-            }).catch(error=>{
-                console.log(error.response)
-            })
+            this.$emit("changeState",this.foodId)
         },
         deleteProduct(){
             this.$emit("deleteProduct",this.foodId)
@@ -242,6 +221,9 @@ export default {
             return valid1 && valid2 && valid3
         },
     },
+    created(){
+        this.preview=this.imgPath
+    }
 }
 </script>
 
