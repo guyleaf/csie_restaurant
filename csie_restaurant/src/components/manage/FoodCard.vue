@@ -8,35 +8,26 @@
                     <b-form-group
                     label="Name"
                     label-for="name-input"
-                    invalid-feedback="name is required" type="text"
-                    :state="nameState">
+                    invalid-feedback="name is required" type="text">
                     <b-form-input
                         ref="name-input"
-                        v-model="foodName"
-                        :state="nameState"
-                        required>{{foodName}}</b-form-input>
+                        v-model="foodName" required>{{foodName}}</b-form-input>
                     </b-form-group>
                     <b-form-group
                     label="Description"
                     label-for="description-input"
-                    invalid-feedback="description is required"
-                    :state="descriptionState">
+                    invalid-feedback="description is required">
                     <b-form-input
                         ref="description-input"
-                        v-model="foodDescription"
-                        :state="descriptionState"   type="text"
-                        required>{{ foodDescription }}</b-form-input>
+                        v-model="foodDescription" type="text" required>{{ foodDescription }}</b-form-input>
                     </b-form-group>
                     <b-form-group
                     label="Price"
                     label-for="price-input"
-                    invalid-feedback="price is required"
-                    :state="priceState">
+                    invalid-feedback="price is required">
                     <b-form-input
                         ref="price-input"
-                        v-model="price"
-                        :state="priceState" type="text"
-                        required>{{ price }}</b-form-input>
+                        v-model="price" type="text" required>{{ price }}</b-form-input>
                     </b-form-group>
                     <div class="row m-2" style="justify-content:space-around">
                         <b-button variant="primary" @click="confirmModal" size="sm">ADD</b-button>
