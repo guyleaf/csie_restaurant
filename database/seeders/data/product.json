@@ -614,7 +614,7 @@
 		"is_deleted" : false,
 		"category_id" : 14,
 		"category_name" : "涼夏沙拉"
-	},
+},
 	{
 		"id" : 45,
 		"seller_id" : 11,
@@ -1117,7 +1117,4 @@
 		"status" : 1,
 		"is_deleted" : false,
 		"category_id" : 12,
-		"category_name" : "單點"
-	}
-	
-]
+		"category_name" : "單點"	}]
