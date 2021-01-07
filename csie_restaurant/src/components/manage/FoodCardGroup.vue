@@ -9,19 +9,23 @@
                     label="Name"
                     label-for="name-input"
                     invalid-feedback="name is required" type="text"
+                    :state="nameState"
                     >
                     <b-form-input
                         v-model="Name"
                         ref="name-input"
+                        :state="nameState"
                         required></b-form-input>
                     </b-form-group>
                     <b-form-group
                     label="Description"
                     label-for="description-input"
                     invalid-feedback="description is required"
+                    :state="descriptionState"
                     >
                     <b-form-input
                         v-model="Description"
+                        :state="descriptionState"
                         ref="description-input"
                         type="text"
                         required></b-form-input>
@@ -30,11 +34,13 @@
                     label="Price"
                     label-for="price-input"
                     invalid-feedback="price is required"
+                    :state="priceState"
                     >
                     <b-form-input
                         v-model="Price"
                         ref="price-input"
                         oninput = "value=value.replace(/[^\d]/g,'')"
+                        :state="priceState"
                         required></b-form-input>
                     </b-form-group>
                     <div class="row m-2" style="justify-content:space-around">
@@ -56,6 +62,7 @@
                         v-on="{changeStock:changeStock, changeState:changeSellingState, deleteProduct:deleteProduct}"
                         v-for="card in sameTag(category.foodCategory,true)" :key="card.foodId"
                         v-bind="card"
+                        id="foodcard"
                         :foodName="card.foodName" 
                         :imgPath="card.imgPath" 
                         :foodDescription="card.foodDescription" 
@@ -104,11 +111,14 @@ export default {
     data()
     {
         return{
-            Price:'',
-            Description:'',
-            Name:'',
+            Price:null,
+            Description:null,
+            Name:null,
             image:'',
             foodCategory:'',
+            nameState:null,
+            descriptionState:null,
+            priceState:null,
             preview: require('../../assets/photoupload.png'),
             foodCategories:[],
             foodCards:
@@ -168,13 +178,6 @@ export default {
                 'category_name': this.foodCategor,
                 'image':formdata.getAll('image')
                 }]
-                //             'name': this.Name,
-                // 'price': this.Price,
-                // 'sold_out': false,
-                // 'description': this.Description,
-                // 'status': 1,
-                // 'is_deleted': false,
-                // 'category_name': this.foodCategor,
             this.$http.post('/seller/products/add',formdata,{
                 headers: {
                 'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
@@ -188,15 +191,16 @@ export default {
         cancelModal() {
             this.preview= require('../../assets/photoupload.png'),
             this.image=''
+            this.Price=null,
+            this.Name=null,
+            this.Description=null,
             this.$refs['my-modal'].hide();
         },
         deleteModal() {
             this.$refs['my-modal'].hide();
         },
         sameTag:function(category,state){
-            if(state) state = 1;
-            else state = 0;
-            return this.foodCards.filter(i => i.foodTag === category && i.sellingState === state)
+            return this.foodCards.filter(i => i.foodTag === category && i.sellingState == state)
         },
         showModal(foodCategory) {
             this.foodCategory=foodCategory
@@ -206,8 +210,8 @@ export default {
         changeStock(id){
             var index = this.foodCards.findIndex(i => i.foodId === id);
             this.foodCards[index].soldOut = !this.foodCards[index].soldOut 
-            let foodCards = [{id:id, sold_out:this.foodCards[index].soldOut}]
-            this.$http.post('/seller/products/update',foodCards[0],{
+            let foodCards = {id:id, sold_out:this.foodCards[index].soldOut}
+            this.$http.post('/seller/products/update',foodCards,{
                 headers: {
                 'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
                 }
@@ -217,7 +221,16 @@ export default {
         },
         changeSellingState(id){
             var index = this.foodCards.findIndex(i => i.foodId === id);
-            this.foodCards[index].sellingState = !this.foodCards[index].sellingState;
+            this.foodCards[index].sellingState = !this.foodCards[index].sellingState
+            let foodCards = {id:id, status:this.foodCards[index].sellingState}
+            this.$http.post('/seller/products/update',foodCards,{
+                headers: {
+                'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
+                }
+            }).catch(error=>{
+                console.log(error.response)
+            })
+            console.log(this.foodCards[index].sellingState)
         },
         deleteProduct(id){
             var index = this.foodCards.findIndex(i => i.foodId === id);
@@ -257,6 +270,11 @@ export default {
         this.$bus.$on("updateTab", msg => {
             this.updateTab(msg);
         });
+
+    },
+    mounted(){
+        let food = document.querySelector("#foodcard")
+        console.log(food)
     }
 }
 </script>
@@ -274,6 +292,7 @@ export default {
 }
 .fback{
     background-color:#FFFFFF
+    
 }
 .addFoodCard{
     min-height: 188.36px;

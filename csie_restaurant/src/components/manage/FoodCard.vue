@@ -61,22 +61,6 @@
                     class="rounded-0">
                     </b-card-img>
                 </b-col>
-       
-                <!-- <b-popover 
-                    :target="'target-'+this.foodId" 
-                    triggers="hover" 
-                    fallback-placement="clockwise" 
-                    placement="bottom"
-                    custom-class="option"
-                    >
-                    <template #title>操作選項</template>
-                        <b-list-group>
-                            <b-list-group-item href="#" variant="primary" @click="showModal">修改商品</b-list-group-item>
-                            <b-list-group-item href="#" v-if="this.sellingState" :variant="this.soldOut ? 'secondary' : 'success'" @click="changeStock">售完商品</b-list-group-item>
-                            <b-list-group-item href="#" :variant="this.sellingState ? 'warning' : 'success'" @click="changeShelf">{{ this.sellingState ?  '下' : '上'}}架商品</b-list-group-item>
-                            <b-list-group-item href="#" variant="danger"  @click="deleteProduct">刪除商品</b-list-group-item>
-                        </b-list-group>
-                </b-popover> -->
             </div>
             <b-card-footer footer-bg-variant="gray" footer-border-variant="white" class="foodCardHeader">
                 <b-row class='brow'>
@@ -105,10 +89,6 @@ export default {
         preview: require('../../assets/photoupload.png'),
         noStock: require('../../assets/noStock.png'),
         image: null,
-        foodCards:
-            [
-                {id: this.foodId,  name: 'ShopRon', price:1023},
-            ] ,
       }
     },
     props:{
@@ -118,8 +98,8 @@ export default {
         foodDescription: String,
         price: Number,
         foodId: Number,
-        soldOut: Boolean,
-        sellingState: Boolean
+        soldOut: Number,
+        sellingState: Number
     },
     computed:{
         total: function() {
@@ -179,7 +159,7 @@ export default {
             //缺：lack of the responsive action when hover on the card
         },
         showModal() {
-            this.preview=require('../../assets/photoupload.png'),
+            this.preview=this.imgPath,
             this.$refs['my-modal'].show();
         },
         confirmModal() {
@@ -195,7 +175,7 @@ export default {
             // }
             // this.addToCookie()
             // this.$bus.$emit("addfunction",this.dataToCart);
-            // //缺：lack of return this.dataToCart to ShoppingCart.vue/CartCell.vue
+            //缺：lack of return this.dataToCart to ShoppingCart.vue/CartCell.vue
             // this.foodName = this.vName;
             // this.foodDescription = this.vDescription;
             // this.price = this.vPrice;
@@ -218,16 +198,7 @@ export default {
             this.$emit("changeStock",this.foodId)
         },
         changeShelf(){
-            this.sellingState = !this.sellingState;
-            let foodCards = [{id:this.foodId,status:this.sellingState}]
-            this.$emit("changeState",this.foodId) //Fixme
-            this.$http.post('/seller/products/update',foodCards[0],{
-                headers: {
-                'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
-                }
-            }).catch(error=>{
-                console.log(error.response)
-            })
+            this.$emit("changeState",this.foodId)
         },
         deleteProduct(){
             this.$emit("deleteProduct",this.foodId)
@@ -242,6 +213,10 @@ export default {
             return valid1 && valid2 && valid3
         },
     },
+    created(){
+        this.image=this.imgPath
+        this.preview=this.imgPath
+    }
 }
 </script>
 
