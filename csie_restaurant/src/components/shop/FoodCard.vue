@@ -88,6 +88,7 @@ export default {
             else productNum = 1;
             if(this.$cookie.get("product")==null) 
             {   
+                console.log(this.data)
                 this.$cookie.set('shopId',this.$router.currentRoute.params.id)
                 this.$cookie.set('shopName',this.$router.currentRoute.params.shopName)
                 this.$cookie.set('product', JSON.stringify(this.data))

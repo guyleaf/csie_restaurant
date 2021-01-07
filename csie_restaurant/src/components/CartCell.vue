@@ -2,7 +2,7 @@
     <div>
         <b-card no-body class="over-flow-hidden" style="max-width: 540px; border:none">
             <b-row no-gutters class="align-items-center prbody">
-                <b-col md="5" @click="modifySpinValue">
+                <b-col md="5">
                     <b-form-spinbutton id="sb-inline" min="1" v-model="foodSpinValue" inline step size="sm" style="width:7rem"></b-form-spinbutton>
                 </b-col>
                 <b-col md="5">
@@ -27,11 +27,21 @@ export default {
         index: Number
     },
     methods: {
-        modifySpinValue(){
-            if(this.foodSpinValue >=2 ){ 
-                this.$emit("spinClick",this.foodSpinValue); 
-            }
-        },
+        // modifySpinValue(){
+        //     if(this.foodSpinValue >=1 ){
+        //         let productCookie = JSON.parse(this.$cookie.get("product"));
+                
+        //         for (let i = 0; i<productCookie.length; i++){
+        //             if(productCookie[i].foodName == this.foodName){
+        //                 productCookie[i].foodSpinValue = this.foodSpinValue
+        //                 console.log(productCookie)
+        //             }
+        //         }
+        //         document.cookie = 'product=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
+        //         this.$cookie.set('product', JSON.stringify(productCookie))
+        //         this.$emit("spinClick",this.foodSpinValue); 
+        //     }
+        // },
         deleteitem(){
             this.$emit("deleteclick",this.index)
         }
@@ -43,7 +53,19 @@ export default {
   },
     watch: {
         foodSpinValue: function(){
-            this.$emit("spinClick",this.index,this.foodSpinValue)
+            if(this.foodSpinValue >=1 ){
+                let productCookie = JSON.parse(this.$cookie.get("product"));
+                
+                for (let i = 0; i<productCookie.length; i++){
+                    if(productCookie[i].foodName == this.foodName){
+                        productCookie[i].foodSpinValue = this.foodSpinValue
+                        console.log(productCookie)
+                    }
+                }
+                document.cookie = 'product=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
+                this.$cookie.set('product', JSON.stringify(productCookie))
+                this.$emit("spinClick",this.index,this.foodSpinValue)
+            }
         }
     },
 }
