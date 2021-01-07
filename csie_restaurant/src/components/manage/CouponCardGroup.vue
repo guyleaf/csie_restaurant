@@ -1,41 +1,120 @@
 <template>
     <div class="container">
         <div style="background-color:white">
-            <div class='tag mt-5'>優惠卷</div>
+            <div class='tag mt-5'>優惠卷  <b-button squared class="ml-5" size="sm" variant="outline-danger" @click="addCoupon">新增</b-button> </div>
             <div class='couponField mb-5' style='display:flex; flex-direction:row; '>
                 <div v-for="coupon in couponCards" :key="coupon['coupon'].id">
-                    <CouponCard :code="coupon['coupon'].code" :products="coupon['coupon_items']" :discount="coupon['coupon'].discount*100" 
+                    <CouponCard :id="coupon['coupon'].coupon_id" :code="coupon['coupon'].code" :products="coupon['coupon_items']" :discount="coupon['coupon'].discount" 
                     :limitMoney="coupon['coupon'].limit_money" :start="coupon['coupon'].start_time" :expire="coupon['coupon'].end_time" :type="coupon['coupon'].type"/>
                 </div>
             </div>
         </div>
+        <b-modal id="modal-lg" size="lg" ref="my-modal" hide-header hide-footer hide-header-close>
+            <div class="container">
+                <div class="m-2">
+                    <h4>優惠卷: {{code}}</h4>
+                    <br>
+                    <b-form-group class="mb-3"
+                    label="優惠類型"
+                    label-for="type-input"
+                    invalid-feedback="type is required">
+                    <b-form-radio v-model="typeSelected" name="some-radios" value="0">免運費</b-form-radio>
+                    <b-form-radio v-model="typeSelected" name="some-radios" value="1">滿額折扣</b-form-radio>
+                    <b-form-radio v-model="typeSelected" name="some-radios" value="2">優惠套餐</b-form-radio>
+                    </b-form-group>
+                    <b-form-group  v-if="typeSelected==2"
+                    label="滿額"
+                    label-for="discount-input"
+                    invalid-feedback="discount is required">
+                    <b-form-input
+                        ref="type-input"
+                        v-model="money"  type="text" required>{{money}}</b-form-input></b-form-group>
+                    <b-form-group
+                    label="折扣(請輸入小數)"
+                    label-for="discount-input"
+                    invalid-feedback="discount is required">
+                    <b-form-input 
+                        ref="discount-input"
+                        v-model="discount" required>{{ discount }}</b-form-input>
+                    </b-form-group>
+                    <div style="display:flex; justify-content:space-around;">
+                        <div style="display:inline-flex; flex-wrap:nowrap;"> 
+                            <div class="mt-2 mr-3">開始時間 </div>
+                            <div>
+                                <date-picker v-model="startDate" :config="options"></date-picker>
+                            </div>
+                        </div>
+                        <div style="display:inline-flex; flex-wrap:nowrap;">
+                            <div class="mt-2 mr-3">結束時間</div>
+                            <div><date-picker v-model="expireDate" :config="options"></date-picker></div>
+                        </div>
+                    </div>
+                    <div class="row m-2" style="justify-content:space-around">
+                        <b-button variant="primary" @click="confirmModal" size="sm">新增</b-button>
+                        <b-button variant="info" @click="cancelModal" size="sm">取消</b-button>
+                    </div>
+                </div>
+            </div> 
+        </b-modal>
     </div>
 </template>
 
 <script>
 import CouponCard from "@/components/manage/CouponCard.vue";
+import datePicker from 'vue-bootstrap-datetimepicker';
+import 'pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css';
 export default {
     name: "CouponCardGroup",
     components: {
         CouponCard,
+        datePicker,
     },
     props:{
     },
     data()
     {
         return{
+            code:'',
             couponCards:[] , 
+            options: {
+                format: 'YYYY-MM-DD hh:mm:ss',
+                sideBySide: true,
+                useCurrent: false,
+            }    
         }
     }, 
     methods:{
+        addCoupon(){
+            this.code = this.makeCode();
+            this.$refs['my-modal'].show();
+        },
+        makeCode() {
+            let result           = '';
+            let characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let charactersLength = characters.length;
+            for ( var i = 0; i < 6; i++ ) {
+                result += characters.charAt(Math.floor(Math.random() * charactersLength));
+            }
+            return result;
+        },
+        confirmModal(){
+            this.$refs['my-modal'].hide();
+        },
+        cancelModal(){
+            this.$refs['my-modal'].hide();
+        }
     },
     created(){
         let id =this.$store.getters['auth/user'].id
         this.$http.get('restaurants/' + id + '/coupons' + '?include_expired=1'). //FIXME  ?include_expired=1要移除
         then(response => {
-            this.couponCards=response.data;
-            console.log('Get啦coupons:',this.couponCards);
-        })
+            let data=response.data;
+            this.couponCards = data;
+        });
+    },
+    computed(){
+        
+        
     }
 }
 </script>

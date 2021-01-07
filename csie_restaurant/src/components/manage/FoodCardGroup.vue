@@ -258,11 +258,12 @@ export default {
         let id =this.$store.getters['auth/user'].id
         this.$http.get('restaurants/'+id+'/products')
         .then(response => {
-          this.foodCards=[];
-          let data=response.data;
-          for (let i=0;i<data.length;i++) {     
-              this.foodCards.push({sellingState:data[i].status, soldOut:data[i].sold_out, foodId: data[i].id, foodName: data[i].name, price:data[i].price, imgPath: 'https://placekitten.com/300/300', foodDescription: data[i].description, foodTag:data[i].category_name});}
-              this.foodCards = this.foodCards.sort(function (a, b) {
+            this.foodCards=[];
+            let data=response.data;
+            for (let i=0;i<data.length;i++) {     
+                this.foodCards.push({sellingState:data[i].status, soldOut:data[i].sold_out, foodId: data[i].id, foodName: data[i].name, price:data[i].price, imgPath: 'https://placekitten.com/300/300', foodDescription: data[i].description, foodTag:data[i].category_name});}
+           
+            this.foodCards = this.foodCards.sort(function (a, b) {
                 return a.foodName - b.foodName
                 });
             }

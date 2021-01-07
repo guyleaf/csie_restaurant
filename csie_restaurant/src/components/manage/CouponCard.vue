@@ -7,14 +7,14 @@
                 <a>滿{{limitMoney}}元 </a><a style="color:red;">免運費</a>
             </b-card-text>
             <b-card-text v-if="type === 1">
-                <a>滿{{limitMoney}}元 </a><a style="color:red;">{{discount}}%off</a>
+                <a>滿{{limitMoney}}元 </a><a style="color:red;">{{discount*100}}%off</a>
             </b-card-text>
             <b-card-text v-if="type === 2">
                 <a v-for="(product, index) in products" :key="product.product_id">
                     {{product.quantity}} {{product.name}}
                     <a v-if="index != products.length-1 ">+</a>  
                 </a>
-                <a style="color:red;">{{discount}}%off</a>
+                <a style="color:red;">{{discount*100}}%off</a>
             </b-card-text>
             <b-card-text>開始:{{start}}</b-card-text>
             <b-card-text>結束:{{expire}}</b-card-text>
@@ -45,7 +45,7 @@
                         v-model="money"  type="text" required></b-form-input>
                     </b-form-group>
                     <b-form-group
-                    label="折扣"
+                    label="折扣(請輸入小數)"
                     label-for="discount-input"
                     invalid-feedback="discount is required">
                     <b-form-input 
@@ -95,6 +95,7 @@ export default {
       }
     },
     props:{
+        id: Number,
         code: String,
         products: Array,
         discount: Number,
@@ -164,7 +165,6 @@ export default {
                 this.expire = this.expireDate;
                 this.$refs['my-modal'].hide();
             }
-            JSON.stringify(this.products);
     /*"coupon": {
       "id": 12,
       "code": "bPhZha",
@@ -183,9 +183,9 @@ export default {
       }
     ]
   },*/
-            this.info = [{'coupon':{code:this.code, start_time:this.start, end_time:this.expire, type:this.type, discount:this.discount, limit_money:this.limitMoney}}]
+            this.info = {'coupon':{code:this.code, start_time:this.start, end_time:this.expire, type:this.type, discount:this.discount, limit_money:this.limitMoney}}
             //api
-            this.$http.post('/seller/coupons/update',this.info[0],{
+            this.$http.post('/seller/coupons/update',this.info,{
                 headers: {
                 'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
                 }
