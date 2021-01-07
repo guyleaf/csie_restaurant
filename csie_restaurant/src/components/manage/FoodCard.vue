@@ -103,7 +103,8 @@ export default {
         price: Number,
         foodId: Number,
         soldOut: Boolean,
-        sellingState: Number
+        sellingState: Number,
+        foodId: Number,
     },
     computed:{
         total: function() {

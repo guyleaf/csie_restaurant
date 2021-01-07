@@ -68,12 +68,6 @@
                         v-on="{changeStock:changeStock, changeState:changeSellingState, deleteProduct:deleteProduct}"
                         v-for="card in sameTag(category.foodCategory,true)" :key="card.foodId"
                         v-bind="card"
-                        id="foodcard"
-                        :foodName="card.foodName" 
-                        :imgPath="card.imgPath" 
-                        :foodDescription="card.foodDescription" 
-                        :foodTag="card.foodTag"
-                        :sellingState="card.sellingState"
                     />
                     <div class="col-md-6 card-body">
                         <b-card tag="article" class="addFoodCard">
