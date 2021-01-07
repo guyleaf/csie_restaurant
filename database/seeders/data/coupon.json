@@ -198,5 +198,44 @@
 		"type" : 1,
 		"discount" : 0.68,
 		"limit_money" : 499.0
-	}
+	},
+	{
+		"id" : 21,
+		"code" : "AmQ66E",
+		"member_id" : 12,
+		"start_time" : "2021-01-03T00:00:00.000Z",
+		"end_time" : "2021-01-05T00:00:00.000Z",
+		"type" : 0,
+		"discount" : 1.0,
+		"limit_money" : 99.0
+	},
+	{
+		"id" : 22,
+		"code" : "QQr42W",
+		"member_id" : 12,
+		"start_time" : "2021-02-20T12:00:00.000Z",
+		"end_time" : "2021-10-22T12:00:00.000Z",
+		"type" : 0,
+		"discount" : 1.0,
+		"limit_money" : 179.0
+	},
+	{
+		"id" : 23,
+		"code" : "QsD26W",
+		"member_id" : 12,
+		"start_time" : "2021-01-01T00:00:00.000Z",
+		"end_time" : "2021-01-10T23:99:00.000Z",
+		"type" : 1,
+		"discount" : 0.9,
+		"limit_money" : 188.0
+	},
+	{
+		"id" : 24,
+		"code" : "Q4f87f",
+		"member_id" : 12,
+		"start_time" : "2021-12-25T16:00:00.000Z",
+		"end_time" : "2021-12-26T16:00:00.000Z",
+		"type" : 1,
+		"discount" : 0.79,
+		"limit_money" : 399.0	}
 ]

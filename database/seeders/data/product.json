@@ -614,7 +614,7 @@
 		"is_deleted" : false,
 		"category_id" : 14,
 		"category_name" : "涼夏沙拉"
-	},
+},
 	{
 		"id" : 45,
 		"seller_id" : 11,
@@ -662,7 +662,7 @@
 		"seller_id" : 3,
 		"name" : "完美日曬耶加雪菲",
 		"price" : 95,
-		"sold_out" : false,
+		"sold_out" : true,
 		"description" : "有日曬的味道",
 		"publish_time" : "2018-03-28T07:39:30.000Z",
 		"modified_time" : "2019-04-27T16:00:00.000Z",
@@ -690,7 +690,7 @@
 		"seller_id" : 3,
 		"name" : "曼特寧 迦佑山G1",
 		"price" : 80,
-		"sold_out" : false,
+		"sold_out" : true,
 		"description" : "有咖啡的味道",
 		"publish_time" : "2018-03-28T07:39:30.000Z",
 		"modified_time" : "2019-04-27T16:00:00.000Z",
@@ -1117,7 +1117,4 @@
 		"status" : 1,
 		"is_deleted" : false,
 		"category_id" : 12,
-		"category_name" : "單點"
-	}
-
-]
+		"category_name" : "單點"	}]
