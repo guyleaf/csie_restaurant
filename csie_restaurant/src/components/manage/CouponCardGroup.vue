@@ -93,12 +93,18 @@ export default {
             couponProductNum:1,
             spinValue:1,
             allProducts:[],
-             sizes: ['Small', 'Medium', 'Large', 'Extra Large']
+            allProductName:[],
         }
     }, 
     methods:{
         addCoupon(){
             this.code = this.makeCode();
+            // this.couponProductNum = 1;
+            // this.couponProduct = [];
+            // this.$bus.$on('getAllProducts',  msg=>{
+            //     this.getAllProducts(msg);
+            //     console.log('on',msg)
+            // });
             this.$refs['my-modal'].show();
         },
         makeCode() {
@@ -111,11 +117,29 @@ export default {
             return result;
         },
         confirmModal(){
-            for (let i = 1; i<this.couponProductNum+1; i++){
-                let option = document.querySelector('#option_'+i).value
-                let spinValue = document.querySelector('#sb_'+i).value
-                this.couponProduct.push({option:option, spinValue:spinValue})
+            //FIXME 防呆input錯誤
+            let couponAll = {'coupon':{}, "coupon_items":null };
+            if(this.money == undefined) this.money = null; 
+            couponAll['coupon'] = {code:this.code, start_time:this.startDate, end_time:this.expireDate, numberOfUsage: 100, //FIXME numberOfUsae
+                                    type:parseInt(this.typeSelected), discount:parseFloat(this.discount), limit_money:this.money }
+            if(this.typeSelected ==2 ){
+                for (let i = 1; i<this.couponProductNum+1; i++){
+                    let name = document.querySelector('#option_'+i).value
+                    let spinValue = document.querySelector('#sb_'+i).value
+                    let index = this.allProductName.indexOf(name)
+                    // console.log(index, this.allProducts[index].name);
+                    couponAll['coupon_items'].push({product_id:this.allProducts[index].id, quantity:spinValue, name:this.allProducts[index].name})
+                }
             }
+            
+            console.log(couponAll);
+            this.$http.post('/seller/coupons/add',couponAll,{
+                headers: {
+                'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
+                }
+            }).catch(error=>{
+                console.log(error.response)
+            })
             this.$refs['my-modal'].hide();
         },
         cancelModal(){
@@ -123,11 +147,12 @@ export default {
         },
         getAllProducts(msg){
             this.allProducts = [];
+            this.allProductName = [];
             // {sellingState:data[i].status, soldOut:data[i].sold_out, foodId: data[i].id, foodName: data[i].name, price:data[i].price, });}
             for(let i=0; i<msg.length; i++){
                 this.allProducts.push({id:msg[i].foodId, name:msg[i].foodName, price:msg[i].price, sellingState: msg[i].sellingState});
+                this.allProductName.push(msg[i].foodName);
             }
-            console.log('etAll', this.allProducts)
         },
         addCouponProduct(){
             this.couponProductNum += 1;
@@ -137,13 +162,13 @@ export default {
         let id =this.$store.getters['auth/user'].id
         this.$http.get('restaurants/' + id + '/coupons' + '?include_expired=1'). //FIXME  ?include_expired=1要移除
         then(response => {
-            let data=response.data;
-            this.couponCards = data;
+            this.couponCards = response.data;
+            // console.log(this.couponCards);
         });
         this.$bus.$on('getAllProducts',  msg=>{
-            this.getAllProducts(msg);
-            console.log('on',msg)
-        });
+                this.getAllProducts(msg);
+            });
+        
     },
     computed(){
         

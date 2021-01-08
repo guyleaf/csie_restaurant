@@ -295,7 +295,7 @@ export default {
             {
             let food = document.querySelector('#shopbody')
             let back = document.querySelector(id)
-            console.log(back)
+            // console.log(back)
             if(food == null || back==null) {
                 setTimeout(setfbacksize.bind(this,id),100)
             }
@@ -309,21 +309,20 @@ export default {
         .then(response => {
           this.foodCards=[];
           let data=response.data;
-          console.log(response.data)
+        //   console.log(response.data)
           for (let i=0;i<data.length;i++) {     
               this.foodCards.push({sellingState:data[i].status, soldOut:data[i].sold_out, foodId: data[i].id, foodName: data[i].name, price:data[i].price, imgPath: this.$url + data[i].image_path, foodDescription: data[i].description, foodTag:data[i].category_name});}
               this.foodCards = this.foodCards.sort(function (a, b) {
                 return a.foodName - b.foodName
                 });
             this.$bus.$emit("getAllProducts",this.foodCards);
-            console.log('emit', this.foodCards);
             
         })
         this.$http.get('/restaurants/'+id+'/category')
             .then(response => {
             this.foodCategories=[];
             let data=response.data;
-            console.log(data)
+            // console.log(data)
             for (let i=0;i<data.length;i++) this.foodCategories.push({foodCategory: data[i].name, order: data[i].display_order, hover:false});}
             )
         this.foodCategories.sort(function(a,b){
