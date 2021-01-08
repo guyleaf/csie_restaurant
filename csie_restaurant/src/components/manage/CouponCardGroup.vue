@@ -6,7 +6,7 @@
                 <div v-for="coupon in couponCards" :key="coupon['coupon'].id">
                     <CouponCard :id="coupon['coupon'].coupon_id" :code="coupon['coupon'].code" :products="coupon['coupon_items']" :discount="coupon['coupon'].discount" 
                     :limitMoney="coupon['coupon'].limit_money" :start="coupon['coupon'].start_time" :expire="coupon['coupon'].end_time" :type="coupon['coupon'].type"
-                    :allProducts="allProducts"/>
+                    :allProducts="allProducts" :allProductName="allProductName"/>
                 </div>
             </div>
         </div>
@@ -27,8 +27,8 @@
                     </div>
                     </b-form-radio-group>
                     </b-form-group>
-                    <a v-if="typeSelected==0">滿額</a><b-form-input v-if="typeSelected==0" v-model="money" :placeholder="limitMoney+shipFreeHint" type="text" style="width:50%;" required></b-form-input>
-                    <a v-if="typeSelected==1">滿額</a><b-form-input v-if="typeSelected==1" v-model="money" :placeholder="limitMoney+limitHint" type="text" style="width:50%;" required></b-form-input>
+                    <a v-if="typeSelected==0">滿額</a><b-form-input v-if="typeSelected==0" v-model="money" placeholder="XX元免運費" type="text" style="width:50%;" required></b-form-input>
+                    <a v-if="typeSelected==1">滿額</a><b-form-input v-if="typeSelected==1" v-model="money" placeholder="XX元打折" type="text" style="width:50%;" required></b-form-input>
                     <b-form-group label="優惠商品" v-if="typeSelected==2">
                         <div :id="'coupon_product_'+num" class="row cp_pd" v-for="num in couponProductNum" :key="num">
                             <div class="col-md-8 ">
@@ -43,7 +43,7 @@
                         </div>
                         <b-button variant="outline-primary" @click="addCouponProduct">新增優惠商品</b-button>
                     </b-form-group>
-                    <a v-if="typeSelected==1 || typeSelected==2">折扣</a><b-form-input v-if="typeSelected ==1||typeSelected ==2" v-model="discount" :placeholder="discount+discountHint" type="text" style="width:50%;" required></b-form-input>
+                    <a v-if="typeSelected==1 || typeSelected==2">折扣</a><b-form-input v-if="typeSelected ==1||typeSelected ==2" v-model="discount" placeholder="請輸入小數" type="text" style="width:50%;" required></b-form-input>
                     <div style="display:flex; justify-content:space-around;">
                         <div style="display:inline-flex; flex-wrap:nowrap;"> 
                             <div class="mt-2 mr-3">開始時間 </div>
@@ -120,6 +120,7 @@ export default {
             //FIXME 防呆input錯誤
             let couponAll = {'coupon':{}, "coupon_items":null };
             if(this.money == undefined) this.money = null; 
+            if(parseInt(this.typeSelected) == 0) this.discount = 1;
             couponAll['coupon'] = {code:this.code, start_time:this.startDate, end_time:this.expireDate, numberOfUsage: 100, //FIXME numberOfUsae
                                     type:parseInt(this.typeSelected), discount:parseFloat(this.discount), limit_money:this.money }
             if(this.typeSelected ==2 ){
@@ -128,11 +129,11 @@ export default {
                     let spinValue = document.querySelector('#sb_'+i).value
                     let index = this.allProductName.indexOf(name)
                     // console.log(index, this.allProducts[index].name);
-                    couponAll['coupon_items'].push({product_id:this.allProducts[index].id, quantity:spinValue, name:this.allProducts[index].name})
+                    couponAll['coupon_items'].push({product_id:this.allProducts[index].id, quantity:parseInt(spinValue), name:this.allProducts[index].name})
                 }
             }
-            
             console.log(couponAll);
+
             this.$http.post('/seller/coupons/add',couponAll,{
                 headers: {
                 'Authorization': 'Bearer ' + this.$store.getters['auth/token'],

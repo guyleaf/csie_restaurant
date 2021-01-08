@@ -7,14 +7,14 @@
                 <a>滿{{limitMoney}}元 </a><a style="color:red;">免運費</a>
             </b-card-text>
             <b-card-text v-if="type === 1">
-                <a>滿{{limitMoney}}元 </a><a style="color:red;">{{discount*100}}%off</a>
+                <a>滿{{limitMoney}}元 </a><a style="color:red;">{{showDiscount}}%off</a>
             </b-card-text>
             <b-card-text v-if="type === 2">
                 <a v-for="(product, index) in products" :key="product.product_id">
                     {{product.quantity}} {{product.name}}
                     <a v-if="index != products.length-1 ">+</a>  
                 </a>
-                <a style="color:red;">{{discount*100}}%off</a>
+                <a style="color:red;">{{showDiscount}}%off</a>
             </b-card-text>
             <b-card-text>開始:{{start}}</b-card-text>
             <b-card-text>結束:{{expire}}</b-card-text>
@@ -99,6 +99,7 @@ export default {
     data() {
       return {
         info:{},    
+        showDiscount: Math.round((1-this.discount)*100),
         shipFreeHint:'元免運費',
         limitHint:'元',
         discountHint:'(請輸入小數)',
@@ -111,7 +112,6 @@ export default {
         couponProduct:[],
         couponProductNum:1,
         spinValue:1,
-        AllProducts: this.allProducts
       }
     },
     props:{
@@ -124,6 +124,7 @@ export default {
         expire: Date,
         type: Number,
         allProducts: Array,
+        allProductName: Array,
     },
     created:{
 
@@ -175,15 +176,44 @@ export default {
                 this.expire = this.expireDate;
                 this.$refs['my-modal'].hide();
             }
-            // for (let i = 1; i<this.allProducts.length +1; i++){
-            //     let option = document.querySelector('#option_'+i).value
-            //     let spinValue = document.querySelector('#sb_'+i).value
-            //     this.couponProduct.push({option:option, spinValue:spinValue})
-            // } //FIXME
-            this.info = {'coupon':{code:this.code, start_time:this.start, end_time:this.expire, type:this.type, discount:this.discount, limit_money:this.limitMoney}}
-            console.log('updateCoupon:',this.info);
+            let couponAll = {'coupon':{}, "coupon_items":null };
+            if(this.money == undefined) this.money = null; 
+            if(parseInt(this.typeSelected) == 0) this.discount = 1;
+            couponAll['coupon'] = {code:this.code, start_time:this.start, end_time:this.expire, numberOfUsage: 100, //FIXME numberOfUsae
+                                    type:parseInt(this.typeSelected), discount:parseFloat(this.discount), limit_money:this.money };
+            if(this.typeSelected ==2 ){
+                this.info=[];
+                for (let i = 1; i<this.couponProductNum+1; i++){
+                    let name = document.querySelector('#option_'+i).value
+                    let spinValue = document.querySelector('#sb_'+i).value
+                    let index = this.allProductName.indexOf(name)
+                    console.log(index, this.allProducts[index].name);
+                    console.log(index, this.allProducts[index].id);
+                    console.log(index, spinValue);
+                    this.info.push({product_id:this.allProducts[index].id, quantity:parseInt(spinValue), name:this.allProducts[index].name})
+                    // couponAll['coupon_items'].push({product_id:this.allProducts[index].id, quantity:spinValue, name:this.allProducts[index].name})
+                }
+            }
+            couponAll['coupon_items'] = this.info;
+            console.log('updateCoupon2:', couponAll);
+            
+            //new 
+            // let couponAll = {'coupon':{}, "coupon_items":null };
+            // if(this.money == undefined) this.money = null; 
+            // if(parseInt(this.typeSelected) == 1) this.discount = 1;
+            // couponAll['coupon'] = {code:this.code, start_time:this.startDate, end_time:this.expireDate, numberOfUsage: 100, //FIXME numberOfUsae
+            //                         type:parseInt(this.typeSelected), discount:parseFloat(this.discount), limit_money:this.money }
+            // if(this.typeSelected ==2 ){
+            //     for (let i = 1; i<this.couponProductNum+1; i++){
+            //         let name = document.querySelector('#option_'+i).value
+            //         let spinValue = document.querySelector('#sb_'+i).value
+            //         let index = this.allProductName.indexOf(name)
+            //         // console.log(index, this.allProducts[index].name);
+            //         couponAll['coupon_items'].push({product_id:this.allProducts[index].id, quantity:spinValue, name:this.allProducts[index].name})
+            //     }
+            // }
             //api
-            this.$http.post('/seller/coupons/update',this.info,{
+            this.$http.post('/seller/coupons/update',couponAll,{
                 headers: {
                 'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
                 }
