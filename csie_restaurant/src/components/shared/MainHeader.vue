@@ -19,7 +19,7 @@
 
             <b-nav-form class="ml-auto">
                 <b-input-group size="sm" >
-                    <b-form-input list="searchInput" placeholder="Search Shop" v-model="keywords" debounce="700"></b-form-input>
+                    <b-form-input list="searchInput" placeholder="Search Shop" v-model="keywords" debounce="500"></b-form-input>
                     <datalist id="searchInput">
                         <option v-for="name in search_shopName" :key="name"> {{ name }}</option>
                     </datalist>
