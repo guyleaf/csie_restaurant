@@ -19,7 +19,7 @@
 
       <template #row-details="row">
         <b-card>
-          <div class="row"> 客戶帳號: {{account}}</div>
+          <div class="row"> 客戶暱稱: {{row.item.clientName}}</div>
           <!-- <div class="row">  -->
           <div class='container row'>
           
@@ -46,7 +46,7 @@
                 <div class='row justify-content-center'>
                   <textarea :id="'text'+row.index" :placeholder="items[row.index].comment" class='tA' :readonly="items[row.index].readonly"></textarea>
                   <div :id ="'disabled-wrapper'+row.index" class="d-inline-block sb row">
-                    <b-button class="te col-md-9" :disabled="items[row.index].ratingdisabled" variant='success' @click="submitRating(row)">{{row.item.msg}}</b-button>
+                    <b-button class="te col-md-9" :disabled="items[row.index].ratingdisabled" variant='primary' @click="submitRating(row)">{{row.item.msg}}</b-button>
                     <b-button class="cancel col-md-3" :disabled="items[row.index].ratingdisabled" variant='danger' @click="cancelOrder(row)">取消</b-button>
                   </div>
                   <b-tooltip v-if="items[row.index].isFinish" :target="'disabled-wrapper'+row.index">已完成</b-tooltip>
@@ -75,30 +75,17 @@
               ratingStar:3,
               readonly:true,
               ratingdisabled:false,
-              comment:"123123",
-              訂單編號: 'Dickerson', 下單日期: '2020-11-11 04:12:25',
+              comment:"不要加奶茶",
+              訂單編號: '3', 下單日期: '2020-01-07 08:00:00',
               運輸時間:'null',地址:'null',訂單狀態:0,
               msg:'下一步:店家已確認',
               isFinish:false,
               fee:0,
               isShippingCoupon:false,
+              clientName:'Roger',
               datas:[
-                  {name:123123, price:123, quantity:1,discount:1},
-                  {name:456, price:456, quantity:2},
+                  {product_name:'玩火Passion Tea', price:50, quantity:2,discount:1},
               ]
-          }, 
-           { 
-              ratingStar:1,
-              readonly:false,
-              comment:"請留下您的評論。",
-              ratingdisabled:'disabled',
-              訂單編號: 'Dickerson', 下單日期: 'Macdonald',
-              訂單狀態:4,
-              datas:[
-                  {name:123123},
-                  {name:456 },
-              ]
-              
           }, 
         ],
       }

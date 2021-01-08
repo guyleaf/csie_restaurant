@@ -178,17 +178,6 @@
           let orderItems = this.$cookie.get('product')
 
           let data = { coupon_code:coupon,seller_id:id,orderItems:orderItems,total_price:this.totalPrice}
-          console.log(data)
-//           {
-              //     "id":,
-              //     "quantity":
-              // }
-            //           {
-            //   "code":,
-            //   "seller_id":,
-            //   "orderItems":[{}, {}],
-            //   "total_price":
-            // }
           this.$http.post('/customer/coupon/use',data , {
             headers: {
               'Authorization': 'Bearer ' + this.$store.getters['auth/token']
