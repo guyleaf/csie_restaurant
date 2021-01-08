@@ -34,7 +34,7 @@
                         <div :id="'coupon_product_'+num" class="row cp_pd" v-for="num in couponProductNum" :key="num">
                             <div class="col-md-8 ">
                                 <b-form-input :id="'option_'+num" :list="'my-list-id_'+num" v-model="option"></b-form-input>
-                                    <datalist :id="'my-list-id_'+num" >
+                                <datalist :id="'my-list-id_'+num" >
                                     <option v-for="product in allProducts" :key="product.id" > {{product.name}}</option>
                                 </datalist>
                             </div>
