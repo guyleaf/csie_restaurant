@@ -38,7 +38,7 @@
               <b-button size="sm" v-else id="coupon_submit" text="Button" variant="success" @click="modifyCoupon">修改</b-button>
             </b-input-group-append>
             <b-form-invalid-feedback id='coupon-error' class='error_msg'>
-                  &emsp;&emsp;無法使用此優惠券
+                  {{errorMessage}}
            </b-form-invalid-feedback>
           </b-input-group>
           
@@ -87,7 +87,8 @@
           }
         ],
         totalPrice: null,
-        popoverShow: false
+        popoverShow: false,
+        errorMessage: ''
       }
     },
     methods: {
@@ -103,8 +104,8 @@
         this.bookingShopName = this.$cookie.get('shopName')
         for (var i = 0; i<data.length;i++)
         {
-          this.totalPrice = this.totalPrice + data[i].foodPrice*data[i].foodSpinValue;
-          this.ItemList.push({foodName:data[i].foodName, foodSpinValue:data[i].foodSpinValue, foodPrice:data[i].foodPrice});
+          this.totalPrice = this.totalPrice + data[i].foodPrice*data[i].quantity;
+          this.ItemList.push({foodName:data[i].foodName, foodSpinValue:data[i].quantity, foodPrice:data[i].foodPrice});
         }
         if(coupon != null)
         {
@@ -166,7 +167,7 @@
         let coupon = JSON.parse(this.$cookie.get('coupon'))
         console.log(product,coupon)
         for (let i = 0; i<coupon.coupon_items.length; i++){
-          let match = product.filter(array=>array.foodName == coupon.coupon_items[i].name && array.foodSpinValue == coupon.coupon_items[i].quantity)
+          let match = product.filter(array=>array.foodName == coupon.coupon_items[i].name && array.quantity == coupon.coupon_items[i].quantity)
           if(match.length != 0){
             matchProduct.push(match);
           }
@@ -175,7 +176,21 @@
       checkCoupon(coupon){
         if(this.checkLogin()){
           let id = this.$cookie.get('shopId');
-          this.$http.get('/customer/coupon/check?coupon_code='+ coupon +"&seller_id="+ id , {
+          let orderItems = this.$cookie.get('product')
+
+          let data = { coupon_code:coupon,seller_id:id,orderItems:orderItems,total_price:this.totalPrice}
+          console.log(data)
+//           {
+              //     "id":,
+              //     "quantity":
+              // }
+            //           {
+            //   "code":,
+            //   "seller_id":,
+            //   "orderItems":[{}, {}],
+            //   "total_price":
+            // }
+          this.$http.post('/customer/coupon/use',data , {
             headers: {
               'Authorization': 'Bearer ' + this.$store.getters['auth/token']
             }
@@ -187,7 +202,9 @@
             this.checkItemsInCoupon()
           })
           .catch(error => {
-            this.couponState = false;
+            console.log(error.response)
+            this.couponState = false
+            this.errorMessage = error.response.data.message
           })
         }
       },
@@ -225,7 +242,7 @@
       },
       modifySpinValue(index,value){
         let productCookie = JSON.parse(this.$cookie.get("product"));
-        productCookie[index].foodSpinValue = value
+        productCookie[index].quantity = value
         document.cookie = 'product=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
         this.$cookie.set('product', JSON.stringify(productCookie))
         this.totalPrice = this.totalPrice + (value - this.ItemList[index].foodSpinValue) * this.ItemList[index].foodPrice
