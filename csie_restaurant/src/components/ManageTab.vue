@@ -43,8 +43,8 @@ export default {
     watch: {
       $route: {
         handler: function() {
-        this.selected = this.$router.history.current.name
-      },
+          this.selected = this.$router.history.current.name
+        },
       }
     },
 }

@@ -1,22 +1,17 @@
 <template>
     <div>
         <b-navbar toggleable="lg" type="dark" variant="dark" class='header'>
-            <b-navbar-brand> 
-                <router-link :to="{name: 'Home'}" class="nav-link" variant="info">孜宮庭園</router-link>
+            <b-navbar-brand @click="goHome" class="nav-link" variant="info"> 
+                孜宮庭園
             </b-navbar-brand>
-            
-
             <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-
             <b-collapse id="nav-collapse" is-nav>
             <b-navbar-nav>
-                <b-nav-item> 
-                    <router-link :to="{name: 'Home'}" class="nav-link">Home</router-link>
+                <b-nav-item @click="goHome" class="nav-link" variant="info"> 
+                    Home
                 </b-nav-item>
             </b-navbar-nav>
-            
             <!-- Right aligned nav items -->
-
             <b-nav-form class="ml-auto">
                 <b-input-group size="sm" >
                     <b-form-input list="searchInput" placeholder="Search Shop" v-model="keywords" debounce="700"></b-form-input>
@@ -59,6 +54,24 @@ export default {
     methods: {
         showHistory() {
         },
+        goHome(){
+            this.$store.dispatch('auth/setSearchResult', this.search_result);
+            console.log('homeClean',this.$store.getters['auth/searchResult'])
+            this.$router.push({name: 'Home'}); 
+            console.log('pushHome')
+            // window.location.reload(); //FIXME
+        },
+        goSearch(){
+            let search = document.querySelector('#searchInput').textContent
+            if (search.trim()==''){
+                console.log('NOTFOUND');
+                //FIXME SHOW NOT FOUND MODAL
+                return
+            }
+            console.log('search',this.search_result);
+            this.$store.dispatch('auth/setSearchResult', this.search_result);
+            this.$router.push('/')
+        },
         goShop() {
             let search = document.querySelector('#searchInput').textContent
             if (search.trim()==''){
@@ -66,9 +79,15 @@ export default {
                 //FIXME SHOW NOT FOUND MODAL
                 return
             }
-            let path = '/shop/' + this.search_result[0].seller_id + '/' + search.trim();
-            this.$router.push(path);
-            this.$bus.$emit('reloadShop');
+            // let path = '/shop/' + this.search_result[0].seller_id + '/' + search.trim();
+            // this.$router.push(path);
+            // console.log('emittt')
+            this.$store.dispatch('auth/setSearchResult', this.search_result);
+            // console.log('123',this.$store.getters['auth/searchResult'])
+            this.$bus.$emit('reloadShop', this.search_result);
+            // this.$router.pushf
+            console.log('enddd')
+            
         }
     },
     computed: {
@@ -81,7 +100,7 @@ export default {
             .then(response => {
                 console.log(response)
                 this.search_result = response.data;
-                console.log(this.search_result);
+                console.log('22222222222',this.search_result);
                 this.search_shopName = [];
                 for(let i=0;i<this.search_result.length ;i++){
                     this.search_shopName.push(this.search_result[i].name);

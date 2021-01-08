@@ -29,7 +29,6 @@
                     </b-form-group>
                     <a v-if="typeSelected==0">滿額</a><b-form-input v-if="typeSelected==0" v-model="money" :placeholder="limitMoney+shipFreeHint" type="text" style="width:50%;" required></b-form-input>
                     <a v-if="typeSelected==1">滿額</a><b-form-input v-if="typeSelected==1" v-model="money" :placeholder="limitMoney+limitHint" type="text" style="width:50%;" required></b-form-input>
-                    <a v-if="typeSelected==1">折扣</a><b-form-input v-if="typeSelected==1" v-model="discount" :placeholder="discount+discountHint" type="text" style="width:50%;" required></b-form-input>
                     <b-form-group label="優惠商品" v-if="typeSelected==2">
                         <div :id="'coupon_product_'+num" class="row cp_pd" v-for="num in couponProductNum" :key="num">
                             <div class="col-md-8 ">
@@ -44,6 +43,7 @@
                         </div>
                         <b-button variant="outline-primary" @click="addCouponProduct">新增優惠商品</b-button>
                     </b-form-group>
+                    <a v-if="typeSelected==1 || typeSelected==2">折扣</a><b-form-input v-if="typeSelected ==1||typeSelected ==2" v-model="discount" :placeholder="discount+discountHint" type="text" style="width:50%;" required></b-form-input>
                     <div style="display:flex; justify-content:space-around;">
                         <div style="display:inline-flex; flex-wrap:nowrap;"> 
                             <div class="mt-2 mr-3">開始時間 </div>

@@ -18,6 +18,14 @@ const routes = [
                     title: '孜宮庭園 - 首頁',
                 }
             },
+            // {
+            //     name: 'SearchResult',
+            //     path: 'searchResult',
+            //     component: () => import('@/views/SearchResult.vue'),
+            //     meta: {
+            //         title: '孜宮庭園 - 搜尋結果',
+            //     }
+            // },
             {
                 name: 'Shop',
                 path: 'shop/:id/:shopName',

@@ -10,7 +10,7 @@
                 <Checkbox v-on:selectChange="updateSelected" />
               </div>
               <div class="col-10">
-                <ShopCardGroup :tag="selected"/>
+                <ShopCardGroup :cards="cards" :tag="selected"/>
               </div>
             </div>
           </b-card>
@@ -40,8 +40,38 @@ export default {
   data()
   {
     return{
-      selected: []
+      selected: [],
+      cards:[],
     }
+  },
+  watch:{
+    $store:function () {
+      let sR = this.$store.getters['auth/searchResult'];
+      if(sR != null || sR.length!=0 ){
+        console.log('NOTNULL')
+        this.cards = [];
+        for(let i=0; i<this.sR.length; i++){
+          this.cards.push({shopId: sR[i].seller_id, shopName: sR[i].name, imgPath: this.$url + sR[i].header_image, rating: sR[i].averageofratings});
+        }
+      } 
+    }
+  },
+  created(){
+    this.$http.get('/restaurants/?currentNumber=0&requiredNumber=10')
+    .then(response => {
+        this.cards=[];
+        let data=response.data;
+        for (let i=0;i<data.length;i++)this.cards.push({shopId: data[i].seller_id, shopName: data[i].name, imgPath: this.$url + data[i].header_image, rating: data[i].averageofratings});
+    })
+
+    this.$bus.$on('reloadShop',  msg=>{
+      console.log('Homeon',msg)
+      this.cards=[];
+      for(let i=0; i<msg.length; i++){
+        this.cards.push({shopId: msg[i].seller_id, shopName: msg[i].name, imgPath: this.$url + msg[i].header_image, rating: msg[i].averageofratings});
+      }
+      // window.location.reload();
+    });
   }
 }
 </script>
