@@ -5,7 +5,8 @@
             <div class='couponField mb-5' style='display:flex; flex-direction:row; '>
                 <div v-for="coupon in couponCards" :key="coupon['coupon'].id">
                     <CouponCard :id="coupon['coupon'].coupon_id" :code="coupon['coupon'].code" :products="coupon['coupon_items']" :discount="coupon['coupon'].discount" 
-                    :limitMoney="coupon['coupon'].limit_money" :start="coupon['coupon'].start_time" :expire="coupon['coupon'].end_time" :type="coupon['coupon'].type"/>
+                    :limitMoney="coupon['coupon'].limit_money" :start="coupon['coupon'].start_time" :expire="coupon['coupon'].end_time" :type="coupon['coupon'].type"
+                    :allProducts="allProducts"/>
                 </div>
             </div>
         </div>
@@ -18,34 +19,30 @@
                     label="優惠類型"
                     label-for="type-input"
                     invalid-feedback="type is required">
+                    <b-form-radio-group v-model="typeSelected">
                    <div style="display:flex; justify-content:space-around;">
-                    <div style="display:inline-flex; flex-wrap:wrap;">
-                        <b-form-radio  v-model="typeSelected" name="some-radios" value="0">滿額免運費</b-form-radio>
+                        <b-form-radio value="0">滿額免運費</b-form-radio>
+                        <b-form-radio value="1">滿額打折</b-form-radio>
+                        <b-form-radio value="2">優惠套餐</b-form-radio>
                     </div>
-                    <div style="display:inline-flex; flex-wrap:wrap;">
-                        <b-form-radio v-model="typeSelected" name="some-radios" value="1">滿額打折</b-form-radio>
-                    </div>
-                    <b-form-radio v-model="typeSelected" name="some-radios" value="2">優惠套餐</b-form-radio>
-                    </div>
+                    </b-form-radio-group>
                     </b-form-group>
-                    <a v-if="typeSelected==='0'">滿額</a><b-form-input v-if="typeSelected==='0'" v-model="money" :placeholder="limitMoney+shipFreeHint" type="text" style="width:50%;" required></b-form-input>
-                    <a v-if="typeSelected==='1'">滿額</a><b-form-input v-if="typeSelected==='1'" v-model="money" :placeholder="limitMoney+limitHint" type="text" style="width:50%;" required></b-form-input>
-                    <a v-if="typeSelected==='1'">折扣</a><b-form-input v-if="typeSelected==='1'" v-model="money" :placeholder="discount+discountHint" type="text" style="width:50%;" required></b-form-input>
-                    <b-form-group
-                        label="新增商品"
-                        v-if="typeSelected==='2'"
-                        >
-                        <div :id="'coupon_product_'+num" class="row cp_pd" v-for="num in productNum" :key="num">
+                    <a v-if="typeSelected==0">滿額</a><b-form-input v-if="typeSelected==0" v-model="money" :placeholder="limitMoney+shipFreeHint" type="text" style="width:50%;" required></b-form-input>
+                    <a v-if="typeSelected==1">滿額</a><b-form-input v-if="typeSelected==1" v-model="money" :placeholder="limitMoney+limitHint" type="text" style="width:50%;" required></b-form-input>
+                    <a v-if="typeSelected==1">折扣</a><b-form-input v-if="typeSelected==1" v-model="discount" :placeholder="discount+discountHint" type="text" style="width:50%;" required></b-form-input>
+                    <b-form-group label="優惠商品" v-if="typeSelected==2">
+                        <div :id="'coupon_product_'+num" class="row cp_pd" v-for="num in couponProductNum" :key="num">
                             <div class="col-md-8 ">
                                 <b-form-input :id="'option_'+num" :list="'my-list-id_'+num" v-model="option"></b-form-input>
                                     <datalist :id="'my-list-id_'+num" >
-                                    <option v-for="size in sizes" :key="size" > {{size}}</option>
+                                    <option v-for="product in allProducts" :key="product.id" > {{product.name}}</option>
                                 </datalist>
                             </div>
                             <div class="col-md-4">
                                 <b-form-spinbutton :id="'sb_'+num" min="1" max="100" :v-model="spinValue"></b-form-spinbutton>
                             </div>
                         </div>
+                        <b-button variant="outline-primary" @click="addCouponProduct">新增優惠商品</b-button>
                     </b-form-group>
                     <div style="display:flex; justify-content:space-around;">
                         <div style="display:inline-flex; flex-wrap:nowrap;"> 
@@ -84,7 +81,7 @@ export default {
     data()
     {
         return{
-            typeSelected:'',
+            typeSelected:null,
             code:'',
             couponCards:[] , 
             options: {
@@ -93,9 +90,10 @@ export default {
                 useCurrent: false,
             },
             couponProduct:[],
+            couponProductNum:1,
             spinValue:1,
-            productNum:3,
-            sizes: ['Small', 'Medium', 'Large', 'Extra Large']    
+            allProducts:[],
+             sizes: ['Small', 'Medium', 'Large', 'Extra Large']
         }
     }, 
     methods:{
@@ -113,16 +111,28 @@ export default {
             return result;
         },
         confirmModal(){
-            for (let i = 1; i<this.productNum+1; i++){
+            for (let i = 1; i<this.allProducts.length+1; i++){
                 let option = document.querySelector('#option_'+i).value
                 let spinValue = document.querySelector('#sb_'+i).value
                 this.couponProduct.push({option:option, spinValue:spinValue})
             }
+            
             console.log(this.couponProduct)
             this.$refs['my-modal'].hide();
         },
         cancelModal(){
             this.$refs['my-modal'].hide();
+        },
+        getAllProducts(msg){
+            this.allProducts = [];
+            // {sellingState:data[i].status, soldOut:data[i].sold_out, foodId: data[i].id, foodName: data[i].name, price:data[i].price, });}
+            for(let i=0; i<msg.length; i++){
+                this.allProducts.push({id:msg[i].foodId, name:msg[i].foodName, price:msg[i].price, sellingState: msg[i].sellingState});
+            }
+            console.log('etAll', this.allProducts)
+        },
+        addCouponProduct(){
+            this.couponProductNum += 1;
         }
     },
     created(){
@@ -131,6 +141,10 @@ export default {
         then(response => {
             let data=response.data;
             this.couponCards = data;
+        });
+        this.$bus.$on('getAllProducts',  msg=>{
+            this.getAllProducts(msg);
+            console.log('on',msg)
         });
     },
     computed(){

@@ -105,7 +105,6 @@
       },
       total(datas){
         let total=0;
-        console.log(datas)
         for(let i=0;i<datas.length;i++) total=total+parseFloat(parseFloat(datas[i].price * datas[i].quantity * datas[i].discount).toFixed(0))
         return total
       },
@@ -195,11 +194,6 @@
       .catch(error => {
         this.$store.dispatch('auth/invalidate')
         this.$router.push('/')
-        // if (error.response) {
-        //   // console.log(this.$refs.loginNav)
-        //   // if (error.response.status == 401)
-        //   //   this.$refs.loginNav.refreshToken(this.$store.getters['auth/token'])
-        // }
       });
     },
   }

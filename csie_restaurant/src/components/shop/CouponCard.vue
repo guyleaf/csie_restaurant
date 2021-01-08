@@ -3,17 +3,17 @@
             <b-card-title>{{code}}</b-card-title>
             <!-- 0 for免運 1for滿XXX折扣 2for套餐組合><-->
             <b-card-text v-if="type === 0">
-                <a style="color:red;">免運費</a>
+                <a>滿{{limitMoney}}元 </a><a style="color:red;">免運費</a>
             </b-card-text>
             <b-card-text v-if="type === 1">
-                <a>滿{{money}}元</a> <a style="color:red;">{{discount}}%off</a>
+                <a>滿{{limitMoney}}元 </a><a style="color:red;">{{discount*100}}%off</a>
             </b-card-text>
             <b-card-text v-if="type === 2">
                 <a v-for="(product, index) in products" :key="product.product_id">
                     {{product.quantity}} {{product.name}}
                     <a v-if="index != products.length-1 ">+</a>  
                 </a>
-                <a style="color:red;">{{discount}}%off</a>
+                <a style="color:red;">{{discount*100}}%off</a>
             </b-card-text>
             <b-card-text>期限:{{expire}}</b-card-text>
         </b-card>
@@ -30,7 +30,7 @@ export default {
         code: String,
         products: Array,
         discount: Number,
-        money: Number,
+        limitMoney: Number,
         expire: String,
         type: Number,
     },

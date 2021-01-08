@@ -1,6 +1,6 @@
 <template>
-    <div class="container">
-        <CategoryTab :foodCategory="foodCategories" />
+    <div class="container" >
+        <CategoryTab :foodCategory="foodCategories" class="tab"/>
         <div class="row" v-for="category in hasProducts(foodCards)" :key="category.categoryId">
             <div class="row">
                 <h1>{{category.foodCategory}}</h1>
@@ -37,7 +37,7 @@ export default {
         },
         hasProducts:function(foodcard){
             return this.foodCategories.filter(i => foodcard.find(j => i.foodCategory === j.foodTag))
-        }
+        },
     },
     created(){
     let id = this.$router.currentRoute.params.id
@@ -47,7 +47,7 @@ export default {
           let data=response.data;
           for (let i=0;i<data.length;i++) 
             {
-              this.foodCards.push({sellingState:data[i].status, soldOut:data[i].sold_out, foodId: data[i].id, foodName: data[i].name, price:data[i].price, imgPath: 'https://placekitten.com/300/300', foodDescription: data[i].description, foodTag:data[i].category_name});}
+              this.foodCards.push({sellingState:data[i].status, soldOut:data[i].sold_out, foodId: data[i].id, foodName: data[i].name, price:data[i].price, imgPath: this.$url + data[i].image_path, foodDescription: data[i].description, foodTag:data[i].category_name});}
             }
         )
     this.$http.get('/restaurants/'+id+'/category')
@@ -71,22 +71,17 @@ export default {
               setTimeout(setfbacksize.bind(this),100)
           }
           else {
-            console.log(back)
-          for(let i=0;i<back.length;i++)
-            {
-                console.log(back[i])
-                console.log(food.clientWidth)
-                back[i].style.minWidth= (food.clientWidth).toString() +'px'
-            }
-                
+          for(let i=0;i<back.length;i++) back[i].style.minWidth= (food.clientWidth).toString() +'px'
           }
         }
         setfbacksize()
-    }
+    },
+
 }
 </script>
 
 <style scoped>
+
 .row{
     margin:1% 0 1% 0;   
 }

@@ -2,7 +2,7 @@
     <div class="col-md-6 card-body" v-b-hover="hoverCard" @click="showModal">
         <b-modal id="modal-sm" size="sm" ref="my-modal" hide-header hide-footer hide-header-close>
             <div class="container">
-                <b-img :src="imgPath" fluid alt="Responsive image"></b-img>
+                <b-img :src="imgPath" fluid alt="Responsive image" class="productImage"></b-img>
                 <div class="m-2">
                     <h3 class="mt-3">{{foodName}} </h3>
                     <p>{{foodDescription}} </p>
@@ -87,7 +87,7 @@ export default {
             let productNum = this.parseCookie()['productNum'];
             if (productNum!=undefined) productNum = parseInt(productNum, 10) + 1;
             else productNum = 1;
-            if(this.$cookie.get("product")==null) 
+            if(this.$cookie.get("product")==null || this.$cookie.get('shopName')==null) 
             {   
                 this.$cookie.set('shopId',this.$router.currentRoute.params.id)
                 this.$cookie.set('shopName',this.$router.currentRoute.params.shopName)
@@ -107,7 +107,7 @@ export default {
                     this.$cookie.set('product', JSON.stringify(cartProduct));
                     console.log(this.$cookie.get('product'))
                 }
-                else
+                else 
                 {
                     this.change = true;
                     this.changeShop(cartShop,currentShop);
@@ -179,6 +179,10 @@ export default {
 </script>
 
 <style scoped>
+.productImage{
+    width: 100%;
+    height: 250px;
+}
 .card-body{
     margin-bottom: 0.5%;
 }

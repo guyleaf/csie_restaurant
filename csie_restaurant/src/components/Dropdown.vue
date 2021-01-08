@@ -22,8 +22,6 @@ export default {
             if(day==1)  this.text="今天"
             if(day==7)  this.text="最近7天"
             if(day==30)  this.text="最近30天"
-            console.log(dropdown)
-            console.log(day)
         }
     },
 }

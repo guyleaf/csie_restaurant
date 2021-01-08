@@ -165,7 +165,6 @@
         let matchProduct = [];
         let product = JSON.parse(this.$cookie.get('product'))
         let coupon = JSON.parse(this.$cookie.get('coupon'))
-        console.log(product,coupon)
         for (let i = 0; i<coupon.coupon_items.length; i++){
           let match = product.filter(array=>array.foodName == coupon.coupon_items[i].name && array.quantity == coupon.coupon_items[i].quantity)
           if(match.length != 0){

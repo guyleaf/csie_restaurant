@@ -16,6 +16,7 @@
     data() {
       return {
           isActive: 0,
+          lastScrollY: 0,
           tabs: [],
         }
     },
@@ -24,10 +25,12 @@
         {
             let scrollItems = document.querySelectorAll('h1')
             let header = document.querySelectorAll('nav')
-            let totalY = scrollItems[index].offsetParent.offsetTop+scrollItems[index].offsetTop+header[0].clientHeight
+            let tabClass = document.querySelector('.CategoryTab')
+            let tabBar = tabClass.querySelector('ul')
+            let totalY = scrollItems[index].offsetTop-tabBar.clientHeight
+            console.log(totalY)
             let distance = document.documentElement.scrollTop
-            let step = totalY / 50
-            document.documentElement.scrollTop=distance
+            let step = Math.abs(totalY-distance) / 50
             if (totalY > distance) 
             {
                 smoothDown(document.documentElement)
@@ -66,18 +69,26 @@
             let scrollTop =document.documentElement.scrollTop
             for(var i=scrollItems.length-1;i>=0;i--)
             {
-                var ItmeY = scrollItems[i].offsetParent.offsetTop+scrollItems[i].offsetTop+header[0].clientHeight
-                if(scrollTop>ItmeY) 
+                var ItmeY = scrollItems[i].offsetTop
+                if(scrollTop>=ItmeY-400) 
                 {
                     this.isActive=i
                     break
                 }
             }
             let tabClass = document.querySelector('.CategoryTab')
+            let mainheader = document.querySelector('.html>.navigation')
+            let headerHeight= mainheader.clientHeight.toString() +'px'
+            let tabBar = tabClass.querySelector('ul')
             let tab = tabClass.querySelectorAll('.nav-item>a')
+            let limit = document.querySelector('#limit')
+            var st = scrollTop;
+            if(scrollTop>limit.offsetTop+limit.clientHeight && st <= this.lastScrollY) {tabBar.classList.add("navigation"); tabBar.style.marginTop=headerHeight; tabBar.style.backgroundColor='white'}
+            else {tabBar.classList.remove("navigation"); tabBar.style.marginTop=""; tabBar.style.backgroundColor=''}
+            this.lastScrollY = st;
             for(i=tab.length-1;i>=0;i--)   if(tab[i].className.indexOf("active") >= 0){tab[i].classList.remove("active") } 
-            tab[this.isActive].classList.add("active")
-
+            if(tab[this.isActive]!=null) tab[this.isActive].classList.add("active")
+            
         },
     },
     created(){

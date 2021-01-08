@@ -1,6 +1,7 @@
 <template>
     <div class="html">
-        <MainHeader />
+        <MainHeader class="navigation"/>
+        <div id="fixed"/>
         <div class="container body">
             <router-view />
         </div>
@@ -30,9 +31,11 @@ export default {
         var body = document.querySelector('.body')
         var header = document.querySelector('.header')
         var footer = document.querySelector('.bottom')
+        var fixed = document.querySelector('#fixed')
         var footerHeight = footer.clientHeight
         var bodyHeight =html.clientHeight - footerHeight - header.clientHeight
-        body.style.minHeight= bodyHeight.toString()+"px"
+        fixed.style.minHeight = header.clientHeight.toString() +"px"
+        body.style.minHeight = bodyHeight.toString()+"px"
     },  
     beforeUpdate: function() {},
     updated: function() {},
@@ -54,5 +57,12 @@ export default {
     margin: 0 !important;
     padding: 0% !important;
     overflow: hidden;
+  }
+  .navigation{
+      width: 100%;
+      top: 0;
+      left: 0;
+      z-index: 20;          
+      position: fixed;
   }
 </style>

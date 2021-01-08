@@ -23,20 +23,20 @@
       </div>
     </div>
 
-    <div class="col-4">
+    <div class="scrollbar col-10">
       <h3>調整類別順序</h3>
 
       <draggable
         :list="list"
         :disabled="!enabled"
-        class="list-group list-group-horizontal"
+        class="list-group list-group-horizontal row"
         ghost-class="ghost"
         :move="checkMove"
         @start="dragging = true"
         @end="dragEnd"
       >
         <div
-          class="list-group-item"
+          class="list-group-item col-2"
           v-for="element in list"
           :key="element.foodCategory"
         >
@@ -44,8 +44,6 @@
         </div>
       </draggable>
     </div>
-
-    <rawDisplayer class="col-3" :value="list" title="List" />
   </div>
 </template>
 
@@ -79,23 +77,24 @@ export default {
     }}
   },
   methods: {
-    show(){
-      console.log(this.foodCategory)
-    },
     add: function() {
-      this.list.push({ foodCategory: "Ron " + order, order: order++ });
+      let name="新類別"
+      let i=1
+      while(this.list.find(list=> list.foodCategory==name))
+      {
+        name="新類別"+i.toString()
+        i++
+      }
+      this.list.push({ foodCategory: name, order: order++ });
     },
     finish: function(){
         this.$bus.$emit('updateTab',this.list);
     },
     checkMove: function(e) {
-        window.console.log("Dragging:" + e.draggedContext.index + " Future index: " + e.draggedContext.futureIndex);
-        
     },
     dragEnd: function(e) {
         for(let i=0;i<this.foodCategory.length;i++){
             this.list[i].order = i;
-            console.log('now:',this.list[i].foodCategory,this.list[i].order);
         }
     }
   },
@@ -115,5 +114,9 @@ export default {
 .ghost {
   opacity: 0.5;
   background: #c8ebfb;
+}
+.scrollbar{
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 </style>

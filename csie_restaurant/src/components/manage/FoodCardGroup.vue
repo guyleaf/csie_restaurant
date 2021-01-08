@@ -4,11 +4,12 @@
             <div class="container">
                 <input type="file" accept="image/*" @change="previewImage" id="upload">
                 <img :src="preview" @click="upload" class="preview"/>
+                <p v-if="!imageState" class="imageInfo">圖片不能為空</p>
                 <div class="m-2">
                     <b-form-group
                     label="Name"
                     label-for="name-input"
-                    invalid-feedback="name is required" type="text"
+                    invalid-feedback="商品名不能為空" type="text"
                     :state="nameState"
                     >
                     <b-form-input
@@ -33,13 +34,13 @@
                     <b-form-group
                     label="Price"
                     label-for="price-input"
-                    invalid-feedback="price is required"
+                    invalid-feedback="價錢不能為空"
                     :state="priceState"
                     >
                     <b-form-input
                         v-model="Price"
                         ref="price-input"
-                        oninput = "value=value.replace(/[^\d]/g,'')"
+                        type="number"
                         :state="priceState"
                         required></b-form-input>
                     </b-form-group>
@@ -51,25 +52,23 @@
             </div> 
         </b-modal>
         <CategoryTabManage :foodCategory="foodCategories"/>
-        <div class="row" v-for="category in foodCategories" :key="category.categoryId">
+        <div class="row" v-for="(category,index) in foodCategories" :key="index">
             <div class="row">
-                <h1>{{category.foodCategory}}</h1>
+                <div class="categoryGroup">
+                    <b-form-input v-if="index==editable" v-model="modityName" :placeholder="category.foodCategory" trim></b-form-input>
+                    <h1 v-else>{{category.foodCategory}}</h1>
+                    <b-icon v-if="index==editable" icon="check" class="ml-2" font-scale="2.95" @click="modityfoodcategory(index)"></b-icon>
+                    <b-icon v-else icon="pencil-square" class="ml-2" font-scale="2.95" @click="foodcategoryEditable(index)"></b-icon>
+                </div>
             </div>
-            <div class="fback" >
+            <div class="fback" :id="category.foodCategory.replace(/\s*/g,'')">
                 <div style="padding:1.25em 0 0 1.25em"><h2>上架中</h2> </div>
                 <div class="row" >
                     <FoodCard 
                         v-on="{changeStock:changeStock, changeState:changeSellingState, deleteProduct:deleteProduct}"
                         v-for="card in sameTag(category.foodCategory,true)" :key="card.foodId"
                         v-bind="card"
-                        id="foodcard"
-                        :foodName="card.foodName" 
-                        :imgPath="card.imgPath" 
-                        :foodDescription="card.foodDescription" 
-                        :foodTag="card.foodTag"
-                        :sellingState="card.sellingState"
                     />
-<!-- /////////////////////////////////////      -->
                     <div class="col-md-6 card-body">
                         <b-card tag="article" class="addFoodCard">
                             <div class='row'>
@@ -114,16 +113,19 @@ export default {
             Price:null,
             Description:null,
             Name:null,
-            image:'',
+            image:null,
             foodCategory:'',
             nameState:null,
             descriptionState:null,
+            imageState:true,
             priceState:null,
+            editable:-1,
+            modityName:'',
             preview: require('../../assets/photoupload.png'),
             foodCategories:[],
             foodCards:
             [
-                {sellingState:true, soldOut:false, foodId: 0,  foodName: 'ShopRon',  imgPath: 'https://placekitten.com/300/300', foodDescription: '11111111',  foodTag: 'Ron', price:123},
+                /*{sellingState:true, soldOut:false, foodId: 0,  foodName: 'ShopRon',  imgPath: 'https://placekitten.com/300/300', foodDescription: '11111111',  foodTag: 'Ron', price:123},
                 {sellingState:true, soldOut:false, foodId: 1,  foodName: 'ShopRon',  imgPath: 'https://placekitten.com/300/300', foodDescription: '878787878', foodTag: 'Ron', price:133},
                 {sellingState:true, soldOut:false, foodId: 2,  foodName: 'ShopPan', imgPath: 'https://placekitten.com/300/300', foodDescription: '3333333',   foodTag: 'Pan', price:13},
                 {sellingState:true, soldOut:false, foodId: 3,  foodName: 'Lee',  imgPath: 'https://placekitten.com/300/300', foodDescription: '0000000',   foodTag: 'Lee', price:23},
@@ -138,10 +140,22 @@ export default {
                 {sellingState:true, soldOut:false, foodId: 12, foodName: 'ShPanon',  imgPath: 'https://placekitten.com/300/300', foodDescription: '77777777',  foodTag: 'Pan', price:188},
                 {sellingState:true, soldOut:false, foodId: 13, foodName: 'SPanPan',  imgPath: 'https://placekitten.com/300/300', foodDescription: '888888888', foodTag: 'Pan', price:120},
                 {sellingState:true, soldOut:false, foodId: 14, foodName: 'ShPanf', imgPath: 'https://placekitten.com/300/300', foodDescription: '9999999',   foodTag: 'Pan', price:73},
+                FIXME*/
             ], 
         }
     },
     methods:{
+        foodcategoryEditable(index){
+            this.editable=index;
+            this.modityName=this.foodCategories[index].foodCategory;
+        },
+        modityfoodcategory(index){ //FIXME
+            console.log(index)
+            this.updateTab(this.foodCategories)
+            this.foodCategories[index].foodCategory=this.modityName;
+            this.modityName='';
+            this.editable=-1;
+        },
         upload(){
             let upload=document.querySelector('#upload')
             upload.click()
@@ -158,42 +172,24 @@ export default {
         }
         },
         confirmModal() {
-            let formdata = new FormData();
-            formdata.append('image',this.image);
-            formdata.append('name',this.Name);
-            formdata.append('price',this.Price);
-            formdata.append('sold_out',false);
-            formdata.append('description',this.Description);
-            formdata.append('status',1);
-            formdata.append('is_deleted',false);
-            formdata.append('category_name',this.foodCategory);
-            console.log(this.Price,this.Description,this.Name,this.foodCategory,formdata.get('image'))
-            let foodCard = [{
-                'name': this.Name,
-                'price': this.Price,
-                'sold_out': false,
-                'description': this.Description,
-                'status': 1,
-                'is_deleted': false,
-                'category_name': this.foodCategor,
-                'image':formdata.getAll('image')
-                }]
-            this.$http.post('/seller/products/add',formdata,{
-                headers: {
-                'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
-                }
-            })
-            .catch(error=>{
-                console.log(error.response)
-            }
-            )
+            if(this.Name == null) {this.nameState=false}
+            if(this.Price == null) {this.priceState=false}
+            if(this.image == null) {this.imageState=false}
+            console.log(this.Name)
+            if(this.nameState!=false && this.priceState!=false){
+            this.$confirm("確定要新增此商品？","","question").then(() => {
+            this.addProduct()
+            })}
         },
         cancelModal() {
             this.preview= require('../../assets/photoupload.png'),
-            this.image=''
+            this.image=null
             this.Price=null,
             this.Name=null,
             this.Description=null,
+            this.imageState=true,
+            this.priceState=null,
+            this.nameState=null,
             this.$refs['my-modal'].hide();
         },
         deleteModal() {
@@ -215,7 +211,10 @@ export default {
                 headers: {
                 'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
                 }
+            }).then(response =>{
+                this.$alert("修改成功","","success");
             }).catch(error=>{
+                this.$alert("修改失敗","","error");
                 console.log(error.response)
             })
         },
@@ -227,7 +226,10 @@ export default {
                 headers: {
                 'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
                 }
+            }).then(response =>{
+                this.$alert("修改成功","","success");
             }).catch(error=>{
+                this.$alert("修改失敗","","error");
                 console.log(error.response)
             })
         },
@@ -238,10 +240,46 @@ export default {
                 headers: {
                 'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
                 }
-            }).catch(error=>{
+            }).then(response =>{
+                this.$alert("刪除成功","","success");
+            })
+            .catch(error=>{
+                this.$alert("刪除失敗","","error");
                 console.log(error.response)
             })
             this.foodCards.splice(index,1);
+        },
+        addProduct(){
+            let formdata = new FormData();
+            formdata.append('image',this.image);
+            formdata.append('name',this.Name);
+            formdata.append('price',this.Price);
+            formdata.append('sold_out',false);
+            formdata.append('description',this.Description);
+            formdata.append('status',1);
+            formdata.append('is_deleted',false);
+            formdata.append('category_name',this.foodCategory);
+            this.$http.post('/seller/products/add',formdata,{
+                headers: {
+                'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
+                }
+            }).then( response=>{
+                this.foodCards.push({sellingState:1, soldOut:false, foodId: response.data.id.product_id, foodName: this.Name, price:this.Price, imgPath: this.$url + response.data.id.image_path, foodDescription: this.Description, foodTag:this.foodCategory})
+                this.$alert("新增成功","","success");
+                }
+            )
+            .catch(error=>{
+                this.$alert("新增失敗","","error");
+                console.log(error.response)
+                this.preview= require('../../assets/photoupload.png'),
+                this.image=''
+                this.Price=null,
+                this.Name=null,
+                this.Description=null,
+                this.$refs['my-modal'].hide();
+            }
+            )
+
         },
         sortOrder:function(a, b){
             return a - b;
@@ -250,24 +288,37 @@ export default {
             this.foodCategories=[]
             for(let i=0;i<msg.length;i++){
                 this.foodCategories.push({foodCategory: msg[i].foodCategory,order: msg[i].order,hover:false})
+                let id=msg[i].foodCategory.replace(/\s*/g,"");
+                setfbacksize('#'+id)
             }
-            console.log(this.foodCategories)
+            function setfbacksize(id)
+            {
+            let food = document.querySelector('#shopbody')
+            let back = document.querySelector(id)
+            console.log(back)
+            if(food == null || back==null) {
+                setTimeout(setfbacksize.bind(this,id),100)
+            }
+            else  back.style.minWidth= (shopbody.clientWidth).toString() +'px'
+            }
         }
     },
     created(){
         let id =this.$store.getters['auth/user'].id
         this.$http.get('restaurants/'+id+'/products')
         .then(response => {
-            this.foodCards=[];
-            let data=response.data;
-            for (let i=0;i<data.length;i++) {     
-                this.foodCards.push({sellingState:data[i].status, soldOut:data[i].sold_out, foodId: data[i].id, foodName: data[i].name, price:data[i].price, imgPath: 'https://placekitten.com/300/300', foodDescription: data[i].description, foodTag:data[i].category_name});}
-           
-            this.foodCards = this.foodCards.sort(function (a, b) {
+          this.foodCards=[];
+          let data=response.data;
+          console.log(response.data)
+          for (let i=0;i<data.length;i++) {     
+              this.foodCards.push({sellingState:data[i].status, soldOut:data[i].sold_out, foodId: data[i].id, foodName: data[i].name, price:data[i].price, imgPath: this.$url + data[i].image_path, foodDescription: data[i].description, foodTag:data[i].category_name});}
+              this.foodCards = this.foodCards.sort(function (a, b) {
                 return a.foodName - b.foodName
                 });
-            }
-        )
+            this.$bus.$emit("getAllProducts",this.foodCards);
+            console.log('emit', this.foodCards);
+            
+        })
         this.$http.get('/restaurants/'+id+'/category')
             .then(response => {
             this.foodCategories=[];
@@ -281,6 +332,7 @@ export default {
         this.$bus.$on("updateTab", msg => {
             this.updateTab(msg);
         });
+        
 
     },
     mounted(){
@@ -292,12 +344,7 @@ export default {
             setTimeout(setfbacksize.bind(this),100)
           }
           else {
-            for(let i=0;i<back.length;i++)
-            {
-                console.log(food)
-                back[i].style.minWidth= (shopbody.clientWidth).toString() +'px'
-            }
-                
+            for(let i=0;i<back.length;i++) back[i].style.minWidth= (shopbody.clientWidth).toString() +'px'
           }
         }
         setfbacksize()
@@ -333,5 +380,11 @@ export default {
     position: absolute;
     top: calc(50% + -32px);
     left: calc(50% + -32px);
+}
+.categoryGroup{
+    display:inline-flex
+}
+.imageInfo{
+    color: red;
 }
 </style>

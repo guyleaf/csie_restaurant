@@ -122,7 +122,6 @@
         .then(response => {
         this.members = [];
         let data = response.data;
-        console.log(data)
         for (let i=0;i<data.length;i++){ this.members.push({isActive:true, id:data[i].seller_id, username:data[i].username, name:data[i].name, email:data[i].email, 
                                                             created_at:data[i].created_at, phone:data[i].phone, member_status:data[i].member_status})}
         })
@@ -137,7 +136,6 @@
         else {lstPgButton.disabled = false;}
         this.$http.get(url)
         .then(response => {
-          console.log(response.data.length)
           if (response.data.length == 0){nxtButton.disabled = true}
           else (nxtButton.disabled = false)
         })
@@ -149,7 +147,6 @@
       .then(response => {
         this.members = [];
         let data = response.data;
-        console.log(response.data)
         for (let i=0;i<data.length;i++){ this.members.push({isActive:true, id:data[i].seller_id, username:data[i].username, name:data[i].name, email:data[i].email, 
                                                             created_at:data[i].created_at, phone:data[i].phone, member_status:data[i].member_status})}
       })
