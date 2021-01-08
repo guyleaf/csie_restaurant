@@ -100,15 +100,14 @@ class ShopRepository
 
     public function searchShops($keywords)
     {
-        $result = $this->shopTable
-        ->join('member as M', 'M.id', '=', 'S.member_id')
-        ->Where(function ($query) use($keywords) {
+        $result = $this->shopsInfoView
+        ->where(function ($query) use ($keywords) {
             for ($i = 0; $i < count($keywords); $i++){
-               $query->orwhere('M.name', 'like',  '%' . $keywords[$i] .'%');
+               $query->orwhere('name', 'like',  '%' . $keywords[$i] .'%');
             }
-       })->get(['S.member_id as seller_id', 'M.name', 'S.description', 'S.counter_number', 'S.header_image']);
-
-       return $result;
+        })->get(['member_id as seller_id', 'name', 'counter_number', 'header_image', 'averageofratings']);
+        
+        return $result;
     }
 }
 ?>

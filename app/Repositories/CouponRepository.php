@@ -74,13 +74,13 @@ class CouponRepository
         return $result;
     }
 
-    public function addCoupon($seller_id, $payload)
+    public function addCoupon($id, $payload)
     {
         DB::beginTransaction();
 
         try
         {
-            $payload['coupon']['member_id'] = $seller_id;
+            $payload['coupon']['member_id'] = $id;
 
             $id = DB::table('coupon', 'CP')
             ->orderByDesc('id')
@@ -117,18 +117,20 @@ class CouponRepository
         return $id;
     }
 
-    public function deleteCoupon($code)
+    public function deleteCoupon($id, $code)
     {
         $this->coupon
         ->where('code', '=', $code)
+        ->where('member_id', '=', $id)
         ->update(['is_deleted' => true]);
     }
 
-    public function updateCoupon($payload)
+    public function updateCoupon($id, $payload)
     {
-        DB::transaction(function () use ($payload) {
+        DB::transaction(function () use ($id, $payload) {
             DB::table('coupon', 'CP')
             ->where('code', '=', $payload['coupon']['code'])
+            ->where('CP.member_id', '=', $id)
             ->update($payload['coupon']);
 
             if (!empty($payload['coupon_items']))
