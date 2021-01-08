@@ -175,12 +175,13 @@ export default {
                 this.expire = this.expireDate;
                 this.$refs['my-modal'].hide();
             }
-            for (let i = 1; i<this.allProducts.length +1; i++){
-                let option = document.querySelector('#option_'+i).value
-                let spinValue = document.querySelector('#sb_'+i).value
-                this.couponProduct.push({option:option, spinValue:spinValue})
-            }
+            // for (let i = 1; i<this.allProducts.length +1; i++){
+            //     let option = document.querySelector('#option_'+i).value
+            //     let spinValue = document.querySelector('#sb_'+i).value
+            //     this.couponProduct.push({option:option, spinValue:spinValue})
+            // } //FIXME
             this.info = {'coupon':{code:this.code, start_time:this.start, end_time:this.expire, type:this.type, discount:this.discount, limit_money:this.limitMoney}}
+            console.log('updateCoupon:',this.info);
             //api
             this.$http.post('/seller/coupons/update',this.info,{
                 headers: {

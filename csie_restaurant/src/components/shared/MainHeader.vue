@@ -85,7 +85,7 @@ export default {
             this.$store.dispatch('auth/setSearchResult', this.search_result);
             // console.log('123',this.$store.getters['auth/searchResult'])
             this.$bus.$emit('reloadShop', this.search_result);
-            // this.$router.pushf
+            this.$router.push('/')
             console.log('enddd')
             
         }
