@@ -49,9 +49,7 @@ class CustomerController extends Controller
     public function getOrderInfo(Request $request, $orderId)
     {
         try {
-            $user = auth()->user();
-            $id = $user->id;
-            $result = $this->customerService->getOrderInfo($id, $orderId);
+            $result = $this->customerService->getOrderInfo($orderId);
         } catch (Exception $e) {
             return response()->json([
                 'status' => $e->getCode(),
