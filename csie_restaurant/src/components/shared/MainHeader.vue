@@ -53,7 +53,7 @@ export default {
         return {
             keywords: '',
             search_result: [],
-            search_shopName: [], //set options
+            search_shopName: [], //options
         };
     },
     methods: {
@@ -63,11 +63,12 @@ export default {
             let search = document.querySelector('#searchInput').textContent
             if (search.trim()==''){
                 console.log('NOTFOUND');
+                //FIXME SHOW NOT FOUND MODAL
                 return
             }
             let path = '/shop/' + this.search_result[0].seller_id + '/' + search.trim();
-            console.log('PPPPP',path);
             this.$router.push(path);
+            this.$bus.$emit('reloadShop');
         }
     },
     computed: {
@@ -90,7 +91,8 @@ export default {
             .catch(error => {
                 console.log(error)
             })
-        }
+        },
+        
     },
     beforeCreate: function() {},
     created: function() {},

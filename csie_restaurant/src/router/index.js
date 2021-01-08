@@ -93,5 +93,13 @@ const router = new VueRouter({
     mode: 'hash',
     routes: routes
 })
+router.beforeEach((to, from, next) => { //可以做router路徑判斷
+    if (1) { // 0 viewer 1 seller 2 mall this.$store.getters['auth/user'].permission ==
+        next()
+    }
+    else {
+        next()
+    }
+}).ca
 
 export default router

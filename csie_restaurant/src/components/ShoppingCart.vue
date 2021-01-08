@@ -294,8 +294,8 @@
     watch: {
       $route: {
         handler: function() {
-        this.onClose()
-      },
+          this.onClose()
+        },
       }
     },
     created(){

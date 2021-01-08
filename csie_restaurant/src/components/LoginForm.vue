@@ -106,6 +106,7 @@
           })
           }, 300)
           this.$emit('close')
+          this.$router.push({name: 'ShopManage'});
         })
         .catch(error => {
           console.log(error)
