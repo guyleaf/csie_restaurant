@@ -22,6 +22,7 @@ class CreateUsedCouponsTable extends Migration
             ->onUpdate("cascade")->onDelete("cascade");
             $table->foreign("coupon_id")->references("id")->on("coupon")
             ->onUpdate("cascade")->onDelete("cascade");
+            $table->index("customer_id");
         });
     }
 

@@ -34,6 +34,7 @@ $router->group(['prefix' => 'restaurants'], function () use ($router) {
     $router->get('{id}/category', 'ShopController@getProductCategories');
     $router->get('{id}/Info', 'ShopController@getShopInfo');
     $router->get('{id}/coupons', 'ShopController@getCoupons');
+    $router->get('search', 'ShopController@searchShops');
 });
 
 $router->group(['prefix' => 'members'], function () use ($router) {
