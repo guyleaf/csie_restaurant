@@ -45,25 +45,26 @@ export default {
     }
   },
   watch:{
-    $store:function () {
+    $store:function () {     
+ 
+  }},
+  created(){
       let sR = this.$store.getters['auth/searchResult'];
-      if(sR != null || sR.length!=0 ){
+      if(sR.length!=0 ){
         console.log('NOTNULL')
         this.cards = [];
-        for(let i=0; i<this.sR.length; i++){
+        for(let i=0; i<sR.length; i++){
           this.cards.push({shopId: sR[i].seller_id, shopName: sR[i].name, imgPath: this.$url + sR[i].header_image, rating: sR[i].averageofratings});
-        }
-      } 
-    }
-  },
-  created(){
+        } 
+      }
+    else{
     this.$http.get('/restaurants/?currentNumber=0&requiredNumber=10')
     .then(response => {
         this.cards=[];
         let data=response.data;
         for (let i=0;i<data.length;i++)this.cards.push({shopId: data[i].seller_id, shopName: data[i].name, imgPath: this.$url + data[i].header_image, rating: data[i].averageofratings});
     })
-
+    }
     this.$bus.$on('reloadShop',  msg=>{
       console.log('Homeon',msg)
       this.cards=[];
@@ -72,6 +73,8 @@ export default {
       }
       // window.location.reload();
     });
+  },
+  mounted(){
   }
 }
 </script>
