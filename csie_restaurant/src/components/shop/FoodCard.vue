@@ -86,7 +86,7 @@ export default {
             let productNum = this.parseCookie()['productNum'];
             if (productNum!=undefined) productNum = parseInt(productNum, 10) + 1;
             else productNum = 1;
-            if(this.$cookie.get("product")==null) 
+            if(this.$cookie.get("product")==null || this.$cookie.get('shopName')==null) 
             {   
                 this.$cookie.set('shopId',this.$router.currentRoute.params.id)
                 this.$cookie.set('shopName',this.$router.currentRoute.params.shopName)
@@ -105,7 +105,7 @@ export default {
                     else cartProduct.push(this.data[0])
                     this.$cookie.set('product', JSON.stringify(cartProduct));
                 }
-                else
+                else 
                 {
                     this.change = true;
                     this.changeShop(cartShop,currentShop);
