@@ -32,10 +32,10 @@ class OrderService
         return $result;
     }
 
-    public function getOrderInfo($id, $orderId)
+    public function getOrderInfo($orderId)
     {
         $result = $this->orderRepository
-        ->getOrderInfo($id, $orderId);
+        ->getOrderInfo($orderId);
 
         if (!empty($result->get('order')->coupon_id) && $result->get('order')->coupon_type == 2)
         {
