@@ -149,6 +149,7 @@
           }
         })
         .then(response => {
+          console.log(response.data)
           let datas=response.data
           history.item.datas=[]
           history.item.comment=datas.order.comment

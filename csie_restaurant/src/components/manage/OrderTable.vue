@@ -2,7 +2,7 @@
   <div>
     <b-table :items="items" :fields="fields" striped responsive="sm">
       <template #cell(訂單狀態)="row">
-            <b-form-select v-model="row.item.訂單狀態" :options="options" />
+        {{status[row.item.訂單狀態]}}
       </template>
       <template #cell(評分)="row">
         <div class="star">
@@ -19,7 +19,10 @@
 
       <template #row-details="row">
         <b-card>
+          <div class="row"> 客戶帳號: {{account}}</div>
+          <!-- <div class="row">  -->
           <div class='container row'>
+          
             <div class='col-md-3'>
                   <b-row class="mb-2" v-for= "(data,index) in row.item.datas " :key="index">
                       <b-row class="mr-2">{{ data.product_name }}</b-row>
@@ -41,12 +44,12 @@
             </div>
             <div class='col-md-6'>
                 <div class='row justify-content-center'>
-                  <textarea :id="'text'+row.index" :placeholder="items[row.index].comment" class='tA' :readonly="items[row.index].readonly"/>
-                  <div :id ="'disabled-wrapper'+row.index" class="d-inline-block sb">
-                    <b-button class="te" :disabled="items[row.index].ratingdisabled" @click="submitRating(row)">評價</b-button>
+                  <textarea :id="'text'+row.index" :placeholder="items[row.index].comment" class='tA' :readonly="items[row.index].readonly"></textarea>
+                  <div :id ="'disabled-wrapper'+row.index" class="d-inline-block sb row">
+                    <b-button class="te col-md-9" :disabled="items[row.index].ratingdisabled" variant='success' @click="submitRating(row)">{{row.item.msg}}</b-button>
+                    <b-button class="cancel col-md-3" :disabled="items[row.index].ratingdisabled" variant='danger' @click="cancelOrder(row)">取消</b-button>
                   </div>
-                  <b-tooltip v-if="!items[row.index].isClicked" :target="'disabled-wrapper'+row.index">請先給予評分。</b-tooltip>
-                  <b-tooltip v-if="items[row.index].isRated" :target="'disabled-wrapper'+row.index">已留言</b-tooltip>
+                  <b-tooltip v-if="items[row.index].isFinish" :target="'disabled-wrapper'+row.index">已完成</b-tooltip>
                 </div>
             </div>
           </div>
@@ -65,24 +68,18 @@
         starb:'https://i.imgur.com/gONraUA.png',//暗星星
         status: ['已下單','店家已確認','準備中','運送中','已完成','已取消'],
         fields: ['訂單編號', '下單日期', '訂單狀態', '評分', '顯示更多'],
-                    options: [
-            { value: 0, text: '已下單' },
-            { value: 1, text: '店家已確認' },
-            { value: 2, text: '準備中' },
-            { value: 3, text: '運送中' },
-            { value: 4, text: '已完成'},
-            { value: 5, text: '已取消'},
-            ],
         items: [
           { 
               id:0,
               seller_id:0,
               ratingStar:3,
-              readonly:false,
-              comment:"請留下您的評論。",
-              ratingdisabled:true,
+              readonly:true,
+              ratingdisabled:false,
+              comment:"123123",
               訂單編號: 'Dickerson', 下單日期: '2020-11-11 04:12:25',
-              運輸時間:'null',地址:'null',訂單狀態:4,
+              運輸時間:'null',地址:'null',訂單狀態:0,
+              msg:'下一步:店家已確認',
+              isFinish:false,
               fee:0,
               isShippingCoupon:false,
               datas:[
@@ -142,18 +139,47 @@
       },
       submitRating(history){
         var index = history.index
-        var textArea = document.getElementById("text"+index.toString())
-        var comment = textArea.value
-        this.items[index].isRated = true
-        this.items[index].readonly = true
-        this.items[index].comment = comment
-        this.items[index].ratingdisabled=!this.items[index].ratingdisabled
+        this.$confirm("確定要更改狀態為"+ this.status[this.items[index].訂單狀態+1],"","question").then(() => {
+          this.items[index].訂單狀態 += 1;
+          if ( this.items[index].訂單狀態 == 4){
+            this.items[index].msg = '已完成'
+            this.items[index].isFinish = true
+            this.items[index].ratingdisabled=!this.items[index].ratingdisabled
+          }
+          else{
+            this.items[index].msg = '下一步：'+ this.status[this.items[index].訂單狀態+1]
+            this.items[index].isRated = true
+            this.items[index].readonly = true
+          }
+          this.$alert("更改成功","","success");
+        })
+        // this.items[index].ratingdisabled=!this.items[index].ratingdisabled
+      },
+      cancelOrder(history){
+        var index = history.index
+        this.$confirm("您確定要取消訂單嗎？","","warning").then(() => {
+          this.items[index].訂單狀態 =5;
+          this.items[index].msg = '已取消'
+          this.items[index].isFinish = true
+          this.items[index].ratingdisabled=!this.items[index].ratingdisabled
+          this.$alert("取消成功","","success");
+        })
       },
       show(history){
+        this.$http.get('/customer/orders/'+history.item.id, {
+          headers: {
+            'Authorization': 'Bearer ' + this.$store.getters['auth/token']
+          }
+        }).then(response=>{
+          console.log(response.data)
+        })
           console.log(history)
+          history.toggleDetails()
       }
     },
-
+  computed:{
+    
+  }
   }
 </script>
 
@@ -200,8 +226,17 @@
   .te{
       width:100%;
       height: 100%;
-      background:rgba(67,154,255,1);
-      border-radius:4px;
+      /* background:rgba(67,154,255,1); */
+      border-radius:0px;
+      font-size:15px;
+      font-family:PingFangSC-Regular;
+      font-weight:400;
+      color:rgba(254,254,254,1);
+  }
+  .cancel{
+      width:100%;
+      height: 100%;
+      border-radius:0px;
       font-size:15px;
       font-family:PingFangSC-Regular;
       font-weight:400;
