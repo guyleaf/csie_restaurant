@@ -2,6 +2,7 @@
 namespace App\Repositories;
 
 use Illuminate\Support\Facades\DB;
+use Exception;
 
 class CouponRepository
 {
@@ -48,7 +49,7 @@ class CouponRepository
         $result = $this->coupon
         ->where('member_id', '=', $member_id)
         ->where('is_deleted', '=', false)
-        ->get(['id', 'code', 'start_time', 'end_time', 'type', 'discount', 'limit_money']);
+        ->get(['id', 'code', 'start_time', 'end_time', 'type', 'discount', 'limit_money', 'numberOfUsage']);
 
         return $result;
     }
@@ -58,7 +59,7 @@ class CouponRepository
         $result = $this->coupon
         ->where('id', '=', $coupon_id)
         ->where('is_deleted', '=', false)
-        ->get(['id', 'code', 'member_id', 'start_time', 'end_time', 'type', 'discount', 'limit_money']);
+        ->get(['id', 'code', 'member_id', 'start_time', 'end_time', 'type', 'discount', 'limit_money', 'numberOfUsage']);
 
         return $result;
     }
@@ -68,14 +69,17 @@ class CouponRepository
         $result = $this->coupon
         ->where('code', '=', $coupon_code)
         ->where('is_deleted', '=', false)
-        ->get(['id', 'code', 'member_id', 'start_time', 'end_time', 'type', 'discount', 'limit_money']);
+        ->get(['id', 'code', 'member_id', 'start_time', 'end_time', 'type', 'discount', 'limit_money', 'numberOfUsage']);
 
         return $result;
     }
 
     public function addCoupon($seller_id, $payload)
     {
-        DB::transaction(function () use ($seller_id, $payload) {
+        DB::beginTransaction();
+
+        try
+        {
             $payload['coupon']['member_id'] = $seller_id;
 
             $id = DB::table('coupon', 'CP')
@@ -91,17 +95,26 @@ class CouponRepository
 
             if (!empty($payload['coupon_items']))
             {
-                $payload['coupon_items'] = 
+                $payload['coupon_items'] =
                 array_map(function ($item) use ($id) {
                     $item['coupon_id'] = $id;
                     return $item;
                 }, $payload['coupon_items']);
-                
+
 
                 DB::table('specified_coupon_product', 'SCP')
                 ->insert($payload['coupon_items']);
             }
-        }, 3);
+
+            DB::commit();
+        }
+        catch (Exception $e)
+        {
+            DB::rollBack();
+            throw $e;
+        }
+
+        return $id;
     }
 
     public function deleteCoupon($code)

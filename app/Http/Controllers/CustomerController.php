@@ -62,19 +62,28 @@ class CustomerController extends Controller
         return response()->json($result);
     }
 
-    public function checkCoupon(Request $request)
+    public function useCoupon(Request $request)
     {
         $user = auth()->user();
         $id = $user->id;
-        $code = $this->customerService->checkCoupon($id, $request->query('coupon_code'), $request->query('seller_id'));
+        $result = $this->customerService
+        ->useCoupon($id, $request->input('coupon_code'), $request->input('seller_id'), $request->except(['coupon_code', 'seller_id']));
 
-        if ($code == 3)
-            return response()->json(['message' => 'You have used this coupon before'], 403);
-        else if ($code == 2)
-            return response()->json(['message' => 'This coupon is not for this seller'], 403);
-        else if ($code == 1)
-            return response()->json(['message' => 'Unknown coupon'], 403);
+        if (gettype($result) != 'array')
+        {
+            $code = $result;
+            if ($code == 5)
+                return response()->json(['message' => '優惠券使用次數到達上限'], 403);
+            else if ($code == 4)
+                return response()->json(['message' => '無效的優惠券'], 403);
+            else if ($code == 3)
+                return response()->json(['message' => '優惠券已過期'], 403);
+            else if ($code == 2)
+                return response()->json(['message' => '優惠券不適用於此店家'], 403);
+            else if ($code == 1)
+                return response()->json(['message' => '未滿足優惠券之條件'], 403);
+        }
         else
-            return response()->json(['message' => 'Valid coupon'], 200);
+            return response()->json(['message' => '恭喜! 優惠券可以使用', 'coupon' => $result], 200);
     }
 }

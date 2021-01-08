@@ -32,6 +32,7 @@ class CreateProductsTable extends Migration
             ->onUpdate("cascade")->onDelete("cascade");
             $table->foreign(["category_id", "category_name"])->references(["seller_id", "name"])->on("product_category")
             ->onUpdate("cascade")->onDelete("cascade");
+            $table->index("seller_id");
         });
         DB::statement('ALTER TABLE "product" ADD CONSTRAINT chk_status_of_product CHECK (status BETWEEN 0 AND 1);');
     }

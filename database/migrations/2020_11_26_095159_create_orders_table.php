@@ -37,6 +37,8 @@ class CreateOrdersTable extends Migration
             ->onUpdate("cascade")->onDelete("cascade");
             $table->foreign("seller_id")->references("member_id")->on("seller")
             ->onUpdate("cascade")->onDelete("cascade");
+            $table->index('customer_id');
+            $table->index('seller_id');
         });
 
         DB::statement('ALTER TABLE "order" ADD CONSTRAINT chk_rating_time CHECK (rating_time >= order_time);');
