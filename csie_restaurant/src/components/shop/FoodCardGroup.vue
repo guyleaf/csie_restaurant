@@ -9,10 +9,6 @@
                 <FoodCard 
                     v-for="card in sameTag(category.foodCategory,true)" :key="card.foodId"
                     v-bind="card"
-                    :foodName="card.foodName" 
-                    :imgPath="card.imgPath"
-                    :foodDescription="card.foodDescription" 
-                    :foodTag="card.foodTag"
                 />
             </div>
         </div>

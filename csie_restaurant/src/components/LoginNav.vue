@@ -2,9 +2,9 @@
   <div>
     <b-button v-if="!logined" @click="showModal">Login</b-button>
     <b-dropdown v-else id="dropdown" :text="loginMsg" class="m-md-2" right style="min-width: 4rem">
-      <b-dropdown-item><b-link :to="{name: 'History'}">History</b-link></b-dropdown-item>
-      <b-dropdown-item v-if="this.$store.getters['auth/user'].permission==1"><b-link :to="{name: 'ShopManage'}">ShopManage</b-link></b-dropdown-item>
-      <b-dropdown-item v-if="this.$store.getters['auth/user'].permission<=1"><b-link :to="{name: 'SalesReport'}">Manage</b-link></b-dropdown-item>
+      <b-dropdown-item :to="{name: 'History'}" v-if="this.$store.getters['auth/user'].permission==2">History</b-dropdown-item>
+      <b-dropdown-item :to="{name: 'ShopManage'}" v-if="this.$store.getters['auth/user'].permission==1">ShopManage</b-dropdown-item>
+      <b-dropdown-item :to="{name: 'SalesReport'}" v-if="this.$store.getters['auth/user'].permission<=1">Manage</b-dropdown-item>
       <b-dropdown-item @click="logout">Logout</b-dropdown-item>
     </b-dropdown>
     <LoginForm ref="form" @close="closeModal" @success="loginSucess"/>
