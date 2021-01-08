@@ -122,7 +122,10 @@ class SearchService
 
     public function searchShops($keywords)
     {
-        
+        $result = $this->shopRepository
+        ->searchShops($keywords);
+
+        return $result;
     }
 
     public function getCategories()

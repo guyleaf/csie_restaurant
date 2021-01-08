@@ -2,6 +2,7 @@
 namespace App\Repositories;
 
 use Illuminate\Support\Facades\DB;
+use Exception;
 
 class CouponRepository
 {
@@ -94,12 +95,12 @@ class CouponRepository
 
             if (!empty($payload['coupon_items']))
             {
-                $payload['coupon_items'] = 
+                $payload['coupon_items'] =
                 array_map(function ($item) use ($id) {
                     $item['coupon_id'] = $id;
                     return $item;
                 }, $payload['coupon_items']);
-                
+
 
                 DB::table('specified_coupon_product', 'SCP')
                 ->insert($payload['coupon_items']);
