@@ -19,10 +19,12 @@
 
             <b-nav-form class="ml-auto">
                 <b-input-group size="sm" >
-                    <b-form-input type="search" placeholder="Search terms" list="result" v-model="keywords" debounce="700"></b-form-input>
-                    
-                    <b-input-group-prepend>
-                        <b-button variant="success" @click="go()">search</b-button>
+                    <b-form-input list="searchInput" placeholder="Search Shop" v-model="keywords" debounce="700"></b-form-input>
+                    <datalist id="searchInput">
+                        <option v-for="name in search_shopName" :key="name"> {{ name }}</option>
+                    </datalist>
+                    <b-input-group-prepend >
+                        <b-button variant="success" @click="goShop">Search</b-button>
                     </b-input-group-prepend>
                 </b-input-group>
             </b-nav-form>
@@ -50,14 +52,22 @@ export default {
     data: function() {
         return {
             keywords: '',
-            search_result: []
+            search_result: [],
+            search_shopName: [], //set options
         };
     },
-    method: {
+    methods: {
         showHistory() {
         },
-        go() {
-            
+        goShop() {
+            let search = document.querySelector('#searchInput').textContent
+            if (search.trim()==''){
+                console.log('NOTFOUND');
+                return
+            }
+            let path = '/shop/' + this.search_result[0].seller_id + '/' + search.trim();
+            console.log('PPPPP',path);
+            this.$router.push(path);
         }
     },
     computed: {
@@ -69,7 +79,13 @@ export default {
             this.$axios.get(this.$url + url)
             .then(response => {
                 console.log(response)
-                this.search_result = response.data
+                this.search_result = response.data;
+                console.log(this.search_result);
+                this.search_shopName = [];
+                for(let i=0;i<this.search_result.length ;i++){
+                    this.search_shopName.push(this.search_result[i].name);
+                }
+                
             })
             .catch(error => {
                 console.log(error)
