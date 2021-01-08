@@ -61,10 +61,10 @@ class CustomerService
         return $result;
     }
 
-    public function getOrderInfo($id, $orderId)
+    public function getOrderInfo($orderId)
     {
         $result = $this->orderService
-        ->getOrderInfo($id, $orderId);
+        ->getOrderInfo($orderId);
         return $result;
     }
 

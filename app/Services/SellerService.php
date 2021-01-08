@@ -37,14 +37,14 @@ class SellerService
         return $coupon_id;
     }
 
-    public function deleteCoupon($code)
+    public function deleteCoupon($seller_id, $code)
     {
-        $this->couponRepository->deleteCoupon($code);
+        $this->couponRepository->deleteCoupon($seller_id, $code);
     }
 
-    public function updateCoupon($payload)
+    public function updateCoupon($seller_id, $payload)
     {
-        $this->couponRepository->updateCoupon($payload);
+        $this->couponRepository->updateCoupon($seller_id, $payload);
     }
 
     public function addProduct($seller_id, $payload)
