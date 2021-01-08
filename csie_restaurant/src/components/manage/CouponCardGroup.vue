@@ -111,13 +111,11 @@ export default {
             return result;
         },
         confirmModal(){
-            for (let i = 1; i<this.allProducts.length+1; i++){
+            for (let i = 1; i<this.couponProductNum+1; i++){
                 let option = document.querySelector('#option_'+i).value
                 let spinValue = document.querySelector('#sb_'+i).value
                 this.couponProduct.push({option:option, spinValue:spinValue})
             }
-            
-            console.log(this.couponProduct)
             this.$refs['my-modal'].hide();
         },
         cancelModal(){
