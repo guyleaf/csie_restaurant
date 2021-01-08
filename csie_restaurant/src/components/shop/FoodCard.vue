@@ -120,8 +120,9 @@ export default {
             if(cartShop != currentShop && this.$cookie.get("product") !=null)
             {
                 this.change = true;
-                this.cleanShopCart()
+                this.cleanShopCart(cartShop, currentShop)
             }
+            else this.$refs['my-modal'].show();
         },
         checkItemExistCart(cart,item){
             let index = -1;
@@ -145,8 +146,8 @@ export default {
                 // this.$refs['my-modal'].hide();
             // })
         },
-        cleanShopCart(){
-            this.$confirm("您的訂單含有"+' '+cartShop+' '+"提供的餐點。建立新訂單，即可新增"+' '+currentShop+' '+"提供的餐點。","","warning").then(() => {
+        cleanShopCart(cartShop,currentShop){
+            this.$confirm("您的訂單含有"+' '+cartShop+' '+"提供的餐點。清空購物車，即可新增"+' '+currentShop+' '+"提供的餐點。","","warning").then(() => {
                 // this.cleanShopCart()
                 document.cookie = 'shopId=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
                 document.cookie = 'shopName=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
@@ -155,7 +156,9 @@ export default {
                 // this.$cookie.set('shopName',this.$router.currentRoute.params.shopName)
                 // this.$cookie.set('product', JSON.stringify(this.data))
                 // uploadtodatabase
-                this.$alert("成功建立新訂單","","success");
+                this.$alert("已清空購物車","","success").then(()=>{
+                    this.$refs['my-modal'].show();
+                });
                 // this.$bus.$emit("addfunction",this.dataToCart);
                 // this.$refs['my-modal'].hide();
             })
@@ -165,14 +168,11 @@ export default {
         },
         showModal() {
             this.checkSameShop()
-            this.$refs['my-modal'].show();
         },
         confirmModal() {
             this.addToCookie()
-            if(!this.change){
-                this.$bus.$emit("addfunction",this.dataToCart);
-                this.$refs['my-modal'].hide();
-            }
+            this.$bus.$emit("addfunction",this.dataToCart);
+            this.$refs['my-modal'].hide();
         },
     }
 }

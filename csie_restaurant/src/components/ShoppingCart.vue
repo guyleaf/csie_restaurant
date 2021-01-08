@@ -83,7 +83,7 @@
           {
             foodName: null,
             foodPrice: null,
-            foodSpinValue: null,
+            quantity: null,
           }
         ],
         totalPrice: null,
@@ -105,7 +105,7 @@
         for (var i = 0; i<data.length;i++)
         {
           this.totalPrice = this.totalPrice + data[i].foodPrice*data[i].quantity;
-          this.ItemList.push({foodName:data[i].foodName, foodSpinValue:data[i].quantity, foodPrice:data[i].foodPrice});
+          this.ItemList.push({foodName:data[i].foodName, quantity:data[i].quantity, foodPrice:data[i].foodPrice});
         }
         if(coupon != null)
         {
@@ -178,17 +178,6 @@
           let orderItems = this.$cookie.get('product')
 
           let data = { coupon_code:coupon,seller_id:id,orderItems:orderItems,total_price:this.totalPrice}
-          console.log(data)
-//           {
-              //     "id":,
-              //     "quantity":
-              // }
-            //           {
-            //   "code":,
-            //   "seller_id":,
-            //   "orderItems":[{}, {}],
-            //   "total_price":
-            // }
           this.$http.post('/customer/coupon/use',data , {
             headers: {
               'Authorization': 'Bearer ' + this.$store.getters['auth/token']
@@ -244,11 +233,11 @@
         productCookie[index].quantity = value
         document.cookie = 'product=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
         this.$cookie.set('product', JSON.stringify(productCookie))
-        this.totalPrice = this.totalPrice + (value - this.ItemList[index].foodSpinValue) * this.ItemList[index].foodPrice
-        this.ItemList[index].foodSpinValue = value;
+        this.totalPrice = this.totalPrice + (value - this.ItemList[index].quantity) * this.ItemList[index].foodPrice
+        this.ItemList[index].quantity = value;
       },
       deleteCartCell(e){
-        this.totalPrice = this.totalPrice - this.ItemList[e].foodPrice*this.ItemList[e].foodSpinValue;
+        this.totalPrice = this.totalPrice - this.ItemList[e].foodPrice*this.ItemList[e].quantity;
         this.ItemList.splice(e,1);
         if(this.totalPrice == 0) {
           this.bookingShopName = null;
@@ -261,6 +250,7 @@
           document.cookie = 'product=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
         }
         else{ this.$cookie.set('product',JSON.stringify(this.ItemList));}
+        console.log(this.$cookie.get('product'))
       },
       onClose() {
         this.popoverShow = false
@@ -280,7 +270,7 @@
         {
             foodName: name,
             foodPrice: price,
-            foodSpinValue: spinValue,    
+            quantity: spinValue,    
         })
       },
       handleScroll ()

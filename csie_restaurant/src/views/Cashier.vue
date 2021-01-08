@@ -48,7 +48,7 @@ export default {
         let data = this.parseCookie();
         for (var i = 0; i<data.length;i++)
         {
-          this.ItemList.push({foodName:data[i].foodName, foodSpinValue:data[i].foodSpinValue, foodPrice:data[i].foodPrice});
+          this.ItemList.push({foodName:data[i].foodName, quantity:data[i].quantity, foodPrice:data[i].foodPrice});
         }
       },
       deleteCartCell(e){

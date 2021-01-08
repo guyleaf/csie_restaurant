@@ -106,7 +106,8 @@
           })
           }, 300)
           this.$emit('close')
-          if(this.$store.getters['auth/user'].permission == 1)this.$router.push({name: 'ShopManage'});
+          if(this.$store.getters['auth/user'].permission == 1)
+            this.$router.push({name: 'ShopManage'});
         })
         .catch(error => {
           console.log(error)

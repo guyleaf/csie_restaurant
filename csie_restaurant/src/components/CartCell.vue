@@ -3,7 +3,7 @@
         <b-card no-body class="over-flow-hidden" style="max-width: 540px; border:none">
             <b-row no-gutters class="align-items-center prbody">
                 <b-col md="5">
-                    <b-form-spinbutton id="sb-inline" min="1" v-model="foodSpinValue" inline step size="sm" style="width:7rem"></b-form-spinbutton>
+                    <b-form-spinbutton id="sb-inline" min="1" v-model="quantity" inline step size="sm" style="width:7rem"></b-form-spinbutton>
                 </b-col>
                 <b-col md="5">
                     <b-card-text class = "card_text">{{foodName}}</b-card-text>
@@ -23,7 +23,7 @@ export default {
     props:{
         foodName: String,
         foodPrice: Number,
-        foodSpinValue: Number,
+        quantity: Number,
         index: Number
     },
     methods: {
@@ -33,13 +33,13 @@ export default {
     },
     computed: {
         totalPrice: function() {
-            return this.foodPrice*this.foodSpinValue;
+            return this.foodPrice*this.quantity;
         }
     },
     watch: {
-        foodSpinValue: function(){
-            if(this.foodSpinValue >=1 ){
-                this.$emit("spinClick",this.index,this.foodSpinValue)
+        quantity: function(){
+            if(this.quantity >=1 ){
+                this.$emit("spinClick",this.index,this.quantity)
             }
         }
     },
