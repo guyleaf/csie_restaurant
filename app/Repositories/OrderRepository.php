@@ -12,9 +12,9 @@ class OrderRepository
     protected $order;
 
     /**
-     * @var \Illuminate\Database\Query\Builder $product_image
+     * @var \Illuminate\Database\Query\Builder $order_items
      */
-    protected $product_image;
+    protected $order_items;
 
     /**
      * Member Repository constructor
@@ -24,7 +24,7 @@ class OrderRepository
     public function __construct()
     {
         $this->order = DB::table('order', 'O');
-        $this->product_image = DB::table('product_image', 'PI');
+        $this->order_items = DB::table('order_item', 'OI');
     }
 
     /**
@@ -73,6 +73,57 @@ class OrderRepository
             ->get(['P.id as product_id', 'PI.image_path', 'P.name as product_name', 'I.quantity', 'I.price', 'I.note']);
 
         return collect(['order' => $order[0], 'order_items' => $items]);
+    }
+
+    public function getActiveOrdersStatus($id)
+    {
+        $result = $this->order
+        ->join('member as M', 'M.id', '=', 'O.seller_id')
+        ->join('seller as S', 'S.member_id', '=', 'O.seller_id')
+        ->where('O.customer_id', '=', $id)
+        ->where('O.status', '<', 4)
+        ->orderByDesc('O.order_time')
+        ->get(['O.id', 'O.status', 'M.name', 'S.header_image', 'O.taking_method', 'O.payment_method']);
+
+        return $result;
+    }
+
+    public function addOrder($customer_id, $payload)
+    {
+        DB::transaction(function () use ($customer_id, $payload) {
+            $payload['order']['customer_id'] = $customer_id;
+
+            $id = DB::table('order', 'O')
+            ->orderByDesc('id')
+            ->limit(1)->lockForUpdate()
+            ->get(['id'])->first()->id + 1;
+
+            $payload['order']['id'] = $id;
+
+            DB::table('order', 'O')
+            ->insert($payload['order']);
+
+            $payload['order_items'] =
+            array_map(function ($item) use ($id) {
+                $item['order_id'] = $id;
+                return $item;
+            }, $payload['order_items']);
+
+
+            DB::table('order_item', 'OI')
+            ->insert($payload['order_items']);
+        }, 3);
+    }
+
+    public function updateOrder($id, $payload)
+    {
+        DB::transaction(function () use ($id, $payload) {
+            DB::table('order', 'O')
+            ->where('O.id', '=', $payload['order']['id'])
+            ->where('O.customer_id', '=', $id)
+            ->orWhere('O.seller_id', '=', $id)
+            ->update($payload['order']);
+        });
     }
 }
 ?>

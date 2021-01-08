@@ -62,7 +62,7 @@ class SellerController extends Controller
     {
         // $user = auth()->userOrFail();
         // $id = $user->id;
-        $this->sellerService->deleteCoupon($request->input('code'));
+        $this->sellerService->deleteCoupon(4, $request->input('code'));
         return response()->json(['message' => 'Success']);
     }
 
@@ -70,7 +70,7 @@ class SellerController extends Controller
     {
         // $user = auth()->userOrFail();
         // $id = $user->id;
-        $this->sellerService->updateCoupon($request->all());
+        $this->sellerService->updateCoupon(4, $request->all());
         return response()->json(['message' => 'Success'], 201);
     }
 
