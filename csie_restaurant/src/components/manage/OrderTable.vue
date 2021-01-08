@@ -78,7 +78,7 @@
               comment:"123123",
               訂單編號: 'Dickerson', 下單日期: '2020-11-11 04:12:25',
               運輸時間:'null',地址:'null',訂單狀態:0,
-              msg:'下一步:已下單',
+              msg:'下一步:店家已確認',
               isFinish:false,
               fee:0,
               isShippingCoupon:false,
