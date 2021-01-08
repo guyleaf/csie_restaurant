@@ -28,6 +28,7 @@ class CreateCouponsTable extends Migration
             // $table->enum("type", [0, 1, 2])->comment("優惠券種類");
             $table->foreign("member_id")->references("id")->on("member")
             ->onUpdate("cascade")->onDelete("cascade");
+            $table->index('member_id');
         });
 
         DB::statement('ALTER TABLE "coupon" ADD CONSTRAINT chk_condition_of_coupon CHECK (discount IS NOT NULL OR limit_money IS NOT NULL);');
