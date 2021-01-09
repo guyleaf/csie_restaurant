@@ -74,13 +74,13 @@ class CouponRepository
         return $result;
     }
 
-    public function addCoupon($id, $payload)
+    public function addCoupon($member_id, $payload)
     {
         DB::beginTransaction();
 
         try
         {
-            $payload['coupon']['member_id'] = $id;
+            $payload['coupon']['member_id'] = $member_id;
 
             $id = DB::table('coupon', 'CP')
             ->orderByDesc('id')
@@ -124,14 +124,14 @@ class CouponRepository
         ->update(['is_deleted' => true]);
     }
 
-    public function updateCoupon($id, $payload)
+    public function updateCoupon($payload)
     {
-        DB::transaction(function () use ($id, $payload) {
+        DB::transaction(function () use ($payload) {
             DB::table('coupon', 'CP')
             ->where('id', '=', $payload['coupon']['id'])
             ->update($payload['coupon']);
 
-            if ($payload['coupon']['type'] == 2)
+            if ($payload['coupon']['type'] == 2 && !empty($payload['coupon_items']))
             {
                 $id = $payload['coupon']['id'];
                 
@@ -142,6 +142,8 @@ class CouponRepository
                 DB::table('specified_coupon_product', 'SCP')
                 ->insert($payload['coupon_items']);
             }
+            else
+                throw 'Coupon items should be not empty';
         });
     }
 }
