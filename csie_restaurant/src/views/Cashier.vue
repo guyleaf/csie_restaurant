@@ -3,14 +3,18 @@
     <b-row class="justify-content-md-center mt-5">
       <b-col col lg="4">
         <div class="desField">
-          <div v-for="(item,index) in ItemList" :key="index" style="border-bottom:1px solid;" >
+        <div class="title" style="border-bottom:1px solid;">
+          <h2>親愛的Nelson您好，</h2>
+          <h2>以下是您購物車內的商品：</h2>
+        </div>
+          <div v-for="(item,index) in ItemList" :key="index" style="border-bottom:1px solid; justify-content:center" >
             <CartCell v-on:deleteclick="deleteCartCell" v-bind="item" :index="index"/>
           </div>
         </div>
       </b-col>
       <b-col col lg="1"></b-col>
       <b-col col lg="3">
-        <h1>Total Price</h1>
+        <h1>Total Price:</h1>
         <h3>{{totalPrice}}</h3>
         <CashierForm />
       </b-col>
@@ -29,13 +33,11 @@ export default {
     CashierForm
   },
   props:{
-    totalPrice: Number
-  },
+    },
   data() {
-      return {
-        ItemList:[
-
-        ]
+    return {
+      ItemList:[],
+        totalPrice: 0
       }
   },
   methods:{
@@ -49,6 +51,8 @@ export default {
         for (var i = 0; i<data.length;i++)
         {
           this.ItemList.push({foodName:data[i].foodName, quantity:data[i].quantity, foodPrice:data[i].foodPrice});
+          console.log(this.ItemList[i].foodPrice * this.ItemList[i].quantity)
+          this.totalPrice += this.ItemList[i].foodPrice * this.ItemList[i].quantity
         }
       },
       deleteCartCell(e){
@@ -76,11 +80,15 @@ export default {
   padding: 0% !important;
   overflow: hidden;
 }
+.title{
+  text-align: left;
+  font-weight: bolder;
+},
 .desField{
   overflow-x: visible;
   overflow-y: scroll;
   padding:  1%;
-  margin:0% 2% 3% 0;
+  margin:2% 2% 3% 0;
   border-width: 2px;
   border-color: #000000;
   height: 380px;

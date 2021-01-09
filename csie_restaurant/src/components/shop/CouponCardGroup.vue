@@ -31,8 +31,9 @@ export default {
     },
     created(){
         let id = this.$router.currentRoute.params.id
-        this.$http.get('restaurants/' + id + '/coupons' + '?include_expired=1'). //FIXME  ?include_expired=1要移除
+        this.$http.get('restaurants/' + id + '/coupons' + '?include_expired=0'). //FIXME  ?include_expired=1要移除
         then(response => {
+            console.log(response.data)
             this.couponCards=response.data;
         })
     }

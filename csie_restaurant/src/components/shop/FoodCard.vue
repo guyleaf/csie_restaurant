@@ -168,6 +168,7 @@ export default {
         },
         showModal() {
             if (this.$store.getters['auth/token'] == null || this.$store.getters['auth/user'].permission==2){
+                this.spinValue = 1;
                 this.checkSameShop()
             }
         },
