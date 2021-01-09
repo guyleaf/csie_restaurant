@@ -81,6 +81,7 @@ class SellerService
 
             $product_id = $payload['id'];
             $path = public_path('restaurant/' . strval($seller_id) . '/') . strval($product_id) . '.' . $image_extension;
+            chmod($path, 777);
             unlink($path);
             $image->storeAs($path);
         }
