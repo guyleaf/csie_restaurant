@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Repositories\CouponRepository;
 use App\Repositories\ProductRepository;
+use Exception;
 
 class SellerService
 {
@@ -82,9 +83,15 @@ class SellerService
 
             $product_id = $payload['id'];
             $path = public_path('restaurant/' . strval($seller_id) . '/') . strval($product_id) . '.' . $image_extension;
-          
-            File::delete($path);
-            $image->storeAs($path);
+            try
+            {
+                File::delete($path);
+                $image->storeAs($path);
+            }
+            catch (Exception $e)
+            {
+                return response()->json($e, 500);
+            }
         }
     }
 }
