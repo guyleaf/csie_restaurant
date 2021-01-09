@@ -1,6 +1,6 @@
 <template>
     <div class="container" >
-        <CategoryTab :foodCategory="foodCategories" class="tab"/>
+        <CategoryTab :foodCategory="hasProducts(foodCards)" class="tab"/>
         <div class="row" v-for="category in hasProducts(foodCards)" :key="category.categoryId">
             <div class="row">
                 <h1>{{category.foodCategory}}</h1>
