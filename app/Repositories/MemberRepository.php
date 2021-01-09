@@ -13,6 +13,11 @@ class MemberRepository
     protected $memberTable;
 
     /**
+     * @var \Illuminate\Database\Query\Builder $memberTable
+     */
+    protected $customerTable;
+
+    /**
      * Member Repository constructor
      *
      * @return void
@@ -20,6 +25,7 @@ class MemberRepository
     public function __construct()
     {
         $this->memberTable = DB::table('member');
+        $this->customerTable = DB::table('customer');
     }
     /**
      * Get shops
@@ -36,6 +42,41 @@ class MemberRepository
             ->get(['id as seller_id', 'name', 'username', 'email', 'created_at', 'phone', 'member_status', ]);
 
         return $members;
+    }
+
+    public function addMember($payload)
+    {
+        DB::beginTransaction();
+
+        try
+        {
+            $payload['member']['created_at'] = new DateTime('now', new DateTimeZone('Asia/Taipei'));
+            $payload['member']['created_at'] = $payload['member']['created_at']->format('Y-m-d H:i:s');
+            $payload['member']['updated_at'] = $payload['member']['created_at'];
+
+            $id = $this->memberTable
+            ->orderByDesc('id')
+            ->limit(1)
+            ->lockForUpdate()
+            ->get(['id'])->first()->id + 1;
+
+            $payload['member']['id'] = $id;
+            $payload['customer']['member_id'] = $id;
+
+            $this->memberTable
+            ->insert($payload['member']);
+
+            $this->customerTable
+            ->insert($payload['customer']);
+
+            DB::commit();
+        }
+        catch (Exception $e)
+        {
+            DB::rollBack();
+            throw $e;
+        }
+
     }
 
     public function updateMember($payload)
