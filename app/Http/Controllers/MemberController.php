@@ -45,7 +45,7 @@ class MemberController extends Controller
     public function addMember(Request $request)
     {
         $this->memberService->addMember($request->all());
-        return response()->json(['message' => 'Success']);
+        return response()->json(['message' => 'Success'], 201);
     }
 
     public function updateMember(Request $request)
