@@ -70,4 +70,10 @@ export default {
       z-index: 20;
       position: sticky;
   }
+  .modal-open {
+    padding-right: 16px !important;
+}
+  body{
+      padding-right: 0px !important;
+  }
 </style>

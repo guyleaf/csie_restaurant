@@ -187,12 +187,14 @@ export default {
             this.$http.post('/seller/products/update',formdata,{
                 headers: {
                 'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
-                }
+            }}).then(response => {
+                this.$alert("修改成功","","success");
+                this.$refs['my-modal'].hide();
             }).catch(error=>{
                 this.$alert("修改失敗","","error");
+                this.$refs['my-modal'].hide();
                 console.log(error.response)
             })
-            this.$refs['my-modal'].hide();
             })}  
         },
         cancelModal() {
