@@ -59,7 +59,7 @@
                     <b-card-img
                     :src="imgPath" 
                     alt="Image"
-                    class="rounded-0">
+                    class="rounded-0 preview">
                     </b-card-img>
                 </b-col>
             </div>
@@ -247,7 +247,7 @@ export default {
 }
 .preview{
     width: 100%;
-    height: 250px;
+    height: 200px;
 }
 .outOfStock{
     background-color: rgb(255,255,255) !important;
@@ -255,7 +255,7 @@ export default {
 }
 .soldOut{
     position: absolute;
-    z-index: 100;
+    z-index: 18;
     width: 100%;
     height: 100%;
 }
@@ -268,7 +268,7 @@ export default {
 }
 .foodCardHeader{
     padding: 0rem;
-    z-index: 101;
+    z-index: 19;
 }
 .card-body{
     margin-bottom: 0.5%;

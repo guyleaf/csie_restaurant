@@ -29,7 +29,7 @@
                     <b-card-img
                     :src="imgPath" 
                     alt="Image"
-                    class="rounded-0">
+                    class="rounded-0 productImage">
                     </b-card-img>
                 </b-col>
             </div>
@@ -181,7 +181,7 @@ export default {
 <style scoped>
 .productImage{
     width: 100%;
-    height: 250px;
+    height: 200px;
 }
 .card-body{
     margin-bottom: 0.5%;
@@ -201,7 +201,7 @@ export default {
 }
 .soldOut{
     position: absolute;
-    z-index: 100;
+    z-index: 19;
     width: 100%;
     height: 100%;
 }
