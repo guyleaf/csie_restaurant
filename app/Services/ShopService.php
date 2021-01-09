@@ -63,7 +63,7 @@ class ShopService
             $filtered = $result->reject(function ($value, $key) use ($origin) {
                 $start_time = new DateTime($value->start_time,  new DateTimeZone('Asia/Taipei'));
                 $end_time = new DateTime($value->end_time,  new DateTimeZone('Asia/Taipei'));
-                return $origin->diff($start_time)->format("%s") > 0 && $end_time->diff($origin)->format("%s") > 0;
+                return $origin > $start_time && $end_time > $origin;
             });
 
             $result = $filtered;
@@ -111,9 +111,7 @@ class ShopService
         $start_time = new DateTime($result->first()->start_time, new DateTimeZone('Asia/Taipei'));
         $end_time = new DateTime($result->first()->end_time, new DateTimeZone('Asia/Taipei'));
 
-        var_dump($start_time->diff($now)->format("%s"));
-        var_dump($now->diff($end_time)->format("%s"));
-        if ($start_time->diff($now)->format("%s") > 0 || $now->diff($end_time)->format("%s") > 0)
+        if ($start_time > $now || $now > $end_time)
             return 3;
         
         $result = $result->where('member_id', $seller_id);
