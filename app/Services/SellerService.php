@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use Illuminate\Http\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Repositories\CouponRepository;
@@ -81,8 +82,8 @@ class SellerService
 
             $product_id = $payload['id'];
             $path = public_path('restaurant/' . strval($seller_id) . '/') . strval($product_id) . '.' . $image_extension;
-            chmod($path, 777);
-            unlink($path);
+            
+            File::delete($path);
             $image->storeAs($path);
         }
     }
