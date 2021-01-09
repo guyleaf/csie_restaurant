@@ -63,5 +63,10 @@ class MemberService
 
         return $result;
     }
+
+    public function updateMember($payload)
+    {
+        $this->memberRepository->updateMember($payload);
+    }
 }
 ?>
