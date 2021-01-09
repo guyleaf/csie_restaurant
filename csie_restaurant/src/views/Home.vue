@@ -7,10 +7,10 @@
           <b-card>
             <div class="row">
               <div class="col-2">
-                <Checkbox v-on:selectChange="updateSelected" />
+                <Checkbox v-on:selectChange="updateSelected" :categories="categories"/>
               </div>
               <div class="col-10">
-                <ShopCardGroup :cards="cards" :tag="selected"/>
+                <ShopCardGroup :cards="cards"/>
               </div>
             </div>
           </b-card>
@@ -33,8 +33,19 @@ export default {
     ShopCardGroup
   },
   methods:{
-    updateSelected(e){
+    updateSelected(e) {
       this.selected = e;
+    },
+    getShops() {
+      this.$http.get('/restaurants/?currentNumber=0&requiredNumber=10')
+      .then(response => {
+        this.loadShops(response.data)
+      })
+    },
+    loadShops(shops) {
+      this.cards=[];
+      for (let i=0;i<shops.length;i++)
+        this.cards.push({shopId: shops[i].seller_id, shopName: shops[i].name, imgPath: this.$url + shops[i].header_image, rating: parseInt(shops[i].averageofratings)});
     }
   },
   data()
@@ -42,36 +53,45 @@ export default {
     return{
       selected: [],
       cards:[],
+      categories:[]
     }
   },
   watch:{
-    $store:function () {     
- 
-  }},
+    selected : function(tags) {
+        let url='/restaurants/?currentNumber=0&requiredNumber=10';
+        for (let i=0;i<tags.length;i++)    url=url+'&filters[]='+tags[i]
+        this.$http.get(url)
+        .then(response => {
+            this.cards=[];
+            let data=response.data;
+            for (let i=0;i<data.length;i++) this.cards.push({shopId: data[i].seller_id, shopName: data[i].name, imgPath: this.$url + data[i].header_image, rating: parseFloat(data[i].averageofratings)});
+        })
+    },
+  },
   created(){
-      let sR = this.$store.getters['auth/searchResult'];
-      if(sR.length!=0 ){
+    let sR = this.$store.getters['auth/searchResult'];
+    if(sR.length != 0) {
         console.log('NOTNULL')
         this.cards = [];
         for(let i=0; i<sR.length; i++){
           this.cards.push({shopId: sR[i].seller_id, shopName: sR[i].name, imgPath: this.$url + sR[i].header_image, rating: sR[i].averageofratings});
         } 
-      }
-    else{
-    this.$http.get('/restaurants/?currentNumber=0&requiredNumber=10')
-    .then(response => {
-        this.cards=[];
-        let data=response.data;
-        for (let i=0;i<data.length;i++)this.cards.push({shopId: data[i].seller_id, shopName: data[i].name, imgPath: this.$url + data[i].header_image, rating: data[i].averageofratings});
-    })
     }
-    this.$bus.$on('reloadShop',  msg=>{
-      console.log('Homeon',msg)
-      this.cards=[];
-      for(let i=0; i<msg.length; i++){
-        this.cards.push({shopId: msg[i].seller_id, shopName: msg[i].name, imgPath: this.$url + msg[i].header_image, rating: msg[i].averageofratings});
-      }
-      // window.location.reload();
+    else {
+      this.getShops();
+    }
+    
+    this.$http.get('/restaurants/category')
+    .then(response => (this.categories = response.data))
+
+    this.$bus.$on('reloadHome',  () =>{
+      console.log('Homeon')
+      let shops = this.$store.getters['auth/searchResult'];
+      this.loadShops(shops)
+    });
+    this.$bus.$on('resetHome',  () =>{
+      console.log('resetHome')
+      this.getShops()
     });
   },
   mounted(){
