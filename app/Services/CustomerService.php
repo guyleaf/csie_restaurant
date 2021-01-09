@@ -68,6 +68,12 @@ class CustomerService
         return $result;
     }
 
+    public function getAddress($customerId)
+    {
+        $address = $this->$customerRepository
+        ->getAddress($customerId);
+        return $address;
+    }
 
     public function useCoupon($id, $coupon_code, $seller_id, $order)
     {

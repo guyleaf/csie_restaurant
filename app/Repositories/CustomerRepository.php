@@ -24,6 +24,7 @@ class CustomerRepository
     public function __construct()
     {
         $this->customer = DB::table('customer', 'C');
+        $this->customerAddress = DB::table('customer_address', 'CA');
         $this->usedCoupon = DB::table('used_coupon', 'UC');
     }
 
@@ -46,6 +47,14 @@ class CustomerRepository
         ->get(['COUNT(*) as numberOfUsage']);
 
         return $result->first()->numberOfUsage;
+    }
+
+    public function getAddress($id)
+    {
+        $result = $this->customerAddress
+        ->join()
+        ->where('CA.customer_id', '=', $id)
+        ->get(['CA.address']);
     }
 }
 ?>
