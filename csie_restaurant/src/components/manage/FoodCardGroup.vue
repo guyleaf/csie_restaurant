@@ -311,11 +311,10 @@ export default {
           let data=response.data;
         //   console.log(response.data)
           for (let i=0;i<data.length;i++) {     
-              this.foodCards.push({sellingState:data[i].status, soldOut:data[i].sold_out, foodId: data[i].id, foodName: data[i].name, price:data[i].price, imgPath: this.$url + data[i].image_path, foodDescription: data[i].description, foodTag:data[i].category_name});}
-              this.foodCards = this.foodCards.sort(function (a, b) {
+            this.foodCards.push({sellingState:data[i].status, soldOut:data[i].sold_out, foodId: data[i].id, foodName: data[i].name, price:data[i].price, imgPath: this.$url + data[i].image_path, foodDescription: data[i].description, foodTag:data[i].category_name});}
+            this.foodCards = this.foodCards.sort(function (a, b) {
                 return a.foodName - b.foodName
-                });
-            this.$bus.$emit("getAllProducts",this.foodCards);
+            });
             
         })
         this.$http.get('/restaurants/'+id+'/category')
