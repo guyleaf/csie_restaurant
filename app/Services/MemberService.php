@@ -64,6 +64,11 @@ class MemberService
         return $result;
     }
 
+    public function addMember($payload)
+    {
+        $this->memberRepository->addProduct($payload);
+    }
+
     public function updateMember($payload)
     {
         $this->memberRepository->updateMember($payload);
