@@ -38,6 +38,39 @@ class MemberRepository
         return $members;
     }
 
+    public function addProduct($payload)
+    {
+        DB::beginTransaction();
+
+        try
+        {
+            $payload['name'] = $seller_id;
+            $payload['category_id'] = $seller_id;
+            $payload['created_at'] = new DateTime('now', new DateTimeZone('Asia/Taipei'));
+            $payload['created_at'] = $payload['created_at']->format('Y-m-d H:i:s');
+            $payload['updated_at'] = $payload['created_at'];
+
+            $id = $this->memberTable
+            ->orderByDesc('id')
+            ->limit(1)
+            ->lockForUpdate()
+            ->get(['id'])->first()->id + 1;
+
+            $payload['id'] = $id;
+
+            $this->memberTable
+            ->insert($payload);
+
+            DB::commit();
+        }
+        catch (Exception $e)
+        {
+            DB::rollBack();
+            throw $e;
+        }
+
+    }
+
     public function updateMember($payload)
     {
         $now = new DateTime('now', new DateTimeZone('Asia/Taipei'));
