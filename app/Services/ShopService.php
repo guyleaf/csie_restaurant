@@ -111,6 +111,8 @@ class ShopService
         $start_time = new DateTime($result->first()->start_time, new DateTimeZone('Asia/Taipei'));
         $end_time = new DateTime($result->first()->end_time, new DateTimeZone('Asia/Taipei'));
 
+        var_dump($start_time->diff($now)->format("%s"));
+        var_dump($now->diff($end_time)->format("%s"));
         if ($start_time->diff($now)->format("%s") > 0 || $now->diff($end_time)->format("%s") > 0)
             return 3;
         
