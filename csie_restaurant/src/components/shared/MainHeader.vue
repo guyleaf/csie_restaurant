@@ -24,7 +24,7 @@
                 </b-input-group>
             </b-nav-form>
             <b-navbar-nav class="ml-4 mr-3">
-                <ShoppingCart />
+                <ShoppingCart v-if="this.$store.getters['auth/token'] == null || this.$store.getters['auth/user'].permission==2"/>
             </b-navbar-nav>
             <b-navbar-nav>
                 <LoginNav ref="loginNav"></LoginNav>

@@ -167,7 +167,9 @@ export default {
             //缺：lack of the responsive action when hover on the card
         },
         showModal() {
-            this.checkSameShop()
+            if (this.$store.getters['auth/token'] == null || this.$store.getters['auth/user'].permission==2){
+                this.checkSameShop()
+            }
         },
         confirmModal() {
             this.addToCookie()
