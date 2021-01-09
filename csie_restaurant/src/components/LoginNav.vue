@@ -1,23 +1,27 @@
 <template>
   <div>
-    <b-button v-if="!logined" @click="showModal">Login</b-button>
+    <b-button class="mr-1" v-if="!logined" @click="showSignUpModal">SignUp</b-button>
+    <b-button class="ml-1" v-if="!logined" @click="showLoginModal">Login</b-button>
     <b-dropdown v-else id="dropdown" :text="loginMsg" class="m-md-2" right style="min-width: 4rem">
       <b-dropdown-item :to="{name: 'History'}" v-if="this.$store.getters['auth/user'].permission==2">History</b-dropdown-item>
       <b-dropdown-item :to="{name: 'ShopManage'}" v-if="this.$store.getters['auth/user'].permission==1">ShopManage</b-dropdown-item>
       <b-dropdown-item :to="{name: 'SalesReport'}" v-if="this.$store.getters['auth/user'].permission<=1">Manage</b-dropdown-item>
       <b-dropdown-item @click="logout">Logout</b-dropdown-item>
     </b-dropdown>
-    <LoginForm ref="form" @close="closeModal" @success="loginSucess"/>
+    <SignUpForm ref="SignUp" @close="closeModal"/>
+    <LoginForm ref="form" @close="closeModal" @success="loginSuccess"/>
   </div>
 </template>
 
 <script>
   import LoginForm from '@/components/LoginForm.vue'
+  import SignUpForm from '@/components/SignUpForm.vue'
   import jwt_decode from "jwt-decode"
   export default {
     name: 'LoginNav',
     components: {
-      LoginForm
+      LoginForm,
+      SignUpForm
     },
     beforeMount() {
       if (!this.$store.getters['auth/expired']) {
@@ -35,15 +39,21 @@
       }
     },
     methods: {
-      showModal() {
+      showLoginModal() {
         this.$refs.form.reset()
         this.$bvModal.show('login-modal')
       },
+      showSignUpModal(){
+        this.$refs.SignUp.reset()
+        this.$bvModal.show('signUp-modal')
+      },
       closeModal() {
         this.$refs.form.reset()
+        this.$refs.SignUp.reset()
         this.$bvModal.hide('login-modal')
+        this.$bvModal.hide('signUp-modal')
       },
-      loginSucess(name) {
+      loginSuccess(name) {
         this.logined = true
         this.loginMsg = 'Hi ' + name
       },
