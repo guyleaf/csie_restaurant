@@ -116,10 +116,10 @@ class CouponRepository
         return $id;
     }
 
-    public function deleteCoupon($code)
+    public function deleteCoupon($id)
     {
         $this->coupon
-        ->where('code', '=', $code)
+        ->where('id', '=', $id)
         ->update(['is_deleted' => true]);
     }
 
@@ -127,15 +127,19 @@ class CouponRepository
     {
         DB::transaction(function () use ($payload) {
             DB::table('coupon', 'CP')
-            ->where('code', '=', $payload['coupon']['code'])
+            ->where('id', '=', $payload['coupon']['id'])
             ->update($payload['coupon']);
 
-            if (!empty($payload['coupon_items']))
+            if ($payload['coupon']['type'] == 2)
             {
+                $id = $payload['coupon']['id'];
+                
                 DB::table('specified_coupon_product', 'SCP')
-                ->join('coupon as CP', 'CP.id', '=', 'SCP.coupon_id')
-                ->where('CP.code', '=', $payload['coupon']['code'])
-                ->update($payload['coupon_items']);
+                ->where('SCP.coupon_id', '=', $id)
+                ->delete();
+
+                DB::table('specified_coupon_product', 'SCP')
+                ->insert($payload['coupon_items']);
             }
         });
     }

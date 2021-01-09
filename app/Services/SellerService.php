@@ -71,6 +71,8 @@ class SellerService
 
     public function updateProduct($seller_id, $payload)
     {
+        $this->productRepository->updateProduct($payload);
+
         if (!empty($payload['image']))
         {
             $image = $payload['image'];
@@ -80,8 +82,6 @@ class SellerService
             $product_id = $payload['id'];
             $image->storeAs('public/restaurant/' . strval($seller_id), strval($product_id) . '.' . $image_extension);
         }
-
-        $this->productRepository->updateProduct($payload);
     }
 }
 ?>

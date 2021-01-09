@@ -48,7 +48,7 @@ $router->group(['prefix' => 'customer'], function () use ($router) {
     });
 });
 
-$router->group(['prefix' => 'seller'], function () use ($router) {
+$router->group(['prefix' => 'seller', 'middleware' => 'jwt.seller'], function () use ($router) {
     $router->get('coupons', 'SellerController@getCoupons');
     $router->post('coupons/add', 'SellerController@addCoupon');
     $router->post('coupons/delete', 'SellerController@deleteCoupon');
