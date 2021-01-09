@@ -133,7 +133,7 @@ class CouponRepository
 
             if ($payload['coupon']['type'] == 2)
             {
-                if (!empty($payload['coupon_items']))
+                if (empty($payload['coupon_items']))
                     throw 'Coupon items should be not empty';
                     
                 $id = $payload['coupon']['id'];
