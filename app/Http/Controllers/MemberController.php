@@ -49,4 +49,10 @@ class MemberController extends Controller
         $this->memberService->updateMember($request->all());
         return response()->json(['message' => 'Success']);
     }
+
+    public function deleteMember(Request $request)
+    {
+        $this->memberService->deleteMember($request->input('id'));
+        return response()->json(['message' => 'Success']);
+    }
 }

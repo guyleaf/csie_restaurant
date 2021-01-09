@@ -38,9 +38,19 @@ class MemberRepository
 
     public function updateMember($payload)
     {
+        $now = new DateTime('now', new DateTimeZone('Asia/Taipei'));
+        $payload['updated_at'] = $now->format('Y-m-d H:i:s');
+
         $this->memberTable
         ->where('id', '=', $payload['id'])
         ->update($payload);
+    }
+
+    public function deleteMember($id)
+    {
+        $this->memberTable
+        ->where('id', '=', $id)
+        ->delete();
     }
 }
 ?>
