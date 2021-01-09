@@ -80,7 +80,9 @@ class SellerService
             $image_extension = $image->getClientOriginalExtension();
 
             $product_id = $payload['id'];
-            $image->storeAs('public/restaurant/' . strval($seller_id), strval($product_id) . '.' . $image_extension);
+            $path = public_path('restaurant/' . strval($seller_id) . '/') . strval($product_id) . '.' . $image_extension;
+            unlink($path);
+            $image->storeAs($path);
         }
     }
 }
