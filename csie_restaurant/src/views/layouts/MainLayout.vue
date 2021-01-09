@@ -57,7 +57,7 @@ export default {
     padding: 0% !important;
     overflow: hidden;
   }
-  .tabs{
+  .categoryTabs{
       left: 0;
       z-index: 19;
       background-color: white;
@@ -69,5 +69,11 @@ export default {
       left: 0;
       z-index: 20;
       position: sticky;
+  }
+  .modal-open {
+    padding-right: 16px !important;
+}
+  body{
+      padding-right: 0px !important;
   }
 </style>

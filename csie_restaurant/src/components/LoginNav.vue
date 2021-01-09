@@ -25,7 +25,7 @@
     },
     beforeMount() {
       if (!this.$store.getters['auth/expired']) {
-        this.loginSucess(this.$store.getters['auth/user'].name)
+        this.loginSuccess(this.$store.getters['auth/user'].name)
       }
       else if (this.$store.getters['auth/token'] != null)
         this.refreshToken(this.$store.getters['auth/token'])

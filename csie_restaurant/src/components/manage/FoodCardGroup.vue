@@ -53,7 +53,7 @@
         </b-modal>
         <CategoryTabManage :foodCategory="foodCategories"/>
         <div class="row" v-for="(category,index) in foodCategories" :key="index">
-            <div class="row">
+            <div class="row" id='category'>
                 <div class="categoryGroup">
                     <b-form-input v-if="index==editable" v-model="modityName" :placeholder="category.foodCategory" trim></b-form-input>
                     <h1 v-else>{{category.foodCategory}}</h1>
