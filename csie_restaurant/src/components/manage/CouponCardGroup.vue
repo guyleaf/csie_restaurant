@@ -6,15 +6,15 @@
                 <div v-for="coupon in couponCards" :key="coupon['coupon'].id">
                     <CouponCard :coupon_id="coupon['coupon'].id" :code="coupon['coupon'].code" :products="coupon['coupon_items']" :discount="coupon['coupon'].discount" 
                     :limitMoney="coupon['coupon'].limit_money" :start="coupon['coupon'].start_time" :expire="coupon['coupon'].end_time" :type="coupon['coupon'].type"
-                    :allProducts="allProducts" :allProductName="allProductName"
+                    :allProducts="allProducts"
                     v-on="{updateCoupon:updateCoupon, deleteCoupon:deleteCoupon}"/>
                 </div>
             </div>
         </div>
-        <b-modal id="modal-lg" size="lg" ref="my-modal" hide-header hide-footer hide-header-close>
+        <b-modal id="modal-lg" size="lg" ref="my-modal" hide-header hide-footer hide-header-close body-bg-variant="secondary">
             <div class="container">
                 <div class="m-2">
-                    <h4>優惠卷: {{code}}</h4>
+                    <h4>優惠卷: {{code}}</h4> <b-button @click="check">Check</b-button>
                     <br>
                     <b-form-group class="mb-3"
                     label="優惠類型"
@@ -31,30 +31,28 @@
                     <a v-if="typeSelected==0">滿額</a><b-form-input v-if="typeSelected==0" v-model="money" placeholder="XX元免運費" type="text" style="width:50%;" required></b-form-input>
                     <a v-if="typeSelected==1">滿額</a><b-form-input v-if="typeSelected==1" v-model="money" placeholder="XX元打折" type="text" style="width:50%;" required></b-form-input>
                     <b-form-group label="優惠商品" v-if="typeSelected==2">
-                        <div :id="'coupon_product_'+num" class="row cp_pd" v-for="num in couponProductNum" :key="num">
-                            <div class="col-md-8 ">
-                                <b-form-input :id="'option_'+num" :list="'my-list-id_'+num"></b-form-input>
-                                <datalist :id="'my-list-id_'+num" >
-                                    <option v-for="product in allProducts" :key="product.id" > {{product.name}}</option>
-                                </datalist>
+                        <div class="row mt-2" v-for="(item, index) in couponItems" v-bind:key="index">
+                            <div class="col-md-6">
+                                <b-form-select v-model="item.selected" :options="productOption" @change="setPrice(index,item.selected)"></b-form-select>
                             </div>
                             <div class="col-md-4">
-                                <b-form-spinbutton :id="'sb_'+num" min="1" max="100" :v-model="spinValue"></b-form-spinbutton>
+                                <b-form-spinbutton :id="'sb_'+num" min="1" max="100" v-model="item.spinValue" @change="setTotal"></b-form-spinbutton>
                             </div>
+                            <div class="col-md-2 mt-1">{{item.price*item.spinValue}}元</div>
                         </div>
-                        <b-button variant="outline-primary" @click="addCouponProduct">新增優惠商品</b-button>
+                        <b-button variant="outline-primary" @click="addcouponItems">新增優惠商品</b-button> <a>{{total}}</a>
                     </b-form-group>
                     <a v-if="typeSelected==1 || typeSelected==2">折扣(請輸入小數)</a><b-form-input v-if="typeSelected ==1||typeSelected ==2" v-model="discount" placeholder="請輸入小數" type="text" style="width:50%;" required></b-form-input>
                     <div style="display:flex; justify-content:space-around;">
                         <div style="display:inline-flex; flex-wrap:nowrap;"> 
                             <div class="mt-2 mr-3">開始時間 </div>
                             <div>
-                                <date-picker v-model="startDate" :config="options"></date-picker>
+                                <date-picker v-model="startDate" :config="dateOption"></date-picker>
                             </div>
                         </div>
                         <div style="display:inline-flex; flex-wrap:nowrap;">
                             <div class="mt-2 mr-3">結束時間</div>
-                            <div><date-picker v-model="expireDate" :config="options"></date-picker></div>
+                            <div><date-picker v-model="expireDate" :config="dateOption"></date-picker></div>
                         </div>
                     </div>
                     <div class="row m-2" style="justify-content:space-around">
@@ -82,6 +80,8 @@ export default {
     data()
     {
         return{
+            total: 0,
+            selectedProduct:'',
             startDate: '',
             expireDate: '',
             discount: 0,
@@ -90,19 +90,18 @@ export default {
             typeSelected:null,
             code:'',
             couponCards:[] , 
-            options: {
+            dateOption: {
                 format: 'YYYY-MM-DD hh:mm:ss',
                 sideBySide: true,
                 useCurrent: false,
             },
-            couponProduct:[],
-            couponProductNum:1,
-            spinValue:1,
-            allProducts:[],
-            allProductName:[],
+            couponItems:[ { selected: null, spinValue:1, price:0 } ],
+            productOption:[],
+            
         }
     }, 
     methods:{
+        check(){ console.log(this.couponItems)},
         updateCoupon(msg){
             this.$http.post('/seller/coupons/update', msg,{
                 headers: {
@@ -116,9 +115,6 @@ export default {
                 console.log(msg);
                 console.log(error.response)
             })
-            // let index = this.couponCards.findIndex( i=> i['coupon'].id === msg['coupon'].id)
-            // this.couponCards[index] = msg;
-            // console.log(this.couponCards[index]);
         },
         deleteCoupon(msg){
             this.$http.post('/seller/coupons/delete', msg,{
@@ -149,6 +145,24 @@ export default {
         },
         openModal(){
             this.code = this.makeCode();
+            this.productOption=[];
+            this.typeSelected = null;
+            this.couponItems = [ { selected: null, spinValue:1, price:0 } ];
+            this.total = 0;
+            let id =this.$store.getters['auth/user'].id
+            this.$http.get('restaurants/'+id+'/products')
+            .then(response => {
+                // console.log('openModalAPI');
+                let data=response.data;
+                for (let i=0;i<data.length;i++){
+                    this.productOption.push({value:data[i].id, text:data[i].name, price:data[i].price});
+                }
+                console.log(this.productOption)
+                this.productOption = this.productOption.sort(function (a, b) {
+                    return a.name - b.name
+                });
+            })
+            
             this.$refs['my-modal'].show();
         },
         makeCode() {
@@ -169,38 +183,37 @@ export default {
                                     type:parseInt(this.typeSelected), discount:parseFloat(this.discount), limit_money:parseInt(this.money) }
             if(this.typeSelected ==2 ){
                 this.info = [];
-                for (let i = 1; i<this.couponProductNum+1; i++){
-                    let name = document.querySelector('#option_'+i).value
-                    let spinValue = document.querySelector('#sb_'+i).value
-                    let index = this.allProductName.indexOf(name)
-                    //console.log(index, this.allProducts[index].name);
-                    this.info.push({product_id:this.allProducts[index].id, quantity:parseInt(spinValue)})
+                for (let i = 0; i<this.couponItems.length; i++){
+                    this.info.push({product_id:this.couponItems[i].selected, quantity:this.couponItems[i].spinValue})
                 }
                 couponAll['coupon_items'] = this.info;
             }
-            
+            // console.log('showCOupon',couponAll);
             this.addCoupon(couponAll);
-
             this.$refs['my-modal'].hide();
         },
         cancelModal(){
             this.$refs['my-modal'].hide();
         },
-        getAllProducts(msg){
-            this.allProducts = [];
-            this.allProductName = [];
-            // console.log('getAllProducts')
-            for(let i=0; i<msg.length; i++){
-                this.allProducts.push({id:msg[i].foodId, name:msg[i].foodName, price:msg[i].price, sellingState: msg[i].sellingState});
-                this.allProductName.push(msg[i].foodName);
-            }
+        addcouponItems(){
+            this.couponItems.push({ selected: null, spinValue:1, price:0 })
         },
-        addCouponProduct(){
-            this.couponProductNum += 1;
+        setPrice(index, selected){
+            let optionIndex = this.productOption.findIndex(i => i.value === selected)
+            this.couponItems[index].price = this.productOption[optionIndex].price;
+            this.setTotal();
+        },
+        setTotal(){
+            // console.log('total',this.total)
+            this.total = 0;
+            for(let i=0; i<this.couponItems.length; i++){
+                this.total += this.couponItems[i].price * this.couponItems[i].spinValue;
+            }
         }
+        
     },
+    
     created(){
-
         this.$http.get('/seller/coupons', {
             headers: {
                 'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
@@ -213,13 +226,7 @@ export default {
             console.log('getCouponsFAIL');
             console.log(error.response)
         })
-        this.$bus.$on('getAllProducts',  msg=>{
-            this.getAllProducts(msg);
-        });
-        
     },
-    computed(){        
-    }
 }
 </script>
 

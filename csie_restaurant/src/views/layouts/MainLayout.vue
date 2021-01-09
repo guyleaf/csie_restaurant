@@ -1,7 +1,6 @@
 <template>
     <div class="html">
         <MainHeader class="navigation"/>
-        <div id="fixed"/>
         <div class="container body">
             <router-view />
         </div>
@@ -58,11 +57,17 @@ export default {
     padding: 0% !important;
     overflow: hidden;
   }
+  .tabs{
+      left: 0;
+      z-index: 19;
+      background-color: white;
+      position: fixed;
+  }
   .navigation{
       width: 100%;
       top: 0;
       left: 0;
-      z-index: 20;          
-      position: fixed;
+      z-index: 20;
+      position: sticky;
   }
 </style>

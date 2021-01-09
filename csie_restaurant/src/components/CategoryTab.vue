@@ -83,8 +83,8 @@
             let tab = tabClass.querySelectorAll('.nav-item>a')
             let limit = document.querySelector('#limit')
             var st = scrollTop;
-            if(scrollTop>limit.offsetTop+limit.clientHeight && st <= this.lastScrollY) {tabBar.classList.add("navigation"); tabBar.style.top=headerHeight; tabBar.style.backgroundColor='white' ;tabBar.style.zIndex='19'}
-            else {tabBar.classList.remove("navigation"); tabBar.style.top=""; tabBar.style.backgroundColor='';tabBar.style.zIndex=''}
+            if(scrollTop>limit.offsetTop+limit.clientHeight && st <= this.lastScrollY) {tabBar.classList.add("tabs"); tabBar.style.top=headerHeight; tabBar.style.width=mainheader.clientWidth.toString() + 'px'}
+            else {tabBar.classList.remove("tabs"); tabBar.style.top=""; tabBar.style.width=""}
             this.lastScrollY = st;
             for(i=tab.length-1;i>=0;i--)   if(tab[i].className.indexOf("active") >= 0){tab[i].classList.remove("active") } 
             if(tab[this.isActive]!=null) tab[this.isActive].classList.add("active")
