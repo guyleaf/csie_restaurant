@@ -101,7 +101,8 @@
     },
     methods:{
       price(data){
-        return parseFloat(data.price * data.quantity * data.discount).toFixed(0)
+        var discountItem=parseInt(data.quantity/data.couponQuantity)
+        return Math.round((data.price * discountItem * data.discount) + (data.price * (data.quantity-discountItem)))
       },
       total(datas){
         let total=0;
@@ -157,7 +158,7 @@
             let discount = 1
             if(datas.coupon_items!=undefined) for (let j =0;j<datas.coupon_items.length;j++)
               if(datas.coupon_items[j].product_id == datas.order_items[i].product_id && datas.coupon_items[j].quantity<=datas.order_items[i].quantity) discount=datas.order.discount
-            history.item.datas.push({product_name:datas.order_items[i].product_name, price:datas.order_items[i].price, quantity:datas.order_items[i].quantity ,discount:discount})
+            history.item.datas.push({product_name:datas.order_items[i].product_name, price:datas.order_items[i].price, quantity:datas.order_items[i].quantity ,discount:discount, couponQuantity: datas.coupon_items[j].quantity})
           }
           if(datas.order.coupon_type==1) history.item.isShippingCoupon=true;
           else history.item.isShippingCoupon=false;

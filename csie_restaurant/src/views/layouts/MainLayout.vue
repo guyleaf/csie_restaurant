@@ -57,7 +57,7 @@ export default {
     padding: 0% !important;
     overflow: hidden;
   }
-  .tabs{
+  .categoryTabs{
       left: 0;
       z-index: 19;
       background-color: white;

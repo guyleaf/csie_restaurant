@@ -173,17 +173,18 @@ export default {
             this.$refs['my-modal'].show();
         },
         confirmModal() {
-            let food={id: this.foodId}
             if(this.vfoodName == '') {this.nameState=false}
             if(this.vprice == '') {this.priceState=false}
             if(this.nameState!=false && this.priceState!=false)
             {
+            let formdata = new FormData();
+            formdata.append('id',this.foodId)
             this.$confirm("確定要更改此商品？","","question").then(() => {
-            if(this.foodName != this.vfoodName) {this.foodName = this.vfoodName; food.name=this.vfoodName}
-            if(this.foodDescription != this.vfoodDescription) {this.foodDescription = this.vfoodDescription; food.description=this.vfoodDescription}
-            if(this.price != this.vprice) {this.price = this.vprice; food.price=this.vprice}
-            if(this.imgPath != this.image) {this.imgPath = this.image; food.image=this.image}
-            this.$http.post('/seller/products/update',food,{
+            if(this.foodName != this.vfoodName) {this.foodName = this.vfoodName; formdata.append('name',this.vfoodName);}
+            if(this.foodDescription != this.vfoodDescription) {this.foodDescription = this.vfoodDescription; formdata.append('description',this.vfoodDescription)}
+            if(this.price != this.vprice) {this.price = this.vprice; formdata.append('price',this.vprice)}
+            if(this.imgPath != this.image) {formdata.append('image',this.image);}
+            this.$http.post('/seller/products/update',formdata,{
                 headers: {
                 'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
                 }
