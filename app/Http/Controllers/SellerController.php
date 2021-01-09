@@ -55,7 +55,7 @@ class SellerController extends Controller
 
     public function deleteCoupon(Request $request)
     {
-        $this->sellerService->deleteCoupon($request->input('id'));
+        $this->sellerService->deleteCoupon($request->input('coupon.id'));
         return response()->json(['message' => 'Success']);
     }
 
