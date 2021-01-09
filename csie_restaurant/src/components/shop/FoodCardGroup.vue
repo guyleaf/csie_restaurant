@@ -1,8 +1,8 @@
 <template>
     <div class="container" >
-        <CategoryTab :foodCategory="foodCategories" class="tab"/>
+        <CategoryTab :foodCategory="hasProducts(foodCards)" class="tab"/>
         <div class="row" v-for="category in hasProducts(foodCards)" :key="category.categoryId">
-            <div class="row">
+            <div class="row" id="category">
                 <h1>{{category.foodCategory}}</h1>
             </div>
             <div class="row fback" >

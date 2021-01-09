@@ -1,6 +1,6 @@
 <template>
   <div id="my-container">
-    <div class="my-3">
+    <div>
       <!-- Our triggering (target) element -->
       <b-icon icon='cart4' font-scale='2.5' id="popover-reactive-1" ref="button" @click="loadingData()"></b-icon>
     </div>

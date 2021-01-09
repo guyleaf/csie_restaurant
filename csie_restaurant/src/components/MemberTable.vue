@@ -126,7 +126,7 @@
             }).then(response =>{
                 this.$alert("刪除成功","","success");
                 this.members.splice(member.index,1);
-                this.$emit("deleteProduct")
+                this.$emit("deleteMember")
             })
             .catch(error=>{
                 this.$alert("刪除失敗","","error");

@@ -41,8 +41,12 @@
 
 <script>
   import jwt_decode from "jwt-decode"
+  import SignUpForm from '@/components/SignUpForm.vue'
   export default {
     name: 'LoginForm',
+    components: {
+      SignUpForm
+    },
     data() {
         return {
             account: null,
@@ -131,7 +135,7 @@
         this.account = null
         this.password = null
         this.showAlert = false
-      }
+      },
     }
   }
 </script>
