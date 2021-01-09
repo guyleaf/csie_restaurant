@@ -21,9 +21,9 @@ class AdminMiddleware extends BaseMiddleware
     public function handle($request, Closure $next)
     {
 
-        if (!$this->auth->check()) {
-            throw new UnauthorizedHttpException('admin-auth', 'Token has expired', 401);
-        }
+        // if (!$this->auth->check()) {
+        //     throw new UnauthorizedHttpException('admin-auth', 'Token has expired', 401);
+        // }
 
         $this->authenticate($request);
 
