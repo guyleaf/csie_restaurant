@@ -24,7 +24,8 @@
                 </b-input-group>
             </b-nav-form>
             <b-navbar-nav class="ml-4 mr-3">
-                <ShoppingCart v-if="this.$store.getters['auth/token'] == null || this.$store.getters['auth/user'].permission==2 && showShoppingCart"/>
+                <ShoppingCart v-if="this.$store.getters['auth/token'] == null || this.$store.getters['auth/user'].permission==2 && 
+                showShoppingCart"/>
             </b-navbar-nav>
             <b-navbar-nav>
                 <LoginNav ref="loginNav"></LoginNav>
@@ -102,14 +103,15 @@ export default {
             handler: function() {
                 if(this.$router.currentRoute['name'] == "Cashier") this.showShoppingCart = false;
                 else this.showShoppingCart = true;
-                console.log('12321')
             },
          },
     },
+    created: function() {
+        if(this.$router.currentRoute['name'] == "Cashier") this.showShoppingCart = false;
+        else this.showShoppingCart = true;
+    },
     beforeCreate: function() {},
-    created: function() {},
     beforeMount: function() {},
-    mounted: function() {},
     beforeUpdate: function() {},
     updated: function() {},
     activated: function() {},
