@@ -34,5 +34,11 @@ class ProductService
         $result = $this->productRepository->getProductInfo($product_id);
         return $result;
     }
+
+    public function getProductCategoriesByShopId($seller_id)
+    {
+        $result = $this->productRepository->getProductCategoriesByShopId($seller_id);
+        return $result;
+    }
 }
 ?>
