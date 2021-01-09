@@ -1,20 +1,19 @@
 <template>
     <div class="container">
         <div style="background-color:white">
-            <div class='tag mt-5'>優惠卷  <b-button squared class="ml-5" size="sm" variant="outline-danger" @click="openModal">新增</b-button> </div>
+            <div class='tag mt-5'>優惠卷  <b-button squared class="ml-5 nooutline" size="sm" variant="outline-danger" @click="openModal">新增</b-button> </div>
             <div class='couponField mb-5' style='display:flex; flex-direction:row; '>
                 <div v-for="coupon in couponCards" :key="coupon['coupon'].id">
                     <CouponCard :coupon_id="coupon['coupon'].id" :code="coupon['coupon'].code" :products="coupon['coupon_items']" :discount="coupon['coupon'].discount" 
                     :limitMoney="coupon['coupon'].limit_money" :start="coupon['coupon'].start_time" :expire="coupon['coupon'].end_time" :type="coupon['coupon'].type"
-                    :allProducts="allProducts"
                     v-on="{updateCoupon:updateCoupon, deleteCoupon:deleteCoupon}"/>
                 </div>
             </div>
         </div>
-        <b-modal id="modal-lg" size="lg" ref="my-modal" hide-header hide-footer hide-header-close body-bg-variant="secondary">
+        <b-modal id="modal-lg" size="lg" ref="my-modal" hide-header hide-footer hide-header-close>
             <div class="container">
                 <div class="m-2">
-                    <h4>優惠卷: {{code}}</h4> <b-button @click="check">Check</b-button>
+                    <h4>優惠卷: {{code}}</h4>
                     <br>
                     <b-form-group class="mb-3"
                     label="優惠類型"
@@ -28,22 +27,46 @@
                     </div>
                     </b-form-radio-group>
                     </b-form-group>
-                    <a v-if="typeSelected==0">滿額</a><b-form-input v-if="typeSelected==0" v-model="money" placeholder="XX元免運費" type="text" style="width:50%;" required></b-form-input>
-                    <a v-if="typeSelected==1">滿額</a><b-form-input v-if="typeSelected==1" v-model="money" placeholder="XX元打折" type="text" style="width:50%;" required></b-form-input>
+                    <div class="row" v-if="typeSelected==0">
+                        <div class="col-md-1 mt-2">滿額</div>
+                        <b-form-input class="col-md-2" v-model="money" placeholder="XX元免運費" type="text" required></b-form-input>
+                        <div class="col-md-1 mt-0 ml-0">使用次數</div>
+                        <b-form-input class="col-md-3" v-model="usage" placeholder="消費者可用次數" type="text" required></b-form-input>
+                    </div>
+                    <div class="row" v-if="typeSelected==1">
+                        <div class="col-md-1 mt-2">滿額</div>
+                        <b-form-input class="col-md-2" v-model="money" placeholder="XX元打折" type="text"  required></b-form-input>
+                        <div class="col-md-1 mt-2">折扣</div>
+                        <b-form-input class="col-md-2" v-model="discount" placeholder="請輸入小數" type="text" required></b-form-input>
+                        <div class="col-md-1 mt-0 ml-0">使用次數</div>
+                        <b-form-input class="col-md-3" v-model="usage" placeholder="消費者可用次數" type="text" required></b-form-input>
+                    </div>
                     <b-form-group label="優惠商品" v-if="typeSelected==2">
                         <div class="row mt-2" v-for="(item, index) in couponItems" v-bind:key="index">
-                            <div class="col-md-6">
+                            <div class="col-md-7">
                                 <b-form-select v-model="item.selected" :options="productOption" @change="setPrice(index,item.selected)"></b-form-select>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <b-form-spinbutton :id="'sb_'+num" min="1" max="100" v-model="item.spinValue" @change="setTotal"></b-form-spinbutton>
                             </div>
-                            <div class="col-md-2 mt-1">{{item.price*item.spinValue}}元</div>
+                            <div class="col-md-1 mt-1">${{item.price*item.spinValue}}</div>
                         </div>
-                        <b-button variant="outline-primary" @click="addcouponItems">新增優惠商品</b-button> <a>{{total}}</a>
+                        <div class="row ml-2 mt-2">
+                            <b-button class="col-md-3" variant="outline-primary" @click="addcouponItems">新增欄位</b-button>
+                            <b-button class="col-md-3 ml-4" variant="outline-danger" @click="deletecouponItems">移除欄位</b-button> 
+                            <h2 class="col-md-2 mt-2 ml-5">總金額</h2>
+                            <h2 class="col-md-1 mt-2" style="text-decoration:line-through;">{{total}}</h2>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-md-1 mt-2">折扣</div>
+                            <b-form-input class="col-md-2" v-model="discount" placeholder="請輸入小數" type="text" required></b-form-input>
+                            <div class="col-md-1 mt-0 ml-0">使用次數</div>
+                            <b-form-input class="col-md-3" v-model="usage" placeholder="消費者可用次數" type="text" required></b-form-input>
+                            <h2 class="col-md-3">折價後金額</h2>
+                            <h2 class="col-md-2">{{Math.round(total*discount)}}</h2>
+                        </div>
                     </b-form-group>
-                    <a v-if="typeSelected==1 || typeSelected==2">折扣(請輸入小數)</a><b-form-input v-if="typeSelected ==1||typeSelected ==2" v-model="discount" placeholder="請輸入小數" type="text" style="width:50%;" required></b-form-input>
-                    <div style="display:flex; justify-content:space-around;">
+                    <div class="mt-3" style="display:flex; justify-content:space-around;">
                         <div style="display:inline-flex; flex-wrap:nowrap;"> 
                             <div class="mt-2 mr-3">開始時間 </div>
                             <div>
@@ -81,7 +104,7 @@ export default {
     {
         return{
             total: 0,
-            selectedProduct:'',
+            usage: 0,
             startDate: '',
             expireDate: '',
             discount: 0,
@@ -101,7 +124,6 @@ export default {
         }
     }, 
     methods:{
-        check(){ console.log(this.couponItems)},
         updateCoupon(msg){
             this.$http.post('/seller/coupons/update', msg,{
                 headers: {
@@ -137,6 +159,7 @@ export default {
                 }
             }).then(response =>{
                 this.$alert("新增成功","","success");
+                coupon.log('曾增曾增增資 ',msg)
                 this.couponCards.push(msg);
             }).catch(error=>{
                 this.$alert("新增失敗","","error");
@@ -159,7 +182,7 @@ export default {
                 }
                 console.log(this.productOption)
                 this.productOption = this.productOption.sort(function (a, b) {
-                    return a.name - b.name
+                    return Daa.name - b.name
                 });
             })
             
@@ -179,16 +202,17 @@ export default {
             let couponAll = {'coupon':{}, "coupon_items":null };
             if(this.money == undefined) this.money = null; 
             if(parseInt(this.typeSelected) == 0) this.discount = 1;
-            couponAll['coupon'] = {code:this.code, start_time:this.startDate, end_time:this.expireDate, numberOfUsage: 100, //FIXME numberOfUsae
-                                    type:parseInt(this.typeSelected), discount:parseFloat(this.discount), limit_money:parseInt(this.money) }
+            couponAll['coupon'] = {code:this.code, start_time:this.startDate, end_time:this.expireDate, numberOfUsage: parseInt(this.usage,10),
+                                    type:parseInt(this.typeSelected,10), discount:parseFloat(this.discount), limit_money:parseInt(this.money,10) }
             if(this.typeSelected ==2 ){
                 this.info = [];
                 for (let i = 0; i<this.couponItems.length; i++){
-                    this.info.push({product_id:this.couponItems[i].selected, quantity:this.couponItems[i].spinValue})
+                    if(this.couponItems[i].selected !=null)
+                        this.info.push({product_id:this.couponItems[i].selected, quantity:this.couponItems[i].spinValue})
                 }
                 couponAll['coupon_items'] = this.info;
             }
-            // console.log('showCOupon',couponAll);
+            console.log('showCOupon',couponAll);
             this.addCoupon(couponAll);
             this.$refs['my-modal'].hide();
         },
@@ -197,6 +221,10 @@ export default {
         },
         addcouponItems(){
             this.couponItems.push({ selected: null, spinValue:1, price:0 })
+        },
+        deletecouponItems(){
+            this.couponItems.splice(-1,1);
+            this.setTotal();
         },
         setPrice(index, selected){
             let optionIndex = this.productOption.findIndex(i => i.value === selected)
@@ -220,6 +248,10 @@ export default {
             }
         }).then(response => {
             this.couponCards = response.data;
+            //排序 未來的擺在前面
+            this.couponCards = this.couponCards.sort(function(a,b){
+                return Date.parse(b['coupon'].start_time) - Date.parse(a['coupon'].start_time)
+            })
             console.log('getCoupons');
             // console.log(this.couponCards);
         }).catch(error=>{
