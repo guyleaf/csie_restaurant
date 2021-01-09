@@ -68,5 +68,10 @@ class MemberService
     {
         $this->memberRepository->updateMember($payload);
     }
+
+    public function deleteMember($id)
+    {
+        $this->memberRepository->deleteMember($id);
+    }
 }
 ?>
