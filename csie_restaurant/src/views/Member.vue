@@ -9,7 +9,7 @@
                 <b-input-group size="sm" class="mr-2">
                   <b-form-input type="search" placeholder="會員編號,名稱,帳號,電話"></b-form-input>
                   <b-input-group-prepend is-text>
-                      <b-icon icon="search" @click="search"></b-icon>
+                      <b-icon icon="search"></b-icon>
                   </b-input-group-prepend>
                 </b-input-group>
                 <h4 class="center">全部人數：{{amount}}</h4>
@@ -33,7 +33,14 @@ export default {
       return{
         amount: 20
       }
-    }
+    },
+    created(){
+    this.$http.get('/members?currentNumber=0&requiredNumber=50')
+    .then(response => {
+      console.log(response.data)
+      this.amount=response.data.length;
+    })
+    },
 }
 </script>
 

@@ -23,7 +23,7 @@
                 <b-row class='brow'>
                     <b-button-group class="bgoption">
                         <b-button size='sm' block  class="boption" variant="primary" @click="showModal">修改</b-button>
-                        <b-button size='sm' block  class="boption" variant="danger"  @click="deleteCoupon">刪除</b-button>
+                        <b-button size='sm' block  class="boption" variant="danger"  @click="deleteTHIS">刪除</b-button>
                     </b-button-group>
                 </b-row>
                 <!-- <b-icon icon="list" :id="'target-'+this.foodId" font-scale="1.2"/> -->
@@ -189,7 +189,7 @@ export default {
             if(this.money == undefined) this.money = null; 
             if(parseInt(this.typeSelected) == 0) this.discount = 1;
             this.couponAll['coupon'] = {id:this.coupon_id, code:this.code, start_time:this.start, end_time:this.expire, numberOfUsage: 100, //FIXME numberOfUsae
-                                    type:parseInt(this.typeSelected), discount:parseFloat(this.discount), limit_money:this.money };
+                                    type:parseInt(this.typeSelected), discount:parseFloat(this.discount), limit_money:parseInt(this.money) };
             if(this.typeSelected ==2 ){
                 this.info=[];
                 for (let i = 1; i<this.couponProductNum+1; i++){
@@ -206,34 +206,28 @@ export default {
             }
             // console.log('updateCoupon2:', this.couponAll);
             //api
-            // this.$emit('updateAPI', this.couponAll)
-            this.$http.post('/seller/coupons/update',this.couponAll,{
-                headers: {
-                'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
-                }
-            }).then(response=>{
-                this.$emit('recallCouponAPI')
-                console.log('update Success');
-                // this.recall();
-            })
-            .catch(error=>{
-                console.log(error.response)
-            })
+            // this.$http.post('/seller/coupons/update',this.couponAll,{
+            //     headers: {
+            //     'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
+            //     }
+            // }).then(response=>{
+            //     console.log('update Success');
+            //     // this.recall();
+            // })
+            // .catch(error=>{
+            //     console.log(error.response)
+            // })
+            this.$emit('updateCoupon', this.couponAll)
         },
         cancelModal(){
             this.$refs['my-modal'].hide();
         },
-        deleteCoupon(){
+        deleteTHIS(){
             //api delete
-            let couponDelete = {"coupon":{id: this.coupon_id} };
-            this.$http.post('/seller/coupons/delete', couponDelete,{
-                headers: {
-                'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
-                }
-            }).catch(error=>{
-                console.log(error.response)
+            this.$confirm("你確定要刪除？","","question").then(() =>{
+                let couponDelete = {"coupon":{id: this.coupon_id} };
+                this.$emit('deleteCoupon', couponDelete)
             })
-            console.log('afterDelete',couponDelete);
         },
         addCouponProduct(){
             this.couponProductNum +=1;

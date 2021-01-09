@@ -64,6 +64,16 @@
             timer: 5000
           })
           this.$router.push("/")
+        }).catch(error => {
+          this.logined = false
+          this.$store.dispatch('auth/invalidate')
+          this.$fire({
+            title: "登出成功",
+            text: response.data.message,
+            type: "success",
+            timer: 5000
+          })
+          this.$router.push("/")
         })
       },
       refreshToken(token) {
