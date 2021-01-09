@@ -38,6 +38,7 @@ $router->group(['prefix' => 'restaurants'], function () use ($router) {
 
 $router->group(['prefix' => 'members'], function () use ($router) {
     $router->get('', 'MemberController@getMembers');
+    $router->post('/update', 'MemberController@updateMember');
 });
 
 $router->group(['prefix' => 'customer'], function () use ($router) {

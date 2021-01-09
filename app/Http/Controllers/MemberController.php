@@ -41,4 +41,12 @@ class MemberController extends Controller
 
         return response()->json($result);
     }
+
+    public function updateMember(Request $request)
+    {
+        // $user = auth()->userOrFail();
+        // $id = $user->id;
+        $this->memberService->updateMember($request->all());
+        return response()->json(['message' => 'Success']);
+    }
 }
