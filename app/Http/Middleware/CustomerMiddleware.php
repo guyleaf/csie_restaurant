@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Tymon\JWTAuth\Http\Middleware\BaseMiddleware;
+use \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 use Closure;
 
@@ -21,13 +22,17 @@ class CustomerMiddleware extends BaseMiddleware
     public function handle($request, Closure $next)
     {
 
+        if (!$this->auth->check()) {
+            throw new UnauthorizedHttpException('customer-auth', 'Token has expired', 401);
+        }
+
         $this->authenticate($request);
 
         $token = $this->auth->parseToken();
         $user = $this->auth->toUser($token);
 
         if ($user->permission != 2) {
-            return response()->json(['message' => 'Unauthorized.'], 401);
+            throw new UnauthorizedHttpException('customer-auth', 'Forbidden', 403);
         }
 
         return $next($request);

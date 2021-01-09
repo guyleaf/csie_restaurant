@@ -117,7 +117,7 @@ class ShopController extends Controller
     {
         $include_expired = false;
         if ($request->exists('include_expired'))
-            $include_expired = $request->query('include_expired');
+            $include_expired = (int)$request->query('include_expired');
         $result = $this->shopService->getCoupons($id, $include_expired);
         return response()->json($result);
     }

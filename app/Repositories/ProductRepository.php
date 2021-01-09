@@ -19,6 +19,12 @@ class ProductRepository
     protected $productImageTable;
 
     /**
+     * @var \Illuminate\Database\Query\Builder $productCategoryTable
+     */
+
+    protected $productCategoryTable;
+
+    /**
      * Shop Repository constructor
      *
      * @return void
@@ -27,6 +33,7 @@ class ProductRepository
     {
         $this->productTable = DB::table('product', 'P');
         $this->productImageTable = DB::table('product_image', 'PI');
+        $this->productCategoryTable = DB::table('product_category', 'PC');
     }
 
     public function getShopItemsByShopId($id)
@@ -108,6 +115,21 @@ class ProductRepository
         $this->productTable
         ->where('id', '=', $payload['id'])
         ->update($payload);
+    }
+
+    public function getProductCategoriesByShopId($seller_id)
+    {
+        $category = $this->productCategoryTable
+            ->where('seller_id','=', $seller_id)
+            ->get(['PC.name','display_order']);
+        return $category;
+    }
+
+    public function addProductCategory($seller_id, $payload)
+    {
+        $payload['seller_id'] = $seller_id;
+        $this->productCategoryTable
+        ->insert($payload);
     }
 }
 ?>

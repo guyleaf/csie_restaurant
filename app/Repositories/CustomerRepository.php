@@ -44,9 +44,9 @@ class CustomerRepository
         $result = $this->usedCoupon
         ->join('coupon as CP', 'CP.id', '=', 'UC.coupon_id')
         ->where('CP.code', '=', $coupon_code)
-        ->get(['COUNT(*) as numberOfUsage']);
+        ->count();
 
-        return $result->first()->numberOfUsage;
+        return $result;
     }
 
     public function getAddress($id)
