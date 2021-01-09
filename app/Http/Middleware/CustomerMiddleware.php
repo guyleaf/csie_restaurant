@@ -22,9 +22,9 @@ class CustomerMiddleware extends BaseMiddleware
     public function handle($request, Closure $next)
     {
 
-        // if (!$this->auth->check()) {
-        //     throw new UnauthorizedHttpException('customer-auth', 'Token has expired', 401);
-        // }
+        if (!$this->auth->auth->check()) {
+            throw new UnauthorizedHttpException('customer-auth', 'Token has expired', 401);
+        }
 
         $this->authenticate($request);
 
