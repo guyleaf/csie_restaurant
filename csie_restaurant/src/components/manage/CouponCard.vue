@@ -1,7 +1,8 @@
 <template>
     <div>
         <b-card overlay class='m-2' style="min-width:360px; height:220px">
-            <b-card-title>{{code}}</b-card-title>
+            <b-card-title>{{code}} 
+                <a v-if="Date.parse(expire) < new Date()" style="font-weight:bold; font-size:15px; color:#DDDDDD; background-color:#880000;">已過期</a></b-card-title>
             <!-- 0 for免運 1for滿XXX折扣 2for套餐組合><-->
             <b-card-text v-if="type === 0">
                 <a>滿{{limitMoney}}元 </a><a style="color:red;">免運費</a>
@@ -101,8 +102,9 @@ export default {
         startDate: this.start,
         expireDate: this.expire,
         money: this.limitMoney,
-
+        id: this.coupon_id,
         info:[],    
+        couponAll:{'coupon':{}, "coupon_items":null },
         showDiscount: Math.round((1-this.discount)*100),
         shipFreeHint:'元免運費',
         limitHint:'元',
@@ -119,7 +121,7 @@ export default {
       }
     },
     props:{
-        id: Number,
+        coupon_id: Number,
         code: String,
         products: Array,
         discount: String,
@@ -139,8 +141,7 @@ export default {
         showModal(){
             this.$refs['my-modal'].show();
         },
-        confirmModal(){
-            //api update
+        checkForm(){
             if(Date.parse(this.start) > new Date()){  //兩個時間都要填寫
                 if (this.startDate > this.expireDate){
                     this.$fire({
@@ -180,10 +181,14 @@ export default {
                 this.expire = this.expireDate;
                 this.$refs['my-modal'].hide();
             }
-            let couponAll = {'coupon':{}, "coupon_items":null };
+        },
+        confirmModal(){
+            //api update
+            this.checkForm();
+            
             if(this.money == undefined) this.money = null; 
             if(parseInt(this.typeSelected) == 0) this.discount = 1;
-            couponAll['coupon'] = {code:this.code, start_time:this.start, end_time:this.expire, numberOfUsage: 100, //FIXME numberOfUsae
+            this.couponAll['coupon'] = {id:this.coupon_id, code:this.code, start_time:this.start, end_time:this.expire, numberOfUsage: 100, //FIXME numberOfUsae
                                     type:parseInt(this.typeSelected), discount:parseFloat(this.discount), limit_money:this.money };
             if(this.typeSelected ==2 ){
                 this.info=[];
@@ -194,34 +199,24 @@ export default {
                     console.log(index, this.allProducts[index].name);
                     console.log(index, this.allProducts[index].id);
                     console.log(index, spinValue);
-                    this.info.push({product_id:this.allProducts[index].id, quantity:parseInt(spinValue)})
+                    this.info.push({coupon_id:this.coupon_id ,product_id:this.allProducts[index].id, quantity:parseInt(spinValue)})
                     // couponAll['coupon_items'].push({product_id:this.allProducts[index].id, quantity:spinValue})
                 }
+                this.couponAll['coupon_items'] = this.info;
             }
-            couponAll['coupon_items'] = this.info;
-            console.log('updateCoupon2:', couponAll);
-            
-            //new 
-            // let couponAll = {'coupon':{}, "coupon_items":null };
-            // if(this.money == undefined) this.money = null; 
-            // if(parseInt(this.typeSelected) == 1) this.discount = 1;
-            // couponAll['coupon'] = {code:this.code, start_time:this.startDate, end_time:this.expireDate, numberOfUsage: 100, //FIXME numberOfUsae
-            //                         type:parseInt(this.typeSelected), discount:parseFloat(this.discount), limit_money:this.money }
-            // if(this.typeSelected ==2 ){
-            //     for (let i = 1; i<this.couponProductNum+1; i++){
-            //         let name = document.querySelector('#option_'+i).value
-            //         let spinValue = document.querySelector('#sb_'+i).value
-            //         let index = this.allProductName.indexOf(name)
-            //         // console.log(index, this.allProducts[index].name);
-            //         couponAll['coupon_items'].push({product_id:this.allProducts[index].id, quantity:spinValue, name:this.allProducts[index].name})
-            //     }
-            // }
+            // console.log('updateCoupon2:', this.couponAll);
             //api
-            this.$http.post('/seller/coupons/update',couponAll,{
+            // this.$emit('updateAPI', this.couponAll)
+            this.$http.post('/seller/coupons/update',this.couponAll,{
                 headers: {
                 'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
                 }
-            }).catch(error=>{
+            }).then(response=>{
+                this.$emit('recallCouponAPI')
+                console.log('update Success');
+                // this.recall();
+            })
+            .catch(error=>{
                 console.log(error.response)
             })
         },
@@ -230,10 +225,33 @@ export default {
         },
         deleteCoupon(){
             //api delete
+            let couponDelete = {"coupon":{id: this.coupon_id} };
+            this.$http.post('/seller/coupons/delete', couponDelete,{
+                headers: {
+                'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
+                }
+            }).catch(error=>{
+                console.log(error.response)
+            })
+            console.log('afterDelete',couponDelete);
         },
         addCouponProduct(){
             this.couponProductNum +=1;
-        }
+        },
+        recall(){
+            this.$http.post('/seller/coupons/add',couponAll,{
+                headers: {
+                'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
+                }
+            }).then(response =>{
+                console.log('recall Success')
+            }).catch(error=>{
+                console.log(error.response)
+            })
+        },
+    },
+    updated(){ //data()有值改動就會觸發  //created裡面才產生的值不會觸發
+        console.log('sth change');
     }
 }
 </script>

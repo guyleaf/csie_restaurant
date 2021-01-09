@@ -147,8 +147,7 @@
           headers: {
             'Authorization': 'Bearer ' + this.$store.getters['auth/token']
           }
-        })
-        .then(response => {
+        }).then(response => {
           console.log(response.data)
           let datas=response.data
           history.item.datas=[]

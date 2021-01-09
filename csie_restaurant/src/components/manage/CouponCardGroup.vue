@@ -4,7 +4,7 @@
             <div class='tag mt-5'>優惠卷  <b-button squared class="ml-5" size="sm" variant="outline-danger" @click="addCoupon">新增</b-button> </div>
             <div class='couponField mb-5' style='display:flex; flex-direction:row; '>
                 <div v-for="coupon in couponCards" :key="coupon['coupon'].id">
-                    <CouponCard :id="coupon['coupon'].coupon_id" :code="coupon['coupon'].code" :products="coupon['coupon_items']" :discount="coupon['coupon'].discount" 
+                    <CouponCard :coupon_id="coupon['coupon'].id" :code="coupon['coupon'].code" :products="coupon['coupon_items']" :discount="coupon['coupon'].discount" 
                     :limitMoney="coupon['coupon'].limit_money" :start="coupon['coupon'].start_time" :expire="coupon['coupon'].end_time" :type="coupon['coupon'].type"
                     :allProducts="allProducts" :allProductName="allProductName"/>
                 </div>
@@ -85,6 +85,7 @@ export default {
             expireDate: '',
             discount: 0,
             money: 0,
+            info:[],
             typeSelected:null,
             code:'',
             couponCards:[] , 
@@ -100,15 +101,27 @@ export default {
             allProductName:[],
         }
     }, 
+    watch:{
+        // CouponCard:function(){
+        //     this.$bus.$on('recallCouponAPI', msg=>{
+        //         this.reacll();
+        //     })
+        // }
+    },
     methods:{
+        recall(){
+            this.$http.post('/seller/coupons/add',couponAll,{
+                headers: {
+                'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
+                }
+            }).then(response =>{
+                console.log('recall Success')
+            }).catch(error=>{
+                console.log(error.response)
+            })
+        },
         addCoupon(){
             this.code = this.makeCode();
-            // this.couponProductNum = 1;
-            // this.couponProduct = [];
-            // this.$bus.$on('getAllProducts',  msg=>{
-            //     this.getAllProducts(msg);
-            //     console.log('on',msg)
-            // });
             this.$refs['my-modal'].show();
         },
         makeCode() {
@@ -136,14 +149,17 @@ export default {
                     //console.log(index, this.allProducts[index].name);
                     this.info.push({product_id:this.allProducts[index].id, quantity:parseInt(spinValue)})
                 }
+                couponAll['coupon_items'] = this.info;
             }
-            couponAll['coupon_items'] = this.info;
+            
             console.log(couponAll);
 
             this.$http.post('/seller/coupons/add',couponAll,{
                 headers: {
                 'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
                 }
+            }).then(response =>{
+                console.log('add Coupon Success')
             }).catch(error=>{
                 console.log(error.response)
             })
@@ -167,20 +183,25 @@ export default {
         }
     },
     created(){
-        let id =this.$store.getters['auth/user'].id
-        this.$http.get('restaurants/' + id + '/coupons' + '?include_expired=1'). //FIXME  ?include_expired=1要移除
-        then(response => {
+
+        this.$http.get('/seller/coupons', {
+            headers: {
+                'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
+            }
+        }).then(response => {
             this.couponCards = response.data;
+            console.log('getCoupons');
             // console.log(this.couponCards);
-        });
+        }).catch(error=>{
+            console.log('getCouponsFAIL');
+            console.log(error.response)
+        })
         this.$bus.$on('getAllProducts',  msg=>{
-                this.getAllProducts(msg);
-            });
+            this.getAllProducts(msg);
+        });
         
     },
-    computed(){
-        
-        
+    computed(){        
     }
 }
 </script>
