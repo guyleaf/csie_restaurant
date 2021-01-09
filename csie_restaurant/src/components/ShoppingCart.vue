@@ -135,7 +135,7 @@
       },
       addCouponToCookie(couponName){
         let id = this.$cookie.get('shopId')
-        this.$http.get('restaurants/' + id + '/coupons' + '?include_expired=1'). //FIXME  ?include_expired=1要移除
+        this.$http.get('restaurants/' + id + '/coupons' + '?include_expired=0'). //FIXME  ?include_expired=1要移除
         then(response => {
             let couponCards = response.data;
             for (let i = 0 ; i<couponCards.length; i++){
@@ -150,7 +150,7 @@
       },
       getCouponItems(couponName){
         let id = this.$cookie.get('shopId')
-        this.$http.get('restaurants/' + id + '/coupons' + '?include_expired=1'). //FIXME  ?include_expired=1要移除
+        this.$http.get('restaurants/' + id + '/coupons' + '?include_expired=0'). //FIXME  ?include_expired=1要移除
         then(response => {
             let couponCards = response.data;
             for (let i = 0 ; i<couponCards.length; i++){
@@ -176,8 +176,8 @@
         if(this.checkLogin()){
           let id = this.$cookie.get('shopId');
           let orderItems = this.$cookie.get('product')
-
           let data = { coupon_code:coupon,seller_id:id,orderItems:orderItems,total_price:this.totalPrice}
+          console.log(data)
           this.$http.post('/customer/coupon/use',data , {
             headers: {
               'Authorization': 'Bearer ' + this.$store.getters['auth/token']
@@ -185,9 +185,6 @@
           })
           .then(response =>{
             this.useValidCoupon()
-            this.addCouponToCookie(coupon)
-            this.getCouponItems(coupon)
-            this.checkItemsInCoupon()
           })
           .catch(error => {
             console.log(error.response)
