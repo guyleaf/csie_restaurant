@@ -78,7 +78,8 @@ class CustomerService
         
         $numberOfUsage = $this->customerRepository->countUsageNumberOfUsedCoupon($id, $coupon_code);
         
-        var_dump($coupon['coupon']);
+        var_dump($coupon['coupon']->numberOfUsage);
+        var_dump($coupon['coupon']['numberOfUsage']);
         if ($coupon['coupon']->numberOfUsage - $numberOfUsage === 0)
             return 5;
 
