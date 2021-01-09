@@ -131,8 +131,11 @@ class CouponRepository
             ->where('id', '=', $payload['coupon']['id'])
             ->update($payload['coupon']);
 
-            if ($payload['coupon']['type'] == 2 && !empty($payload['coupon_items']))
+            if ($payload['coupon']['type'] == 2)
             {
+                if (!empty($payload['coupon_items']))
+                    throw 'Coupon items should be not empty';
+                    
                 $id = $payload['coupon']['id'];
                 
                 DB::table('specified_coupon_product', 'SCP')
@@ -141,9 +144,7 @@ class CouponRepository
 
                 DB::table('specified_coupon_product', 'SCP')
                 ->insert($payload['coupon_items']);
-            }
-            else
-                throw 'Coupon items should be not empty';
+            }      
         });
     }
 }
