@@ -14,7 +14,7 @@
                 </b-input-group>
                 <h4 class="center">全部人數：{{amount}}</h4>
             </b-nav-form>
-            <MemberTable />
+            <MemberTable v-on:deleteMember="deleteMember"/>
           </b-card>
         </div>
       </div>
@@ -31,7 +31,12 @@ export default {
     },
     data(){
       return{
-        amount: 20
+        amount: 0
+      }
+    },
+    methods:{
+      deleteMember(){
+        this.amount-=1
       }
     },
     created(){
