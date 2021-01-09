@@ -34,5 +34,11 @@
 		"description" : "Japenese local meal",
 		"counter_number" : 6,
 		"header_image" : "/storage/restaurant/14/header.jpg"
+	},
+	{
+		"member_id" : 15,
+		"description" : "Scallion Cake",
+		"counter_number" : 7,
+		"header_image" : "/storage/restaurant/15/header.jpg"
 	}
 ]

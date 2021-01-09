@@ -2,6 +2,7 @@
 namespace App\Repositories;
 
 use Illuminate\Support\Facades\DB;
+use Exception;
 
 class CouponRepository
 {
@@ -73,13 +74,13 @@ class CouponRepository
         return $result;
     }
 
-    public function addCoupon($seller_id, $payload)
+    public function addCoupon($id, $payload)
     {
         DB::beginTransaction();
 
         try
         {
-            $payload['coupon']['member_id'] = $seller_id;
+            $payload['coupon']['member_id'] = $id;
 
             $id = DB::table('coupon', 'CP')
             ->orderByDesc('id')
@@ -94,12 +95,12 @@ class CouponRepository
 
             if (!empty($payload['coupon_items']))
             {
-                $payload['coupon_items'] = 
+                $payload['coupon_items'] =
                 array_map(function ($item) use ($id) {
                     $item['coupon_id'] = $id;
                     return $item;
                 }, $payload['coupon_items']);
-                
+
 
                 DB::table('specified_coupon_product', 'SCP')
                 ->insert($payload['coupon_items']);
@@ -123,9 +124,9 @@ class CouponRepository
         ->update(['is_deleted' => true]);
     }
 
-    public function updateCoupon($payload)
+    public function updateCoupon($id, $payload)
     {
-        DB::transaction(function () use ($payload) {
+        DB::transaction(function () use ($id, $payload) {
             DB::table('coupon', 'CP')
             ->where('id', '=', $payload['coupon']['id'])
             ->update($payload['coupon']);

@@ -34,6 +34,7 @@ $router->group(['prefix' => 'restaurants'], function () use ($router) {
     $router->get('{id}/category', 'ShopController@getProductCategories');
     $router->get('{id}/Info', 'ShopController@getShopInfo');
     $router->get('{id}/coupons', 'ShopController@getCoupons');
+    $router->get('search', 'ShopController@searchShops');
 });
 
 $router->group(['prefix' => 'members'], function () use ($router) {
@@ -46,6 +47,13 @@ $router->group(['prefix' => 'customer'], function () use ($router) {
         $router->get('orders/{orderId}', 'CustomerController@getOrderInfo');
         $router->post('coupon/use', 'CustomerController@useCoupon');
     });
+});
+
+// 交易中..
+$router->group(['prefix' => 'order'], function () use ($router) {
+    $router->post('', 'OrderController@addOrder');
+    $router->get('event', 'OrderController@listenOrder');
+    $router->post('update', 'OrderController@updateOrder');
 });
 
 $router->group(['prefix' => 'seller', 'middleware' => 'jwt.seller'], function () use ($router) {

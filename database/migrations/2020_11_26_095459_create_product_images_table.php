@@ -19,6 +19,7 @@ class CreateProductImagesTable extends Migration
             $table->primary(["image_path", "id"]);
             $table->foreign("id")->references("id")->on("product")
             ->onUpdate("cascade")->onDelete("cascade");
+            $table->index("id");
         });
     }
 

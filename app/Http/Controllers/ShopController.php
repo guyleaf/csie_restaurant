@@ -121,4 +121,13 @@ class ShopController extends Controller
         $result = $this->shopService->getCoupons($id, $include_expired);
         return response()->json($result);
     }
+
+    public function searchShops(Request $request)
+    {
+        $keywords = $request->query('keywords');
+        $result = $this->searchService
+        ->searchShops($keywords);
+
+        return $result;
+    }
 }
