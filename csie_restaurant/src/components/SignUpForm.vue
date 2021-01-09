@@ -1,7 +1,9 @@
 <template>
   <div>
-    <b-modal id="signUp-modal" size="sm" ref="modal" title="會員註冊" hide-footer hide-header-close>
+    <b-modal id="signUp-modal" size="lg" ref="modal" title="會員註冊" hide-footer hide-header-close>
       <form ref="SignUp" @submit.stop.prevent="submit">
+        <b-row>
+        <b-col md='6'>
         <b-form-group
           label="暱稱"
           label-for="name-input"
@@ -57,6 +59,8 @@
             required
           ></b-form-input>
         </b-form-group>
+        </b-col>
+        <b-col md='6'>
         <b-form-group
           label="電話號碼"
           label-for="phone-input"
@@ -88,8 +92,8 @@
         <b-form-group
           label="性別"
           label-for="sex-input"
-          invalid-feedback="電子信箱錯誤"
-          :state="emailState"
+          invalid-feedback="性別不可為空"
+          :state="sexState"
         >
         <b-form-select
             ref="sex-input"
@@ -99,6 +103,8 @@
             required
           ></b-form-select>
         </b-form-group>
+        </b-col>
+        </b-row>
       </form>
       <b-alert fade :show="showAlert" variant="danger">{{ errorMsg }}</b-alert>
       <div class="row m-2" style="justify-content:space-around">
@@ -167,7 +173,7 @@
           return this.email.length > 0 && this.email.indexOf("@") !=-1
       },
       sexState() {
-          if (this.email === null) {
+          if (this.sex === null) {
               return null
           }
 
@@ -182,8 +188,8 @@
         const valid4 = this.$refs['checkPassword-input'].checkValidity()
         const valid5 = this.$refs['phone-input'].checkValidity()
         const valid6 = this.$refs['email-input'].checkValidity()
-        const valid7 = this.$refs['sex-input'].checkValidity()
-        return valid1 && valid2 && valid3 && valid4 && valid5 && valid6 && valid7
+        // const valid7 = this.$refs['sex-input'].checkValidity() FIXME
+        return valid1 && valid2 && valid3 && valid4 && valid5 && valid6 && this.sexState
       },
       submit() {
         // Exit when the form isn't valid
@@ -237,7 +243,7 @@
               this.showAlert = true;
               break;
             case 500:
-              this.errorMsg = 'Unknown error';
+              this.errorMsg = 'Unknown error';  //FIXME
               this.showAlert = true;
               break;
           }
