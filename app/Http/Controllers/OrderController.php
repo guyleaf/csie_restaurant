@@ -37,4 +37,9 @@ class OrderController extends Controller
 
     //     return response()->json($result);
     // }
+
+    public function addOrder(Request $request)
+    {
+
+    }
 }

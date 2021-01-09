@@ -19,6 +19,7 @@ class CreateCustomerAddressesTable extends Migration
             $table->primary(["customer_id", "address"]);
             $table->foreign("customer_id")->references("member_id")->on("customer")
             ->onUpdate("cascade")->onDelete("cascade");
+            $table->index("customer_id");
         });
     }
 

@@ -20,6 +20,7 @@ class CreateProductCategoriesTable extends Migration
             $table->primary(["seller_id", "name"]);
             $table->foreign("seller_id")->references("member_id")->on("seller")
             ->onUpdate("cascade")->onDelete("cascade");
+            $table->index('seller_id');
         });
     }
 

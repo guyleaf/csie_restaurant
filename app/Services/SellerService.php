@@ -32,12 +32,14 @@ class SellerService
 
     public function addCoupon($seller_id, $payload)
     {
-        $this->couponRepository->addCoupon($seller_id, $payload);
+        $coupon_id = $this->couponRepository->addCoupon($seller_id, $payload);
+
+        return $coupon_id;
     }
 
-    public function deleteCoupon($code)
+    public function deleteCoupon($id)
     {
-        $this->couponRepository->deleteCoupon($code);
+        $this->couponRepository->deleteCoupon($id);
     }
 
     public function updateCoupon($payload)
@@ -53,7 +55,13 @@ class SellerService
 
         $product_id = $this->productRepository->addProduct($seller_id, $payload, $image_extension);
 
-        $image->storeAs('public/restaurant/' . strval($seller_id), strval($product_id) . '.' . $image_extension);
+        $image_path = 'public/restaurant/' . strval($seller_id);
+        $image_name = strval($product_id) . '.' . $image_extension;
+
+        $image->storeAs($image_path, $image_name);
+
+        $image_path = '/storage/restaurant/' . strval($seller_id);
+        return ['product_id' => $product_id, 'image_path' => $image_path . '/' . $image_name];
     }
 
     public function deleteProduct($id)
@@ -63,6 +71,8 @@ class SellerService
 
     public function updateProduct($seller_id, $payload)
     {
+        $this->productRepository->updateProduct($payload);
+
         if (!empty($payload['image']))
         {
             $image = $payload['image'];
@@ -72,8 +82,6 @@ class SellerService
             $product_id = $payload['id'];
             $image->storeAs('public/restaurant/' . strval($seller_id), strval($product_id) . '.' . $image_extension);
         }
-
-        $this->productRepository->updateProduct($payload);
     }
 }
 ?>

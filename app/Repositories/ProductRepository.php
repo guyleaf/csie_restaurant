@@ -2,7 +2,7 @@
 namespace App\Repositories;
 
 use Illuminate\Support\Facades\DB;
-use DateTime, DateTimeZone;
+use DateTime, DateTimeZone, Exception;
 
 class ProductRepository
 {
@@ -54,28 +54,40 @@ class ProductRepository
 
     public function addProduct($seller_id, $payload, $image_extension)
     {
-        $payload['seller_id'] = $seller_id;
-        $payload['category_id'] = $seller_id;
-        $payload['publish_time'] = new DateTime('now', new DateTimeZone('Asia/Taipei'));
-        $payload['publish_time'] = $payload['publish_time']->format('Y-m-d H:i:s');
-        $payload['modified_time'] = $payload['publish_time'];
+        DB::beginTransaction();
 
-        $id = $this->productTable
-        ->orderByDesc('id')
-        ->limit(1)
-        ->get(['id'])->first()->id;
+        try
+        {
+            $payload['seller_id'] = $seller_id;
+            $payload['category_id'] = $seller_id;
+            $payload['publish_time'] = new DateTime('now', new DateTimeZone('Asia/Taipei'));
+            $payload['publish_time'] = $payload['publish_time']->format('Y-m-d H:i:s');
+            $payload['modified_time'] = $payload['publish_time'];
 
-        $payload['id'] = $id;
+            $id = $this->productTable
+            ->orderByDesc('id')
+            ->limit(1)
+            ->lockForUpdate()
+            ->get(['id'])->first()->id + 1;
 
-        $this->productTable
-        ->insert($payload);
+            $payload['id'] = $id;
 
-        var_dump($image_extension);
-        $this->productImageTable
-        ->insert([
-            'image_path' => 'public/restaurant/' . strval($seller_id) . strval($id) . '.' . $image_extension,
-            'id' => $id
-        ]);
+            $this->productTable
+            ->insert($payload);
+
+            $this->productImageTable
+            ->insert([
+                'image_path' => '/storage/restaurant/' . strval($seller_id) . '/' . strval($id) . '.' . $image_extension,
+                'id' => $id
+            ]);
+
+            DB::commit();
+        }
+        catch (Exception $e)
+        {
+            DB::rollBack();
+            throw $e;
+        }
 
         return $id;
     }

@@ -29,9 +29,9 @@ class ShopRepository
      */
     public function __construct()
     {
-        $this->shopTable = DB::table('seller');
-        $this->categoryTable = DB::table('seller_category');
-        $this->shopsInfoView = DB::table('seller_card_view');
+        $this->shopTable = DB::table('seller', 'S');
+        $this->categoryTable = DB::table('seller_category', 'SC');
+        $this->shopsInfoView = DB::table('seller_card_view', 'SCV');
     }
 
     /**
@@ -96,6 +96,18 @@ class ShopRepository
             ->where('member_id','=', $id)
             ->get(['PC.name','display_order']);
         return $category;
+    }
+
+    public function searchShops($keywords)
+    {
+        $result = $this->shopsInfoView
+        ->where(function ($query) use ($keywords) {
+            for ($i = 0; $i < count($keywords); $i++){
+               $query->orwhere('name', 'like',  '%' . $keywords[$i] .'%');
+            }
+        })->get(['member_id as seller_id', 'name', 'counter_number', 'header_image', 'averageofratings']);
+        
+        return $result;
     }
 }
 ?>

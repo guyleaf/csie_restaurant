@@ -21,6 +21,7 @@ class CreateSellerCategoryListsTable extends Migration
             ->onUpdate("cascade")->onDelete("cascade");
             $table->foreign("category_id")->references("category_id")->on("seller_category")
             ->onUpdate("cascade")->onDelete("cascade");
+            $table->index("category_id");
         });
     }
 
