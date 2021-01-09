@@ -47,7 +47,7 @@ class ShopService
 
     public function getProductCategories($id)
     {
-        $result = $this->shopRepository
+        $result = $this->productService
         ->getProductCategoriesByShopId($id);
         return $result;
     }
@@ -63,9 +63,9 @@ class ShopService
             $filtered = $result->reject(function ($value, $key) use ($origin) {
                 $start_time = new DateTime($value->start_time,  new DateTimeZone('Asia/Taipei'));
                 $end_time = new DateTime($value->end_time,  new DateTimeZone('Asia/Taipei'));
-                return $origin->diff($start_time)->format("%s") > 0 && $end_time->diff($origin)->format("%s") > 0;
+                return ($origin < $start_time || $end_time < $origin) ;
             });
-
+            
             $result = $filtered;
         }
 
@@ -111,7 +111,7 @@ class ShopService
         $start_time = new DateTime($result->first()->start_time, new DateTimeZone('Asia/Taipei'));
         $end_time = new DateTime($result->first()->end_time, new DateTimeZone('Asia/Taipei'));
 
-        if ($start_time->diff($now)->format("%s") > 0 || $now->diff($end_time)->format("%s") > 0)
+        if ($start_time > $now || $now > $end_time)
             return 3;
         
         $result = $result->where('member_id', $seller_id);
@@ -124,7 +124,7 @@ class ShopService
         if ($result->type == 2)
         {
             $coupon_items = $this->couponRepository->getCouponItems($result->id);
-            $result = ['coupon' => $result, 'coupon_items' => $coupon_items];
+            return ['coupon' => $result, 'coupon_items' => $coupon_items];
         }
 
         return ['coupon' => $result];
