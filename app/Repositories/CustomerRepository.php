@@ -52,9 +52,10 @@ class CustomerRepository
     public function getAddress($id)
     {
         $result = $this->customerAddress
-        ->join()
-        ->where('CA.customer_id', '=', $id)
-        ->get(['CA.address']);
+        ->where("customer_id", '=', $id)
+        ->get(["address"]);
+
+        return $result;
     }
 }
 ?>

@@ -70,9 +70,9 @@ class CustomerService
 
     public function getAddress($customerId)
     {
-        $address = $this->$customerRepository
+        $result = $this->customerRepository
         ->getAddress($customerId);
-        return $address;
+        return $result;
     }
 
     public function useCoupon($id, $coupon_code, $seller_id, $order)
