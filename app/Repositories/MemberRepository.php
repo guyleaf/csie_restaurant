@@ -61,7 +61,7 @@ class MemberRepository
             ->get(['id'])->first()->id + 1;
 
             $payload['member']['id'] = $id;
-            $payload['customer']['id'] = $id;
+            $payload['customer']['member_id'] = $id;
 
             $this->memberTable
             ->insert($payload['member']);
