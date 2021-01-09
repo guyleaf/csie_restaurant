@@ -47,7 +47,7 @@ class ShopService
 
     public function getProductCategories($id)
     {
-        $result = $this->shopRepository
+        $result = $this->productService
         ->getProductCategoriesByShopId($id);
         return $result;
     }

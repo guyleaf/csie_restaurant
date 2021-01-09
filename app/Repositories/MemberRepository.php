@@ -35,5 +35,12 @@ class MemberRepository
 
         return $members;
     }
+
+    public function updateMember($payload)
+    {
+        $this->memberTable
+        ->where('id', '=', $payload['id'])
+        ->update($payload);
+    }
 }
 ?>
