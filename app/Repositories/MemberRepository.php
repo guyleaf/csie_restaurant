@@ -13,6 +13,11 @@ class MemberRepository
     protected $memberTable;
 
     /**
+     * @var \Illuminate\Database\Query\Builder $memberTable
+     */
+    protected $customerTable;
+
+    /**
      * Member Repository constructor
      *
      * @return void
@@ -20,6 +25,7 @@ class MemberRepository
     public function __construct()
     {
         $this->memberTable = DB::table('member');
+        $this->customerTable = DB::table('customer');
     }
     /**
      * Get shops
@@ -38,17 +44,15 @@ class MemberRepository
         return $members;
     }
 
-    public function addProduct($payload)
+    public function addMember($payload)
     {
         DB::beginTransaction();
 
         try
         {
-            $payload['name'] = $seller_id;
-            $payload['category_id'] = $seller_id;
-            $payload['created_at'] = new DateTime('now', new DateTimeZone('Asia/Taipei'));
-            $payload['created_at'] = $payload['created_at']->format('Y-m-d H:i:s');
-            $payload['updated_at'] = $payload['created_at'];
+            $payload['member']['created_at'] = new DateTime('now', new DateTimeZone('Asia/Taipei'));
+            $payload['member']['created_at'] = $payload['member']['created_at']->format('Y-m-d H:i:s');
+            $payload['member']['updated_at'] = $payload['member']['created_at'];
 
             $id = $this->memberTable
             ->orderByDesc('id')
@@ -56,10 +60,14 @@ class MemberRepository
             ->lockForUpdate()
             ->get(['id'])->first()->id + 1;
 
-            $payload['id'] = $id;
+            $payload['member']['id'] = $id;
+            $payload['customer']['id'] = $id;
 
             $this->memberTable
-            ->insert($payload);
+            ->insert($payload['member']);
+
+            $this->customerTable
+            ->insert($payload['customer']);
 
             DB::commit();
         }
