@@ -124,7 +124,7 @@ class ShopService
         if ($result->type == 2)
         {
             $coupon_items = $this->couponRepository->getCouponItems($result->id);
-            $result = ['coupon' => $result, 'coupon_items' => $coupon_items];
+            return ['coupon' => $result, 'coupon_items' => $coupon_items];
         }
 
         return ['coupon' => $result];
