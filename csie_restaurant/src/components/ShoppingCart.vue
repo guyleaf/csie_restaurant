@@ -48,7 +48,7 @@
           <div class='col-md-3 tlprice' style="text-align: end;">{{totalPrice}}</div>
         </div>
         <div class="row col-md-12" >
-          <b-button class="checkOut" @click="onOk" variant="info" vertical>結帳</b-button>
+          <b-button id="checkSb" class="checkOut" @click="onOk" variant="info" :disabled="submitInvalid" vertical>結帳</b-button>
         </div>
       <!-- <b-nav-item @click="onOk" variant="outline-info" vertical>  
         <router-link :to="{name: 'Cashier'}" class="nav-link">Ok</router-link>
@@ -88,6 +88,7 @@
         ],
         totalPrice: null,
         popoverShow: false,
+        submitInvalid: false,
         errorMessage: ''
       }
     },
@@ -99,9 +100,11 @@
       loadingData(){
         this.ItemList = [];
         this.totalPrice = null;
+        this.submitInvalid = false;
         let data = this.parseCookie();
         let coupon = this.$cookie.get('couponName');
         this.bookingShopName = this.$cookie.get('shopName')
+        if(data == null) this.submitInvalid = true;
         for (var i = 0; i<data.length;i++)
         {
           this.totalPrice = this.totalPrice + data[i].foodPrice*data[i].quantity;
@@ -242,6 +245,7 @@
           }
         if(this.ItemList.length == 0) //delete cookie
         { 
+          this.submitInvalid = true
           document.cookie = 'shopId=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
           document.cookie = 'shopName=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
           document.cookie = 'product=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
@@ -253,13 +257,10 @@
         this.popoverShow = false
       },
       onOk() {
-          if(this.checkLogin()){
-            this.$cookie.set('product',JSON.stringify(this.ItemList));
-            this.confirmModal()
-            this.onClose()
-            if (this.$router.currentRoute['name'] == "Cashier") window.location.reload();
-            else this.$router.push("/cashier");
-          }
+        this.confirmModal()
+        this.onClose()
+        if (this.$router.currentRoute['name'] == "Cashier") window.location.reload();
+        else this.$router.push("/cashier");
       },
       add(name,spinValue,price)
       {

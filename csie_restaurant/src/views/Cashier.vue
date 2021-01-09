@@ -109,14 +109,22 @@ export default {
         }
       },
       deleteCartCell(e){
-        this.ItemList.splice(e,1);
-        if(this.ItemList.length == 0) //delete cookie
+        if(this.ItemList.length == 1) //delete cookie
         { 
-          document.cookie = 'shopId=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
-          document.cookie = 'shopName=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
-          document.cookie = 'product=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
+          this.$confirm("移除這個商品會刪除此筆訂單，您確定嗎？","刪除訂單","warning").then(() => {
+            this.ItemList.splice(e,1);
+            document.cookie = 'shopId=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
+            document.cookie = 'shopName=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
+            document.cookie = 'product=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
+            this.$alert('已刪除訂單','','success').then(()=>{
+              this.$router.push({ name: 'Home' })
+            })
+          })
         }
-        else{ this.$cookie.set('product',JSON.stringify(this.ItemList));}
+        else{ 
+          this.$cookie.set('product',JSON.stringify(this.ItemList));
+          this.ItemList.splice(e,1);
+        }
       },
   },
   created(){
@@ -167,8 +175,8 @@ export default {
   margin: 3% -15px 3% -15px;
 }
 .desField{
-  overflow-x: visible;
-  overflow-y: scroll;
+  overflow-x: hidden;
+  overflow-y: hidden;
   padding: 1%;
   margin:2% 2% 2% 0;
   border-width: 2px;
@@ -181,8 +189,5 @@ export default {
   padding: 1%;
   border-bottom:2px solid #d2d9d2;
   margin-bottom: 2%;
-}
-.sendInfo>p{
-  
 }
 </style>
