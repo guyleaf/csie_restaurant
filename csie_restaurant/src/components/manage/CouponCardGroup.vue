@@ -1,12 +1,13 @@
 <template>
     <div class="container">
         <div style="background-color:white">
-            <div class='tag mt-5'>優惠卷  <b-button squared class="ml-5" size="sm" variant="outline-danger" @click="addCoupon">新增</b-button> </div>
+            <div class='tag mt-5'>優惠卷  <b-button squared class="ml-5" size="sm" variant="outline-danger" @click="openModal">新增</b-button> </div>
             <div class='couponField mb-5' style='display:flex; flex-direction:row; '>
                 <div v-for="coupon in couponCards" :key="coupon['coupon'].id">
                     <CouponCard :coupon_id="coupon['coupon'].id" :code="coupon['coupon'].code" :products="coupon['coupon_items']" :discount="coupon['coupon'].discount" 
                     :limitMoney="coupon['coupon'].limit_money" :start="coupon['coupon'].start_time" :expire="coupon['coupon'].end_time" :type="coupon['coupon'].type"
-                    :allProducts="allProducts" :allProductName="allProductName"/>
+                    :allProducts="allProducts" :allProductName="allProductName"
+                    v-on="{updateCoupon:updateCoupon, deleteCoupon:deleteCoupon}"/>
                 </div>
             </div>
         </div>
@@ -101,26 +102,52 @@ export default {
             allProductName:[],
         }
     }, 
-    watch:{
-        // CouponCard:function(){
-        //     this.$bus.$on('recallCouponAPI', msg=>{
-        //         this.reacll();
-        //     })
-        // }
-    },
     methods:{
-        recall(){
-            this.$http.post('/seller/coupons/add',couponAll,{
+        updateCoupon(msg){
+            this.$http.post('/seller/coupons/update', msg,{
+                headers: {
+                'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
+                }
+            }).then(response=>{
+                this.$alert("更改成功","","success");
+            })
+            .catch(error=>{
+                this.$alert("更改失敗","","error");
+                console.log(msg);
+                console.log(error.response)
+            })
+            // let index = this.couponCards.findIndex( i=> i['coupon'].id === msg['coupon'].id)
+            // this.couponCards[index] = msg;
+            // console.log(this.couponCards[index]);
+        },
+        deleteCoupon(msg){
+            this.$http.post('/seller/coupons/delete', msg,{
+                headers: {
+                'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
+                }
+            }).then(response=>{
+                this.$alert("刪除成功","","success");
+            }).catch(error=>{
+                this.$alert("刪除失敗","","error");
+                console.log(error.response)
+            })
+            let index = this.couponCards.findIndex( i=> i['coupon'].id === msg['coupon'].id)
+            this.couponCards.splice(index,1);
+        },
+        addCoupon(msg){
+            this.$http.post('/seller/coupons/add',msg,{
                 headers: {
                 'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
                 }
             }).then(response =>{
-                console.log('recall Success')
+                this.$alert("新增成功","","success");
+                this.couponCards.push(msg);
             }).catch(error=>{
+                this.$alert("新增失敗","","error");
                 console.log(error.response)
             })
         },
-        addCoupon(){
+        openModal(){
             this.code = this.makeCode();
             this.$refs['my-modal'].show();
         },
@@ -139,7 +166,7 @@ export default {
             if(this.money == undefined) this.money = null; 
             if(parseInt(this.typeSelected) == 0) this.discount = 1;
             couponAll['coupon'] = {code:this.code, start_time:this.startDate, end_time:this.expireDate, numberOfUsage: 100, //FIXME numberOfUsae
-                                    type:parseInt(this.typeSelected), discount:parseFloat(this.discount), limit_money:this.money }
+                                    type:parseInt(this.typeSelected), discount:parseFloat(this.discount), limit_money:parseInt(this.money) }
             if(this.typeSelected ==2 ){
                 this.info = [];
                 for (let i = 1; i<this.couponProductNum+1; i++){
@@ -152,17 +179,8 @@ export default {
                 couponAll['coupon_items'] = this.info;
             }
             
-            console.log(couponAll);
+            this.addCoupon(couponAll);
 
-            this.$http.post('/seller/coupons/add',couponAll,{
-                headers: {
-                'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
-                }
-            }).then(response =>{
-                console.log('add Coupon Success')
-            }).catch(error=>{
-                console.log(error.response)
-            })
             this.$refs['my-modal'].hide();
         },
         cancelModal(){
@@ -171,8 +189,7 @@ export default {
         getAllProducts(msg){
             this.allProducts = [];
             this.allProductName = [];
-            // {sellingState:data[i].status, soldOut:data[i].sold_out, foodId: data[i].id, foodName: data[i].name, price:data[i].price, });}
-            console.log('getAllProducts')
+            // console.log('getAllProducts')
             for(let i=0; i<msg.length; i++){
                 this.allProducts.push({id:msg[i].foodId, name:msg[i].foodName, price:msg[i].price, sellingState: msg[i].sellingState});
                 this.allProductName.push(msg[i].foodName);
