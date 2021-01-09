@@ -89,15 +89,6 @@ class ShopRepository
         return $info;
     }
 
-    public function getProductCategoriesByShopId($id)
-    {
-        $category = $this->shopTable
-            ->join('product_category as PC', 'seller_id','=','member_id')
-            ->where('member_id','=', $id)
-            ->get(['PC.name','display_order']);
-        return $category;
-    }
-
     public function searchShops($keywords)
     {
         $result = $this->shopsInfoView

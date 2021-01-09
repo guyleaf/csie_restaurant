@@ -47,7 +47,7 @@ class ShopService
 
     public function getProductCategories($id)
     {
-        $result = $this->shopRepository
+        $result = $this->productService
         ->getProductCategoriesByShopId($id);
         return $result;
     }
@@ -60,7 +60,7 @@ class ShopService
         if (!$include_expired)
         {
             $origin = new DateTime('now', new DateTimeZone('Asia/Taipei'));
-            $filtered = $result->reject(function ($value, $key) use ($origin) {
+            $filtered = $result->filter(function ($value, $key) use ($origin) {
                 $start_time = new DateTime($value->start_time,  new DateTimeZone('Asia/Taipei'));
                 $end_time = new DateTime($value->end_time,  new DateTimeZone('Asia/Taipei'));
                 return ($origin < $start_time || $end_time < $origin) ;
