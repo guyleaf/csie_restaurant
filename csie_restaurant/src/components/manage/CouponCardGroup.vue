@@ -32,7 +32,7 @@
                     <b-form-group label="優惠商品" v-if="typeSelected==2">
                         <div :id="'coupon_product_'+num" class="row cp_pd" v-for="num in couponProductNum" :key="num">
                             <div class="col-md-8 ">
-                                <b-form-input :id="'option_'+num" :list="'my-list-id_'+num" v-model="option"></b-form-input>
+                                <b-form-input :id="'option_'+num" :list="'my-list-id_'+num"></b-form-input>
                                 <datalist :id="'my-list-id_'+num" >
                                     <option v-for="product in allProducts" :key="product.id" > {{product.name}}</option>
                                 </datalist>
@@ -43,7 +43,7 @@
                         </div>
                         <b-button variant="outline-primary" @click="addCouponProduct">新增優惠商品</b-button>
                     </b-form-group>
-                    <a v-if="typeSelected==1 || typeSelected==2">折扣</a><b-form-input v-if="typeSelected ==1||typeSelected ==2" v-model="discount" placeholder="請輸入小數" type="text" style="width:50%;" required></b-form-input>
+                    <a v-if="typeSelected==1 || typeSelected==2">折扣(請輸入小數)</a><b-form-input v-if="typeSelected ==1||typeSelected ==2" v-model="discount" placeholder="請輸入小數" type="text" style="width:50%;" required></b-form-input>
                     <div style="display:flex; justify-content:space-around;">
                         <div style="display:inline-flex; flex-wrap:nowrap;"> 
                             <div class="mt-2 mr-3">開始時間 </div>
@@ -81,6 +81,10 @@ export default {
     data()
     {
         return{
+            startDate: '',
+            expireDate: '',
+            discount: 0,
+            money: 0,
             typeSelected:null,
             code:'',
             couponCards:[] , 
@@ -124,14 +128,16 @@ export default {
             couponAll['coupon'] = {code:this.code, start_time:this.startDate, end_time:this.expireDate, numberOfUsage: 100, //FIXME numberOfUsae
                                     type:parseInt(this.typeSelected), discount:parseFloat(this.discount), limit_money:this.money }
             if(this.typeSelected ==2 ){
+                this.info = [];
                 for (let i = 1; i<this.couponProductNum+1; i++){
                     let name = document.querySelector('#option_'+i).value
                     let spinValue = document.querySelector('#sb_'+i).value
                     let index = this.allProductName.indexOf(name)
-                    // console.log(index, this.allProducts[index].name);
-                    couponAll['coupon_items'].push({product_id:this.allProducts[index].id, quantity:parseInt(spinValue), name:this.allProducts[index].name})
+                    //console.log(index, this.allProducts[index].name);
+                    this.info.push({product_id:this.allProducts[index].id, quantity:parseInt(spinValue)})
                 }
             }
+            couponAll['coupon_items'] = this.info;
             console.log(couponAll);
 
             this.$http.post('/seller/coupons/add',couponAll,{
@@ -150,6 +156,7 @@ export default {
             this.allProducts = [];
             this.allProductName = [];
             // {sellingState:data[i].status, soldOut:data[i].sold_out, foodId: data[i].id, foodName: data[i].name, price:data[i].price, });}
+            console.log('getAllProducts')
             for(let i=0; i<msg.length; i++){
                 this.allProducts.push({id:msg[i].foodId, name:msg[i].foodName, price:msg[i].price, sellingState: msg[i].sellingState});
                 this.allProductName.push(msg[i].foodName);

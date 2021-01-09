@@ -53,7 +53,7 @@
                         >
                         <div :id="'coupon_product_'+num" class="row cp_pd" v-for="num in couponProductNum" :key="num">
                             <div class="col-md-8 ">
-                                <b-form-input :id="'option_'+num" :list="'my-list-id_'+num" v-model="option"></b-form-input>
+                                <b-form-input :id="'option_'+num" :list="'my-list-id_'+num" ></b-form-input>
                                     <datalist :id="'my-list-id_'+num" >
                                     <option v-for="product in allProducts" :key="product.id" > {{product.name}}</option>
                                 </datalist>
@@ -64,13 +64,13 @@
                         </div>
                         <b-button variant="outline-primary" @click="addCouponProduct">新增優惠商品</b-button>
                     </b-form-group>
-                    <a v-if="typeSelected==1 || typeSelected==2">折扣</a><b-form-input v-if="typeSelected ==1||typeSelected ==2" v-model="discount" :placeholder="discount+discountHint" type="text" style="width:50%;" required></b-form-input>
+                    <a v-if="typeSelected==1 || typeSelected==2">折扣(請輸入小數)</a><b-form-input v-if="typeSelected ==1||typeSelected ==2" v-model="discount" :placeholder="discount+discountHint" type="text" style="width:50%;" required></b-form-input>
                     <div class="mt-3" style="display:flex; justify-content:space-around;">
                         <div style="display:inline-flex; flex-wrap:nowrap;"> 
                             <div class="mt-2 mr-3">開始時間 </div>
                             <div>
                                 <date-picker v-if="Date.parse(start) > new Date()" v-model="startDate" :placeholder="start" :config="options"></date-picker>
-                                <date-picker v-else disabled :placeholder="start" :config="options"></date-picker>
+                                <date-picker v-else disabled :placeholder="start" v-model="startDate" :config="options"></date-picker>
                             </div>
                         </div>
                         <div style="display:inline-flex; flex-wrap:nowrap;">
@@ -98,7 +98,11 @@ export default {
     },
     data() {
       return {
-        info:{},    
+        startDate: this.start,
+        expireDate: this.expire,
+        money: this.limitMoney,
+
+        info:[],    
         showDiscount: Math.round((1-this.discount)*100),
         shipFreeHint:'元免運費',
         limitHint:'元',
@@ -118,10 +122,10 @@ export default {
         id: Number,
         code: String,
         products: Array,
-        discount: Number,
-        limitMoney: Number,
-        start: Date,
-        expire: Date,
+        discount: String,
+        limitMoney: String,
+        start: String,
+        expire: String,
         type: Number,
         allProducts: Array,
         allProductName: Array,
@@ -190,8 +194,8 @@ export default {
                     console.log(index, this.allProducts[index].name);
                     console.log(index, this.allProducts[index].id);
                     console.log(index, spinValue);
-                    this.info.push({product_id:this.allProducts[index].id, quantity:parseInt(spinValue), name:this.allProducts[index].name})
-                    // couponAll['coupon_items'].push({product_id:this.allProducts[index].id, quantity:spinValue, name:this.allProducts[index].name})
+                    this.info.push({product_id:this.allProducts[index].id, quantity:parseInt(spinValue)})
+                    // couponAll['coupon_items'].push({product_id:this.allProducts[index].id, quantity:spinValue})
                 }
             }
             couponAll['coupon_items'] = this.info;
