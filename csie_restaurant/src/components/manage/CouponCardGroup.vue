@@ -103,22 +103,28 @@ export default {
         }
     }, 
     methods:{
-        updateCoupon(msg){
+        updateCoupon(msg, itemName){
             this.$http.post('/seller/coupons/update', msg,{
                 headers: {
                 'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
                 }
             }).then(response=>{
                 this.$alert("更改成功","","success");
+                
+                let index = this.couponCards.findIndex( i=> i['coupon'].id === msg['coupon'].id)
+                let updateInfo = msg;
+                if(msg['coupon'].type == 2){
+                    for(let i=0; i<msg['coupon_items'].length; i++) updateInfo['coupon_items'][i].name = itemName[i];
+                }
+                console.log('update',updateInfo);
+                this.couponCards.splice(index, 1, updateInfo);
             })
             .catch(error=>{
                 this.$alert("更改失敗","","error");
                 console.log(msg);
                 console.log(error.response)
             })
-            // let index = this.couponCards.findIndex( i=> i['coupon'].id === msg['coupon'].id)
-            // this.couponCards[index] = msg;
-            // console.log(this.couponCards[index]);
+            
         },
         deleteCoupon(msg){
             this.$http.post('/seller/coupons/delete', msg,{
@@ -141,7 +147,10 @@ export default {
                 }
             }).then(response =>{
                 this.$alert("新增成功","","success");
-                this.couponCards.push(msg);
+                let newCoupon = msg;
+                newCoupon['coupon'].id = response.data['coupon_id'];
+                // console.log(newCoupon);
+                this.couponCards.push(newCoupon);
             }).catch(error=>{
                 this.$alert("新增失敗","","error");
                 console.log(error.response)
@@ -165,7 +174,7 @@ export default {
             let couponAll = {'coupon':{}, "coupon_items":null };
             if(this.money == undefined) this.money = null; 
             if(parseInt(this.typeSelected) == 0) this.discount = 1;
-            couponAll['coupon'] = {code:this.code, start_time:this.startDate, end_time:this.expireDate, numberOfUsage: 100, //FIXME numberOfUsae
+            couponAll['coupon'] = {id:null, code:this.code, start_time:this.startDate, end_time:this.expireDate, numberOfUsage: 100, //FIXME numberOfUsae
                                     type:parseInt(this.typeSelected), discount:parseFloat(this.discount), limit_money:parseInt(this.money) }
             if(this.typeSelected ==2 ){
                 this.info = [];

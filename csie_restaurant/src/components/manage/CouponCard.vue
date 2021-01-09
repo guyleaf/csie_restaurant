@@ -46,8 +46,8 @@
                     </div>
                     </b-form-radio-group>
                     </b-form-group>
-                    <a v-if="typeSelected==0">滿額</a><b-form-input v-if="typeSelected==0" v-model="money" :placeholder="limitMoney+shipFreeHint" type="text" style="width:50%;" required></b-form-input>
-                    <a v-if="typeSelected==1">滿額</a><b-form-input v-if="typeSelected==1" v-model="money" :placeholder="limitMoney+limitHint" type="text" style="width:50%;" required></b-form-input>
+                    <a v-if="typeSelected==0">滿額</a><b-form-input v-if="typeSelected==0" v-model="money" :placeholder="limitMoney+'元免運費'" type="text" style="width:50%;" required></b-form-input>
+                    <a v-if="typeSelected==1">滿額</a><b-form-input v-if="typeSelected==1" v-model="money" :placeholder="limitMoney+'元打折'" type="text" style="width:50%;" required></b-form-input>
                      <b-form-group
                         v-if="typeSelected==2"
                         label="優惠商品"
@@ -65,7 +65,7 @@
                         </div>
                         <b-button variant="outline-primary" @click="addCouponProduct">新增優惠商品</b-button>
                     </b-form-group>
-                    <a v-if="typeSelected==1 || typeSelected==2">折扣(請輸入小數)</a><b-form-input v-if="typeSelected ==1||typeSelected ==2" v-model="discount" :placeholder="discount+discountHint" type="text" style="width:50%;" required></b-form-input>
+                    <a v-if="typeSelected==1 || typeSelected==2">折扣(請輸入小數)</a><b-form-input v-if="typeSelected ==1||typeSelected ==2" v-model="discount" placeholder="1等於沒有折扣" type="text" style="width:50%;" required></b-form-input>
                     <div class="mt-3" style="display:flex; justify-content:space-around;">
                         <div style="display:inline-flex; flex-wrap:nowrap;"> 
                             <div class="mt-2 mr-3">開始時間 </div>
@@ -106,9 +106,6 @@ export default {
         info:[],    
         couponAll:{'coupon':{}, "coupon_items":null },
         showDiscount: Math.round((1-this.discount)*100),
-        shipFreeHint:'元免運費',
-        limitHint:'元',
-        discountHint:'(請輸入小數)',
         typeSelected: this.type,
         options: {
             format: 'YYYY-MM-DD hh:mm:ss',
@@ -124,7 +121,7 @@ export default {
         coupon_id: Number,
         code: String,
         products: Array,
-        discount: String,
+        discount: Number,
         limitMoney: String,
         start: String,
         expire: String,
@@ -141,7 +138,8 @@ export default {
         showModal(){
             this.$refs['my-modal'].show();
         },
-        checkForm(){
+        confirmModal(){
+            //api update
             if(Date.parse(this.start) > new Date()){  //兩個時間都要填寫
                 if (this.startDate > this.expireDate){
                     this.$fire({
@@ -181,17 +179,15 @@ export default {
                 this.expire = this.expireDate;
                 this.$refs['my-modal'].hide();
             }
-        },
-        confirmModal(){
-            //api update
-            this.checkForm();
             
             if(this.money == undefined) this.money = null; 
             if(parseInt(this.typeSelected) == 0) this.discount = 1;
+            this.couponItemsName = [];
             this.couponAll['coupon'] = {id:this.coupon_id, code:this.code, start_time:this.start, end_time:this.expire, numberOfUsage: 100, //FIXME numberOfUsae
                                     type:parseInt(this.typeSelected), discount:parseFloat(this.discount), limit_money:parseInt(this.money) };
             if(this.typeSelected ==2 ){
                 this.info=[];
+                console.log('TYPE==2, couponCARD LINE 192');
                 for (let i = 1; i<this.couponProductNum+1; i++){
                     let name = document.querySelector('#option_'+i).value
                     let spinValue = document.querySelector('#sb_'+i).value
@@ -200,6 +196,7 @@ export default {
                     console.log(index, this.allProducts[index].id);
                     console.log(index, spinValue);
                     this.info.push({coupon_id:this.coupon_id ,product_id:this.allProducts[index].id, quantity:parseInt(spinValue)})
+                    this.couponItemsName.push(this.allProducts[index].name)
                     // couponAll['coupon_items'].push({product_id:this.allProducts[index].id, quantity:spinValue})
                 }
                 this.couponAll['coupon_items'] = this.info;
@@ -217,7 +214,7 @@ export default {
             // .catch(error=>{
             //     console.log(error.response)
             // })
-            this.$emit('updateCoupon', this.couponAll)
+            this.$emit('updateCoupon', this.couponAll, this.couponItemsName)
         },
         cancelModal(){
             this.$refs['my-modal'].hide();
