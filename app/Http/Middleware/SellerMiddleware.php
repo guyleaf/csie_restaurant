@@ -21,9 +21,9 @@ class SellerMiddleware extends BaseMiddleware
     public function handle($request, Closure $next)
     {
 
-        if (!$this->auth->auth->check()) {
-            throw new UnauthorizedHttpException('seller-auth', 'Token has expired', 401);
-        }
+        // if (!$this->auth->check()) {
+        //     throw new UnauthorizedHttpException('seller-auth', 'Token has expired', 401);
+        // }
 
         $this->authenticate($request);
 
