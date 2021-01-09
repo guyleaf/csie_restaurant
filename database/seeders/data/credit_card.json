@@ -1,3 +1,77 @@
 [
-
+	{
+		"customer_id": 2,
+		"credit_card": "草旗銀行",
+		"expire_date": "2023-01-12"
+	},
+	{
+		"customer_id": 2,
+		"credit_card": "打渣銀行",
+		"expire_date": "2025-02-20"
+	},
+	{
+		"customer_id": 5,
+		"credit_card": "金山銀行",
+		"expire_date": "2030-03-01"
+	},
+	{
+		"customer_id": 5,
+		"credit_card": "草旗銀行",
+		"expire_date": "2035-04-21"
+	},
+	{
+		"customer_id": 6,
+		"credit_card": "打渣銀行",
+		"expire_date": "2024-05-04"
+	},
+	{
+		"customer_id": 6,
+		"credit_card": "金山銀行",
+		"expire_date": "2030-06-21"
+	},
+	{
+		"customer_id": 7,
+		"credit_card": "打渣銀行",
+		"expire_date": "2028-07-18"
+	},
+	{
+		"customer_id": 7,
+		"credit_card": "草旗銀行",
+		"expire_date": "2033-08-08"
+	},
+	{
+		"customer_id": 8,
+		"credit_card": "草旗銀行",
+		"expire_date": "2030-09-29"
+	},
+	{
+		"customer_id": 8,
+		"credit_card": "金山銀行",
+		"expire_date": "2036-10-10"
+	},
+	{
+		"customer_id": 9,
+		"credit_card": "草旗銀行",
+		"expire_date": "2040-11-14"
+	},
+	{
+		"customer_id": 9,
+		"credit_card": "打渣銀行",
+		"expire_date": "2045-12-12"
+	},
+	{
+		"customer_id": 10,
+		"credit_card": "草旗銀行",
+		"expire_date": "2028-01-06"
+	},
+	{
+		"customer_id": 10,
+		"credit_card": "金山銀行",
+		"expire_date": "2036-05-05"
+	},
+	{
+		"customer_id": 10,
+		"credit_card": "打渣銀行",
+		"expire_date": "2040-08-28"
+	}
 ]
