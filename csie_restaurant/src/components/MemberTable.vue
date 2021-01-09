@@ -99,18 +99,38 @@
     },
     methods:{
       changestatus(member){
-        this.$confirm("你確定要更改這位會員的狀態？","","question").then(() => {
-            this.members[member.index].member_status=!this.members[member.index].member_status
-            // uploadtodatabase
-            this.$alert("成功更改","","success");
+        if(!this.members[member.index].member_status) var msg = "你確定要停用這位會員？"
+        if(this.members[member.index].member_status) var msg = "你確定要開啟這位會員？"
+        this.$confirm(msg,"","question").then(() => {
+            let update = {id:this.members[member.index].id, member_status:!this.members[member.index].member_status}
+            this.$http.post('/members/update',update,{
+                headers: {
+                'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
+                }
+            }).then(response =>{
+                this.$alert("修改成功","","success");
+                this.members[member.index].member_status=!this.members[member.index].member_status
+            }).catch(error=>{
+                this.$alert("修改失敗","","error");
+                console.log(error.response)
+            })
         });    
       },
       deleteMember(member){
         this.$confirm("你確定要刪除？","","question").then(() => {
-            this.members.splice(member.index,1);
-            // deletetodatabase
-            // uploadtodatabase
-            this.$alert("成功刪除","","success");
+            let deleteMember = {id:this.members[member.index].id}
+            this.$http.post('/members/delete',deleteMember,{
+                headers: {
+                'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
+                }
+            }).then(response =>{
+                this.$alert("刪除成功","","success");
+                this.members.splice(member.index,1);
+            })
+            .catch(error=>{
+                this.$alert("刪除失敗","","error");
+                console.log(error.response)
+            })
         });
       },
       routeMembers(direction){
