@@ -34,15 +34,21 @@
       <div class="row m-2" style="justify-content:space-around">
           <b-button variant="info" @click="submit" size="sm">CONFIRM</b-button>
           <b-button variant="danger" @click="$emit('close')" size="sm">CANCEL</b-button>
+          <b-button variant="danger" @click="showModal()" size="sm">SIGNUP</b-button>
       </div>
+      <SignUpForm ref="SignUp" @close="closeModal"/>
     </b-modal>
   </div>
 </template>
 
 <script>
   import jwt_decode from "jwt-decode"
+  import SignUpForm from '@/components/SignUpForm.vue'
   export default {
     name: 'LoginForm',
+    components: {
+      SignUpForm
+    },
     data() {
         return {
             account: null,
@@ -68,6 +74,10 @@
       }
     },
     methods: {
+      closeModal() {
+        this.$refs.form.reset()
+        this.$bvModal.hide('login-modal')
+      },
       checkFormValidity() {
         const valid1 = this.$refs['account-input'].checkValidity()
         const valid2 = this.$refs['password-input'].checkValidity()
@@ -131,7 +141,15 @@
         this.account = null
         this.password = null
         this.showAlert = false
-      }
+      },
+      showModal(){
+        this.$refs.SignUp.reset()
+        this.$bvModal.show('signUp-modal')
+      },
+      closeModal() {
+        this.$refs.SignUp.reset()
+        this.$bvModal.hide('signUp-modal')
+      },
     }
   }
 </script>

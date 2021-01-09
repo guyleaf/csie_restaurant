@@ -21,7 +21,6 @@
           </b-input-group>
         </div>
         </b-form-group>
-        <b-button type="submit">Submit</b-button>
     </b-form>
 </template>
 
