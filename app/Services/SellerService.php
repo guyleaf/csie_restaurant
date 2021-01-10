@@ -75,7 +75,7 @@ class SellerService
     public function updateProduct($seller_id, $payload)
     {
         $image_name = Str::random(10);
-
+        var_dump($image_name);
         // fix permission
         $this->productRepository->updateProduct($seller_id, $payload, $image_name);
 
@@ -86,18 +86,12 @@ class SellerService
             $image_extension = $image->getClientOriginalExtension();
 
             $product_id = $payload['id'];
-            $path = public_path('restaurant/' . strval($seller_id) . '/') . $image_name . '.' . $image_extension;
-            $image->storeAs($path);
-            // try
-            // {
-            //     File::delete($path);
-            //     $image->storeAs($path);
-            // }
-            // catch (Exception $e)
-            // {
-            //     return response()->json($e, 500);
-            // }
+
+            $image_path = 'public/restaurant/' . strval($seller_id);
+            $image_name = strval($image_name) . '.' . $image_extension;
+            //$path = public_path('restaurant/' . strval($seller_id) . '/') . $image_name . '.' . $image_extension;
             
+            $image->storeAs($image_path, $image_name);
         }
     }
 }
