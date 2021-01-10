@@ -41,8 +41,7 @@ $router->group(['prefix' => 'members'], function () use ($router) {
     $router->get('', 'MemberController@getMembers');
     $router->post('update', 'MemberController@updateMember');
     $router->post('delete', 'MemberController@deleteMember');
-    $router->post('customer/add', 'MemberController@addCustomer');
-    $router->post('seller/add', 'MemberController@addSeller');
+    $router->post('add', 'MemberController@addMember');
 });
 
 $router->group(['prefix' => 'customer'], function () use ($router) {

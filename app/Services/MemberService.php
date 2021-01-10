@@ -74,21 +74,23 @@ class MemberService
         $this->memberRepository->deleteMember($id);
     }
 
-    public function addCustomer($payload)
+    public function addMember($payload)
     {
-        $this->memberRepository->addCustomer($payload);
-    }
-
-    public function addSeller($payload)
-    {
-        if (!empty($payload['seller']['image']))
+        if($payload['member']['permission'] == 2)
         {
-            $image = $payload['seller']['image'];
-            unset($payloadd['seller']['image']);
-            $image_extension = $image->getClientOriginalExtension();
+            $this->memberRepository->addCustomer($payload);
         }
-        $seller_id = $this->memberRepository->addSeller($payload);
-        // if (!empty($payload['seller']['image']))    {$image->storeAs('public/restaurant/' . strval($seller_id), 'header' . '.' . $image_extension);}
+        if($payload['member']['permission'] == 1)
+        {
+            if (!empty($payload['seller']['image']))
+            {
+                $image = $payload['seller']['image'];
+                unset($payloadd['seller']['image']);
+                $image_extension = $image->getClientOriginalExtension();
+            }
+            $seller_id = $this->memberRepository->addSeller($payload);
+            if (!empty($payload['seller']['image']))    {$image->storeAs('public/restaurant/' . strval($seller_id), 'header' . '.' . $image_extension);}
+        }
     }
 }
 ?>
