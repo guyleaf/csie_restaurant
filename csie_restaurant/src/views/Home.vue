@@ -50,7 +50,7 @@ export default {
     loadShops(shops) {
       this.cards=[];
       for (let i=0;i<shops.length;i++)
-        this.cards.push({shopId: shops[i].seller_id, shopName: shops[i].name, imgPath: this.$url + shops[i].header_image, rating: parseInt(shops[i].averageofratings)});
+        this.cards.push({shopId: shops[i].seller_id, shopName: shops[i].name, imgPath: this.$url + shops[i].header_image, rating: parseFloat(shops[i].averageofratings)});
     }
   },
   data()
