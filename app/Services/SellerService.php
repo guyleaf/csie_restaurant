@@ -74,7 +74,6 @@ class SellerService
 
     public function updateProduct($seller_id, $payload)
     {
-        //$image_name = Str::random(10);
         if (!empty($payload['image']))
         {
             $image = $payload['image'];
@@ -85,14 +84,11 @@ class SellerService
 
             $image_path = 'public/restaurant/' . strval($seller_id);
             $image_name = strval($product_id) . '.' . $image_extension;
-            //$path = public_path('restaurant/' . strval($seller_id) . '/') . $image_name . '.' . $image_extension;
             
             $image->storeAs($image_path, $image_name);
         }
-        //var_dump($image_name);
-        // fix permission
-        $this->productRepository->updateProduct($seller_id, $payload, $image_name);
 
+        $this->productRepository->updateProduct($payload);
     }
 }
 ?>
