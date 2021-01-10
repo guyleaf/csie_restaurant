@@ -13,26 +13,43 @@
                   </b-input-group-prepend>
                 </b-input-group>
                 <h4 class="center">全部人數：{{amount}}</h4>
+                <b-button class="ml-2" @click="showModal">增加店家</b-button>
             </b-nav-form>
-            <MemberTable />
+            <MemberTable v-on:deleteMember="deleteMember"/>
           </b-card>
         </div>
       </div>
     </center>
+    <AddSellerForm ref="AddSeller" @close="closeModal"/>
   </div>
 </template>
 <script>
 import MemberTable from "@/components/MemberTable.vue";
+import AddSellerForm from '@/components/AddSellerForm.vue'
 export default {
     name:"Member",
     components:
     {
-       MemberTable 
+       MemberTable,
+       AddSellerForm
     },
     data(){
       return{
-        amount: 20
+        amount: 0
       }
+    },
+    methods:{
+      deleteMember(){
+        this.amount-=1
+      },
+      showModal(){
+        this.$refs.AddSeller.reset()
+        this.$bvModal.show('addSeller-modal')
+      },
+      closeModal() {
+        this.$refs.AddSeller.reset()
+        this.$bvModal.hide('addSeller-modal')
+      },
     },
     created(){
     this.$http.get('/members?currentNumber=0&requiredNumber=50')

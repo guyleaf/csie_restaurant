@@ -19,12 +19,13 @@
                         <option v-for="name in search_shopName" :key="name"> {{ name }}</option>
                     </datalist>
                     <b-input-group-prepend >
-                        <b-button variant="success" @click="goShop">Search</b-button>
+                        <b-button variant="success" @click="goSearch">Search</b-button>
                     </b-input-group-prepend>
                 </b-input-group>
             </b-nav-form>
             <b-navbar-nav class="ml-4 mr-3">
-                <ShoppingCart v-if="this.$store.getters['auth/token'] == null || this.$store.getters['auth/user'].permission==2"/>
+                <ShoppingCart v-if="this.$store.getters['auth/token'] == null || this.$store.getters['auth/user'].permission==2 && 
+                showShoppingCart"/>
             </b-navbar-nav>
             <b-navbar-nav>
                 <LoginNav ref="loginNav"></LoginNav>
@@ -49,45 +50,32 @@ export default {
             keywords: '',
             search_result: [],
             search_shopName: [], //options
+            showShoppingCart: true
         };
     },
     methods: {
+        reset() {
+            this.keywords = ''
+            this.search_result = []
+            this.$store.dispatch('auth/cleanSearchResult');
+        },
         showHistory() {
         },
         goHome(){
-            this.$store.dispatch('auth/setSearchResult', this.search_result);
-            console.log('homeClean',this.$store.getters['auth/searchResult'])
-            this.$router.push({name: 'Home'}); 
+            console.log('homeClean',this.search_result)
+            this.reset()
+            this.$bus.$emit('resetHome');
+            if (this.$route.path != '/')
+                this.$router.push('/')
             console.log('pushHome')
-            // window.location.reload(); //FIXME
         },
-        goSearch(){
+        goSearch() {
             let search = document.querySelector('#searchInput').textContent
-            if (search.trim()==''){
-                console.log('NOTFOUND');
-                //FIXME SHOW NOT FOUND MODAL
-                return
-            }
-            console.log('search',this.search_result);
             this.$store.dispatch('auth/setSearchResult', this.search_result);
-            this.$router.push('/')
-        },
-        goShop() {
-            let search = document.querySelector('#searchInput').textContent
-            if (search.trim()==''){
-                console.log('NOTFOUND');
-                //FIXME SHOW NOT FOUND MODAL
-                return
-            }
-            // let path = '/shop/' + this.search_result[0].seller_id + '/' + search.trim();
-            // this.$router.push(path);
-            // console.log('emittt')
-            this.$store.dispatch('auth/setSearchResult', this.search_result);
-            // console.log('123',this.$store.getters['auth/searchResult'])
-            this.$bus.$emit('reloadShop', this.search_result);
-            this.$router.push('/')
-            console.log('enddd')
-            
+            this.$bus.$emit('reloadHome');
+            if (this.$route.path != '/')
+                this.$router.push('/')
+            console.log('pushSearch')
         }
     },
     computed: {
@@ -105,18 +93,25 @@ export default {
                 for(let i=0;i<this.search_result.length ;i++){
                     this.search_shopName.push(this.search_result[i].name);
                 }
-                
             })
             .catch(error => {
                 console.log(error)
             })
-        },
         
+        },
+        $route: {
+            handler: function() {
+                if(this.$router.currentRoute['name'] == "Cashier") this.showShoppingCart = false;
+                else this.showShoppingCart = true;
+            },
+         },
+    },
+    created: function() {
+        if(this.$router.currentRoute['name'] == "Cashier") this.showShoppingCart = false;
+        else this.showShoppingCart = true;
     },
     beforeCreate: function() {},
-    created: function() {},
     beforeMount: function() {},
-    mounted: function() {},
     beforeUpdate: function() {},
     updated: function() {},
     activated: function() {},
