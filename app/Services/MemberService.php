@@ -91,9 +91,11 @@ class MemberService
                 $image = $payload['seller']['header_image'];
                 unset($payload['seller']['header_image']);
                 $image_extension = $image->getClientOriginalExtension();
+                $payload['seller']['header_image'] = '/storage/restaurant/' . strval($member_id) . '/' . 'header' . '.' . $image_extension;
                 $image->storeAs('public/restaurant/' . strval($member_id), 'header' . '.' . $image_extension);
+
             }
-            $this->memberRepository->addSeller($payload->get('seller'), $member_id, $image_extension);
+            $this->memberRepository->addSeller($payload->get('seller'), $member_id);
         }
     }
 }

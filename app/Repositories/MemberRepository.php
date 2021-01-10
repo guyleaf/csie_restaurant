@@ -121,7 +121,7 @@ class MemberRepository
 
     }
 
-    public function addSeller($payload, $member_id, $image_extension)
+    public function addSeller($payload, $member_id)
     {
         DB::beginTransaction();
 
@@ -135,7 +135,6 @@ class MemberRepository
 
             $payload['member_id'] = $member_id;
             $payload['counter_number'] = $counter_number;
-            $payload['header_image'] = '/storage/restaurant/' . strval($member_id) . '/' . 'header' . '.' . $image_extension;
 
             $this->sellerTable
             ->insert($payload);
