@@ -79,12 +79,12 @@ class MemberService
 
         $member_id =$this->memberRepository->addMember($payload['member']);
 
-        if($payload['member']['permission'] == 2)
+        if($payload['member']->permission === 2)
         {
             $this->memberRepository->addCustomer($payload['customer'], $member_id);
         }
 
-        if($payload['member']['permission'] == 1)
+        if($payload['member']->permission === 1)
         {
             if (!empty($payload['seller']['header_image']))
             {
