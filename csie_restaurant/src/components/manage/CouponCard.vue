@@ -180,7 +180,7 @@ export default {
                         // console.log(item)
                         this.couponItems.push({selected:this.products[i].product_id, spinValue:this.products[i].quantity, price:item.price, name:item.text})
                     }
-                    console.log('ALLCOUPON',this.couponItems);
+                    // console.log('ALLCOUPON',this.couponItems);
                     this.setTotal()
                 } 
             })
@@ -224,12 +224,10 @@ export default {
                 this.couponAll['coupon'].limit_money=null;
                 for (let i = 0; i<this.couponItems.length; i++){
                     if(this.couponItems[i].selected !=null){
-                        items.push({coupon_id:this.coupon_id, product_id:this.couponItems[i].selected, quantity:this.couponItems[i].spinValue, name:this.couponItems[i].text})
-                        console.log(this.couponItems[i].text);
+                        items.push({coupon_id:this.coupon_id, product_id:this.couponItems[i].selected, quantity:this.couponItems[i].spinValue})
                     }
                 }
                 couponAll['coupon_items'] = items;
-                console.log('COUPONALL', couponAll)
             }
             // update local value;
             this.typeSelected = this.type;

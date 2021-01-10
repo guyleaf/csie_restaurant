@@ -54,8 +54,8 @@
                             <div class="col-md-1 mt-1">${{item.price*item.spinValue}}</div>
                         </div>
                         <div class="row ml-2 mt-2">
-                            <b-button class="col-md-3" variant="outline-primary" @click="addcouponItems">新增欄位</b-button>
-                            <b-button class="col-md-3 ml-4" variant="outline-danger" @click="deletecouponItems">移除欄位</b-button> 
+                            <b-button class="col-md-3 nooutline" variant="outline-primary" @click="addcouponItems">新增欄位</b-button>
+                            <b-button class="col-md-3 ml-4 nooutline" variant="outline-danger" @click="deletecouponItems">移除欄位</b-button> 
                             <h2 class="col-md-2 mt-2 ml-5">總金額</h2>
                             <h2 class="col-md-1 mt-2" style="text-decoration:line-through;">{{total}}</h2>
                         </div>
@@ -127,29 +127,28 @@ export default {
     }, 
     methods:{
         updateCoupon(msg){
-            var updateInfo;
-            if (msg['coupon'].type == 2){
-                console.log('TOJSON~')
-                updateInfo = this.changeJSONInfo(msg)
-            }
-            else {
-                updateInfo = msg;
-                console.log(msg)
-            }
-            this.$http.post('/seller/coupons/update', updateInfo,{             
+            this.$http.post('/seller/coupons/update', msg,{             
                 headers: {
                 'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
                 }
             }).then(response=>{
                 this.$alert("更改成功","","success");
-                console.log(msg);
-                this.couponCards.splice(index, 1, msg);
+                var newCoupon = msg;
+                if(newCoupon['coupon'].type == 2){
+                    for(let i=0; i<newCoupon['coupon_items'].length;i++){
+                        let item = this.productOption.find(element => element.value == newCoupon['coupon_items'][i].product_id);
+                        newCoupon['coupon_items'][i].name = item.text;
+                    }
+                }
+                let index = this.couponCards.findIndex(i => i['coupon'].id === newCoupon['coupon'].id)
+                this.couponCards.splice(index, 1, newCoupon);
             })
             .catch(error=>{
-                // this.$alert("更改失敗","","error");
-                // console.log(error.response)
+                this.$alert("更改失敗","","error");
+                console.log(error.response)
             })
-		},        deleteCoupon(msg){
+        },       
+        deleteCoupon(msg){
             this.$http.post('/seller/coupons/delete', msg,{
                 headers: {
                 'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
@@ -162,6 +161,7 @@ export default {
             })
             let index = this.couponCards.findIndex( i=> i['coupon'].id === msg['coupon'].id)
             this.couponCards.splice(index,1);
+            let optionIndex = this.productOption.findIndex(i => i.value === selected)
         },
         addCoupon(msg){
             this.$http.post('/seller/coupons/add',msg,{
@@ -170,10 +170,20 @@ export default {
                 }
             }).then(response =>{
                 this.$alert("新增成功","","success");
-				let newCoupon = msg;
+				var newCoupon = msg;
                 newCoupon['coupon'].id = response.data['coupon_id'];
-                // console.log(newCoupon);
-                this.couponCards.push(newCoupon);            }).catch(error=>{
+                if(newCoupon['coupon'].type == 2){
+                    console.log('in2')
+                    for(let i=0; i<newCoupon['coupon_items'].length;i++){
+                        let item = this.productOption.find(element => element.value == newCoupon['coupon_items'][i].product_id);
+                        newCoupon['coupon_items'][i].name = item.text;
+                        // var optionIndex = this.productOption.findIndex(i => i.value === newCoupon['coupon_items'][i]['product_id'])
+                        // newCoupon['coupon_items'][i].name = this.productOption[optionIndex].text;
+                    }
+                }
+                console.log('newwwwwwwww',newCoupon);
+                this.couponCards.push(newCoupon);      
+            }).catch(error=>{
                 this.$alert("新增失敗","","error");
                 console.log(error.response)
             })
@@ -218,9 +228,12 @@ export default {
                                     type:parseInt(this.typeSelected,10), discount:parseFloat(this.discount,10), limit_money:parseInt(this.money,10) }
             if(this.typeSelected ==2 ){
                 this.info = [];
+                this.productName = [];
                 for (let i = 0; i<this.couponItems.length; i++){
-                    if(this.couponItems[i].selected !=null)
+                    if(this.couponItems[i].selected !=null){
                         this.info.push({product_id:this.couponItems[i].selected, quantity:this.couponItems[i].spinValue})
+                        // this.productName.push()
+                    }
                 }
                 couponAll['coupon_items'] = this.info;
             }
@@ -250,23 +263,25 @@ export default {
                 this.total += this.couponItems[i].price * this.couponItems[i].spinValue;
             }
         },
-        changeJSONInfo(msg){
-            console.log(msg);
-            var updateInfo = msg['coupon'];
-            console.log('temp',updateInfo);
-            let temp = [];
-            for(let i=0; i<msg['coupon_items'].length; i++){
-                temp.push({coupon_id:msg['coupon_items'][i].coupon_id, product_id:msg['coupon_items'][i].product_id, 
-                                    quantity:msg['coupon_items'][i].quantity})
-            }
-            updateInfo['coupon_items'] = temp ;
-            console.log('JJJJJJJJJJJ', updateInfo)
-            return updateInfo
-        }
         
     },
     
     created(){
+        this.productOption=[];
+        this.typeSelected = null;
+        this.total = 0;
+        let id =this.$store.getters['auth/user'].id
+        this.$http.get('restaurants/'+id+'/products')
+        .then(response => {
+            let data=response.data;
+            for (let i=0;i<data.length;i++){
+                this.productOption.push({value:data[i].id, text:data[i].name, price:data[i].price});
+            }
+            this.productOption = this.productOption.sort(function (a, b) {
+                return a.name - b.name
+            });
+        })
+
         this.$http.get('/seller/coupons', {
             headers: {
                 'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
@@ -288,9 +303,6 @@ export default {
 </script>
 
 <style scoped>
-.cp_pd{
-    margin-bottom:1%;
-}
 .tag{
     color: #d0011b;
     font-size: .675rem;
@@ -307,5 +319,9 @@ export default {
     padding:  1%;
     border-color: #000000;
     height: 280px;
+}
+.nooutline{
+    outline: none !important;
+    box-shadow: none !important;
 }
 </style>
