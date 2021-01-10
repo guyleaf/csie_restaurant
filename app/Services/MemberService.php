@@ -77,9 +77,9 @@ class MemberService
     public function addMember($payload)
     {
 
-        $member_id =$this->memberRepository->addMember($payload['member']);
+        $member_id =$this->memberRepository->addMember($payload->get('member'));
 
-        $this->memberRepository->addCustomer($payload['customer'], $member_id);
+        $this->memberRepository->addCustomer($payload->get['customer'], $member_id);
     }
 }
 ?>
