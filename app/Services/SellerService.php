@@ -75,10 +75,6 @@ class SellerService
     public function updateProduct($seller_id, $payload)
     {
         $image_name = Str::random(10);
-        var_dump($image_name);
-        // fix permission
-        $this->productRepository->updateProduct($seller_id, $payload, $image_name);
-
         if (!empty($payload['image']))
         {
             $image = $payload['image'];
@@ -93,6 +89,9 @@ class SellerService
             
             $image->storeAs($image_path, $image_name);
         }
+        var_dump($image_name);
+        // fix permission
+        $this->productRepository->updateProduct($seller_id, $payload, $image_name);
     }
 }
 ?>
