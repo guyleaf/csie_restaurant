@@ -79,7 +79,22 @@ class MemberService
 
         $member_id =$this->memberRepository->addMember($payload->get('member'));
 
-        $this->memberRepository->addCustomer($payload->get['customer'], $member_id);
+        if($payload['member']['permission'] == 2)
+        {
+            $this->memberRepository->addCustomer($payload->get('customer'), $member_id);
+        }
+
+        if($payload['member']['permission'] == 1)
+        {
+            if (!empty($payload['seller']['header_image']))
+            {
+                $image = $payload['seller']['header_image'];
+                unset($payload['seller']['header_image']);
+                $image_extension = $image->getClientOriginalExtension();
+                $image->storeAs('public/restaurant/' . strval($member_id), 'header' . '.' . $image_extension);
+            }
+            $this->memberRepository->addSeller($payload->get('seller'), $member_id, $image_extension);
+        }
     }
 }
 ?>
