@@ -120,34 +120,5 @@ class MemberRepository
         }
 
     }
-
-    // public function addSeller($payload, $member_id)
-    // {
-    //     DB::beginTransaction();
-
-    //     try
-    //     {
-    //         $counter_number = $this->sellerTable
-    //         ->orderByDesc('counter_number')
-    //         ->limit(1)
-    //         ->lockForUpdate()
-    //         ->get(['counter_number'])->first()->counter_number + 1;
-
-    //         $payload['member_id'] = $member_id;
-    //         $payload['counter_number'] = $counter_number;
-    //         // $payload['header_image'] = '/storage/restaurant/' . strval($id) . '/' . 'header' . '.' . $image_extension
-
-    //         $this->sellerTable
-    //         ->insert($payload);
-
-    //         DB::commit();
-    //     }
-    //     catch (Exception $e)
-    //     {
-    //         DB::rollBack();
-    //         throw $e;
-    //     }
-
-    // }
 }
 ?>
