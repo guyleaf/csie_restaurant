@@ -124,9 +124,9 @@ class CouponRepository
         ->update(['is_deleted' => true]);
     }
 
-    public function updateCoupon($payload)
+    public function updateCoupon($id, $payload)
     {
-        DB::transaction(function () use ($payload) {
+        DB::transaction(function () use ($id, $payload) {
             DB::table('coupon', 'CP')
             ->where('id', '=', $payload['coupon']['id'])
             ->update($payload['coupon']);

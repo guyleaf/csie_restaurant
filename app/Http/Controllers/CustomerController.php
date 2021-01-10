@@ -84,4 +84,19 @@ class CustomerController extends Controller
         else
             return response()->json(['message' => '恭喜! 優惠券可以使用', 'coupon' => $result], 200);
     }
+
+    public function getAddress(Request $request)
+    {   
+        try {
+            $user = auth()->user();
+            $id = $user->id;
+            $result = $this->customerService->getAddress($id);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => $e->getCode(),
+                'messages' => unserialize($e->getMessage())
+            ], $e->getCode());
+        }
+        return response()->json($result);
+    }
 }

@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use Illuminate\Http\File;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Repositories\CouponRepository;
@@ -44,9 +45,9 @@ class SellerService
         $this->couponRepository->deleteCoupon($id);
     }
 
-    public function updateCoupon($payload)
+    public function updateCoupon($seller_id, $payload)
     {
-        $this->couponRepository->updateCoupon($payload);
+        $this->couponRepository->updateCoupon($seller_id, $payload);
     }
 
     public function addProduct($seller_id, $payload)
@@ -73,8 +74,6 @@ class SellerService
 
     public function updateProduct($seller_id, $payload)
     {
-        $this->productRepository->updateProduct($payload);
-
         if (!empty($payload['image']))
         {
             $image = $payload['image'];
@@ -82,17 +81,14 @@ class SellerService
             $image_extension = $image->getClientOriginalExtension();
 
             $product_id = $payload['id'];
-            $path = public_path('restaurant/' . strval($seller_id) . '/') . strval($product_id) . '.' . $image_extension;
-            try
-            {
-                File::delete($path);
-                $image->storeAs($path);
-            }
-            catch (Exception $e)
-            {
-                return response()->json($e, 500);
-            }
+
+            $image_path = 'public/restaurant/' . strval($seller_id);
+            $image_name = strval($product_id) . '.' . $image_extension;
+            
+            $image->storeAs($image_path, $image_name);
         }
+
+        $this->productRepository->updateProduct($payload);
     }
 }
 ?>
