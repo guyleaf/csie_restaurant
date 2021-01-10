@@ -96,7 +96,7 @@ class MemberRepository
             throw $e;
         }
 
-        return $id
+        return $id;
     }
 
     public function addCustomer($payload, $member_id)
