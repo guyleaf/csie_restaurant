@@ -50,6 +50,23 @@ class MemberRepository
         return $members;
     }
 
+    public function updateMember($payload)
+    {
+        $now = new DateTime('now', new DateTimeZone('Asia/Taipei'));
+        $payload['updated_at'] = $now->format('Y-m-d H:i:s');
+
+        $this->memberTable
+        ->where('id', '=', $payload['id'])
+        ->update($payload);
+    }
+
+    public function deleteMember($id)
+    {
+        $this->memberTable
+        ->where('id', '=', $id)
+        ->delete();
+    }
+
     public function addCustomer($payload)
     {
         DB::beginTransaction();
@@ -127,23 +144,6 @@ class MemberRepository
             throw $e;
         }
 
-    }
-
-    public function updateMember($payload)
-    {
-        $now = new DateTime('now', new DateTimeZone('Asia/Taipei'));
-        $payload['updated_at'] = $now->format('Y-m-d H:i:s');
-
-        $this->memberTable
-        ->where('id', '=', $payload['id'])
-        ->update($payload);
-    }
-
-    public function deleteMember($id)
-    {
-        $this->memberTable
-        ->where('id', '=', $id)
-        ->delete();
     }
 }
 ?>

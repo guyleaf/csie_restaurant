@@ -64,6 +64,16 @@ class MemberService
         return $result;
     }
 
+    public function updateMember($payload)
+    {
+        $this->memberRepository->updateMember($payload);
+    }
+
+    public function deleteMember($id)
+    {
+        $this->memberRepository->deleteMember($id);
+    }
+
     public function addCustomer($payload)
     {
         $this->memberRepository->addCustomer($payload);
@@ -79,16 +89,6 @@ class MemberService
         }
         $seller_id = $this->memberRepository->addSeller($payload);
         if (!empty($payload['seller']['image']))    {$image->storeAs('public/restaurant/' . strval($seller_id), 'header' . '.' . $image_extension);}
-    }
-
-    public function updateMember($payload)
-    {
-        $this->memberRepository->updateMember($payload);
-    }
-
-    public function deleteMember($id)
-    {
-        $this->memberRepository->deleteMember($id);
     }
 }
 ?>
