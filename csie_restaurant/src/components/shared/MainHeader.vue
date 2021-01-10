@@ -24,7 +24,8 @@
                 </b-input-group>
             </b-nav-form>
             <b-navbar-nav class="ml-4 mr-3">
-                <ShoppingCart v-if="this.$store.getters['auth/token'] == null || this.$store.getters['auth/user'].permission==2"/>
+                <ShoppingCart v-if="this.$store.getters['auth/token'] == null || this.$store.getters['auth/user'].permission==2 && 
+                showShoppingCart"/>
             </b-navbar-nav>
             <b-navbar-nav>
                 <LoginNav ref="loginNav"></LoginNav>
@@ -49,6 +50,7 @@ export default {
             keywords: '',
             search_result: [],
             search_shopName: [], //options
+            showShoppingCart: true
         };
     },
     methods: {
@@ -56,6 +58,7 @@ export default {
             this.keywords = ''
             this.search_result = []
             this.$store.dispatch('auth/cleanSearchResult');
+            this.$store.dispatch('auth/cleanKeywords');
         },
         showHistory() {
         },
@@ -68,8 +71,9 @@ export default {
             console.log('pushHome')
         },
         goSearch() {
-            let search = document.querySelector('#searchInput').textContent
+            //let search = document.querySelector('#searchInput').textContent
             this.$store.dispatch('auth/setSearchResult', this.search_result);
+            this.$store.dispatch('auth/setKeywords', this.keywords);
             this.$bus.$emit('reloadHome');
             if (this.$route.path != '/')
                 this.$router.push('/')
@@ -95,13 +99,21 @@ export default {
             .catch(error => {
                 console.log(error)
             })
-        },
         
+        },
+        $route: {
+            handler: function() {
+                if(this.$router.currentRoute['name'] == "Cashier") this.showShoppingCart = false;
+                else this.showShoppingCart = true;
+            },
+         },
+    },
+    created: function() {
+        if(this.$router.currentRoute['name'] == "Cashier") this.showShoppingCart = false;
+        else this.showShoppingCart = true;
     },
     beforeCreate: function() {},
-    created: function() {},
     beforeMount: function() {},
-    mounted: function() {},
     beforeUpdate: function() {},
     updated: function() {},
     activated: function() {},

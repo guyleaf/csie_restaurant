@@ -266,8 +266,8 @@ export default {
             }).then( response=>{
                 this.foodCards.push({sellingState:1, soldOut:false, foodId: response.data.id.product_id, foodName: this.Name, price:this.Price, imgPath: this.$url + response.data.id.image_path, foodDescription: this.Description, foodTag:this.foodCategory})
                 this.$alert("新增成功","","success");
-                }
-            )
+                //this.$refs['my-modal'].hide();
+            })
             .catch(error=>{
                 this.$alert("新增失敗","","error");
                 console.log(error.response)

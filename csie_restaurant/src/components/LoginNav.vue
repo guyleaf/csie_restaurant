@@ -79,7 +79,7 @@
           this.$store.dispatch('auth/invalidate')
           this.$fire({
             title: "登出成功",
-            text: response.data.message,
+            text: 'Successfully logged out',
             type: "success",
             timer: 5000
           })

@@ -9,7 +9,7 @@
           </div>
           <div class="products">
             <div v-for="(item,index) in ItemList" :key="index"  >
-              <CartCell v-on:deleteclick="deleteCartCell" v-bind="item" :index="index"/>
+              <CartCell v-on:deleteclick="deleteCartCell" @spinClick="modifySpinValue" v-bind="item" :index="index"/>
             </div>
           </div>
         </div>
@@ -33,7 +33,7 @@
             </div>
             <div class="row restaurant"> 
               <b-icon icon="geo-alt-fill" font-scale="1.5" style="margin:1%"> </b-icon>  
-              <p>碰面地點:{{地址}}</p>
+              <p>碰面地點:地址</p>
             </div>
           </div>
           <div class="priceInfo">
@@ -108,15 +108,35 @@ export default {
           this.totalPrice += this.ItemList[i].foodPrice * this.ItemList[i].quantity
         }
       },
+      modifySpinValue(index,value){
+        let productCookie = JSON.parse(this.$cookie.get("product"));
+        let difValue = value - this.ItemList[index].quantity ;
+        productCookie[index].quantity = value
+        document.cookie = 'product=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
+        this.totalPrice = this.totalPrice + (value - this.ItemList[index].quantity) * this.ItemList[index].foodPrice
+        this.ItemList[index].quantity = value;
+        this.productNum += difValue;
+        this.$cookie.set('product', JSON.stringify(productCookie))
+      },
       deleteCartCell(e){
-        this.ItemList.splice(e,1);
-        if(this.ItemList.length == 0) //delete cookie
+        if(this.ItemList.length == 1) //delete cookie
         { 
-          document.cookie = 'shopId=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
-          document.cookie = 'shopName=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
-          document.cookie = 'product=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
+          this.$confirm("移除這個商品會刪除此筆訂單，您確定嗎？","刪除訂單","warning").then(() => {
+            this.ItemList.splice(e,1);
+            document.cookie = 'shopId=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
+            document.cookie = 'shopName=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
+            document.cookie = 'product=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
+            this.$alert('已刪除訂單','','success').then(()=>{
+              this.$router.push({ name: 'Home' })
+            })
+          })
         }
-        else{ this.$cookie.set('product',JSON.stringify(this.ItemList));}
+        else{
+          this.productNum -= this.ItemList[e].quantity
+          this.totalPrice -= this.ItemList[e].quantity * this.ItemList[e].foodPrice 
+          this.ItemList.splice(e,1);
+          this.$cookie.set('product',JSON.stringify(this.ItemList));
+        }
       },
   },
   created(){
@@ -167,8 +187,8 @@ export default {
   margin: 3% -15px 3% -15px;
 }
 .desField{
-  overflow-x: visible;
-  overflow-y: scroll;
+  overflow-x: hidden;
+  overflow-y: hidden;
   padding: 1%;
   margin:2% 2% 2% 0;
   border-width: 2px;
@@ -181,8 +201,5 @@ export default {
   padding: 1%;
   border-bottom:2px solid #d2d9d2;
   margin-bottom: 2%;
-}
-.sendInfo>p{
-  
 }
 </style>
