@@ -76,9 +76,12 @@ class MemberService
 
     public function addMember($payload)
     {
+
+        $member_id =$this->memberRepository->addMember($payload['member']);
+
         if($payload['member']['permission'] == 2)
         {
-            $this->memberRepository->addCustomer($payload);
+            $this->memberRepository->addCustomer($payload['customer'], $member_id);
         }
 
         if($payload['member']['permission'] == 1)
@@ -89,8 +92,8 @@ class MemberService
                 unset($payload['seller']['header_image']);
                 $image_extension = $image->getClientOriginalExtension();
             }
-            $seller_id = $this->memberRepository->addSeller($payload, $image_extension);
-            if (!empty($payload['seller']['header_image']))    {$image->storeAs('public/restaurant/' . strval($seller_id), 'header' . '.' . $image_extension);}
+            // $seller_id = $this->memberRepository->addSeller($payload['seller'], $member_id, $image_extension);
+            // if (!empty($payload['seller']['header_image']))    {$image->storeAs('public/restaurant/' . strval($seller_id), 'header' . '.' . $image_extension);}
         }
     }
 }
