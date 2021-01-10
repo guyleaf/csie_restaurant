@@ -81,9 +81,9 @@
             let headerHeight= mainheader.clientHeight.toString() +'px'
             let tabBar = tabClass.querySelector('ul')
             let tab = tabClass.querySelectorAll('.nav-item>a')
-            let limit = document.querySelector('#limit')
+            let couponTab = document.querySelector('#couponTab')
             var st = scrollTop;
-            if(scrollTop>limit.offsetTop+limit.clientHeight && st <= this.lastScrollY) {tabBar.classList.add("categoryTabs"); tabBar.style.top=headerHeight; tabBar.style.width=mainheader.clientWidth.toString() + 'px'}
+            if(scrollTop>couponTab.offsetTop+couponTab.clientHeight && st <= this.lastScrollY) {tabBar.classList.add("categoryTabs"); tabBar.style.top=headerHeight; tabBar.style.width=mainheader.clientWidth.toString() + 'px'}
             else {tabBar.classList.remove("categoryTabs"); tabBar.style.top=""; tabBar.style.width=""}
             this.lastScrollY = st;
             for(i=tab.length-1;i>=0;i--)   if(tab[i].className.indexOf("active") >= 0){tab[i].classList.remove("active") } 

@@ -215,7 +215,7 @@
           password: password,
           phone: phone,
           email: email,
-          member_status: 1,
+          member_status: 0,
           permission: 2},
           customer:{
               sex:sex

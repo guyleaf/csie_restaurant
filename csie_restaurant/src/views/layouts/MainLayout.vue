@@ -30,10 +30,8 @@ export default {
         var body = document.querySelector('.body')
         var header = document.querySelector('.header')
         var footer = document.querySelector('.bottom')
-        var fixed = document.querySelector('#fixed')
         var footerHeight = footer.clientHeight
         var bodyHeight =html.clientHeight - footerHeight - header.clientHeight
-        fixed.style.minHeight = header.clientHeight.toString() +"px"
         body.style.minHeight = bodyHeight.toString()+"px"
     },  
     beforeUpdate: function() {},
@@ -72,7 +70,7 @@ export default {
   }
   .modal-open {
     padding-right: 16px !important;
-}
+    }
   body{
       padding-right: 0px !important;
   }

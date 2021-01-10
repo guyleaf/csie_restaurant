@@ -183,8 +183,8 @@ export default {
             if(this.foodName != this.vfoodName) {this.foodName = this.vfoodName; formdata.append('name',this.vfoodName);}
             if(this.foodDescription != this.vfoodDescription) {this.foodDescription = this.vfoodDescription; formdata.append('description',this.vfoodDescription)}
             if(this.price != this.vprice) {this.price = this.vprice; formdata.append('price',this.vprice)}
-            if(this.imgPath != this.image) {formdata.append('image',this.image);}
-            this.$http.post('/seller/products/update',formdata,{
+            if(this.imgPath != this.image) {this.imgPath=this.preview;formdata.append('image',this.image);}
+            this.$http.post('/seller/products/update',{formdata},{
                 headers: {
                 'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
             }}).then(response => {
