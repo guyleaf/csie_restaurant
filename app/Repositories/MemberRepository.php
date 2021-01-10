@@ -13,9 +13,14 @@ class MemberRepository
     protected $memberTable;
 
     /**
-     * @var \Illuminate\Database\Query\Builder $memberTable
+     * @var \Illuminate\Database\Query\Builder $customerTable
      */
     protected $customerTable;
+
+    /**
+     * @var \Illuminate\Database\Query\Builder $sellerTable
+     */
+    protected $sellerTable;
 
     /**
      * Member Repository constructor
@@ -26,6 +31,7 @@ class MemberRepository
     {
         $this->memberTable = DB::table('member');
         $this->customerTable = DB::table('customer');
+        $this->sellerTable = DB::table('seller');
     }
     /**
      * Get shops
@@ -44,7 +50,7 @@ class MemberRepository
         return $members;
     }
 
-    public function addMember($payload)
+    public function addCustomer($payload)
     {
         DB::beginTransaction();
 
@@ -68,6 +74,50 @@ class MemberRepository
 
             $this->customerTable
             ->insert($payload['customer']);
+
+            DB::commit();
+        }
+        catch (Exception $e)
+        {
+            DB::rollBack();
+            throw $e;
+        }
+
+    }
+
+    public function addSeller($payload)
+    {
+        DB::beginTransaction();
+
+        try
+        {
+            $payload['member']['created_at'] = new DateTime('now', new DateTimeZone('Asia/Taipei'));
+            $payload['member']['created_at'] = $payload['member']['created_at']->format('Y-m-d H:i:s');
+            $payload['member']['updated_at'] = $payload['member']['created_at'];
+
+            $id = $this->memberTable
+            ->orderByDesc('id')
+            ->limit(1)
+            ->lockForUpdate()
+            ->get(['id'])->first()->id + 1;
+
+            $counter_number = $this->sellerTable
+            ->orderByDesc('counter_number')
+            ->limit(1)
+            ->lockForUpdate()
+            ->get(['counter_number'])->first()->counter_number + 1;
+
+            $payload['member']['id'] = $id;
+            $payload['seller']['member_id'] = $id;
+            $payload['seller']['counter_number'] = $counter_number;
+
+            $this->memberTable
+            ->insert($payload['member']);
+
+            $this->sellerTable
+            ->insert($payload['seller']);
+
+            return $id
 
             DB::commit();
         }

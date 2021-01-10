@@ -42,9 +42,15 @@ class MemberController extends Controller
         return response()->json($result);
     }
 
-    public function addMember(Request $request)
+    public function addCustomer(Request $request)
     {
-        $this->memberService->addMember($request->all());
+        $this->memberService->addCustomer($request->all());
+        return response()->json(['message' => 'Success'], 201);
+    }
+
+    public function addSeller(Request $request)
+    {
+        $this->memberService->addSeller($request->all());
         return response()->json(['message' => 'Success'], 201);
     }
 

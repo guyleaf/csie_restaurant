@@ -39,9 +39,12 @@ $router->group(['prefix' => 'restaurants'], function () use ($router) {
 
 $router->group(['prefix' => 'members'], function () use ($router) {
     $router->get('', 'MemberController@getMembers');
-    $router->post('/add', 'MemberController@addMember');
-    $router->post('/update', 'MemberController@updateMember');
-    $router->post('/delete', 'MemberController@deleteMember');
+    $router->post('update', 'MemberController@updateMember');
+    $router->post('delete', 'MemberController@deleteMember');
+    $router->post('customer/add', 'MemberController@addCustomer');
+    $router->group(['prefix' => 'seller'], function () use ($router) {
+        $router->post('add', 'MemberController@addSeller');
+    });
 });
 
 $router->group(['prefix' => 'customer'], function () use ($router) {
