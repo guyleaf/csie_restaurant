@@ -89,9 +89,10 @@ class SellerService
             
             $image->storeAs($image_path, $image_name);
         }
-        var_dump($image_name);
+        //var_dump($image_name);
         // fix permission
-        $this->productRepository->updateProduct($seller_id, $payload, $image_name);
+        //$this->productRepository->updateProduct($seller_id, $payload, $image_name);
+
     }
 }
 ?>
