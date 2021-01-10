@@ -80,17 +80,18 @@ class MemberService
         {
             $this->memberRepository->addCustomer($payload);
         }
-        // if($payload['member']['permission'] == 1)
-        // {
-        //     if (!empty($payload['seller']['image']))
-        //     {
-        //         $image = $payload['seller']['image'];
-        //         unset($payloadd['seller']['image']);
-        //         $image_extension = $image->getClientOriginalExtension();
-        //     }
-        //     $seller_id = $this->memberRepository->addSeller($payload);
-        //     if (!empty($payload['seller']['image']))    {$image->storeAs('public/restaurant/' . strval($seller_id), 'header' . '.' . $image_extension);}
-        // }
+
+        if($payload['member']['permission'] == 1)
+        {
+            if (!empty($payload['seller']['header_image']))
+            {
+                $image = $payload['seller']['header_image'];
+                unset($payload['seller']['header_image']);
+                $image_extension = $image->getClientOriginalExtension();
+            }
+            $seller_id = $this->memberRepository->addSeller($payload, $image_extension);
+            if (!empty($payload['seller']['header_image']))    {$image->storeAs('public/restaurant/' . strval($seller_id), 'header' . '.' . $image_extension);}
+        }
     }
 }
 ?>
