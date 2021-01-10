@@ -45,9 +45,9 @@ class SellerService
         $this->couponRepository->deleteCoupon($id);
     }
 
-    public function updateCoupon($payload)
+    public function updateCoupon($seller_id, $payload)
     {
-        $this->couponRepository->updateCoupon($payload);
+        $this->couponRepository->updateCoupon($seller_id, $payload);
     }
 
     public function addProduct($seller_id, $payload)

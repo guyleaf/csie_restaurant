@@ -49,6 +49,7 @@ $router->group(['prefix' => 'customer'], function () use ($router) {
         $router->get('orders', 'CustomerController@getOrders');
         $router->get('orders/{orderId}', 'CustomerController@getOrderInfo');
         $router->post('coupon/use', 'CustomerController@useCoupon');
+        $router->get('address', 'CustomerController@getAddress');
     });
 });
 
