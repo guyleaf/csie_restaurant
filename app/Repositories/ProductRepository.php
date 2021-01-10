@@ -116,11 +116,11 @@ class ProductRepository
         ->where('id', '=', $payload['id'])
         ->update($payload);
         
-        $this->productImageTable
-        ->where('id', '=', $payload['id'])
-        ->update([
-            'image_path' => '/storage/restaurant/' . strval($seller_id) . '/' . $image_name . '.' . $image_extension
-        ]);
+        // $this->productImageTable
+        // ->where('id', '=', $payload['id'])
+        // ->update([
+        //     'image_path' => '/storage/restaurant/' . strval($seller_id) . '/' . $image_name . '.' . $image_extension
+        // ]);
     }
 
     public function getProductCategoriesByShopId($seller_id)
