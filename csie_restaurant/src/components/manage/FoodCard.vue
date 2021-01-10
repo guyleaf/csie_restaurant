@@ -177,25 +177,31 @@ export default {
             if(this.vprice == '') {this.priceState=false}
             if(this.nameState!=false && this.priceState!=false)
             {
-            let formdata = new FormData();
-            formdata.append('id',this.foodId)
-            this.$confirm("確定要更改此商品？","","question").then(() => {
-            if(this.foodName != this.vfoodName) {this.foodName = this.vfoodName; formdata.append('name',this.vfoodName);}
-            if(this.foodDescription != this.vfoodDescription) {this.foodDescription = this.vfoodDescription; formdata.append('description',this.vfoodDescription)}
-            if(this.price != this.vprice) {this.price = this.vprice; formdata.append('price',this.vprice)}
-            if(this.imgPath != this.image) {formdata.append('image',this.image);}
-            this.$http.post('/seller/products/update',formdata,{
-                headers: {
-                'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
-            }}).then(response => {
-                this.$alert("修改成功","","success");
-                this.$refs['my-modal'].hide();
-            }).catch(error=>{
-                this.$alert("修改失敗","","error");
-                this.$refs['my-modal'].hide();
-                console.log(error.response)
-            })
-            })}  
+                let formdata = new FormData();
+                let isChanged = false;
+                formdata.append('id',this.foodId)
+                this.$confirm("確定要更改此商品？","","question").then(() => {
+                    if(this.foodName != this.vfoodName) {this.foodName = this.vfoodName; formdata.append('name',this.vfoodName); isChanged = true;}
+                    if(this.foodDescription != this.vfoodDescription) {this.foodDescription = this.vfoodDescription; formdata.append('description',this.vfoodDescription); isChanged = true;}
+                    if(this.price != this.vprice) {this.price = this.vprice; formdata.append('price',this.vprice); isChanged = true;}
+                    if(this.imgPath != this.image) {formdata.append('image',this.image); isChanged = true;}
+                    if (isChanged) {
+                        this.$http.post('/seller/products/update',formdata,{
+                            headers: {
+                                'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
+                        }}).then(response => {
+                            this.$alert("修改成功","","success");
+                            this.$refs['my-modal'].hide();
+                        }).catch(error=>{
+                            this.$alert("修改失敗","","error");
+                            this.$refs['my-modal'].hide();
+                            console.log(error.response)
+                        })
+                    }
+                    else
+                        this.$refs['my-modal'].hide();
+                })
+            }
         },
         cancelModal() {
             this.$refs['my-modal'].hide();
@@ -271,7 +277,7 @@ export default {
 }
 .foodCardHeader{
     padding: 0rem;
-    z-index: 19;
+    z-index: 18;
 }
 .card-body{
     margin-bottom: 0.5%;
