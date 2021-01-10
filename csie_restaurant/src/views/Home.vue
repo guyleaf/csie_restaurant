@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <Carousel imgPath1="https://picsum.photos/1024/480/?image=54" imgPath2='https://picsum.photos/1024/480/?image=12' imgPath3='https://picsum.photos/1024/480/?image=22'/>
-    <center >
+    <center>
       <div class="container row justify-content-center cardMargin">
         <div class="col-10">
           <b-card>
@@ -10,7 +10,12 @@
                 <Checkbox v-on:selectChange="updateSelected" :categories="categories"/>
               </div>
               <div class="col-10">
-                <ShopCardGroup :cards="cards"/>
+                <div class="row searchIndicator" v-if="searchMode">
+                  <span style="font-weight:700;color:#ee4d2d;">'{{this.keywords}}'</span>搜尋結果
+                </div>
+                <div class="row">
+                  <ShopCardGroup :cards="cards"/>
+                </div>
               </div>
             </div>
           </b-card>
@@ -53,11 +58,14 @@ export default {
     return{
       selected: [],
       cards:[],
-      categories:[]
+      categories:[],
+      searchMode: false,
+      keywords: ''
     }
   },
   watch:{
     selected : function(tags) {
+        this.searchMode = false;
         let url='/restaurants/?currentNumber=0&requiredNumber=10';
         for (let i=0;i<tags.length;i++)    url=url+'&filters[]='+tags[i]
         this.$http.get(url)
@@ -69,28 +77,40 @@ export default {
     },
   },
   created(){
-    let sR = this.$store.getters['auth/searchResult'];
-    if(sR.length != 0) {
-        console.log('NOTNULL')
-        this.cards = [];
-        for(let i=0; i<sR.length; i++){
-          this.cards.push({shopId: sR[i].seller_id, shopName: sR[i].name, imgPath: this.$url + sR[i].header_image, rating: sR[i].averageofratings});
-        } 
-    }
-    else {
-      this.getShops();
-    }
+    // let sR = this.$store.getters['auth/searchResult'];
+    // if(sR.length != 0) {
+    //     this.searchMode = true;
+    //     this.keywords = this.$store.getters['auth/keywords'];
+    //     console.log('NOTNULL')
+    //     this.cards = [];
+    //     for(let i=0; i<sR.length; i++){
+    //       this.cards.push({shopId: sR[i].seller_id, shopName: sR[i].name, imgPath: this.$url + sR[i].header_image, rating: sR[i].averageofratings});
+    //     } 
+    // }
+    // else {
+    //   this.searchMode = false;
+    //   this.getShops();
+    // }
+    //this.searchMode = false;
+    this.getShops();
+    this.$store.dispatch('auth/cleanSearchResult');
+    this.$store.dispatch('auth/cleanKeywords');
     
     this.$http.get('/restaurants/category')
     .then(response => (this.categories = response.data))
 
-    this.$bus.$on('reloadHome',  () =>{
+
+    this.$bus.$on('reloadHome',  (keywords) =>{
       console.log('Homeon')
+      this.searchMode = true;
       let shops = this.$store.getters['auth/searchResult'];
+      this.keywords = this.$store.getters['auth/keywords'];
       this.loadShops(shops)
     });
     this.$bus.$on('resetHome',  () =>{
       console.log('resetHome')
+      this.searchMode = false;
+      this.keywords = '';
       this.getShops()
     });
   },
@@ -110,5 +130,12 @@ export default {
   }
   .splitLine{
     border-right: thin solid gray;
+  }
+  .searchIndicator{
+    margin-right: 1rem;
+    font-size: 1.2rem;
+    padding-bottom: calc(0.125rem + 1px);
+    margin-bottom: calc(0.15rem + 1px);
+    border-bottom: 1px solid gray;
   }
 </style>

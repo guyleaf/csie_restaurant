@@ -58,6 +58,7 @@ export default {
             this.keywords = ''
             this.search_result = []
             this.$store.dispatch('auth/cleanSearchResult');
+            this.$store.dispatch('auth/cleanKeywords');
         },
         showHistory() {
         },
@@ -70,8 +71,9 @@ export default {
             console.log('pushHome')
         },
         goSearch() {
-            let search = document.querySelector('#searchInput').textContent
+            //let search = document.querySelector('#searchInput').textContent
             this.$store.dispatch('auth/setSearchResult', this.search_result);
+            this.$store.dispatch('auth/setKeywords', this.keywords);
             this.$bus.$emit('reloadHome');
             if (this.$route.path != '/')
                 this.$router.push('/')
