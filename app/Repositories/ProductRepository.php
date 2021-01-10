@@ -107,7 +107,7 @@ class ProductRepository
         ->update(['is_deleted' => true, 'modified_time' => $now->format('Y-m-d H:i:s')]);
     }
 
-    public function updateProduct($payload)
+    public function updateProduct($seller_id, $payload, $image_name)
     {
         $now = new DateTime('now', new DateTimeZone('Asia/Taipei'));
         $payload['modified_time'] = $now->format('Y-m-d H:i:s');
@@ -115,6 +115,12 @@ class ProductRepository
         $this->productTable
         ->where('id', '=', $payload['id'])
         ->update($payload);
+        
+        $this->productImageTable
+        ->where('id', '=', $payload['id'])
+        ->update([
+            'image_path' => '/storage/restaurant/' . strval($seller_id) . '/' . $image_name . '.' . $image_extension
+        ]);
     }
 
     public function getProductCategoriesByShopId($seller_id)
