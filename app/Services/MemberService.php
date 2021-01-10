@@ -64,9 +64,21 @@ class MemberService
         return $result;
     }
 
-    public function addMember($payload)
+    public function addCustomer($payload)
     {
-        $this->memberRepository->addMember($payload);
+        $this->memberRepository->addCustomer($payload);
+    }
+
+    public function addSeller($payload)
+    {
+        if (!empty($payload['seller']['image']))
+        {
+            $image = $payload['seller']['image'];
+            unset($payloadd['seller']['image']);
+            $image_extension = $image->getClientOriginalExtension();
+        }
+        $seller_id = $this->memberRepository->addSeller($payload);
+        if (!empty($payload['seller']['image']))    {$image->storeAs('public/restaurant/' . strval($seller_id), 'header' . '.' . $image_extension);}
     }
 
     public function updateMember($payload)
