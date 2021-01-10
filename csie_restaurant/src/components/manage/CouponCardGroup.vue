@@ -161,7 +161,6 @@ export default {
             })
             let index = this.couponCards.findIndex( i=> i['coupon'].id === msg['coupon'].id)
             this.couponCards.splice(index,1);
-            let optionIndex = this.productOption.findIndex(i => i.value === selected)
         },
         addCoupon(msg){
             this.$http.post('/seller/coupons/add',msg,{
