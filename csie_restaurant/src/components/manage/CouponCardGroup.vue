@@ -5,7 +5,7 @@
             <div class='couponField mb-5' style='display:flex; flex-direction:row; '>
                 <div v-for="coupon in couponCards" :key="coupon['coupon'].id">
                     <CouponCard :coupon_id="coupon['coupon'].id" :code="coupon['coupon'].code" :products="coupon['coupon_items']" :discount="coupon['coupon'].discount" 
-                    :limitMoney="coupon['coupon'].limit_money" :start="coupon['coupon'].start_time" :expire="coupon['coupon'].end_time" :type="coupon['coupon'].type"
+                    :numberOfUsage="coupon['coupon'].numberOfUsage" :limitMoney="coupon['coupon'].limit_money" :start="coupon['coupon'].start_time" :expire="coupon['coupon'].end_time" :type="coupon['coupon'].type"
                     v-on="{updateCoupon:updateCoupon, deleteCoupon:deleteCoupon}"/>
                 </div>
             </div>
@@ -31,7 +31,7 @@
                         <div class="col-md-1 mt-2">滿額</div>
                         <b-form-input class="col-md-2" v-model="money" placeholder="XX元免運費" type="text" required></b-form-input>
                         <div class="col-md-1 mt-0 ml-0">使用次數</div>
-                        <b-form-input class="col-md-3" v-model="usage" placeholder="消費者可用次數" type="text" required></b-form-input>
+                        <b-form-input class="col-md-3" v-model="usage" placeholder="每人可用次數" type="text" required></b-form-input>
                     </div>
                     <div class="row" v-if="typeSelected==1">
                         <div class="col-md-1 mt-2">滿額</div>
@@ -39,7 +39,7 @@
                         <div class="col-md-1 mt-2">折扣</div>
                         <b-form-input class="col-md-2" v-model="discount" placeholder="請輸入小數" type="text" required></b-form-input>
                         <div class="col-md-1 mt-0 ml-0">使用次數</div>
-                        <b-form-input class="col-md-3" v-model="usage" placeholder="消費者可用次數" type="text" required></b-form-input>
+                        <b-form-input class="col-md-3" v-model="usage" placeholder="每人可用次數" type="text" required></b-form-input>
                     </div>
                     <b-form-group label="優惠商品" v-if="typeSelected==2">
                         <div class="row mt-2" v-for="(item, index) in couponItems" v-bind:key="index">
@@ -61,7 +61,7 @@
                             <div class="col-md-1 mt-2">折扣</div>
                             <b-form-input class="col-md-2" v-model="discount" placeholder="請輸入小數" type="text" required></b-form-input>
                             <div class="col-md-1 mt-0 ml-0">使用次數</div>
-                            <b-form-input class="col-md-3" v-model="usage" placeholder="消費者可用次數" type="text" required></b-form-input>
+                            <b-form-input class="col-md-3" v-model="usage" placeholder="每人可用次數" type="text" required></b-form-input>
                             <h2 class="col-md-3">折價後金額</h2>
                             <h2 class="col-md-2">{{Math.round(total*discount)}}</h2>
                         </div>
@@ -159,7 +159,7 @@ export default {
                 }
             }).then(response =>{
                 this.$alert("新增成功","","success");
-                coupon.log('曾增曾增增資 ',msg)
+                
                 this.couponCards.push(msg);
             }).catch(error=>{
                 this.$alert("新增失敗","","error");

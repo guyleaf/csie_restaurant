@@ -5,6 +5,7 @@
                 <a v-if="Date.parse(expire) < new Date()" style="font-weight:bold; font-size:15px; color:#DDDDDD; background-color:#880000;">已過期</a>
                 <a v-if="Date.parse(start) > new Date()" style="font-weight:bold; font-size:15px; color:white; background-color:#003E3E;">尚未開始</a>
                 <a v-if="Date.parse(expire)>new Date() && Date.parse(start)<new Date()" style="font-weight:bold; font-size:15px; color:white; background-color:#2828FF;">生效中</a>
+                <a style="margin-left:50px; font-size:10px">每人可用次數：</a><a style="font-weight:bold; font-size:18px;">{{usage}}</a>
             </b-card-title>
             <!-- 0 for免運 1for滿XXX折扣 2for套餐組合><-->
             <b-card-text v-if="type === 0">
@@ -53,15 +54,15 @@
                         <div class="col-md-1 mt-2">滿額</div>
                         <b-form-input class="col-md-2" v-model="money" placeholder="XX元免運費" type="text" required></b-form-input>
                         <div class="col-md-1 mt-0 ml-0">使用次數</div>
-                        <b-form-input class="col-md-3" v-model="usage" placeholder="消費者可用次數" type="text" required></b-form-input>
+                        <b-form-input class="col-md-3" v-model="numberOfUsage" placeholder="每人可用次數" type="text" required></b-form-input>
                     </div>
                     <div class="row" v-if="typeSelected==1">
                         <div class="col-md-1 mt-2">滿額</div>
-                        <b-form-input class="col-md-2" v-model="money" placeholder="XX元打折" type="text"  required></b-form-input>
+                        <b-form-input class="col-md-2" v-model="limitMoney" placeholder="XX元打折" type="text"  required></b-form-input>
                         <div class="col-md-1 mt-2">折扣</div>
                         <b-form-input class="col-md-2" v-model="discount" placeholder="請輸入小數" type="text" required></b-form-input>
                         <div class="col-md-1 mt-0 ml-0">使用次數</div>
-                        <b-form-input class="col-md-3" v-model="usage" placeholder="消費者可用次數" type="text" required></b-form-input>
+                        <b-form-input class="col-md-3" v-model="numberOfUsage" placeholder="每人可用次數" type="text" required></b-form-input>
                     </div>
                     <b-form-group label="優惠商品" v-if="typeSelected==2">
                         <div class="row mt-2" v-for="(item, index) in couponItems" v-bind:key="index">
@@ -82,7 +83,9 @@
                         <div class="row mt-4">
                             <div class="col-md-1 mt-2">折扣</div>
                             <b-form-input class="col-md-2" v-model="discount" placeholder="請輸入小數" type="text" required></b-form-input>
-                            <h2 class="col-md-3 ml-5">折價後金額</h2>
+                            <div class="col-md-1 mt-0 ml-0">使用次數</div>
+                            <b-form-input class="col-md-3" v-model="numberOfUsage" placeholder="每人可用次數" type="text" required></b-form-input>
+                            <h2 class="col-md-3">折價後金額</h2>
                             <h2 class="col-md-2">{{Math.round(total*discount)}}</h2>
                         </div>
                     </b-form-group>
@@ -90,13 +93,13 @@
                         <div style="display:inline-flex; flex-wrap:nowrap;"> 
                             <div class="mt-2 mr-3">開始時間 </div>
                             <div>
-                                <date-picker v-if="Date.parse(start) > new Date()" v-model="startDate" :placeholder="start" :config="dateOption"></date-picker>
-                                <date-picker v-else disabled :placeholder="start" v-model="startDate" :config="dateOption"></date-picker>
+                                <date-picker v-if="Date.parse(start) > new Date()" v-model="start" :placeholder="start" :config="dateOption"></date-picker>
+                                <date-picker v-else disabled :placeholder="start" v-model="start" :config="dateOption"></date-picker>
                             </div>
                         </div>
                         <div style="display:inline-flex; flex-wrap:nowrap;">
                             <div class="mt-2 mr-3">結束時間</div>
-                            <div><date-picker v-model="expireDate" :placeholder="expire" :config="dateOption"></date-picker></div>
+                            <div><date-picker v-model="expire" :placeholder="expire" :config="dateOption"></date-picker></div>
                         </div>
                     </div>
                     <div class="row m-2" style="justify-content:space-around">
@@ -120,18 +123,15 @@ export default {
     data() {
       return {
         total: 0,
-        usage: 0,
+        id: this.coupon_id,
+        typeSelected: this.type,
+        dis: this.discount,
         startDate: this.start,
         expireDate: this.expire,
         money: this.limitMoney,
-        id: this.coupon_id,
+        usage: this.numberOfUsage,
         info:[],    
         couponAll:{'coupon':{}, "coupon_items":null },
-        showDiscount: Math.round((1-this.discount)*100),
-        shipFreeHint:'元免運費',
-        limitHint:'元',
-        discountHint:'(請輸入小數)',
-        typeSelected: this.type,
         dateOption: {
             format: 'YYYY-MM-DD hh:mm:ss',
             sideBySide: true,
@@ -139,17 +139,19 @@ export default {
         },
         couponItems:[ { selected: null, spinValue:1, price:0 } ],
         productOption:[],
+        showDiscount: Math.round((1-this.discount)*100),
       }
     },
     props:{
-        coupon_id: Number,
         code: String,
-        products: Array,
+        coupon_id: Number,
+        type: Number,
         discount: String,
         limitMoney: String,
         start: String,
         expire: String,
-        type: Number,
+        numberOfUsage: Number,
+        products: Array,
     },
     created(){
     },
@@ -185,12 +187,15 @@ export default {
                 } 
             })
             this.$refs['my-modal'].show();
+            
+           
         },
         checkForm(){
             
         },
         confirmModal(){
             //api update
+            
             if(Date.parse(this.start) > new Date()){  //兩個時間都要填寫
                 if (this.startDate > this.expireDate){
                     this.$fire({
@@ -231,7 +236,7 @@ export default {
             
             if(this.money == undefined) this.money = null; 
             if(parseInt(this.typeSelected) == 0) this.discount = 1;
-            this.couponAll['coupon'] = {id:this.coupon_id, code:this.code, start_time:this.start, end_time:this.expire, numberOfUsage: parseInt(this.usage,10), 
+            this.couponAll['coupon'] = {id:this.coupon_id, code:this.code, start_time:this.start, end_time:this.expire, numberOfUsage: parseInt(this.numberOfUsage,10), 
                                     type:parseInt(this.typeSelected,10), discount:parseFloat(this.discount), limit_money:parseInt(this.money,10) };
             if(this.typeSelected ==2 ){
                 this.info = [];
@@ -241,15 +246,28 @@ export default {
                 }
                 this.couponAll['coupon_items'] = this.info;
             }
+            
+            // update local value
+            this.typeSelected = this.type;
+            this.dis = this.discount;
+            this.startDate = this.start;
+            this.expireDate = this.expire;
+            this.usage = this.numberOfUsage;
             this.$refs['my-modal'].hide();
             this.$emit('updateCoupon', this.couponAll)
         },
         cancelModal(){
+            //reset to initial value
+            this.type = this.typeSelected;
+            this.discount = this.dis;
+            this.start = this.startDate;
+            this.exprire = this.expireDate;
+            this.numberOfUsage = this.usage;
             this.$refs['my-modal'].hide();
         },
         deleteTHIS(){
             //api delete
-            this.$confirm("你確定要刪除？","","question").then(() =>{
+            this.$confirm("確定要刪除？","","question").then(() =>{
                 let couponDelete = {"coupon":{id: this.coupon_id} };
                 this.$emit('deleteCoupon', couponDelete)
             })
