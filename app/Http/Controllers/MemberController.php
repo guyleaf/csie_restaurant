@@ -42,18 +42,6 @@ class MemberController extends Controller
         return response()->json($result);
     }
 
-    public function addCustomer(Request $request)
-    {
-        $this->memberService->addCustomer($request->all());
-        return response()->json(['message' => 'Success'], 201);
-    }
-
-    public function addSeller(Request $request)
-    {
-        $this->memberService->addSeller($request->all());
-        return response()->json(['message' => 'Success'], 201);
-    }
-
     public function updateMember(Request $request)
     {
         // $user = auth()->userOrFail();
@@ -66,5 +54,17 @@ class MemberController extends Controller
     {
         $this->memberService->deleteMember($request->input('id'));
         return response()->json(['message' => 'Success']);
+    }
+
+    public function addCustomer(Request $request)
+    {
+        $this->memberService->addCustomer($request->all());
+        return response()->json(['message' => 'Success'], 201);
+    }
+
+    public function addSeller(Request $request)
+    {
+        $this->memberService->addSeller($request->all());
+        return response()->json(['message' => 'Success'], 201);
     }
 }
