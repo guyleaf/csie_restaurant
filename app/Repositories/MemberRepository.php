@@ -88,8 +88,6 @@ class MemberRepository
             $this->memberTable
             ->insert($payload);
 
-            return $id
-
             DB::commit();
         }
         catch (Exception $e)
@@ -98,6 +96,7 @@ class MemberRepository
             throw $e;
         }
 
+        return $id
     }
 
     public function addCustomer($payload, $member_id)
