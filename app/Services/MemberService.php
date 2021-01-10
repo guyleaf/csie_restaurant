@@ -88,7 +88,7 @@ class MemberService
             $image_extension = $image->getClientOriginalExtension();
         }
         $seller_id = $this->memberRepository->addSeller($payload);
-        // if (!empty($payload['seller']['image']))    {$image->storeAs('public/restaurant/' . strval($seller_id), 'header' . '.' . $image_extension);}
+        if (!empty($payload['seller']['image']))    {$image->storeAs('public/restaurant/' . strval($seller_id), 'header' . '.' . $image_extension);}
     }
 }
 ?>
