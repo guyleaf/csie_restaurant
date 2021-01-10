@@ -121,7 +121,8 @@ export default {
                 console.log(msg);
                 console.log(error.response)
             })
-            // console.log(this.couponCards[index]);        },
+            // console.log(this.couponCards[index]);
+        },
         deleteCoupon(msg){
             this.$http.post('/seller/coupons/delete', msg,{
                 headers: {
