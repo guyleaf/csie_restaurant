@@ -49,6 +49,17 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
-        return parent::render($request, $exception);
+        if($exception instanceof \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException){
+            if ($exception->getMessage() === 'Token not provided')
+                return response()->json(['status' => -1, 'message' => $exception->getMessage()], $exception->getStatusCode());
+            elseif ($exception->getMessage() === 'Token has expired')
+                return response()->json(['status' => -2, 'message' => $exception->getMessage()], $exception->getStatusCode());
+            elseif ($exception->getMessage() === 'Forbidden')
+                return response()->json(['status' => -3, 'message' => $exception->getMessage()], $exception->getStatusCode());
+            else
+                return response()->json(['status' => -999, 'message' => $exception->getMessage()], $exception->getStatusCode());
+        }
+
+        return response()->json(['message' => $exception->getMessage()], $exception->getStatusCode());
     }
 }
