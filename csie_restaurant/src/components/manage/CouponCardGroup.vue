@@ -149,8 +149,7 @@ export default {
                 // this.$alert("更改失敗","","error");
                 // console.log(error.response)
             })
-        },
-        deleteCoupon(msg){
+		},        deleteCoupon(msg){
             this.$http.post('/seller/coupons/delete', msg,{
                 headers: {
                 'Authorization': 'Bearer ' + this.$store.getters['auth/token'],

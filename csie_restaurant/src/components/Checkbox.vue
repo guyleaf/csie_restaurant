@@ -9,6 +9,7 @@
         :value="category.category_id"
         button
         button-variant="none"
+        @change="selecting"
       >
         {{ category.name }}
       </b-form-checkbox>
@@ -32,15 +33,20 @@
        this.$bus.$on('resetHome', () => {
          this.selected = []
        });
+       this.$bus.$on('reloadHome', () => {
+         this.selected = []
+       });
     },
     watch:
     {
-      selected: function (selected) {
-        this.$emit("selectChange", selected)
-      }
+      
     },
     methods:
     {
+      selecting: function () {
+        console.log('selecting..');
+        this.$emit("selectChange", this.selected)
+      }
     },
   }
 </script>

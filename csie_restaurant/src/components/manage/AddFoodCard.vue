@@ -1,6 +1,6 @@
 <template>
     <div class="col-md-4 card-body" v-b-hover="hoverCard" @click="showModal">
-        <b-modal id="modal-sm" size="sm" ref="my-modal" hide-header hide-footer hide-header-close>
+        <b-modal id="modal-sm" size="sm" ref="create-modal" hide-header hide-footer hide-header-close>
             <div class="container">
                 <b-img :src="imgPath" fluid alt="Responsive image"></b-img>
                 <div class="m-2">
@@ -121,7 +121,7 @@ export default {
             //缺：lack of the responsive action when hover on the card
         },
         showModal() {
-            this.$refs['my-modal'].show();
+            this.$refs['create-modal'].show();
         },
         confirmModal() {
             // this.$cookie.delete('product')
@@ -140,10 +140,10 @@ export default {
             this.foodName = this.vName;
             this.foodDescription = this.vDescription;
             this.price = this.vPrice;
-            this.$refs['my-modal'].hide();
+            this.$refs['create-modal'].hide();
         },
         cancelModal() {
-            this.$refs['my-modal'].hide();
+            this.$refs['create-modal'].hide();
         },
         checkFormValidity() {
             const valid1 = this.$refs['name-input'].checkValidity()
