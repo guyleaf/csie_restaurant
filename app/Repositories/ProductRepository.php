@@ -79,6 +79,7 @@ class ProductRepository
 
             $payload['id'] = $id;
 
+            $this->productTable = DB::table('product');
             $this->productTable
             ->insert($payload);
 

@@ -2,24 +2,31 @@
 namespace App\Services;
 
 use App\Models\Member;
+use App\Repositories\MemberRepository;
 
 class AuthService
 {
     /**
-     * @param App\Models\Member $member
+     * @param App\Models\MemberRepository $memberRepository
      */
-    protected $member;
+    protected $memberRepository;
 
     /**
      * Constructor
      *
-     * @param App\Models\Member $member
+     * @param App\Models\MemberRepository $memberRepository
      *
      * @return void
      */
-    public function __construct(Member $member)
+    public function __construct(MemberRepository $memberRepository)
     {
-        $this->member = $member;
+        $this->memberRepository = $memberRepository;
+    }
+
+    public function register($payload)
+    {
+        $this->memberRepository
+        ->addCustomer($payload);
     }
 }
 ?>

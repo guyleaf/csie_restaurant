@@ -2,6 +2,7 @@
 namespace App\Repositories;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use DateTime, DateTimeZone, Exception;
 
 
@@ -13,9 +14,14 @@ class MemberRepository
     protected $memberTable;
 
     /**
-     * @var \Illuminate\Database\Query\Builder $memberTable
+     * @var \Illuminate\Database\Query\Builder $customerTable
      */
     protected $customerTable;
+
+    /**
+     * @var \Illuminate\Database\Query\Builder $sellerTable
+     */
+    protected $sellerTable;
 
     /**
      * Member Repository constructor
@@ -26,6 +32,7 @@ class MemberRepository
     {
         $this->memberTable = DB::table('member');
         $this->customerTable = DB::table('customer');
+        $this->sellerTable = DB::table('seller');
     }
     /**
      * Get shops
@@ -34,49 +41,35 @@ class MemberRepository
      * @param integer $requiredNumber
      * @return \Illuminate\Support\Collection
      */
-    public function getMembers($currentNumber, $requiredNumber)
+
+    public function getCustomers($currentNumber, $requiredNumber)
     {
-        $members = $this->memberTable
+        
+        $customers = $this->memberTable
+            ->join('customer as C', 'C.member_id', '=', 'id')
+            ->orderBy('id')
             ->skip($currentNumber)
             ->take($requiredNumber)
-            ->get(['id as seller_id', 'name', 'username', 'email', 'created_at', 'phone', 'member_status', ]);
+            ->get(['id as customer_id', 'name', 'username', 'email', 'phone', 'member_status']);
 
-        return $members;
+        $numbers = $customers->count();
+        
+        return [$numbers, $customers];
     }
 
-    public function addMember($payload)
+    public function getSellers($currentNumber, $requiredNumber)
     {
-        DB::beginTransaction();
 
-        try
-        {
-            $payload['member']['created_at'] = new DateTime('now', new DateTimeZone('Asia/Taipei'));
-            $payload['member']['created_at'] = $payload['member']['created_at']->format('Y-m-d H:i:s');
-            $payload['member']['updated_at'] = $payload['member']['created_at'];
+        $sellers = $this->memberTable
+            ->join('seller as S', 'S.member_id', '=', 'id')
+            ->orderBy('id')
+            ->skip($currentNumber)
+            ->take($requiredNumber)
+            ->get(['id as seller_id', 'name', 'username', 'email', 'phone', 'member_status', 'counter_number']);
 
-            $id = $this->memberTable
-            ->orderByDesc('id')
-            ->limit(1)
-            ->lockForUpdate()
-            ->get(['id'])->first()->id + 1;
+        $numbers = $sellers->count();
 
-            $payload['member']['id'] = $id;
-            $payload['customer']['member_id'] = $id;
-
-            $this->memberTable
-            ->insert($payload['member']);
-
-            $this->customerTable
-            ->insert($payload['customer']);
-
-            DB::commit();
-        }
-        catch (Exception $e)
-        {
-            DB::rollBack();
-            throw $e;
-        }
-
+        return [$numbers, $sellers];
     }
 
     public function updateMember($payload)
@@ -91,9 +84,82 @@ class MemberRepository
 
     public function deleteMember($id)
     {
+        $now = new DateTime('now', new DateTimeZone('Asia/Taipei'));
         $this->memberTable
         ->where('id', '=', $id)
-        ->delete();
+        ->update(['is_deleted' => true, 'updated_at' => $now->format('Y-m-d H:i:s')]);
+    }
+
+    private function addMember($payload)
+    {
+        $payload['created_at'] = new DateTime('now', new DateTimeZone('Asia/Taipei'));
+        $payload['created_at'] = $payload['created_at']->format('Y-m-d H:i:s');
+        $payload['updated_at'] = $payload['created_at'];
+
+        $id = $this->memberTable
+        ->orderByDesc('id')
+        ->limit(1)
+        ->lockForUpdate()
+        ->get(['id'])->first()->id + 1;
+
+        $payload['id'] = $id;
+        $payload['password'] = Hash::make($payload['password']);
+        $this->memberTable = DB::table('member');
+        $this->memberTable
+        ->insert($payload);
+
+        return $id;
+    }
+
+    public function addCustomer($payload)
+    {
+        DB::beginTransaction();
+
+        try
+        {
+            $member_id = $this->addMember($payload['member']);
+
+            $payload['customer']['member_id'] = $member_id;
+
+            $this->customerTable
+            ->insert($payload['customer']);
+
+            DB::commit();
+        }
+        catch (Exception $e)
+        {
+            DB::rollBack();
+            throw $e;
+        }
+    }
+
+    public function addSeller($payload)
+    {
+        DB::beginTransaction();
+
+        try
+        {
+            $member_id = $this->addMember($payload['member']);
+
+            $payload['seller']['member_id'] = $member_id;
+
+            if ($payload['seller']['header_image'])
+                $payload['seller']['header_image'] = '/storage/restaurant/' . strval($member_id) . '/header.jpg';
+            else
+                $payload['seller']['header_image'] = '/storage/restaurant/' . 'default_header.jpg';
+
+            $this->sellerTable
+            ->insert($payload['seller']);
+
+            DB::commit();
+        }
+        catch (Exception $e)
+        {
+            DB::rollBack();
+            throw $e;
+        }
+
+        return $member_id;
     }
 }
 ?>

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Services\SellerService;
 use App\Services\ShopService;
 use App\Services\ProductService;
+use App\Services\OrderService;
 use Exception;
 
 class SellerController extends Controller
@@ -65,6 +66,22 @@ class SellerController extends Controller
         return response()->json(['message' => 'Success'], 201);
     }
 
+    public function getOrders(Request $request)
+    {
+        $user = auth()->user();
+        $id = $user->id;
+        $result = $this->sellerService->getOrders($id);
+        return response()->json($result);
+    }
+
+    public function getOrderInfo(Request $request, $orderId)
+    {
+        $user = auth()->user();
+        $id = $user->id;
+        $result = $this->sellerService->getOrderInfo($orderId);
+        return response()->json($result);
+    }
+
     public function getProducts(Request $request)
     {
         $user = auth()->user();
@@ -77,8 +94,8 @@ class SellerController extends Controller
     {
         $user = auth()->user();
         $id = $user->id;
-        $product_id = $this->sellerService->addProduct($id, $request->all());
-        return response()->json(['message' => 'Success', 'id' => $product_id], 201);
+        $product = $this->sellerService->addProduct($id, $request->all());
+        return response()->json(['message' => 'Success', 'product_id' => $product['product_id'], 'image_path' => $product['image_path']], 201);
     }
 
     public function deleteProduct(Request $request)
@@ -91,7 +108,7 @@ class SellerController extends Controller
     {
         $user = auth()->user();
         $id = $user->id;
-        $this->sellerService->updateProduct($id, $request->all());
-        return response()->json(['message' => 'Success'], 201);
+        $state = $this->sellerService->updateProduct($id, $request->all());
+        return response()->json(['message' => 'Success', 'state' => $state], 201);
     }
 }
