@@ -52,7 +52,7 @@ class MemberService
     //     return $data;
     // }
 
-    public function getMembers($numbers)
+    public function getCustomers($numbers)
     {
         $this->validateBasicArgument($numbers);
 
@@ -60,7 +60,20 @@ class MemberService
         $requiredNumber = (int)$numbers['requiredNumber'];
 
         $result = $this->memberRepository
-            ->getMembers($currentNumber, $requiredNumber);
+            ->getCustomers($currentNumber, $requiredNumber);
+
+        return $result;
+    }
+
+    public function getSellers($numbers)
+    {
+        $this->validateBasicArgument($numbers);
+
+        $currentNumber = (int)$numbers['currentNumber'];
+        $requiredNumber = (int)$numbers['requiredNumber'];
+
+        $result = $this->memberRepository
+            ->getSellers($currentNumber, $requiredNumber);
 
         return $result;
     }
