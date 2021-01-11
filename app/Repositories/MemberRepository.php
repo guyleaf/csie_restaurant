@@ -63,11 +63,10 @@ class MemberRepository
 
         $sellers = $this->memberTable
             ->join('seller as S', 'S.member_id', '=', 'id')
-            ->where('is_deleted','=', false)
             ->orderBy('id')
             ->skip($currentNumber)
             ->take($requiredNumber)
-            ->get(['id as seller_id', 'name', 'username', 'email', 'phone', 'member_status', 'counter_number']);
+            ->get(['*']);
 
         $numbers = 0;
 
