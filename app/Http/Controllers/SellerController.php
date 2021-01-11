@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Services\SellerService;
 use App\Services\ShopService;
 use App\Services\ProductService;
+use App\Services\OrderService;
 use Exception;
 
 class SellerController extends Controller
@@ -63,6 +64,22 @@ class SellerController extends Controller
     {
         $this->sellerService->updateCoupon($request->all());
         return response()->json(['message' => 'Success'], 201);
+    }
+
+    public function getOrders(Request $request)
+    {
+        $user = auth()->user();
+        $id = $user->id;
+        $result = $this->sellerService->getOrders($id);
+        return response()->json($result);
+    }
+
+    public function getOrderInfo(Request $request, $orderId)
+    {
+        $user = auth()->user();
+        $id = $user->id;
+        $result = $this->sellerService->getOrderInfo($orderId);
+        return response()->json($result);
     }
 
     public function getProducts(Request $request)
