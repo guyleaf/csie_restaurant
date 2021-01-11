@@ -93,7 +93,7 @@ class MemberService
      */
     public function addMember($payload)
     {
-        if($payload['member']['permission'] === 1)
+        if($payload['member']['permission'] == 1)
         {
             if (!empty($payload['seller']['header_image']))
             {
@@ -104,11 +104,11 @@ class MemberService
                 $payload['seller']['header_image'] = false;
 
             $member_id = $this->memberRepository->addSeller($payload);
-
+            var_dump($member_id);
             if ($image != null)
                 $image->save('storage/restaurant/' . strval($member_id) . '/header.jpg');
         }
-        elseif($payload['member']['permission'] === 2)
+        elseif($payload['member']['permission'] == 2)
         {
             $this->memberRepository->addCustomer($payload);
         }
