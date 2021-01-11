@@ -43,6 +43,7 @@
           </b-input-group>
           
         </div>
+        <button @click="disableaaa()">幹</button>
         <div class="row ">
           <div class='col-md-9 tlprice'>總計 (包含稅項) :</div>
           <div class='col-md-3 tlprice' style="text-align: end;">{{totalPrice}}</div>
@@ -93,6 +94,8 @@
       }
     },
     methods: {
+      disableaaa(){
+      },
       parseCookie(){
         let allCookies = JSON.parse(this.$cookie.get("product"));
         return allCookies
@@ -189,7 +192,7 @@
           .then(response =>{
             this.useValidCoupon()
             this.getCouponItems(coupon)
-
+            this.$bus.$emit('disable')
           })
           .catch(error => {
             console.log(error.response)
