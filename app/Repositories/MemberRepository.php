@@ -67,9 +67,10 @@ class MemberRepository
 
     public function deleteMember($id)
     {
+        $now = new DateTime('now', new DateTimeZone('Asia/Taipei'));
         $this->memberTable
         ->where('id', '=', $id)
-        ->delete();
+        ->update(['is_deleted' => true, 'updated_at' => $now->format('Y-m-d H:i:s')]);
     }
 
     private function addMember($payload)
