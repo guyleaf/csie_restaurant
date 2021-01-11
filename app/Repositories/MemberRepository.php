@@ -47,7 +47,6 @@ class MemberRepository
         
         $customers = $this->memberTable
             ->join('customer as C', 'C.member_id', '=', 'id')
-            ->where('is_deleted','=', false)
             ->orderBy('id')
             ->skip($currentNumber)
             ->take($requiredNumber)
@@ -66,7 +65,7 @@ class MemberRepository
             ->orderBy('id')
             ->skip($currentNumber)
             ->take($requiredNumber)
-            ->get(['id as seller_id', 'name', 'username', 'email', 'phone', 'member_status', 'counter_number', 'is_deleted']);
+            ->get(['id as seller_id', 'name', 'username', 'email', 'phone', 'member_status', 'counter_number']);
 
         $numbers = 0;
 
