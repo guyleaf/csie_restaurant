@@ -83,7 +83,6 @@ class MemberRepository
         ->get(['id'])->first()->id + 1;
 
         $payload['id'] = $id;
-
         $this->memberTable = DB::table('member');
         $this->memberTable
         ->insert($payload);
