@@ -111,5 +111,12 @@ class SellerService
         ->getOrderInfo($orderId);
         return $result;
     }
+
+    public function addProductCategory($id, $payload)
+    {
+        $result = $this->productRepository
+        ->addProductCategory($id, $payload);
+        return $result;
+    }
 }
 ?>
