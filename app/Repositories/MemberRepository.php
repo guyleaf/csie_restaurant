@@ -66,7 +66,7 @@ class MemberRepository
             ->orderBy('id')
             ->skip($currentNumber)
             ->take($requiredNumber)
-            ->get(['id as seller_id', 'name', 'username', 'email', 'phone', 'member_status', 'counter_number', 'is_deleted']);
+            ->get(['id as seller_id', 'name', 'username', 'email', 'phone', 'member_status', 'counter_number']);
 
         $numbers = 0;
 
