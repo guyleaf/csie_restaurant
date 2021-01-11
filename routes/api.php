@@ -71,8 +71,9 @@ $router->group(['prefix' => 'seller', 'middleware' => 'jwt.seller'], function ()
 
 $router->group(['prefix' => 'admin'], function () use ($router) {
     $router->get('coupons', '');
+    $router->get('sellers', 'AdminController@getSellers');
+    $router->get('customers', 'AdminController@getCustomers');
     $router->group(['prefix' => 'members'], function () use ($router) {
-        $router->get('', 'AdminController@getMembers');
         $router->post('update', 'AdminController@updateMember');
         $router->post('delete', 'AdminController@deleteMember');
         $router->post('add', 'AdminController@addMember');
