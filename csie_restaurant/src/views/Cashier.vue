@@ -141,6 +141,13 @@ export default {
   },
   created(){
     this.loadingData()
+    this.$http.get('/customer/address',  {
+      headers: {
+        'Authorization': 'Bearer ' + this.$store.getters['auth/token']
+      }
+    }).then(response =>{
+      console.log(response.data)
+    })
   },
   computed: {
   }
