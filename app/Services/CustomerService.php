@@ -34,6 +34,7 @@ class CustomerService
         {
             $orderItems = collect($order['orderItems']);
             $coupon_items = $coupon['coupon_items'];
+            var_dump($coupon['coupon_items']);
 
             $tmp = $coupon_items->every(function ($value, $key) use ($order, $orderItems){
                 $product_id = $value->product_id;
