@@ -40,7 +40,7 @@ class AdminController extends Controller
             ], $e->getCode());
         }
 
-        return response()->json($result);
+        return response()->json(['numbers' => $result[0],'members' => $result[1]]);
     }
 
     public function updateMember(Request $request)

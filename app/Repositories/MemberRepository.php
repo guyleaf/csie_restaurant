@@ -42,12 +42,15 @@ class MemberRepository
      */
     public function getMembers($currentNumber, $requiredNumber)
     {
+        $numbers = $this->memberTable->count();
+
+        $this->memberTable = DB::table('member');
         $members = $this->memberTable
             ->skip($currentNumber)
             ->take($requiredNumber)
-            ->get(['id as seller_id', 'name', 'username', 'email', 'created_at', 'phone', 'member_status', ]);
+            ->get(['id as seller_id', 'name', 'username', 'email', 'created_at', 'phone', 'member_status']);
 
-        return $members;
+        return [$numbers, $members];
     }
 
     public function updateMember($payload)
@@ -80,7 +83,6 @@ class MemberRepository
         ->get(['id'])->first()->id + 1;
 
         $payload['id'] = $id;
-
         $this->memberTable = DB::table('member');
         $this->memberTable
         ->insert($payload);
