@@ -11,11 +11,11 @@ class ShopRepository
     protected $shopTable;
 
     /**
-     * @var \Illuminate\Database\Query\Builder $shopsInfoView
+     * @var \Illuminate\Database\Query\Builder $shopsCardView
      *
      * Columns: member_id, name, header_image, category_id, numberOfRatings, averageOfRatings
      */
-    protected $shopsInfoView;
+    protected $shopsCardView;
 
     /**
      * @var \Illuminate\Database\Query\Builder $categoryTable
@@ -31,7 +31,8 @@ class ShopRepository
     {
         $this->shopTable = DB::table('seller', 'S');
         $this->categoryTable = DB::table('seller_category', 'SC');
-        $this->shopsInfoView = DB::table('seller_card_view', 'SCV');
+        $this->shopsCardView = DB::table('seller_card_view', 'SCV');
+        $this->shopsInfoView = DB::table('seller_info_view', 'SIV');
     }
 
     /**
@@ -43,7 +44,7 @@ class ShopRepository
      */
     public function getShops($currentNumber, $requiredNumber)
     {
-        $shops = $this->shopsInfoView
+        $shops = $this->shopsCardView
             ->join('member as M', 'M.id', '=', 'member_id')
             ->where('is_deleted', '=', false)
             ->skip($currentNumber)
@@ -63,7 +64,7 @@ class ShopRepository
      */
     public function getShopsByfilters($currentNumber, $requiredNumber, $filters)
     {
-        $shops = $this->shopsInfoView
+        $shops = $this->shopsCardView
             ->join('seller_category_list as SCL', 'SCL.seller_id', '=', 'member_id')
             ->join('member as M', 'M.id', '=', 'member_id')
             ->where('is_deleted', '=', false)
@@ -71,7 +72,7 @@ class ShopRepository
             ->skip($currentNumber)
             ->take($requiredNumber)
             ->distinct()
-            ->get(['member_id as seller_id', 'M.name', 'counter_number', 'header_image', 'numberofratings', 'averageofratings']);
+            ->get(['member_id as seller_id', 'M.name', 'counter_number', 'header_image', 'numberOfRatings', 'averageOfRatings']);
 
         return $shops;
     }
@@ -86,22 +87,25 @@ class ShopRepository
 
     public function getShopInfoByShopId($id)
     {
-        $info = $this->shopTable
-            ->join('member as M', 'id','=','member_id')
+        $info = $this->shopsInfoView
+            ->join('member as M', 'M.id','=','member_id')
             ->where('member_id','=', $id)
-            ->get(['name','description','created_at']);
+            ->where('is_deleted', '=', false)
+            ->distinct()
+            ->first(['M.name','M.description', 'numberOfRatings', 'averageOfRatings', 'numberOfFans','M.created_at']);
+
         return $info;
     }
 
     public function searchShops($keywords)
     {
-        $result = $this->shopsInfoView
+        $result = $this->shopsCardView
         ->where(function ($query) use ($keywords) {
             for ($i = 0; $i < count($keywords); $i++){
                $query->orwhere('name', 'like',  '%' . $keywords[$i] .'%');
             }
         })->get(['member_id as seller_id', 'name', 'counter_number', 'header_image', 'averageofratings']);
-        
+
         return $result;
     }
 }
