@@ -4,6 +4,7 @@ namespace App\Services;
 use App\Repositories\CouponRepository;
 use App\Repositories\ProductRepository;
 use Exception;
+use Illuminate\Validation\Rules\Exists;
 use Intervention\Image\Facades\Image as Image;
 
 class SellerService
@@ -78,7 +79,7 @@ class SellerService
 
         $this->productRepository->updateProduct($payload);
 
-        if (!empty($payload['image']))
+        if ($image != null)
         {
             $product_id = $payload['id'];
 
