@@ -46,6 +46,7 @@ class MemberRepository
 
         $this->memberTable = DB::table('member');
         $members = $this->memberTable
+            ->orderBy('id')
             ->skip($currentNumber)
             ->take($requiredNumber)
             ->get(['id as seller_id', 'name', 'username', 'email', 'created_at', 'phone', 'member_status']);
