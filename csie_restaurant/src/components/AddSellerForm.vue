@@ -89,10 +89,36 @@
             required
           ></b-form-input>
         </b-form-group>
-        <input type="file" accept="image/*" @change="previewImage" id="upload">
-        <img :src="preview" @click="upload" class="preview"/>
+        <b-form-group
+          label="櫃位號碼"
+          label-for="counter-input"
+          invalid-feedback="櫃位號碼錯誤"
+          :state="counterState"
+        >
+          <b-form-input
+            ref="counter-input"
+            v-model="counter_number"
+            type="number"
+            :state="counterState"
+            required
+          ></b-form-input>
+        </b-form-group>
         </b-col>
         </b-row>
+            <div class='desField'>
+               <div class='desStyle'>
+                   <b-form-textarea
+                        no-resize
+                        id="textarea-plaintext"
+                        placeholder="商店敘述"
+                        style="height:100%; width:100%"
+                        debounce="500"
+                        v-model="description"
+                    />
+               </div>
+            </div>
+        <input type="file" accept="image/*" @change="previewImage" id="upload">
+        <img :src="preview" @click="upload" class="preview"/>
       </form>
       <b-alert fade :show="showAlert" variant="danger">{{ errorMsg }}</b-alert>
       <div class="row m-2" style="justify-content:space-around">
@@ -104,6 +130,7 @@
 </template>
 
 <script>
+import { serialize } from 'object-to-formdata';
   export default {
     name: 'AddSellerForm',
     data() {
@@ -116,6 +143,8 @@
             email:null,
             showAlert: false,
             image:null,
+            counter_number:null,
+            description:'',
             preview: require('../assets/photoupload.png'),
             errorMsg: ''
         }
@@ -160,8 +189,18 @@
 
           return this.email.length > 0 && this.email.indexOf("@") !=-1
       },
+      counterState(){
+          if (this.counter_number === null) {
+              return null
+          }
+
+          return this.counter_number.length > 0
+      }
     },
     methods: {
+        showModal(){
+            this.$refs['my-modal'].show();
+        },
         upload(){
             let upload=document.querySelector('#upload')
             upload.click()
@@ -196,32 +235,39 @@
             this.phone=null
             this.email=null
             this.image=null
+            this.counter_number=null
+            this.description=''
+            console.log("錯誤")
             return
         }
-
-        this.$_verification(this.name, this.username, this.password, this.phone, this.email, this.image)
+        console.log(this.description)
+        this.$_verification(this.name, this.username, this.password, this.phone, this.email, this.image, this.counter_number, this.description)
       },
-      $_verification(name, username, password, phone, email, image) {
-        let formdata = new FormData();
-        console.log(image)
-        let member={
-          member:{
+      $_verification(name, username, password, phone, email, image, counter_number, description) {
+        let seller={counter_number:parseInt(counter_number), description:description}
+        const data = {
+        member:{
           name: name,
           username: username,
           password: password,
           phone: phone,
           email: email,
           member_status: 0,
-          permission: 1}}
-        let seller = new FormData
-        seller.append('header_image', image)
-        formdata.append('member',member)
-        formdata.append('seller',seller)
-        let url='/auth/register';
-        this.$axios.post(url, member)
+          permission: 1},
+        seller:{
+            counter_number:parseInt(counter_number),
+            description:description,
+            header_image:image
+        }};
+        const formData = serialize(data)
+        console.log(data)
+        let url='/admin/members/add';
+        console.log(data)
+        this.$axios.post(this.$url + url, formData)
         .then(response => {
           this.showAlert = false
           let data = response.data
+          console.log(response.data)
           setTimeout(() => {
             this.$fire({
             title: "註冊成功",
@@ -233,7 +279,7 @@
           this.$emit('close')
         })
         .catch(error => {
-          console.log(error)
+          console.log(error.response)
           let status = error.response.status
           switch (status) {
             case 401:
@@ -257,6 +303,8 @@
             this.phone=null
             this.email=null
             this.image=null
+            this.description=''
+            this.counter_number=null
             this.preview= require('../assets/photoupload.png'),
             this.showAlert = false
       }
@@ -270,6 +318,21 @@
 }
 .preview{
     width: 100%;
-    height: 160px;
+    height: 480px;
+}
+.desField{
+    overflow-x: visible;
+    overflow-y: scroll;
+    padding:  1%;
+    margin:0% 2% 3% 0;
+    border-width: 2px;
+    border-color: #000000;
+    height: 250px;
+}
+.desStyle{
+    line-height: 1.25rem;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: .675rem;
+    height: 100%;
 }
 </style>
