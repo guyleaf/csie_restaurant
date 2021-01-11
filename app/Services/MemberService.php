@@ -88,13 +88,16 @@ class MemberService
         $this->memberRepository->deleteMember($id);
     }
 
+    /**
+     * @param Illuminate\Http\UploadedFile $payload['seller']['header_image]
+     */
     public function addMember($payload)
     {
-        if($payload['member']->permission === 1)
+        if($payload['member']['permission'] == 1)
         {
             if (!empty($payload['seller']['header_image']))
             {
-                $image = Image::make($payload['seller']['header_image'])->resize(640, 480)->encode('jpg', 100);
+                $image = Image::make($payload['seller']['header_image']->get())->resize(640, 480)->encode('jpg', 100);
                 $payload['seller']['header_image'] = true;
             }
             else
@@ -102,10 +105,13 @@ class MemberService
 
             $member_id = $this->memberRepository->addSeller($payload);
 
-            if ($image != null)
-                $image->save('restaurant/' . strval($member_id) . '/header.jpg');
+            if (!mkdir('storage/restaurant/' . strval($member_id), 0777))
+                throw 'Error to make new folder';
+
+            if (isset($image))
+                $image->save('storage/restaurant/' . strval($member_id) . '/header.jpg');
         }
-        elseif($payload['member']->permission === 2)
+        elseif($payload['member']['permission'] == 2)
         {
             $this->memberRepository->addCustomer($payload);
         }
