@@ -2,6 +2,7 @@
 namespace App\Repositories;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use DateTime, DateTimeZone, Exception;
 
 
@@ -84,6 +85,8 @@ class MemberRepository
         ->get(['id'])->first()->id + 1;
 
         $payload['id'] = $id;
+        $payload['password'] = Hash::make($payload['password']);
+
         $this->memberTable = DB::table('member');
         $this->memberTable
         ->insert($payload);
