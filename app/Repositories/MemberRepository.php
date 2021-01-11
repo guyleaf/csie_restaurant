@@ -45,14 +45,12 @@ class MemberRepository
     public function getCustomers($currentNumber, $requiredNumber)
     {
         
-        $this->memberTable = DB::table('member');
         $customers = $this->memberTable
             ->join('customer as C', 'C.member_id', '=', 'id')
-            ->where('is_deleted','=', false)
             ->orderBy('id')
             ->skip($currentNumber)
             ->take($requiredNumber)
-            ->get(['id as customer_id', 'name', 'username', 'email', 'email', 'phone', 'member_status', 'counter_number']);
+            ->get(['id as customer_id', 'name', 'username', 'email', 'phone', 'member_status']);
 
         $numbers = $customers->count();
         
@@ -62,10 +60,8 @@ class MemberRepository
     public function getSellers($currentNumber, $requiredNumber)
     {
 
-        $this->memberTable = DB::table('member');
         $sellers = $this->memberTable
             ->join('seller as S', 'S.member_id', '=', 'id')
-            ->where('is_deleted','=', false)
             ->orderBy('id')
             ->skip($currentNumber)
             ->take($requiredNumber)

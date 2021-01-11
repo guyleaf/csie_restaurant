@@ -4,7 +4,7 @@ namespace App\Services;
 use Illuminate\Support\Facades\Validator;
 use App\Repositories\MemberRepository;
 use InvalidArgumentException;
-use Intervention\Image\Facades\Image as Image;
+// use Intervention\Image\Facades\Image as Image;
 
 class MemberService
 {
@@ -94,7 +94,7 @@ class MemberService
         {
             if (!empty($payload['seller']['header_image']))
             {
-                $image = Image::make($payload['seller']['header_image'])->resize(640, 480)->encode('jpg', 100);
+                // $image = Image::make($payload['seller']['header_image'])->resize(640, 480)->encode('jpg', 100);
                 $payload['seller']['header_image'] = true;
             }
             else
