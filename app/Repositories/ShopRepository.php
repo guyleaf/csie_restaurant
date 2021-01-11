@@ -44,9 +44,11 @@ class ShopRepository
     public function getShops($currentNumber, $requiredNumber)
     {
         $shops = $this->shopsInfoView
+            ->join('member as M', 'M.id', '=', 'member_id')
+            ->where('is_deleted', '=', false)
             ->skip($currentNumber)
             ->take($requiredNumber)
-            ->get(['member_id as seller_id', 'name', 'counter_number', 'header_image', 'numberofratings', 'averageofratings']);
+            ->get(['member_id as seller_id', 'M.name', 'counter_number', 'header_image', 'numberofratings', 'averageofratings']);
 
         return $shops;
     }
@@ -63,11 +65,13 @@ class ShopRepository
     {
         $shops = $this->shopsInfoView
             ->join('seller_category_list as SCL', 'SCL.seller_id', '=', 'member_id')
+            ->join('member as M', 'M.id', '=', 'member_id')
+            ->where('is_deleted', '=', false)
             ->whereIn('SCL.category_id', $filters)
             ->skip($currentNumber)
             ->take($requiredNumber)
             ->distinct()
-            ->get(['member_id as seller_id', 'name', 'counter_number', 'header_image', 'numberofratings', 'averageofratings']);
+            ->get(['member_id as seller_id', 'M.name', 'counter_number', 'header_image', 'numberofratings', 'averageofratings']);
 
         return $shops;
     }
