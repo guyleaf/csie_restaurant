@@ -11,11 +11,11 @@ class ShopRepository
     protected $shopTable;
 
     /**
-     * @var \Illuminate\Database\Query\Builder $shopsCardView
+     * @var \Illuminate\Database\Query\Builder $shopsInfoView
      *
      * Columns: member_id, name, header_image, category_id, numberOfRatings, averageOfRatings
      */
-    protected $shopsCardView;
+    protected $shopsInfoView;
 
     /**
      * @var \Illuminate\Database\Query\Builder $categoryTable
@@ -31,8 +31,7 @@ class ShopRepository
     {
         $this->shopTable = DB::table('seller', 'S');
         $this->categoryTable = DB::table('seller_category', 'SC');
-        $this->shopsCardView = DB::table('seller_card_view', 'SCV');
-        $this->shopsInfoView = DB::table('seller_info_view', 'SIV');
+        $this->shopsInfoView = DB::table('seller_card_view', 'SCV');
     }
 
     /**
@@ -44,7 +43,7 @@ class ShopRepository
      */
     public function getShops($currentNumber, $requiredNumber)
     {
-        $shops = $this->shopsCardView
+        $shops = $this->shopsInfoView
             ->join('member as M', 'M.id', '=', 'member_id')
             ->where('is_deleted', '=', false)
             ->skip($currentNumber)
@@ -64,14 +63,15 @@ class ShopRepository
      */
     public function getShopsByfilters($currentNumber, $requiredNumber, $filters)
     {
-        $shops = $this->shopsCardView
+        $shops = $this->shopsInfoView
             ->join('seller_category_list as SCL', 'SCL.seller_id', '=', 'member_id')
+            ->join('member as M', 'M.id', '=', 'member_id')
             ->where('is_deleted', '=', false)
             ->whereIn('SCL.category_id', $filters)
             ->skip($currentNumber)
             ->take($requiredNumber)
             ->distinct()
-            ->get(['member_id as seller_id', 'name', 'counter_number', 'header_image', 'numberOfRatings', 'averageOfRatings']);
+            ->get(['member_id as seller_id', 'M.name', 'counter_number', 'header_image', 'numberofratings', 'averageofratings']);
 
         return $shops;
     }
@@ -86,23 +86,37 @@ class ShopRepository
 
     public function getShopInfoByShopId($id)
     {
-        $info = $this->shopsInfoView
+        $info = $this->shopTable
+            ->join('member as M', 'id','=','member_id')
             ->where('member_id','=', $id)
-            ->where('is_deleted', '=', false)
-            ->distinct()
-            ->first(['name','description', 'numberOfRatings', 'averageOfRatings', 'numberOfFans','created_at']);
+            ->first(['name','description','created_at']);
 
+        $fans = DB::table('customer_favorite')
+            ->where('seller_id','=', $id)
+            ->groupBy('seller_id')
+            ->count();
+
+        $query = DB::table('order')
+            ->where('seller_id','=', $id)
+            ->groupBy('seller_id');
+
+        $ratings = $query->count();
+        $avgRatings = $query->avg('stars');
+
+        $info->numberOfFans = $fans;
+        $info->numberOfRatings = $ratings;
+        $info->averageOfRatings = $avgRatings;
         return $info;
     }
 
     public function searchShops($keywords)
     {
-        $result = $this->shopsCardView
+        $result = $this->shopsInfoView
         ->where(function ($query) use ($keywords) {
             for ($i = 0; $i < count($keywords); $i++){
                $query->orwhere('name', 'like',  '%' . $keywords[$i] .'%');
             }
-        })->get(['member_id as seller_id', 'name', 'counter_number', 'header_image', 'averageOfRatings']);
+        })->get(['member_id as seller_id', 'name', 'counter_number', 'header_image', 'averageofratings']);
 
         return $result;
     }
