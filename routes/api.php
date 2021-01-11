@@ -65,6 +65,8 @@ $router->group(['prefix' => 'seller', 'middleware' => 'jwt.seller'], function ()
     $router->post('coupons/add', 'SellerController@addCoupon');
     $router->post('coupons/delete', 'SellerController@deleteCoupon');
     $router->post('coupons/update', 'SellerController@updateCoupon');
+    $router->get('orders', 'SellerController@getOrders');
+    $router->get('orders/{orderId}', 'SellerController@getOrderInfo');
     $router->group(['prefix' => 'products'], function () use ($router) {
         $router->get('', 'SellerController@getProducts');
         $router->post('add', 'SellerController@addProduct');
