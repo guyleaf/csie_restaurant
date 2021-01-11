@@ -124,9 +124,9 @@ class CouponRepository
         ->update(['is_deleted' => true]);
     }
 
-    public function updateCoupon($id, $payload)
+    public function updateCoupon($payload)
     {
-        DB::transaction(function () use ($id, $payload) {
+        DB::transaction(function () use ($payload) {
             DB::table('coupon', 'CP')
             ->where('id', '=', $payload['coupon']['id'])
             ->update($payload['coupon']);
@@ -135,16 +135,14 @@ class CouponRepository
             {
                 if (empty($payload['coupon_items']))
                     throw 'Coupon items should be not empty';
-                    
-                $id = $payload['coupon']['id'];
-                
+
                 DB::table('specified_coupon_product', 'SCP')
-                ->where('SCP.coupon_id', '=', $id)
+                ->where('SCP.coupon_id', '=', $payload['coupon']['id'])
                 ->delete();
 
                 DB::table('specified_coupon_product', 'SCP')
                 ->insert($payload['coupon_items']);
-            }      
+            }
         });
     }
 }

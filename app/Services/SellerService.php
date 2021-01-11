@@ -45,9 +45,9 @@ class SellerService
         $this->couponRepository->deleteCoupon($id);
     }
 
-    public function updateCoupon($seller_id, $payload)
+    public function updateCoupon($payload)
     {
-        $this->couponRepository->updateCoupon($seller_id, $payload);
+        $this->couponRepository->updateCoupon($payload);
     }
 
     public function addProduct($seller_id, $payload)
@@ -84,7 +84,7 @@ class SellerService
 
             $image_path = 'public/restaurant/' . strval($seller_id);
             $image_name = strval($product_id) . '.' . $image_extension;
-            
+
             $image->storeAs($image_path, $image_name);
         }
 
