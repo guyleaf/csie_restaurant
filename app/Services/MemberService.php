@@ -1,16 +1,17 @@
 <?php
 namespace App\Services;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Repositories\MemberRepository;
+use InvalidArgumentException;
+use Intervention\Image\Facades\Image as Image;
 
 class MemberService
 {
     /**
      * @var \App\Repositories\MemberRepository $memberRepository
      */
-    protected $memberReposity;
+    protected $memberRepository;
 
     /**
      * Member service constructor
@@ -76,26 +77,24 @@ class MemberService
 
     public function addMember($payload)
     {
-
-        $member_id =$this->memberRepository->addMember($payload['member']);
-
-        if($payload['member']->permission === 2)
-        {
-            $this->memberRepository->addCustomer($payload['customer'], $member_id);
-        }
-
         if($payload['member']->permission === 1)
         {
             if (!empty($payload['seller']['header_image']))
             {
-                $image = $payload['seller']['header_image'];
-                unset($payload['seller']['header_image']);
-                $image_extension = $image->getClientOriginalExtension();
-                $payload['seller']['header_image'] = '/storage/restaurant/' . strval($member_id) . '/' . 'header' . '.' . $image_extension;
-                $image->storeAs('public/restaurant/' . strval($member_id), 'header' . '.' . $image_extension);
-
+                $image = Image::make($payload['seller']['header_image'])->resize(640, 480)->encode('jpg', 100);
+                $payload['seller']['header_image'] = true;
             }
-            $this->memberRepository->addSeller($payload['seller'], $member_id);
+            else
+                $payload['seller']['header_image'] = false;
+
+            $member_id = $this->memberRepository->addSeller($payload);
+
+            if ($image != null)
+                $image->save('restaurant/' . strval($member_id) . '/header.jpg');
+        }
+        elseif($payload['member']->permission === 2)
+        {
+            $this->memberRepository->addCustomer($payload);
         }
     }
 }

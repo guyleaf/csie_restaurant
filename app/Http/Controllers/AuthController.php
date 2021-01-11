@@ -3,17 +3,24 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\JWTAuth;
+use App\Services\AuthService;
 
 class AuthController extends Controller
 {
+    /**
+     * @var \App\Services\AuthService $sellerService
+     */
+    protected $authService;
+
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(JWTAuth $jwt)
+    public function __construct(JWTAuth $jwt, AuthService $authService)
     {
         $this->jwt = $jwt;
+        $this->authService = $authService;
     }
 
     /**
@@ -80,5 +87,11 @@ class AuthController extends Controller
             'access_token' => $token,
             'expires_in' => $this->jwt->factory()->getTTL() * 60
         ]);
+    }
+
+    public function register(Request $request)
+    {
+        $this->authService
+        ->register($request->input());
     }
 }

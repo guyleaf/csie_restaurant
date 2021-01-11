@@ -60,6 +60,6 @@ class Handler extends ExceptionHandler
                 return response()->json(['status' => -999, 'message' => $exception->getMessage()], $exception->getStatusCode());
         }
 
-        return response()->json(['message' => $exception->getMessage()], $exception->getStatusCode());
+        return response()->json(['message' => $exception->getMessage()], 400);
     }
 }
