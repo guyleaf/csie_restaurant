@@ -64,11 +64,6 @@ class MemberService
         return $result;
     }
 
-    public function addMember($payload)
-    {
-        $this->memberRepository->addMember($payload);
-    }
-
     public function updateMember($payload)
     {
         $this->memberRepository->updateMember($payload);
@@ -77,6 +72,31 @@ class MemberService
     public function deleteMember($id)
     {
         $this->memberRepository->deleteMember($id);
+    }
+
+    public function addMember($payload)
+    {
+
+        $member_id =$this->memberRepository->addMember($payload['member']);
+
+        if($payload['member']->permission === 2)
+        {
+            $this->memberRepository->addCustomer($payload['customer'], $member_id);
+        }
+
+        if($payload['member']->permission === 1)
+        {
+            if (!empty($payload['seller']['header_image']))
+            {
+                $image = $payload['seller']['header_image'];
+                unset($payload['seller']['header_image']);
+                $image_extension = $image->getClientOriginalExtension();
+                $payload['seller']['header_image'] = '/storage/restaurant/' . strval($member_id) . '/' . 'header' . '.' . $image_extension;
+                $image->storeAs('public/restaurant/' . strval($member_id), 'header' . '.' . $image_extension);
+
+            }
+            $this->memberRepository->addSeller($payload['seller'], $member_id);
+        }
     }
 }
 ?>

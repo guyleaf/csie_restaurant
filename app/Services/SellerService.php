@@ -1,10 +1,13 @@
 <?php
 namespace App\Services;
 
+use Illuminate\Http\File;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Repositories\CouponRepository;
 use App\Repositories\ProductRepository;
+use Exception;
 
 class SellerService
 {
@@ -71,8 +74,6 @@ class SellerService
 
     public function updateProduct($seller_id, $payload)
     {
-        $this->productRepository->updateProduct($payload);
-
         if (!empty($payload['image']))
         {
             $image = $payload['image'];
@@ -80,8 +81,14 @@ class SellerService
             $image_extension = $image->getClientOriginalExtension();
 
             $product_id = $payload['id'];
-            $image->storeAs('public/restaurant/' . strval($seller_id), strval($product_id) . '.' . $image_extension);
+
+            $image_path = 'public/restaurant/' . strval($seller_id);
+            $image_name = strval($product_id) . '.' . $image_extension;
+            
+            $image->storeAs($image_path, $image_name);
         }
+
+        $this->productRepository->updateProduct($payload);
     }
 }
 ?>
