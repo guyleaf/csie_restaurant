@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Services\SellerService;
 use App\Services\ShopService;
 use App\Services\ProductService;
+use App\Services\OrderService;
 use Exception;
 
 class SellerController extends Controller
@@ -37,72 +38,77 @@ class SellerController extends Controller
         $this->productService = $productService;
     }
 
-    protected function checkAuth()
-    {
-
-    }
-
     public function getCoupons(Request $request)
     {
-        // $user = auth()->userOrFail();
-        // $id = $user->id;
-        $result = $this->shopService->getCoupons(4, true);
+        $user = auth()->user();
+        $id = $user->id;
+        $result = $this->shopService->getCoupons($id, true);
         return response()->json($result);
     }
 
     public function addCoupon(Request $request)
     {
-        // $user = auth()->userOrFail();
-        // $id = $user->id;
-        $coupon_id = $this->sellerService->addCoupon(4, $request->all());
+        $user = auth()->user();
+        $id = $user->id;
+        $coupon_id = $this->sellerService->addCoupon($id, $request->all());
         return response()->json(['message' => 'Success', 'coupon_id' => $coupon_id], 201);
     }
 
     public function deleteCoupon(Request $request)
     {
-        // $user = auth()->userOrFail();
-        // $id = $user->id;
-        $this->sellerService->deleteCoupon(4, $request->input('code'));
+        $this->sellerService->deleteCoupon($request->input('coupon.id'));
         return response()->json(['message' => 'Success']);
     }
 
     public function updateCoupon(Request $request)
     {
-        // $user = auth()->userOrFail();
-        // $id = $user->id;
-        $this->sellerService->updateCoupon(4, $request->all());
+        $this->sellerService->updateCoupon($request->all());
         return response()->json(['message' => 'Success'], 201);
+    }
+
+    public function getOrders(Request $request)
+    {
+        $user = auth()->user();
+        $id = $user->id;
+        $result = $this->sellerService->getOrders($id);
+        return response()->json($result);
+    }
+
+    public function getOrderInfo(Request $request, $orderId)
+    {
+        $user = auth()->user();
+        $id = $user->id;
+        $result = $this->sellerService->getOrderInfo($orderId);
+        return response()->json($result);
     }
 
     public function getProducts(Request $request)
     {
-        // $user = auth()->userOrFail();
-        // $id = $user->id;
-        $result = $this->productService->getItems(4);
+        $user = auth()->user();
+        $id = $user->id;
+        $result = $this->productService->getItems($id);
         return response()->json($result);
     }
 
     public function addProduct(Request $request)
     {
-        // $user = auth()->userOrFail();
-        // $id = $user->id;
-        $product_id = $this->sellerService->addProduct(4, $request->all());
-        return response()->json(['message' => 'Success', 'id' => $product_id], 201);
+        $user = auth()->user();
+        $id = $user->id;
+        $product = $this->sellerService->addProduct($id, $request->all());
+        return response()->json(['message' => 'Success', 'product_id' => $product['product_id'], 'image_path' => $product['image_path']], 201);
     }
 
     public function deleteProduct(Request $request)
     {
-        // $user = auth()->userOrFail();
-        // $id = $user->id;
         $this->sellerService->deleteProduct($request->input('id'));
         return response()->json(['message' => 'Success']);
     }
 
     public function updateProduct(Request $request)
     {
-        // $user = auth()->userOrFail();
-        // $id = $user->id;
-        $this->sellerService->updateProduct(4, $request->all());
-        return response()->json(['message' => 'Success'], 201);
+        $user = auth()->user();
+        $id = $user->id;
+        $state = $this->sellerService->updateProduct($id, $request->all());
+        return response()->json(['message' => 'Success', 'state' => $state], 201);
     }
 }

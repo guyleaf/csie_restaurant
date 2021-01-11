@@ -88,7 +88,9 @@ $app->middleware([
 
 $app->routeMiddleware([
     'auth' => App\Http\Middleware\Authenticate::class,
-    'jwt.customer' => App\Http\Middleware\CustomerMiddleware::class
+    'jwt.customer' => App\Http\Middleware\CustomerMiddleware::class,
+    'jwt.seller' => App\Http\Middleware\SellerMiddleware::class,
+    'jwt.admin' => App\Http\Middleware\AdminMiddleware::class
 ]);
 
 /*
@@ -106,6 +108,7 @@ $app->register(Fruitcake\Cors\CorsServiceProvider::class);
 $app->register(App\Providers\AppServiceProvider::class);
 $app->register(App\Providers\AuthServiceProvider::class);
 $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
+// $app->register(Intervention\Image\ImageServiceProviderLumen::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 
 /*

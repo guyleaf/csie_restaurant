@@ -74,13 +74,13 @@ class CouponRepository
         return $result;
     }
 
-    public function addCoupon($id, $payload)
+    public function addCoupon($member_id, $payload)
     {
         DB::beginTransaction();
 
         try
         {
-            $payload['coupon']['member_id'] = $id;
+            $payload['coupon']['member_id'] = $member_id;
 
             $id = DB::table('coupon', 'CP')
             ->orderByDesc('id')
@@ -117,28 +117,31 @@ class CouponRepository
         return $id;
     }
 
-    public function deleteCoupon($id, $code)
+    public function deleteCoupon($id)
     {
         $this->coupon
-        ->where('code', '=', $code)
-        ->where('member_id', '=', $id)
+        ->where('id', '=', $id)
         ->update(['is_deleted' => true]);
     }
 
-    public function updateCoupon($id, $payload)
+    public function updateCoupon($payload)
     {
-        DB::transaction(function () use ($id, $payload) {
+        DB::transaction(function () use ($payload) {
             DB::table('coupon', 'CP')
-            ->where('code', '=', $payload['coupon']['code'])
-            ->where('CP.member_id', '=', $id)
+            ->where('id', '=', $payload['coupon']['id'])
             ->update($payload['coupon']);
 
-            if (!empty($payload['coupon_items']))
+            if ($payload['coupon']['type'] == 2)
             {
+                if (empty($payload['coupon_items']))
+                    throw 'Coupon items should be not empty';
+
                 DB::table('specified_coupon_product', 'SCP')
-                ->join('coupon as CP', 'CP.id', '=', 'SCP.coupon_id')
-                ->where('CP.code', '=', $payload['coupon']['code'])
-                ->update($payload['coupon_items']);
+                ->where('SCP.coupon_id', '=', $payload['coupon']['id'])
+                ->delete();
+
+                DB::table('specified_coupon_product', 'SCP')
+                ->insert($payload['coupon_items']);
             }
         });
     }
