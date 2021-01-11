@@ -240,7 +240,8 @@
 	{
 		"id" : 16,
 		"customer_id" : 7,
-		"coupon_code" : null,		"seller_id" : 13,
+		"coupon_code" : null,		
+		"seller_id" : 13,
 		"order_time" : "2020-11-06T02:00:00.000Z",
 		"ship_time" : null,
 		"payment_method" : 0,
