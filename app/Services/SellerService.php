@@ -87,8 +87,8 @@ class SellerService
 
             $image->storeAs($image_path, $image_name);
         }
-
-        $this->productRepository->updateProduct($payload);
+        var_dump($payload);
+        //$this->productRepository->updateProduct($payload);
     }
 }
 ?>
