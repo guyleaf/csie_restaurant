@@ -3,6 +3,7 @@ namespace App\Services;
 
 use App\Repositories\CouponRepository;
 use App\Repositories\ProductRepository;
+use Exception;
 use Intervention\Image\Facades\Image as Image;
 
 class SellerService
@@ -53,10 +54,10 @@ class SellerService
 
         $product_id = $this->productRepository->addProduct($seller_id, $payload, 'jpg');
 
-        $image_path = 'public/restaurant/' . strval($seller_id);
+        $image_path = 'storage/restaurant/' . strval($seller_id);
         $image_name = strval($product_id) . '.jpg';
 
-        $image->storeAs($image_path, $image_name);
+        $image->save($image_path. '/' . $image_name, 100);
 
         $image_path = '/storage/restaurant/' . strval($seller_id);
         return ['product_id' => $product_id, 'image_path' => $image_path . '/' . $image_name];
@@ -78,7 +79,7 @@ class SellerService
 
             $product_id = $payload['id'];
 
-            $image_path = 'public/restaurant/' . strval($seller_id);
+            $image_path = 'storage/restaurant/' . strval($seller_id);
             $image_name = strval($product_id) . '.' . $image_extension;
             //unset(public_path('restaurant/' . strval($seller_id) . '/' . strval($product_id) . '.' . $image_extension));
             $image->storeAs($image_path, $image_name);

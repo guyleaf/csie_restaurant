@@ -61,7 +61,7 @@ $router->group(['prefix' => 'order'], function () use ($router) {
 });
 
 $router->group(['prefix' => 'seller'], function () use ($router) {
-    $router->group(['middleware' => 'jwt.seller'], function () use ($router) {
+
         $router->get('coupons', 'SellerController@getCoupons');
         $router->post('coupons/add', 'SellerController@addCoupon');
         $router->post('coupons/delete', 'SellerController@deleteCoupon');
@@ -72,7 +72,6 @@ $router->group(['prefix' => 'seller'], function () use ($router) {
             $router->post('delete', 'SellerController@deleteProduct');
             $router->post('update', 'SellerController@updateProduct');
         });
-    });
 });
 
 $router->group(['prefix' => 'admin'], function () use ($router) {
