@@ -1,11 +1,11 @@
 [
 	{
 		"customer_id" : 5,
-		"address" : "第六教學大樓327"
+		"address" : "台北市大安區瑞安街281號"
 	},
 	{
 		"customer_id" : 5,
-		"address" : "科研大樓438"
+		"address" : "台北市內湖區金莊路9巷16號7樓"
 	},
 	{
 		"customer_id" : 5,
@@ -21,7 +21,7 @@
 	},
 	{
 		"customer_id" : 6,
-		"address" : "科研大樓1421"
+		"address" : "台北市內湖區基湖路123巷10號"
 	},
 	{
 		"customer_id" : 6,
@@ -41,7 +41,7 @@
 	},
 	{
 		"customer_id" : 7,
-		"address" : "科研大樓1321"
+		"address" : "台北市中山區伊通街187巷10號7樓"
 	},
 	{
 		"customer_id" : 7,
@@ -57,7 +57,7 @@
 	},
 	{
 		"customer_id" : 8,
-		"address" : "綜二演講廳"
+		"address" : "台北市中山區建國北路二段116巷25號2樓"
 	},
 	{
 		"customer_id" : 8,
@@ -69,7 +69,7 @@
 	},
 	{
 		"customer_id" : 9,
-		"address" : "第二教學大樓221"
+		"address" : "台北市中正區館前路213號"
 	},
 	{
 		"customer_id" : 9,
@@ -81,7 +81,7 @@
 	},
 	{
 		"customer_id" : 10,
-		"address" : "第一教學大樓221"
+		"address" : "台北市文山區木新路二段40巷2號3樓"
 	},
 	{
 		"customer_id" : 10,

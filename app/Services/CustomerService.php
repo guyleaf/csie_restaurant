@@ -32,7 +32,7 @@ class CustomerService
             return $coupon['coupon']->limit_money <= $order['total_price'];
         else if ($coupon['coupon']->type === 2)
         {
-            $orderItems = collect($order['orderItems']);
+            $orderItems = collect(json_decode($order['orderItems'], true));
             $coupon_items = $coupon['coupon_items'];
 
             $tmp = $coupon_items->every(function ($value, $key) use ($order, $orderItems){
@@ -84,7 +84,6 @@ class CustomerService
 
         $numberOfUsage = $this->customerRepository->countUsageNumberOfUsedCoupon($id, $coupon_code);
 
-        var_dump($coupon['coupon']);
         if ($coupon['coupon']->numberOfUsage - $numberOfUsage === 0)
             return 5;
 

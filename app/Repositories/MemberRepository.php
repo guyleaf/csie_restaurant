@@ -41,18 +41,45 @@ class MemberRepository
      * @param integer $requiredNumber
      * @return \Illuminate\Support\Collection
      */
-    public function getMembers($currentNumber, $requiredNumber)
-    {
-        $numbers = $this->memberTable->count();
 
-        $this->memberTable = DB::table('member');
-        $members = $this->memberTable
+    public function getCustomers($currentNumber, $requiredNumber)
+    {
+        
+        $customers = $this->memberTable
+            ->join('customer as C', 'C.member_id', '=', 'id')
+            ->where('is_deleted', '=', false)
             ->orderBy('id')
             ->skip($currentNumber)
             ->take($requiredNumber)
-            ->get(['id as seller_id', 'name', 'username', 'email', 'created_at', 'phone', 'member_status']);
+            ->get(['id as customer_id', 'name', 'username', 'created_at','email', 'phone', 'member_status']);
 
-        return [$numbers, $members];
+        $this->memberTable = DB::table('member');
+        $numbers = $this->memberTable
+        ->join('customer as C', 'C.member_id', '=', 'id')
+        ->where('is_deleted', '=', false)
+        ->count();
+        
+        return [$numbers, $customers];
+    }
+
+    public function getSellers($currentNumber, $requiredNumber)
+    {
+
+        $sellers = $this->memberTable
+            ->join('seller as S', 'S.member_id', '=', 'id')
+            ->where('is_deleted', '=', false)
+            ->orderBy('id')
+            ->skip($currentNumber)
+            ->take($requiredNumber)
+            ->get(['id as seller_id', 'name', 'username', 'email', 'created_at', 'phone', 'member_status', 'counter_number']);
+
+        $this->memberTable = DB::table('member');
+        $numbers =$this->memberTable
+        ->join('seller as S', 'S.member_id', '=', 'id')
+        ->where('is_deleted', '=', false)
+        ->count();
+
+        return [$numbers, $sellers];
     }
 
     public function updateMember($payload)
@@ -67,9 +94,10 @@ class MemberRepository
 
     public function deleteMember($id)
     {
+        $now = new DateTime('now', new DateTimeZone('Asia/Taipei'));
         $this->memberTable
         ->where('id', '=', $id)
-        ->delete();
+        ->update(['is_deleted' => true, 'updated_at' => $now->format('Y-m-d H:i:s')]);
     }
 
     private function addMember($payload)
