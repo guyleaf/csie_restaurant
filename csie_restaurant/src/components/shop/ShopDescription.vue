@@ -23,8 +23,8 @@
                 </b-card>
                 <div class='grid-container'>
                         <div class ='grid-item'>商品:{{commodity}}</div>
-                        <div class ='grid-item'>粉絲:2{{fans}}</div>
-                        <div class ='grid-item'>評分:4.5(300){{rate}}</div>
+                        <div class ='grid-item'>粉絲:{{fans}}</div>
+                        <div class ='grid-item'>評分:{{rate}}({{numberOfRatings}})</div>
                         <div class ='grid-item'>加入時間:{{joinDate}}</div>
                 </div>
             </div>
@@ -76,6 +76,7 @@
         fans: Number,
         joinDate: String,
         rate: Number,
+        numberOfRatings: Number,
         // editable: Boolean,
     },
     data(){
