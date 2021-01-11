@@ -68,9 +68,10 @@ class MemberRepository
             ->take($requiredNumber)
             ->get(['id as seller_id', 'name', 'username', 'email', 'phone', 'member_status', 'counter_number']);
 
-        $sellers = $this->memberTable
+        $numbers = $this->memberTable
             ->join('seller as S', 'S.member_id', '=', 'id')
-            ->where('is_deleted','=',false);
+            ->where('is_deleted','=',false)
+            ->count();
 
         return [$numbers, $sellers];
     }
