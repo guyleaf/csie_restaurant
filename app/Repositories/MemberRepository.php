@@ -63,6 +63,7 @@ class MemberRepository
 
         $sellers = $this->memberTable
             ->join('seller as S', 'S.member_id', '=', 'id')
+            ->where('is_deleted','=', false)
             ->orderBy('id')
             ->skip($currentNumber)
             ->take($requiredNumber)
