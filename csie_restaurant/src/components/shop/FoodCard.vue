@@ -55,7 +55,6 @@ export default {
         foodDescription: String,
         price: Number,
         soldOut: Boolean,
-        sellingState: Boolean,
         foodId: Number
     },
     computed:{
