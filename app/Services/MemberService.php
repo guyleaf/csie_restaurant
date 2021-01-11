@@ -100,10 +100,10 @@ class MemberService
             else
                 $payload['seller']['header_image'] = false;
 
-            $member_id = $this->memberRepository->addSeller($payload);
+            // $member_id = $this->memberRepository->addSeller($payload);
 
-            if ($image != null)
-                $image->save('restaurant/' . strval($member_id) . '/header.jpg');
+            // if ($image != null)
+            //     $image->save('restaurant/' . strval($member_id) . '/header.jpg');
         }
         elseif($payload['member']->permission === 2)
         {
