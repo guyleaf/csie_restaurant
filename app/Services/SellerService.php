@@ -1,13 +1,9 @@
 <?php
 namespace App\Services;
 
-use Illuminate\Http\File;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use App\Repositories\CouponRepository;
 use App\Repositories\ProductRepository;
-use Exception;
+use Image;
 
 class SellerService
 {
@@ -52,14 +48,13 @@ class SellerService
 
     public function addProduct($seller_id, $payload)
     {
-        $image = $payload['image'];
+        $image = Image::make($payload['image'])->resize(200, 200)->encode('jpg');
         unset($payload['image']);
-        $image_extension = $image->getClientOriginalExtension();
 
-        $product_id = $this->productRepository->addProduct($seller_id, $payload, $image_extension);
+        $product_id = $this->productRepository->addProduct($seller_id, $payload, 'jpg');
 
         $image_path = 'public/restaurant/' . strval($seller_id);
-        $image_name = strval($product_id) . '.' . $image_extension;
+        $image_name = strval($product_id) . '.jpg';
 
         $image->storeAs($image_path, $image_name);
 
@@ -77,6 +72,7 @@ class SellerService
         if (!empty($payload['image']))
         {
             $image = $payload['image'];
+
             unset($payload['image']);
             $image_extension = $image->getClientOriginalExtension();
 
@@ -84,10 +80,10 @@ class SellerService
 
             $image_path = 'public/restaurant/' . strval($seller_id);
             $image_name = strval($product_id) . '.' . $image_extension;
-
+            //unset(public_path('restaurant/' . strval($seller_id) . '/' . strval($product_id) . '.' . $image_extension));
             $image->storeAs($image_path, $image_name);
         }
-        var_dump($payload);
+
         //$this->productRepository->updateProduct($payload);
     }
 }
