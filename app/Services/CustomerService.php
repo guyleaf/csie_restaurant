@@ -39,8 +39,8 @@ class CustomerService
                 $product_id = $value->product_id;
                 $quantity = $value->quantity;
                 return $orderItems->contains(function ($value, $key) use ($product_id, $quantity) {
-                    return $value['id'] == $product_id &&
-                    $value['quantity'] >= $quantity;
+                    return $value->id == $product_id &&
+                    $value->quantity >= $quantity;
                 });
             });
             return $tmp;
@@ -81,9 +81,9 @@ class CustomerService
 
         if (gettype($coupon) != "array")
             return $coupon;
-        
+
         $numberOfUsage = $this->customerRepository->countUsageNumberOfUsedCoupon($id, $coupon_code);
-        
+
         var_dump($coupon['coupon']);
         if ($coupon['coupon']->numberOfUsage - $numberOfUsage === 0)
             return 5;
