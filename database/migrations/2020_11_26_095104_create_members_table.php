@@ -26,6 +26,7 @@ class CreateMembersTable extends Migration
             $table->dateTime('created_at')->comment("註冊日期");
             $table->dateTime('updated_at')->comment("最後更動日期");
             $table->dateTime('email_verified_at')->nullable()->comment("電子信箱認證狀態");
+            $table->boolean("is_deleted")->default(false)->comment("是否已被刪除");
             // $table->enum("Member_status", [0, 1, 2])->comment("狀態");
             // $table->enum("Permission", [0, 1, 2])->comment("權限");
         });

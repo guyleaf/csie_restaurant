@@ -31,6 +31,7 @@ class DatabaseSeeder extends Seeder
         $seller_category_list_path = base_path('database/seeders/data/seller_category_list.json');
         $product_category_path = base_path('database/seeders/data/product_category.json');
         $product_path = base_path('database/seeders/data/product.json');
+        $product_image_path = base_path('database/seeders/data/product_image.json');
         $coupon_path = base_path('database/seeders/data/coupon.json');
         $specified_coupon_product_path = base_path('database/seeders/data/specified_coupon_product.json');
         $order_path = base_path('database/seeders/data/order.json');
@@ -47,5 +48,6 @@ class DatabaseSeeder extends Seeder
         $this->call(SpecifiedCouponProductSeeder::class, false, ['specified_coupon_product_path' => $specified_coupon_product_path]);
         $this->call(OrderSeeder::class, false, ['order_path' => $order_path]);
         $this->call(OrderItemSeeder::class, false, ['order_item_path' => $order_item_path]);
+        $this->call(ProductImageSeeder::class, false, ['product_image_path' => $product_image_path]);
     }
 }

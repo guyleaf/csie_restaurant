@@ -1,27 +1,58 @@
 <?php
 namespace App\Services;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use App\Repositories\OrderRepository;
+use App\Repositories\CouponRepository;
+use DateTime, DateTimeZone;
 
 class OrderService
 {
     /**
-     * @var \App\Repositories\OrderRepository $orderRepository
+     * @var App\Repositories\OrderRepository $orderRepository
      */
     protected $orderRepository;
 
-    public function __construct(OrderRepository $orderRepository)
+    /**
+     * @var App\Repositories\CouponRepository $couponRepository
+     */
+    protected $couponRepository;
+
+    public function __construct(OrderRepository $orderRepository, CouponRepository $couponRepository)
     {
         $this->orderRepository = $orderRepository;
+        $this->couponRepository = $couponRepository;
     }
 
-    public function getOrderItems($id)
+    public function getOrders($id)
     {
         $result = $this->orderRepository
-        ->getOrderItemsByOrderId($id);
+        ->getOrders($id);
+
         return $result;
+    }
+
+    public function getOrderInfo($orderId)
+    {
+        $result = $this->orderRepository
+        ->getOrderInfo($orderId);
+
+        if (!empty($result->get('order')->coupon_id) && $result->get('order')->coupon_type == 2)
+        {
+            $coupon_items = $this->couponRepository
+            ->getCouponItems($result->get('order')->coupon_id);
+            $result['coupon_items'] = $coupon_items;
+        }
+
+        return $result;
+    }
+
+    public function addOrder($customer_id, $order)
+    {
+        $now = new DateTime('now', new DateTimeZone('Asia/Taipei'));
+        $order['order_time'] = $now->format('Y-m-d H:i:s');
+        $order['status'] = 0;
+        $this->orderRepository
+        ->addOrder($customer_id, $order);
     }
 }
 ?>

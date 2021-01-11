@@ -7,9 +7,14 @@ class CustomerRepository
 {
 
     /**
-     * @var \Illuminate\Database\Query\Builder $order
+     * @var \Illuminate\Database\Query\Builder $customer
      */
-    protected $order;
+    protected $customer;
+
+    /**
+     * @var \Illuminate\Database\Query\Builder $coupon
+     */
+    protected $usedCoupon;
 
     /**
      * Member Repository constructor
@@ -18,17 +23,39 @@ class CustomerRepository
      */
     public function __construct()
     {
-        $this->order = DB::table('order', 'O');
+        $this->customer = DB::table('customer', 'C');
+        $this->customerAddress = DB::table('customer_address', 'CA');
+        $this->usedCoupon = DB::table('used_coupon', 'UC');
     }
 
-    public function getOrderByCustomerId($id)
-    {
-        $order = $this->order
-            ->join('member as M', 'O.seller_id','=','M.id')
-            ->where('O.customer_id', '=', $id)
-            ->get(['O.id as order_id', 'M.name', 'O.order_time', 'O.stars']);
+    // public function getUsedCoupons($id, $coupon_code)
+    // {
+    //     $result = DB::table('used_coupon', 'UC')
+    //     ->join('coupon as CP', 'CP.id', '=', 'UC.coupon_id')
+    //     ->where('UC.customer_id', '=', $id)
+    //     ->where('CP.code', '=', $coupon_code)
+    //     ->get(['*']);
 
-        return $order;
+    //     return $result;
+    // }
+
+    public function countUsageNumberOfUsedCoupon($id, $coupon_code)
+    {
+        $result = $this->usedCoupon
+        ->join('coupon as CP', 'CP.id', '=', 'UC.coupon_id')
+        ->where('CP.code', '=', $coupon_code)
+        ->count();
+
+        return $result;
+    }
+
+    public function getAddress($id)
+    {
+        $result = $this->customerAddress
+        ->where("customer_id", '=', $id)
+        ->get(["address"]);
+
+        return $result;
     }
 }
 ?>

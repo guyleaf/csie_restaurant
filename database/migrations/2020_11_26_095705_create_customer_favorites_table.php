@@ -21,6 +21,7 @@ class CreateCustomerFavoritesTable extends Migration
             ->onUpdate("cascade")->onDelete("cascade");
             $table->foreign("seller_id")->references("member_id")->on("seller")
             ->onUpdate("cascade")->onDelete("cascade");
+            $table->index("customer_id");
         });
     }
 

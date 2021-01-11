@@ -29,9 +29,9 @@ class ShopRepository
      */
     public function __construct()
     {
-        $this->shopTable = DB::table('seller');
-        $this->categoryTable = DB::table('seller_category');
-        $this->shopsInfoView = DB::table('seller_card_view');
+        $this->shopTable = DB::table('seller', 'S');
+        $this->categoryTable = DB::table('seller_category', 'SC');
+        $this->shopsInfoView = DB::table('seller_card_view', 'SCV');
     }
 
     /**
@@ -44,9 +44,11 @@ class ShopRepository
     public function getShops($currentNumber, $requiredNumber)
     {
         $shops = $this->shopsInfoView
+            ->join('member as M', 'M.id', '=', 'member_id')
+            ->where('is_deleted', '=', false)
             ->skip($currentNumber)
             ->take($requiredNumber)
-            ->get(['member_id as seller_id', 'name', 'counter_number', 'header_image', 'numberofratings', 'averageofratings']);
+            ->get(['member_id as seller_id', 'M.name', 'counter_number', 'header_image', 'numberofratings', 'averageofratings']);
 
         return $shops;
     }
@@ -63,11 +65,13 @@ class ShopRepository
     {
         $shops = $this->shopsInfoView
             ->join('seller_category_list as SCL', 'SCL.seller_id', '=', 'member_id')
+            ->join('member as M', 'M.id', '=', 'member_id')
+            ->where('is_deleted', '=', false)
             ->whereIn('SCL.category_id', $filters)
             ->skip($currentNumber)
             ->take($requiredNumber)
             ->distinct()
-            ->get(['member_id as seller_id', 'name', 'counter_number', 'header_image', 'numberofratings', 'averageofratings']);
+            ->get(['member_id as seller_id', 'M.name', 'counter_number', 'header_image', 'numberofratings', 'averageofratings']);
 
         return $shops;
     }
@@ -89,13 +93,16 @@ class ShopRepository
         return $info;
     }
 
-    public function getProductCategoriesByShopId($id)
+    public function searchShops($keywords)
     {
-        $category = $this->shopTable
-            ->join('product_category as PC', 'seller_id','=','member_id')
-            ->where('member_id','=', $id)
-            ->get(['PC.name']);
-        return $category;
+        $result = $this->shopsInfoView
+        ->where(function ($query) use ($keywords) {
+            for ($i = 0; $i < count($keywords); $i++){
+               $query->orwhere('name', 'like',  '%' . $keywords[$i] .'%');
+            }
+        })->get(['member_id as seller_id', 'name', 'counter_number', 'header_image', 'averageofratings']);
+        
+        return $result;
     }
 }
 ?>

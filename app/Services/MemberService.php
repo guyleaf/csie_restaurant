@@ -1,16 +1,17 @@
 <?php
 namespace App\Services;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Repositories\MemberRepository;
+use InvalidArgumentException;
+use Intervention\Image\Facades\Image as Image;
 
 class MemberService
 {
     /**
      * @var \App\Repositories\MemberRepository $memberRepository
      */
-    protected $memberReposity;
+    protected $memberRepository;
 
     /**
      * Member service constructor
@@ -51,7 +52,7 @@ class MemberService
     //     return $data;
     // }
 
-    public function getMembers($numbers)
+    public function getCustomers($numbers)
     {
         $this->validateBasicArgument($numbers);
 
@@ -59,9 +60,55 @@ class MemberService
         $requiredNumber = (int)$numbers['requiredNumber'];
 
         $result = $this->memberRepository
-            ->getMembers($currentNumber, $requiredNumber);
+            ->getCustomers($currentNumber, $requiredNumber);
 
         return $result;
+    }
+
+    public function getSellers($numbers)
+    {
+        $this->validateBasicArgument($numbers);
+
+        $currentNumber = (int)$numbers['currentNumber'];
+        $requiredNumber = (int)$numbers['requiredNumber'];
+
+        $result = $this->memberRepository
+            ->getSellers($currentNumber, $requiredNumber);
+
+        return $result;
+    }
+
+    public function updateMember($payload)
+    {
+        $this->memberRepository->updateMember($payload);
+    }
+
+    public function deleteMember($id)
+    {
+        $this->memberRepository->deleteMember($id);
+    }
+
+    public function addMember($payload)
+    {
+        if($payload['member']->permission === 1)
+        {
+            if (!empty($payload['seller']['header_image']))
+            {
+                $image = Image::make($payload['seller']['header_image'])->resize(640, 480)->encode('jpg', 100);
+                $payload['seller']['header_image'] = true;
+            }
+            else
+                $payload['seller']['header_image'] = false;
+
+            $member_id = $this->memberRepository->addSeller($payload);
+
+            if ($image != null)
+                $image->save('restaurant/' . strval($member_id) . '/header.jpg');
+        }
+        elseif($payload['member']->permission === 2)
+        {
+            $this->memberRepository->addCustomer($payload);
+        }
     }
 }
 ?>
