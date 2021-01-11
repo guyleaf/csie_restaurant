@@ -75,10 +75,10 @@ class SellerController extends Controller
 
     public function addProduct(Request $request)
     {
-        // $user = auth()->user();
-        // $id = $user->id;
-        $product_id = $this->sellerService->addProduct(4, $request->all());
-        return response()->json(['message' => 'Success', 'id' => $product_id], 201);
+        $user = auth()->user();
+        $id = $user->id;
+        $product_id = $this->sellerService->addProduct($id, $request->all());
+        return response()->json(['message' => 'Success', 'product' => $product_id], 201);
     }
 
     public function deleteProduct(Request $request)
