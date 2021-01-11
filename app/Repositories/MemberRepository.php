@@ -2,6 +2,7 @@
 namespace App\Repositories;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use DateTime, DateTimeZone, Exception;
 
 
@@ -42,12 +43,16 @@ class MemberRepository
      */
     public function getMembers($currentNumber, $requiredNumber)
     {
+        $numbers = $this->memberTable->count();
+
+        $this->memberTable = DB::table('member');
         $members = $this->memberTable
+            ->orderBy('id')
             ->skip($currentNumber)
             ->take($requiredNumber)
-            ->get(['id as seller_id', 'name', 'username', 'email', 'created_at', 'phone', 'member_status', ]);
+            ->get(['id as seller_id', 'name', 'username', 'email', 'created_at', 'phone', 'member_status']);
 
-        return $members;
+        return [$numbers, $members];
     }
 
     public function updateMember($payload)
@@ -67,46 +72,36 @@ class MemberRepository
         ->delete();
     }
 
-    public function addMember($payload)
+    private function addMember($payload)
     {
-        DB::beginTransaction();
+        $payload['created_at'] = new DateTime('now', new DateTimeZone('Asia/Taipei'));
+        $payload['created_at'] = $payload['created_at']->format('Y-m-d H:i:s');
+        $payload['updated_at'] = $payload['created_at'];
 
-        try
-        {
-            $payload['created_at'] = new DateTime('now', new DateTimeZone('Asia/Taipei'));
-            $payload['created_at'] = $payload['created_at']->format('Y-m-d H:i:s');
-            $payload['updated_at'] = $payload['created_at'];
+        $id = $this->memberTable
+        ->orderByDesc('id')
+        ->limit(1)
+        ->lockForUpdate()
+        ->get(['id'])->first()->id + 1;
 
-            $id = $this->memberTable
-            ->orderByDesc('id')
-            ->limit(1)
-            ->lockForUpdate()
-            ->get(['id'])->first()->id + 1;
-
-            $payload['id'] = $id;
-
-            $this->memberTable
-            ->insert($payload);
-
-            DB::commit();
-        }
-        catch (Exception $e)
-        {
-            DB::rollBack();
-            throw $e;
-        }
+        $payload['id'] = $id;
+        $payload['password'] = Hash::make($payload['password']);
+        $this->memberTable = DB::table('member');
+        $this->memberTable
+        ->insert($payload);
 
         return $id;
-
     }
 
-    public function addCustomer($payload, $member_id)
+    public function addCustomer($payload)
     {
         DB::beginTransaction();
 
         try
         {
-            $payload['member_id'] = $member_id;
+            $member_id = $this->addMember($payload['member']);
+
+            $payload['customer']['member_id'] = $member_id;
 
             $this->customerTable
             ->insert($payload['customer']);
@@ -118,27 +113,25 @@ class MemberRepository
             DB::rollBack();
             throw $e;
         }
-
     }
 
-    public function addSeller($payload, $member_id)
+    public function addSeller($payload)
     {
         DB::beginTransaction();
 
         try
         {
-            $counter_number = $this->sellerTable
-            ->orderByDesc('counter_number')
-            ->limit(1)
-            ->lockForUpdate()
-            ->get(['counter_number'])->first()->counter_number + 1;
+            $member_id = $this->addMember($payload['member']);
 
-            $payload['member_id'] = $member_id;
-            $payload['counter_number'] = $counter_number;
+            $payload['seller']['member_id'] = $member_id;
+
+            if ($payload['seller']['header_image'])
+                $payload['seller']['header_image'] = '/storage/restaurant/' . strval($member_id) . '/header.jpg';
+            else
+                $payload['seller']['header_image'] = '/storage/restaurant/' . 'default_header.jpg';
 
             $this->sellerTable
-            ->insert($payload);
-
+            ->insert($payload['seller']);
 
             DB::commit();
         }
@@ -148,6 +141,7 @@ class MemberRepository
             throw $e;
         }
 
+        return $member_id;
     }
 }
 ?>
