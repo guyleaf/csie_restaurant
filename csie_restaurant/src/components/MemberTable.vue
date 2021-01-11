@@ -142,12 +142,12 @@
         this.members = []
         if (direction == 'next')  {this.currentNumber += this.requiredNumber}
         else if(direction == 'last') {this.currentNumber -= this.requiredNumber}
-        let url  = '/admin/members?' + 'currentNumber=' + this.currentNumber.toString() + '&' + 'requiredNumber=' + this.requiredNumber.toString()
+        let url  = '/admin/customers?' + 'currentNumber=' + this.currentNumber.toString() + '&' + 'requiredNumber=' + this.requiredNumber.toString()
         this.$http.get(url)
         .then(response => {
         this.members = [];
-        let data = response.data.members;
-        for (let i=0;i<data.length;i++){ this.members.push({isActive:true, id:data[i].seller_id, username:data[i].username, name:data[i].name, email:data[i].email, 
+        let data = response.data.customers;
+        for (let i=0;i<data.length;i++){ this.members.push({isActive:true, id:data[i].customer_id, username:data[i].username, name:data[i].name, email:data[i].email, 
                                                             created_at:data[i].created_at, phone:data[i].phone, member_status:data[i].member_status})}
         })
         this.checkRoute()
@@ -163,13 +163,13 @@
         console.log(this.currentNumber );
       },
       refresh() {
-        let url = '/admin/members?currentNumber=0&requiredNumber=5'
+        let url = '/admin/customers?currentNumber=0&requiredNumber=5'
         this.$axios.get(this.$url + url)
         .then(response => {
           this.members = [];
-          let data = response.data.members;
-          for (let i=0;i<data.length;i++){ this.members.push({isActive:true, id:data[i].seller_id, username:data[i].username, name:data[i].name, email:data[i].email, 
-                                                              created_at:data[i].created_at, phone:data[i].phone, member_status:data[i].member_status})}
+          let data = response.data.customers;
+          for (let i=0;i<data.length;i++){ this.members.push({isActive:true, id:data[i].customer_id, username:data[i].username, name:data[i].name, email:data[i].email, 
+                                                              created_at:data[i].created_at, phone:data[i].phone,member_status:data[i].member_status})}
           this.numOfMembers = response.data.numbers;
           this.$bus.$emit('setNumOfMembers', this.numOfMembers);
         })

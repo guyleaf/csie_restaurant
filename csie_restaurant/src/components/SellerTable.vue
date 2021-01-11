@@ -79,6 +79,12 @@
             // Variant applies to the whole column, including the header and footer
           },
           {
+            key: 'counter_number',
+            label: '櫃位號碼',
+            class: 'text-center'
+            // Variant applies to the whole column, including the header and footer
+          },
+          {
             key: 'member_status',
             label: '狀態',
             class: 'text-center'
@@ -142,13 +148,13 @@
         this.members = []
         if (direction == 'next')  {this.currentNumber += this.requiredNumber}
         else if(direction == 'last') {this.currentNumber -= this.requiredNumber}
-        let url  = '/admin/members?' + 'currentNumber=' + this.currentNumber.toString() + '&' + 'requiredNumber=' + this.requiredNumber.toString()
+        let url  = '/admin/sellers?' + 'currentNumber=' + this.currentNumber.toString() + '&' + 'requiredNumber=' + this.requiredNumber.toString()
         this.$http.get(url)
         .then(response => {
         this.members = [];
-        let data = response.data.members;
+        let data = response.data.sellers;
         for (let i=0;i<data.length;i++){ this.members.push({isActive:true, id:data[i].seller_id, username:data[i].username, name:data[i].name, email:data[i].email, 
-                                                            created_at:data[i].created_at, phone:data[i].phone, member_status:data[i].member_status})}
+                                                            created_at:data[i].created_at, phone:data[i].phone, member_status:data[i].member_status, counter_number:data[i].counter_number})}
         })
         this.checkRoute()
       },
@@ -163,13 +169,14 @@
         console.log(this.currentNumber );
       },
       refresh() {
-        let url = '/admin/members?currentNumber=0&requiredNumber=5'
+        let url = '/admin/sellers?currentNumber=0&requiredNumber=5'
         this.$axios.get(this.$url + url)
         .then(response => {
           this.members = [];
-          let data = response.data.members;
+          let data = response.data.sellers;
+          console.log(data)
           for (let i=0;i<data.length;i++){ this.members.push({isActive:true, id:data[i].seller_id, username:data[i].username, name:data[i].name, email:data[i].email, 
-                                                              created_at:data[i].created_at, phone:data[i].phone, member_status:data[i].member_status})}
+                                                              created_at:data[i].created_at, phone:data[i].phone, member_status:data[i].member_status, counter_number:data[i].counter_number})}
           this.numOfMembers = response.data.numbers;
           this.$bus.$emit('setNumOfMembers', this.numOfMembers);
         })

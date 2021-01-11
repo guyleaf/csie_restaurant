@@ -18,6 +18,7 @@
     "jquery.js": "0.0.2-security",
     "jsonwebtoken": "^8.5.1",
     "jwt-decode": "^3.1.2",
+    "object-to-formdata": "^4.1.0",
     "secure-ls": "^1.2.6",
     "vue": "^2.6.11",
     "vue-bootstrap-datetimepicker": "^5.0.1",

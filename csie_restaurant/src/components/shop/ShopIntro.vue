@@ -43,6 +43,12 @@
         joinDate: String,
         rate: String
         
+    },
+    created(){
+        this.$bus.on('productsNumber',num =>{
+            console.log(num)
+            this.commodity=num.toString()}
+        )
     }
 }
 </script>

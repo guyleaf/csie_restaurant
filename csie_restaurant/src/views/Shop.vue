@@ -14,14 +14,12 @@
 
 <script>
 // @ is an alias to /src
-import ShopIntro from '@/components/shop/ShopIntro.vue';
 import FoodCardGroup from '@/components/shop/FoodCardGroup.vue';
 import CouponCardGroup from '@/components/shop/CouponCardGroup.vue';
 import ShopDescription from '@/components/shop/ShopDescription.vue';
 export default {
   name: "Shop",
   components: {
-    ShopIntro,
     ShopDescription,
     FoodCardGroup,
     CouponCardGroup
@@ -47,7 +45,7 @@ export default {
         .then(response => {
           this.Info=[];
           let data=response.data;
-          for (let i=0;i<data.length;i++)this.Info.push({description: data[i].description, joinDate: data[i].created_at.split(" ",1)[0],shopName: data[i].name, imgPath:"https://picsum.photos/900/250/?image=3"});
+          this.Info.push({description: data.description, joinDate: data.created_at.split(" ",1)[0],shopName: data.name, imgPath:"https://picsum.photos/900/250/?image=3", rate:parseFloat(parseFloat(data.averageOfRatings).toFixed(1)), numberOfRatings:parseInt(data.numberOfRatings), fans:parseInt(data.numberOfFans)});
     })
     // this.$bus.$on('reloadShop',msg =>{
     //     this.$router.push     

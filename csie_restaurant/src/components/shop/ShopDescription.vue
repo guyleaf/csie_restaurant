@@ -22,9 +22,9 @@
                     >
                 </b-card>
                 <div class='grid-container'>
-                        <div class ='grid-item'>商品:15{{commodity}}</div>
-                        <div class ='grid-item'>粉絲:2{{fans}}</div>
-                        <div class ='grid-item'>評分:4.5(300){{rate}}</div>
+                        <div class ='grid-item'>商品:{{commodity}}</div>
+                        <div class ='grid-item'>粉絲:{{fans}}</div>
+                        <div class ='grid-item'>評分:{{rate}}({{numberOfRatings}})</div>
                         <div class ='grid-item'>加入時間:{{joinDate}}</div>
                 </div>
             </div>
@@ -68,21 +68,31 @@
 
 <script>
     export default {
-    name: 'ShopInfo',
+    name: 'ShopDescription',
     props:{
         description:String,
         shopName: String,
         imgPath: String,
-        commodity: Number,
         fans: Number,
         joinDate: String,
         rate: Number,
+        numberOfRatings: Number,
         // editable: Boolean,
+    },
+    data(){
+        return{
+            commodity:0,
+        }
     },
     methods:{
         showModal() {
             this.$refs['my-modal'].show();
         },
+    },
+    created(){
+        this.$bus.$on('productsNumber',num =>{
+            this.commodity=num}
+        )
     }
 }
 </script>
