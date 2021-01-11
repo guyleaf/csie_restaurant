@@ -3,7 +3,7 @@ namespace App\Services;
 
 use App\Repositories\CouponRepository;
 use App\Repositories\ProductRepository;
-use Image;
+use Intervention\Image\Facades\Image as Image;
 
 class SellerService
 {
