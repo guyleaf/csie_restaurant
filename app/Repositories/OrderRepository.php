@@ -87,41 +87,40 @@ class OrderRepository
         return $result;
     }
 
-    public function addOrder($customer_id, $payload)
+    public function addOrder($customer_id, $order)
     {
-        DB::transaction(function () use ($customer_id, $payload) {
-            $payload['order']['customer_id'] = $customer_id;
+        DB::transaction(function () use ($customer_id, $order) {
+            $order['order']['customer_id'] = $customer_id;
 
             $id = DB::table('order', 'O')
             ->orderByDesc('id')
             ->limit(1)->lockForUpdate()
             ->get(['id'])->first()->id + 1;
 
-            $payload['order']['id'] = $id;
+            $order['order']['id'] = $id;
 
             DB::table('order', 'O')
-            ->insert($payload['order']);
+            ->insert($order['order']);
 
-            $payload['order_items'] =
+            $order['order_items'] =
             array_map(function ($item) use ($id) {
                 $item['order_id'] = $id;
                 return $item;
-            }, $payload['order_items']);
-
+            }, $order['order_items']);
 
             DB::table('order_item', 'OI')
-            ->insert($payload['order_items']);
+            ->insert($order['order_items']);
         }, 3);
     }
 
-    public function updateOrder($id, $payload)
+    public function updateOrder($id, $order)
     {
-        DB::transaction(function () use ($id, $payload) {
+        DB::transaction(function () use ($id, $order) {
             DB::table('order', 'O')
-            ->where('O.id', '=', $payload['order']['id'])
+            ->where('O.id', '=', $order['order']['id'])
             ->where('O.customer_id', '=', $id)
             ->orWhere('O.seller_id', '=', $id)
-            ->update($payload['order']);
+            ->update($order['order']);
         });
     }
 }
