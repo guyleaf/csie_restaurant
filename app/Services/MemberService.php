@@ -88,13 +88,16 @@ class MemberService
         $this->memberRepository->deleteMember($id);
     }
 
+    /**
+     * @param Illuminate\Http\UploadedFile $payload['seller']['header_image]
+     */
     public function addMember($payload)
     {
         if($payload['member']->permission === 1)
         {
             if (!empty($payload['seller']['header_image']))
             {
-                $image = Image::make($payload['seller']['header_image'])->resize(640, 480)->encode('jpg', 100);
+                $image = Image::make($payload['seller']['header_image']->get())->resize(640, 480)->encode('jpg', 100);
                 $payload['seller']['header_image'] = true;
             }
             else

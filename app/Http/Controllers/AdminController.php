@@ -74,8 +74,7 @@ class AdminController extends Controller
 
     public function addMember(Request $request)
     {
-        // $this->memberService->addMember($request->all());
-        var_dump($request->all());
+        $this->memberService->addMember($request->all());
         return response()->json(['message' => 'Success'], 201);
     }
 }
