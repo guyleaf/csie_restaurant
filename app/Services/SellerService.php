@@ -84,9 +84,10 @@ class SellerService
 
             $image_path = 'storage/restaurant/' . strval($seller_id);
             $image_name = strval($product_id) . '.jpg';
-            unlink(public_path($image_path. '/' . $image_name));
+            $state = unlink(public_path($image_path. '/' . $image_name));
             $image->save($image_path. '/' . $image_name, 100);
         }
+        return $state;
     }
 }
 ?>
