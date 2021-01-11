@@ -202,26 +202,23 @@
         this.$_verification(this.name, this.username, this.password, this.phone, this.email, this.image)
       },
       $_verification(name, username, password, phone, email, image) {
-        // let formdata = new FormData();
+        let formdata = new FormData();
         console.log(image)
         let member={
-            member:{
+          member:{
           name: name,
           username: username,
           password: password,
           phone: phone,
           email: email,
           member_status: 0,
-          permission: 1},
-          seller:{
-              header_image: image,
-          }}
-        // let seller = new FormData
-        // seller.append('header_image', image)
-        // formdata.append('member',member)
-        // formdata.append('seller',seller)
-        let url='/admin/members/add';
-        this.$http.post(url, member)
+          permission: 1}}
+        let seller = new FormData
+        seller.append('header_image', image)
+        formdata.append('member',member)
+        formdata.append('seller',seller)
+        let url='/auth/register';
+        this.$axios.post(url, member)
         .then(response => {
           this.showAlert = false
           let data = response.data

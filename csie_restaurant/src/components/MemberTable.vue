@@ -128,6 +128,8 @@
             }).then(response =>{
                 this.$alert("刪除成功","","success");
                 this.members.splice(member.index,1);
+                console.log("刪除成功")
+                this.routeMembers("now")
                 this.$emit("deleteMember")
             })
             .catch(error=>{

@@ -34,6 +34,11 @@ export default {
         amount: 0
       }
     },
+    methods:{
+      deleteMember(){
+        this.amount -=1
+      }
+    },
     created(){
       // this.$http.get('/admin/members?currentNumber=0&requiredNumber=50')
       // .then(response => {
