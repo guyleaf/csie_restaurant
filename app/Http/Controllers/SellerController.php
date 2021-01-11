@@ -77,8 +77,8 @@ class SellerController extends Controller
     {
         $user = auth()->user();
         $id = $user->id;
-        $product_id = $this->sellerService->addProduct($id, $request->all());
-        return response()->json(['message' => 'Success', 'id' => $product_id], 201);
+        $product = $this->sellerService->addProduct($id, $request->all());
+        return response()->json(['message' => 'Success', 'product_id' => $product['product_id'], 'image_path' => $product['image_path']], 201);
     }
 
     public function deleteProduct(Request $request)
@@ -91,7 +91,7 @@ class SellerController extends Controller
     {
         $user = auth()->user();
         $id = $user->id;
-        $this->sellerService->updateProduct($id, $request->all());
-        return response()->json(['message' => 'Success'], 201);
+        $state = $this->sellerService->updateProduct($id, $request->all());
+        return response()->json(['message' => 'Success', 'state' => $state], 201);
     }
 }
