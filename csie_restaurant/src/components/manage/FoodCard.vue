@@ -193,7 +193,7 @@ export default {
                         if(this.foodDescription != this.vfoodDescription) {this.foodDescription = this.vfoodDescription;formdata.append('description',this.vfoodDescription);}
                         if(this.price != this.vprice) {this.price = this.vprice;formdata.append('price',this.vprice);}
                         if(this.imgPath != this.image) {this.imgPath=this.preview;formdata.append('image',this.image);}
-                
+
                         this.$http.post('/seller/products/update',formdata,{
                             headers: {
                             'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
@@ -205,7 +205,7 @@ export default {
                                 type: "success",
                                 timer: 5000
                             })
-                            }, 300)
+                            }, 100)
                             this.$refs['my-modal'].hide();
                         }).catch(error=>{
                             setTimeout(() => {
