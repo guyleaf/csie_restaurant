@@ -188,7 +188,6 @@
         const valid4 = this.$refs['checkPassword-input'].checkValidity()
         const valid5 = this.$refs['phone-input'].checkValidity()
         const valid6 = this.$refs['email-input'].checkValidity()
-        // const valid7 = this.$refs['sex-input'].checkValidity() FIXME
         return valid1 && valid2 && valid3 && valid4 && valid5 && valid6 && this.sexState
       },
       submit() {
@@ -207,8 +206,8 @@
         this.$_verification(this.name, this.username, this.password, this.phone, this.email, this.sex)
       },
       $_verification(name, username, password, phone, email, sex) {
-        let url='/members/add';
-        this.$http.post('/members/add', {
+        let url='/auth/register';
+        this.$axios.post(this.$url + url, {
           member:{
           name: name,
           username: username,

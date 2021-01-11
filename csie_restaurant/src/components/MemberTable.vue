@@ -37,6 +37,7 @@
         members:[],
         currentNumber: 0,
         requiredNumber: 5,
+        numOfMembers: 0,
         // Note 'isActive' is left out and will not appear in the rendered table
         fields: [
           {
@@ -104,7 +105,7 @@
         if(this.members[member.index].member_status) var msg = "你確定要開啟這位會員？"
         this.$confirm(msg,"","question").then(() => {
             let update = {id:this.members[member.index].id, member_status:!this.members[member.index].member_status}
-            this.$http.post('/members/update',update,{
+            this.$http.post('/admin/members/update',update,{
                 headers: {
                 'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
                 }
@@ -120,7 +121,7 @@
       deleteMember(member){
         this.$confirm("你確定要刪除？","","question").then(() => {
             let deleteMember = {id:this.members[member.index].id}
-            this.$http.post('/members/delete',deleteMember,{
+            this.$http.post('/admin/members/delete',deleteMember,{
                 headers: {
                 'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
                 }
@@ -139,39 +140,41 @@
         this.members = []
         if (direction == 'next')  {this.currentNumber += this.requiredNumber}
         else if(direction == 'last') {this.currentNumber -= this.requiredNumber}
-        let url  = '/members?' + 'currentNumber=' + this.currentNumber.toString() + '&' + 'requiredNumber=' + this.requiredNumber.toString()
+        let url  = '/admin/members?' + 'currentNumber=' + this.currentNumber.toString() + '&' + 'requiredNumber=' + this.requiredNumber.toString()
         this.$http.get(url)
         .then(response => {
         this.members = [];
-        let data = response.data;
+        let data = response.data.members;
         for (let i=0;i<data.length;i++){ this.members.push({isActive:true, id:data[i].seller_id, username:data[i].username, name:data[i].name, email:data[i].email, 
                                                             created_at:data[i].created_at, phone:data[i].phone, member_status:data[i].member_status})}
         })
-        this.routeDisabled()
+        this.checkRoute()
       },
-      routeDisabled(){
+      checkRoute(){
         let lstPgButton = document.getElementById("lstPg")
         let nxtButton = document.getElementById('nxtPg')
-        let nextCurrent = this.currentNumber + this.requiredNumber
-        let url  = '/members?' + 'currentNumber=' + nextCurrent.toString() + '&' + 'requiredNumber=' + this.requiredNumber.toString()
-        if (this.currentNumber == 0){lstPgButton.disabled = true;}
+        let nxtNumber = this.currentNumber + this.requiredNumber
+        if (this.currentNumber == 0) {lstPgButton.disabled = true;}
         else {lstPgButton.disabled = false;}
-        this.$http.get(url)
+        if (nxtNumber >= this.numOfMembers) {nxtButton.disabled = true}
+        else {nxtButton.disabled = false}
+        console.log(this.currentNumber );
+      },
+      refresh() {
+        let url = '/admin/members?currentNumber=0&requiredNumber=5'
+        this.$axios.get(this.$url + url)
         .then(response => {
-          if (response.data.length == 0){nxtButton.disabled = true}
-          else (nxtButton.disabled = false)
+          this.members = [];
+          let data = response.data.members;
+          for (let i=0;i<data.length;i++){ this.members.push({isActive:true, id:data[i].seller_id, username:data[i].username, name:data[i].name, email:data[i].email, 
+                                                              created_at:data[i].created_at, phone:data[i].phone, member_status:data[i].member_status})}
+          this.numOfMembers = response.data.numbers;
+          this.$bus.$emit('setNumOfMembers', this.numOfMembers);
         })
       }
     },
     mounted () {
-      let url = '/members?currentNumber=0 & requiredNumber=5'
-      this.$http.get(url)
-      .then(response => {
-        this.members = [];
-        let data = response.data;
-        for (let i=0;i<data.length;i++){ this.members.push({isActive:true, id:data[i].seller_id, username:data[i].username, name:data[i].name, email:data[i].email, 
-                                                            created_at:data[i].created_at, phone:data[i].phone, member_status:data[i].member_status})}
-      })
+      this.refresh();
     },
   }
 </script>

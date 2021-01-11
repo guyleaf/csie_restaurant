@@ -220,9 +220,8 @@
         // seller.append('header_image', image)
         // formdata.append('member',member)
         // formdata.append('seller',seller)
-        let url='/members/add';
-        this.$http.post(url, member
-        )
+        let url='/admin/members/add';
+        this.$http.post(url, member)
         .then(response => {
           this.showAlert = false
           let data = response.data
