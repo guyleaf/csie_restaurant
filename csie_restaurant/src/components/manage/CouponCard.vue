@@ -70,7 +70,7 @@
                                 <b-form-select v-model="item.selected" :options="productOption" @change="setPrice(index,item.selected)"></b-form-select>
                             </div>
                             <div class="col-md-3">
-                                <b-form-spinbutton :id="'sb_'+num" min="1" max="100" v-model="item.spinValue" @change="setTotal"></b-form-spinbutton>
+                                <b-form-spinbutton :id="'sb_'+index" min="1" max="100" v-model="item.spinValue" @change="setTotal"></b-form-spinbutton>
                             </div>
                             <div class="col-md-1 mt-1">${{item.price*item.spinValue}}</div>
                         </div>
