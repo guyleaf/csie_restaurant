@@ -29,10 +29,11 @@ class AdminController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getMembers(Request $request)
+
+    public function getCustomers(Request $request)
     {
         try {
-            $result = $this->memberService->getMembers($request->query());
+            $result = $this->memberService->getCustomers($request->query());
         } catch (Exception $e) {
             return response()->json([
                 'status' => $e->getCode(),
@@ -40,7 +41,21 @@ class AdminController extends Controller
             ], $e->getCode());
         }
 
-        return response()->json(['numbers' => $result[0],'members' => $result[1]]);
+        return response()->json(['numbers' => $result[0],'customers' => $result[1]]);
+    }
+
+    public function getSellers(Request $request)
+    {
+        try {
+            $result = $this->memberService->getSellers($request->query());
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => $e->getCode(),
+                'messages' => unserialize($e->getMessage())
+            ], $e->getCode());
+        }
+
+        return response()->json(['numbers' => $result[0],'sellers' => $result[1]]);
     }
 
     public function updateMember(Request $request)

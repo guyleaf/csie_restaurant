@@ -41,18 +41,39 @@ class MemberRepository
      * @param integer $requiredNumber
      * @return \Illuminate\Support\Collection
      */
-    public function getMembers($currentNumber, $requiredNumber)
-    {
-        $numbers = $this->memberTable->count();
 
+    public function getCustomers($currentNumber, $requiredNumber)
+    {
+        
         $this->memberTable = DB::table('member');
-        $members = $this->memberTable
+        $customers = $this->memberTable
+            ->join('customer as C', 'C.member_id', '=', 'id')
+            ->where('is_deleted','=', false)
             ->orderBy('id')
             ->skip($currentNumber)
             ->take($requiredNumber)
-            ->get(['id as seller_id', 'name', 'username', 'email', 'created_at', 'phone', 'member_status']);
+            ->get(['id as customer_id', 'name', 'username', 'email', 'email', 'phone', 'member_status', 'counter_number']);
 
-        return [$numbers, $members];
+        $numbers = $customers->count();
+        
+        return [$numbers, $customers];
+    }
+
+    public function getSellers($currentNumber, $requiredNumber)
+    {
+
+        $this->memberTable = DB::table('member');
+        $sellers = $this->memberTable
+            ->join('seller as S', 'S.member_id', '=', 'id')
+            ->where('is_deleted','=', false)
+            ->orderBy('id')
+            ->skip($currentNumber)
+            ->take($requiredNumber)
+            ->get(['id as seller_id', 'name', 'username', 'email', 'phone', 'member_status', 'counter_number']);
+
+        $numbers = $sellers->count();
+
+        return [$numbers, $sellers];
     }
 
     public function updateMember($payload)
