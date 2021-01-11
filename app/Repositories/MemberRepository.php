@@ -54,7 +54,7 @@ class MemberRepository
             ->take($requiredNumber)
             ->get(['id as customer_id', 'name', 'username', 'email', 'email', 'phone', 'member_status', 'counter_number']);
 
-        $numbers = $customers->count();
+        // $numbers = $customers->count();
         
         return [$numbers, $customers];
     }
@@ -71,7 +71,7 @@ class MemberRepository
             ->take($requiredNumber)
             ->get(['id as seller_id', 'name', 'username', 'email', 'phone', 'member_status', 'counter_number']);
 
-        $numbers = $sellers->count();
+        // $numbers = $sellers->count();
 
         return [$numbers, $sellers];
     }
