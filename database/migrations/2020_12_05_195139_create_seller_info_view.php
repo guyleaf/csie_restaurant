@@ -14,7 +14,7 @@ class CreateSellerInfoView extends Migration
     {
         DB::statement('CREATE VIEW seller_info_view AS (
             select * FROM
-            (SELECT S.member_id, M.name, S.header_image, counter_number
+            (SELECT S.member_id, M.name, S.header_image, counter_number, S.description, M.created_at, M.is_deleted
             FROM seller as S, member as M
             WHERE S.member_id = M.id
             ORDER BY S.member_id) as S

@@ -66,13 +66,12 @@ class ShopRepository
     {
         $shops = $this->shopsCardView
             ->join('seller_category_list as SCL', 'SCL.seller_id', '=', 'member_id')
-            ->join('member as M', 'M.id', '=', 'member_id')
             ->where('is_deleted', '=', false)
             ->whereIn('SCL.category_id', $filters)
             ->skip($currentNumber)
             ->take($requiredNumber)
             ->distinct()
-            ->get(['member_id as seller_id', 'M.name', 'counter_number', 'header_image', 'numberOfRatings', 'averageOfRatings']);
+            ->get(['member_id as seller_id', 'name', 'counter_number', 'header_image', 'numberOfRatings', 'averageOfRatings']);
 
         return $shops;
     }
@@ -88,11 +87,10 @@ class ShopRepository
     public function getShopInfoByShopId($id)
     {
         $info = $this->shopsInfoView
-            ->join('member as M', 'M.id','=','member_id')
-            ->where('M.id','=', $id)
+            ->where('member_id','=', $id)
             ->where('is_deleted', '=', false)
             ->distinct()
-            ->first(['M.name','M.description', 'numberOfRatings', 'averageOfRatings', 'numberOfFans','M.created_at']);
+            ->first(['name','description', 'numberOfRatings', 'averageOfRatings', 'numberOfFans','created_at']);
 
         return $info;
     }
@@ -104,7 +102,7 @@ class ShopRepository
             for ($i = 0; $i < count($keywords); $i++){
                $query->orwhere('name', 'like',  '%' . $keywords[$i] .'%');
             }
-        })->get(['member_id as seller_id', 'name', 'counter_number', 'header_image', 'averageofratings']);
+        })->get(['member_id as seller_id', 'name', 'counter_number', 'header_image', 'averageOfRatings']);
 
         return $result;
     }
