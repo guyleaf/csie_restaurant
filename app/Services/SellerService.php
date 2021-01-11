@@ -72,20 +72,21 @@ class SellerService
     {
         if (!empty($payload['image']))
         {
-            $image = $payload['image'];
-
+            $image = Image::make($payload['image'])->resize(200, 200)->encode('jpg');
             unset($payload['image']);
-            $image_extension = $image->getClientOriginalExtension();
+        }
 
+        $this->productRepository->updateProduct($payload);
+
+        if (!empty($payload['image']))
+        {
             $product_id = $payload['id'];
 
             $image_path = 'storage/restaurant/' . strval($seller_id);
-            $image_name = strval($product_id) . '.' . $image_extension;
-            //unset(public_path('restaurant/' . strval($seller_id) . '/' . strval($product_id) . '.' . $image_extension));
-            $image->storeAs($image_path, $image_name);
-        }
+            $image_name = strval($product_id) . '.jpg';
 
-        //$this->productRepository->updateProduct($payload);
+            $image->save($image_path. '/' . $image_name, 100);
+        }
     }
 }
 ?>
