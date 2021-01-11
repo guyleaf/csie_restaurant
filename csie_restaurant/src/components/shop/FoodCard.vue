@@ -167,7 +167,7 @@ export default {
             //缺：lack of the responsive action when hover on the card
         },
         showModal() {
-            if (this.$store.getters['auth/token'] == null || this.$store.getters['auth/user'].permission==2 && !this.soldOut){
+            if ((this.$store.getters['auth/token'] == null || this.$store.getters['auth/user'].permission==2) && !this.soldOut){
                 this.spinValue = 1;
                 this.checkSameShop()
             }

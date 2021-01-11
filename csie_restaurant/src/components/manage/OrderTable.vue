@@ -153,7 +153,7 @@
         })
       },
       show(history){
-        this.$http.get('/customer/orders/'+history.item.id, {
+        this.$http.get('/seller/order/'+history.item.訂單編號, {
           headers: {
             'Authorization': 'Bearer ' + this.$store.getters['auth/token']
           }
@@ -166,7 +166,32 @@
     },
   computed:{
     
-  }
+  },
+  created(){
+    this.$http.get('/seller/orders', {
+        headers: {
+          'Authorization': 'Bearer ' + this.$store.getters['auth/token']
+        }
+      })
+      .then(response => {
+          this.items=[];
+          let data=response.data;
+          console.log(data)
+          for (let i=0;i<data.length;i++)
+          {
+            this.items.push({訂單編號: data[i].order_id,ratingStar: data[i].stars, 下單日期: data[i].order_time, 訂單狀態: data[i].status,readonly: true, ratingdisabled:false});
+          }
+      })
+      .catch(error => {
+        this.$store.dispatch('auth/invalidate')
+        this.$router.push('/')
+        // if (error.response) {
+        //   // console.log(this.$refs.loginNav)
+        //   // if (error.response.status == 401)
+        //   //   this.$refs.loginNav.refreshToken(this.$store.getters['auth/token'])
+        // }
+      });
+    },
   }
 </script>
 
