@@ -32,7 +32,7 @@ class CustomerService
             return $coupon['coupon']->limit_money <= $order['total_price'];
         else if ($coupon['coupon']->type === 2)
         {
-            $orderItems = collect($order['orderItems']);
+            $orderItems = collect(json_decode($order['orderItems'], true));
             $coupon_items = $coupon['coupon_items'];
             var_dump($orderItems);
 
