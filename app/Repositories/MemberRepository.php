@@ -86,7 +86,6 @@ class MemberRepository
 
         $payload['id'] = $id;
         $payload['password'] = Hash::make($payload['password']);
-
         $this->memberTable = DB::table('member');
         $this->memberTable
         ->insert($payload);
