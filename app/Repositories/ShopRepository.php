@@ -89,7 +89,7 @@ class ShopRepository
     {
         $info = $this->shopsInfoView
             ->join('member as M', 'M.id','=','member_id')
-            ->where('member_id','=', $id)
+            ->where('M.id','=', $id)
             ->where('is_deleted', '=', false)
             ->distinct()
             ->first(['M.name','M.description', 'numberOfRatings', 'averageOfRatings', 'numberOfFans','M.created_at']);
