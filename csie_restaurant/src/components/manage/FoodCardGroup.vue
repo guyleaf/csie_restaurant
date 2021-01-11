@@ -178,21 +178,21 @@ export default {
             console.log(this.Name)
             if(this.nameState!=false && this.priceState!=false){
             this.$confirm("確定要新增此商品？","","question").then(() => {
-            this.addProduct()
+                this.addProduct()
             })}
         },
-        cancelModal() {
+        resetModal() {
             this.preview= require('../../assets/photoupload.png'),
             this.image=null
-            this.Price=null,
-            this.Name=null,
-            this.Description=null,
-            this.imageState=true,
-            this.priceState=null,
-            this.nameState=null,
-            this.$refs['my-modal'].hide();
+            this.Price=null
+            this.Name=null
+            this.Description=null
+            this.imageState=true
+            this.priceState=null
+            this.nameState=null
         },
-        deleteModal() {
+        cancelModal() {
+            this.resetModal();
             this.$refs['my-modal'].hide();
         },
         sameTag:function(category,state){
@@ -254,32 +254,28 @@ export default {
             formdata.append('image',this.image);
             formdata.append('name',this.Name);
             formdata.append('price',this.Price);
-            formdata.append('sold_out',false);
+            formdata.append('sold_out',0);
             formdata.append('description',this.Description);
             formdata.append('status',1);
-            formdata.append('is_deleted',false);
+            formdata.append('is_deleted',0);
             formdata.append('category_name',this.foodCategory);
-            this.$http.post('/seller/products/add',formdata,{
+            this.$axios.post(this.$url + '/seller/products/add',formdata,{
                 headers: {
-                'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
+                    'Authorization': 'Bearer ' + this.$store.getters['auth/token']
                 }
             }).then( response=>{
-                this.foodCards.push({sellingState:1, soldOut:false, foodId: response.data.id.product_id, foodName: this.Name, price:this.Price, imgPath: this.$url + response.data.id.image_path, foodDescription: this.Description, foodTag:this.foodCategory})
+                this.foodCards.push({sellingState:1, soldOut:false, foodId: response.data.product_id, foodName: this.Name, price:parseInt(this.Price), imgPath: this.$url + response.data.image_path, foodDescription: this.Description, foodTag:this.foodCategory})
                 this.$alert("新增成功","","success");
-                //this.$refs['my-modal'].hide();
+                console.log(response.data)
+                this.resetModal();
+                this.$refs['my-modal'].hide();
             })
             .catch(error=>{
                 this.$alert("新增失敗","","error");
                 console.log(error.response)
-                this.preview= require('../../assets/photoupload.png'),
-                this.image=''
-                this.Price=null,
-                this.Name=null,
-                this.Description=null,
+                this.resetModal();
                 this.$refs['my-modal'].hide();
-            }
-            )
-
+            })
         },
         sortOrder:function(a, b){
             return a - b;
@@ -311,7 +307,7 @@ export default {
           let data=response.data;
         //   console.log(response.data)
           for (let i=0;i<data.length;i++) {     
-            this.foodCards.push({sellingState:data[i].status, soldOut:data[i].sold_out, foodId: data[i].id, foodName: data[i].name, price:data[i].price, imgPath: this.$url + data[i].image_path, foodDescription: data[i].description, foodTag:data[i].category_name});}
+            this.foodCards.push({sellingState:data[i].status, soldOut:data[i].sold_out, foodId: data[i].id, foodName: data[i].name, price:parseInt(data[i].price), imgPath: this.$url + data[i].image_path, foodDescription: data[i].description, foodTag:data[i].category_name});}
             this.foodCards = this.foodCards.sort(function (a, b) {
                 return a.foodName - b.foodName
             });

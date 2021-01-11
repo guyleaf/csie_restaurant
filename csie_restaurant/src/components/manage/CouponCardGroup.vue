@@ -4,7 +4,7 @@
             <div class='tag mt-5'>優惠卷  <b-button squared class="ml-5 nooutline" size="sm" variant="outline-danger" @click="openModal">新增</b-button> </div>
             <div class='couponField mb-5' style='display:flex; flex-direction:row; '>
                 <div v-for="coupon in couponCards" :key="coupon['coupon'].id">
-                    <CouponCard :coupon_id="coupon['coupon'].id" :code="coupon['coupon'].code" :products="coupon['coupon_items']" :discount="coupon['coupon'].discount" 
+                    <CouponCard :coupon_id="coupon['coupon'].id" :code="coupon['coupon'].code" :products="coupon['coupon_items']" :discount="parseInt(coupon['coupon'].discount)" 
                     :numberOfUsage="coupon['coupon'].numberOfUsage" :limitMoney="coupon['coupon'].limit_money" :start="coupon['coupon'].start_time" :expire="coupon['coupon'].end_time" :type="coupon['coupon'].type"
                     v-on="{updateCoupon:updateCoupon, deleteCoupon:deleteCoupon}"/>
                 </div>
@@ -49,7 +49,7 @@
                             </div>
                             
                             <div class="col-md-3">
-                                <b-form-spinbutton :id="'sb_'+num" min="1" max="100" v-model="item.spinValue" @change="setTotal"></b-form-spinbutton>
+                                <b-form-spinbutton :id="'sb_'+index" min="1" max="100" v-model="item.spinValue" @change="setTotal"></b-form-spinbutton>
                             </div>
                             <div class="col-md-1 mt-1">${{item.price*item.spinValue}}</div>
                         </div>

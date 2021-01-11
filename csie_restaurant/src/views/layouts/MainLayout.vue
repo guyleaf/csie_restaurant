@@ -54,7 +54,6 @@ export default {
     margin: 0 !important;
     padding: 0% !important;
     overflow: hidden;
-    margin-bottom: 40px !important;
   }
   .categoryTabs{
       left: 0;
@@ -71,7 +70,7 @@ export default {
   }
   .modal-open {
     padding-right: 16px !important;
-  }
+    }
   body{
       padding-right: 0px !important;
   }

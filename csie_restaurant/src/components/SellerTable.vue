@@ -28,7 +28,7 @@
 
 <script>
   export default {
-    name: "MemberTable",
+    name: "SellerTable",
     data() {
       return {
         deleteImage:require('../assets/xIcon.png'),

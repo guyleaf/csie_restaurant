@@ -74,9 +74,14 @@ const routes = [
                     component: () =>import('@/views/OrderManage.vue')
                     },
                     {
-                    name: 'Member',
-                    path: 'member',
+                    name: 'Customer',
+                    path: 'customer',
                     component: () =>import('@/views/Member.vue')
+                    },
+                    {
+                    name: 'Seller',
+                    path: 'seller',
+                    component: () =>import('@/views/Seller.vue')
                     }
             ]
             },
