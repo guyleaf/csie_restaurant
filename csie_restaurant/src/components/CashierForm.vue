@@ -5,7 +5,6 @@
             id="radio-group-1"
             v-model="placeSelected"
             :options="places"
-            :aria-describedby="ariaDescribedby"
             name="radio-options"
          ></b-form-radio-group>
         </b-form-group>
@@ -22,15 +21,43 @@
               v-model="addressSelected"
               :options="address"
               :aria-describedby="ariaDescribedby"
-              button-variant="outline-info"
+              button-variant="outline-dark"
               buttons
               stacked
             ></b-form-radio-group>
+            <div class="adb">
+              <b-icon animation="cylon" variant="secondary" @mouseleave="adHover=false" v-if="adHover" icon="plus-circle-fill" font-scale="3" @click="addAddress"/>
+              <b-icon variant="secondary" @mouseover="adHover=true" v-else icon="plus-circle" font-scale="3" @click="addAddress"/>
+            </div>
           </div>
-      </b-form-group>
+        </b-form-group>
+        <b-modal
+          id="modal-prevent-closing"
+          ref="modal"
+          title="新增地址"
+          @show="resetModal"
+          @hidden="resetModal"
+          @ok="handleOk"
+          centered
+        >
+          <form ref="form" @submit.stop.prevent="handleSubmit">
+            <b-form-group
+              label="您的地址："
+              label-for="name-input"
+              :state="addressState"
+            >
+              <b-form-input
+                id="name-input"
+                v-model="newAddress"
+                :state="addressState"
+                required
+              ></b-form-input>
+            </b-form-group>
+          </form>
+        </b-modal>
         <b-form-group label="支付方式:" label-for="payment">
-            <b-form-radio v-model="selected" name="pay" value="1">信用卡</b-form-radio>
-            <b-form-radio v-model="selected" name="pay" value="2">現金支付  </b-form-radio>
+            <!-- <b-form-radio v-model="selected" name="pay" value="1">信用卡</b-form-radio>
+            <b-form-radio v-model="selected" name="pay" value="2">現金支付  </b-form-radio> -->
         </b-form-group>
         <b-form-group label="優惠碼:" label-for="coupon">
             <div class='tlprice' id='coupon'>
@@ -86,12 +113,18 @@ export default {
         address:[],
         totalPrice: null,
         popoverShow: false,
-        errorMessage: ''
+        errorMessage: '',
+        adHover:false,
+        newAddress: '',
+        addressState: null,
       }
   },
   methods:{
     school(){
       console.log(this.placeSelected)
+    },
+    addAddress(){
+      this.$refs['modal'].show();
     },
     getCutomerAddress(){
       this.$http.get('/customer/address',  {
@@ -102,6 +135,39 @@ export default {
         for (let i = 0; i<response.data.length; i++){
           this.address.push({text:response.data[i].address, value:response.data[i].address})
         }
+        this.addressSelected = this.address[0].value;
+      })
+    },
+    checkFormValidity() {
+      const valid = this.$refs.form.checkValidity()
+      this.addressState = valid
+      return valid
+    },
+    resetModal() {
+      this.newAddress = ''
+      this.addressState = null
+    },
+    handleOk(bvModalEvt) {
+      // Prevent modal from closing
+      bvModalEvt.preventDefault()
+      // Trigger submit handler
+      this.handleSubmit()
+    },
+    handleSubmit() {
+      if (!this.checkFormValidity()) {
+        return
+      }
+      for (let i = 0 ; i<this.address.length; i++){
+        if(this.newAddress == this.address[i].value){
+          this.$alert("重複的地址，請重新輸入","","warning")
+          this.addressState = false 
+          return
+        }
+      }
+      this.address.push(this.newAddress)
+      console.log(this.address)
+      this.$nextTick(() => {
+        this.$bvModal.hide('modal-prevent-closing')
       })
     }
   },
@@ -112,6 +178,10 @@ export default {
 </script>
 
 <style scoped>
+  .adb{
+    margin: 2%;
+    text-align:center;
+  }
   .rdb{
     width: 100%;
   }

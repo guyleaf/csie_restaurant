@@ -4,7 +4,7 @@
             <div class='tag mt-5'>優惠卷  <b-button squared class="ml-5 nooutline" size="sm" variant="outline-danger" @click="openModal">新增</b-button> </div>
             <div class='couponField mb-5' style='display:flex; flex-direction:row; '>
                 <div v-for="coupon in couponCards" :key="coupon['coupon'].id">
-                    <CouponCard :coupon_id="coupon['coupon'].id" :code="coupon['coupon'].code" :products="coupon['coupon_items']" :discount="parseInt(coupon['coupon'].discount)" 
+                    <CouponCard :coupon_id="coupon['coupon'].id" :code="coupon['coupon'].code" :products="coupon['coupon_items']" :discount="parseFloat(coupon['coupon'].discount)" 
                     :numberOfUsage="coupon['coupon'].numberOfUsage" :limitMoney="coupon['coupon'].limit_money" :start="coupon['coupon'].start_time" :expire="coupon['coupon'].end_time" :type="coupon['coupon'].type"
                     v-on="{updateCoupon:updateCoupon, deleteCoupon:deleteCoupon}"/>
                 </div>
