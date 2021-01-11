@@ -6,12 +6,13 @@ use Illuminate\Http\Request;
 use App\Services\MemberService;
 use Exception;
 
-class MemberController extends Controller
+class AdminController extends Controller
 {
     /**
      * @var \App\Services\MemberService $memberService
      */
     protected $memberService;
+
     /**
      * Create a new controller instance.
      *

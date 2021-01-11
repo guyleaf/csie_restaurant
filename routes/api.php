@@ -37,13 +37,6 @@ $router->group(['prefix' => 'restaurants'], function () use ($router) {
     $router->get('search', 'ShopController@searchShops');
 });
 
-$router->group(['prefix' => 'members'], function () use ($router) {
-    $router->get('', 'MemberController@getMembers');
-    $router->post('update', 'MemberController@updateMember');
-    $router->post('delete', 'MemberController@deleteMember');
-    $router->post('add', 'MemberController@addMember');
-});
-
 $router->group(['prefix' => 'customer'], function () use ($router) {
     $router->group(['middleware' => 'jwt.customer'], function () use ($router) {
         $router->get('orders', 'CustomerController@getOrders');
@@ -75,6 +68,12 @@ $router->group(['prefix' => 'seller', 'middleware' => 'jwt.seller'], function ()
 
 $router->group(['prefix' => 'admin'], function () use ($router) {
     $router->get('coupons', '');
+    $router->group(['prefix' => 'members'], function () use ($router) {
+        $router->get('', 'AdminController@getMembers');
+        $router->post('update', 'AdminController@updateMember');
+        $router->post('delete', 'AdminController@deleteMember');
+        $router->post('add', 'AdminController@addMember');
+    });
 });
 
 $router->group(['prefix' => 'mall'], function () use ($router) {
