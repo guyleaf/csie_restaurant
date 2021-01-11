@@ -153,7 +153,7 @@
         })
       },
       show(history){
-        this.$http.get('/seller/order/'+history.item.訂單編號, {
+        this.$http.get('/seller/orders/'+history.item.訂單編號, {
           headers: {
             'Authorization': 'Bearer ' + this.$store.getters['auth/token']
           }
@@ -183,13 +183,7 @@
           }
       })
       .catch(error => {
-        this.$store.dispatch('auth/invalidate')
         this.$router.push('/')
-        // if (error.response) {
-        //   // console.log(this.$refs.loginNav)
-        //   // if (error.response.status == 401)
-        //   //   this.$refs.loginNav.refreshToken(this.$store.getters['auth/token'])
-        // }
       });
     },
   }

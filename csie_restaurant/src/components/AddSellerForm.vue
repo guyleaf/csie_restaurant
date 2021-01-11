@@ -103,22 +103,34 @@
             required
           ></b-form-input>
         </b-form-group>
+          <b-form-group
+          label="標籤"
+          label-for="category-input"
+          invalid-feedback=""
+          :state="categoryState"
+          >
+          <b-form-select v-model="selected" :options="categories" multiple :select-size="8"></b-form-select>
+        </b-form-group>
         </b-col>
         </b-row>
-            <div class='desField'>
-               <div class='desStyle'>
-                   <b-form-textarea
-                        no-resize
-                        id="textarea-plaintext"
-                        placeholder="商店敘述"
-                        style="height:100%; width:100%"
-                        debounce="500"
-                        v-model="description"
-                    />
-               </div>
-            </div>
-        <input type="file" accept="image/*" @change="previewImage" id="upload">
-        <img :src="preview" @click="upload" class="preview"/>
+        <div class="row">
+          <div class='desField col-6'>
+              <div class='desStyle'>
+                  <b-form-textarea
+                      no-resize
+                      id="textarea-plaintext"
+                      placeholder="商店敘述"
+                      style="height:100%; width:100%"
+                      debounce="500"
+                      v-model="description"
+                  />
+              </div>
+          </div>
+          <div class="col">
+            <input type="file" accept="image/*" @change="previewImage" id="upload">
+            <img :src="preview" @click="upload" class="preview"/>
+          </div>
+        </div>
       </form>
       <b-alert fade :show="showAlert" variant="danger">{{ errorMsg }}</b-alert>
       <div class="row m-2" style="justify-content:space-around">
@@ -135,6 +147,7 @@ import { serialize } from 'object-to-formdata';
     name: 'AddSellerForm',
     data() {
         return {
+            selected:[],
             name: null,
             username: null,
             password: null,
@@ -145,6 +158,7 @@ import { serialize } from 'object-to-formdata';
             image:null,
             counter_number:null,
             description:'',
+            categories:[],
             preview: require('../assets/photoupload.png'),
             errorMsg: ''
         }
@@ -194,7 +208,7 @@ import { serialize } from 'object-to-formdata';
               return null
           }
 
-          return this.counter_number.length > 0
+          return this.counter_number.length > 0 && this.counter_number>0
       }
     },
     methods: {
@@ -228,19 +242,9 @@ import { serialize } from 'object-to-formdata';
       submit() {
         // Exit when the form isn't valid
         if (!this.checkFormValidity()) {
-            this.name= null
-            this.username= null
-            this.password= null
-            this.checkPassword= null
-            this.phone=null
-            this.email=null
-            this.image=null
-            this.counter_number=null
-            this.description=''
             console.log("錯誤")
             return
         }
-        console.log(this.description)
         this.$_verification(this.name, this.username, this.password, this.phone, this.email, this.image, this.counter_number, this.description)
       },
       $_verification(name, username, password, phone, email, image, counter_number, description) {
@@ -308,6 +312,14 @@ import { serialize } from 'object-to-formdata';
             this.preview= require('../assets/photoupload.png'),
             this.showAlert = false
       }
+    },
+    created(){
+    this.$http.get('/restaurants/category')
+    .then(response => {
+      console.log(response.data)
+      for(let i=0;i<response.data.length;i++)
+      this.categories.push({text:response.data[i].name,value:response.data[i].category_id})
+    })
     }
   }
 </script>
@@ -318,7 +330,7 @@ import { serialize } from 'object-to-formdata';
 }
 .preview{
     width: 100%;
-    height: 480px;
+    height: 250px;
 }
 .desField{
     overflow-x: visible;
