@@ -177,6 +177,11 @@ export default {
             if(this.vprice == '') {this.priceState=false}
             if(this.nameState!=false && this.priceState!=false)
             {
+            if(this.foodName == this.vfoodName && this.foodDescription == this.vfoodDescription && this.price == this.vprice && this.imgPath == this.image) 
+            {
+                this.$refs['my-modal'].hide();
+                return
+            }
             let formdata = new FormData();
             formdata.append('id',this.foodId)
             this.$confirm("確定要更改此商品？","","question").then(() => {

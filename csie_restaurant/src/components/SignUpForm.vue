@@ -247,8 +247,6 @@
               this.showAlert = true;
               break;
           }
-          this.account = null
-          this.password = null
         })
       },
       reset() {

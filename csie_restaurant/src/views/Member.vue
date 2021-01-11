@@ -56,7 +56,7 @@ export default {
     .then(response => {
       console.log(response.data)
       this.amount=response.data.length;
-    })
+    }).catch(error =>{console.log(error)})
     },
 }
 </script>
