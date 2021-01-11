@@ -98,7 +98,8 @@
 	{
 		"id" : 7,
 		"customer_id" : 7,
-		"coupon_code" : null,		"seller_id" : 4,
+		"coupon_code" : null,		
+		"seller_id" : 4,
 		"order_time" : "2020-11-06T02:00:00.000Z",
 		"ship_time" : null,
 		"payment_method" : 0,
@@ -161,7 +162,8 @@
 	{
 		"id" : 11,
 		"customer_id" : 7,
-		"coupon_code" : null,		"seller_id" : 4,
+		"coupon_code" : null,		
+		"seller_id" : 4,
 		"order_time" : "2020-11-06T02:00:00.000Z",
 		"ship_time" : null,
 		"payment_method" : 0,
