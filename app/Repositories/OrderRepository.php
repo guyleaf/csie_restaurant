@@ -54,11 +54,11 @@ class OrderRepository
     public function getOrderInfo($orderId)
     {
         $order = $this->order
-            ->leftjoin('coupon as CP', 'CP.id', '=', 'O.coupon_id')
+            ->leftjoin('coupon as CP', 'CP.code', '=', 'O.coupon_code')
             ->where('O.id', '=', $orderId)
             ->get(['O.ship_time', 'O.payment_method', 'O.address',
             'O.fee', 'O.taking_method', 'O.stars', 'O.rating_time', 'O.comment',
-            'CP.id as coupon_id', 'CP.type as coupon_type', 'CP.discount', 'CP.limit_money']);
+            'CP.code as coupon_code', 'CP.type as coupon_type', 'CP.discount', 'CP.limit_money']);
 
         $items = $this->order
             ->join('order_item as I', 'I.order_id', '=', 'O.id')
