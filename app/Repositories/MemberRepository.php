@@ -45,7 +45,6 @@ class MemberRepository
     public function getCustomers($currentNumber, $requiredNumber)
     {
         
-        $this->memberTable = DB::table('member');
         $customers = $this->memberTable
             ->join('customer as C', 'C.member_id', '=', 'id')
             ->where('is_deleted','=', false)
@@ -62,7 +61,6 @@ class MemberRepository
     public function getSellers($currentNumber, $requiredNumber)
     {
 
-        $this->memberTable = DB::table('member');
         $sellers = $this->memberTable
             ->join('seller as S', 'S.member_id', '=', 'id')
             ->where('is_deleted','=', false)
