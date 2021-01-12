@@ -55,7 +55,7 @@ class OrderRepository
     {
         $order = $this->order
             ->leftjoin('coupon as CP', 'CP.code', '=', 'O.coupon_code')
-            ->join('member as M, M.id', '=' ,'O.customer_id')
+            ->join('member as M', 'M.id', '=' ,'O.customer_id')
             ->where('O.id', '=', $orderId)
             ->get(['O.ship_time', 'O.payment_method', 'O.address',
             'O.fee', 'O.taking_method', 'O.stars', 'O.rating_time', 'O.comment',
