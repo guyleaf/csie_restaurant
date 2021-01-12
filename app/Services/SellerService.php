@@ -119,9 +119,8 @@ class SellerService
     }
     public function addProductCategory($id, $payload)
     {
-        $result = $this->productRepository
+        $this->productRepository
         ->addProductCategory($id, $payload);
-        return $result;
     }
 }
 ?>
