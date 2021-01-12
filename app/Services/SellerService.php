@@ -127,8 +127,9 @@ class SellerService
 
     public function updateProductCategory($seller_id, $payload)
     {
-        $payloadProduct['category_name']=$payload['new']['name']
-        $result = $this->productRepository->updateProductCategory($seller_id, $payload, $payloadProduct);
+
+        $result = $this->productRepository->updateProductCategory($seller_id, $payload);
+        
         return $result;
     }
 
