@@ -86,7 +86,7 @@ class CustomerController extends Controller
     }
 
     public function getAddress(Request $request)
-    {   
+    {
         try {
             $user = auth()->user();
             $id = $user->id;
@@ -97,6 +97,14 @@ class CustomerController extends Controller
                 'messages' => unserialize($e->getMessage())
             ], $e->getCode());
         }
+        return response()->json($result);
+    }
+
+    public function getCreditCard(Request $request)
+    {
+        $user = auth()->user();
+        $id = $user->id;
+        $result = $this->customerService->getCreditCard($id);
         return response()->json($result);
     }
 }

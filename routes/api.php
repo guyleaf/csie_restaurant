@@ -44,6 +44,7 @@ $router->group(['prefix' => 'customer'], function () use ($router) {
         $router->get('orders/{orderId}', 'CustomerController@getOrderInfo');
         $router->post('coupon/use', 'CustomerController@useCoupon');
         $router->get('address', 'CustomerController@getAddress');
+        $router->get('creditCard', 'CustomerController@getCreditCard');
     });
 });
 
@@ -51,7 +52,6 @@ $router->group(['prefix' => 'customer'], function () use ($router) {
 $router->group(['prefix' => 'order'], function () use ($router) {
     $router->post('', 'OrderController@addOrder');
     $router->get('event', 'OrderController@listenOrder');
-    $router->post('update', 'OrderController@updateOrder');
 });
 
 $router->group(['prefix' => 'seller', 'middleware' => 'jwt.seller'], function () use ($router) {
