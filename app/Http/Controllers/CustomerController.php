@@ -104,7 +104,7 @@ class CustomerController extends Controller
     {
         $user = auth()->user();
         $id = $user->id;
-        $this->customerService->getCreditCard($id, $request->input());
+        $this->customerService->addAddress($id, $request->all());
         return response()->json(['message' => 'success'], 201);
     }
 
@@ -112,7 +112,7 @@ class CustomerController extends Controller
     {
         $user = auth()->user();
         $id = $user->id;
-        $this->customerService->addCreditCard($id, $request->input());
+        $this->customerService->addCreditCard($id, $request->all());
         return response()->json(['message' => 'success'], 201);
     }
 
