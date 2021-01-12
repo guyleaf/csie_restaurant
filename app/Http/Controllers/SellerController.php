@@ -124,7 +124,7 @@ class SellerController extends Controller
     {
         $user = auth()->user();
         $id = $user->id;
-        $this->sellerService->addProductCategory($id, $request->all());
-        return response()->json(['message' => 'Success'], 201);
+        $state = $this->sellerService->addProductCategory($id, $request->all());
+        return response()->json(['message' => 'Success', 'state' => $state], 201);
     }
 }
