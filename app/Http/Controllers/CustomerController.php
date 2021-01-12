@@ -100,6 +100,22 @@ class CustomerController extends Controller
         return response()->json($result);
     }
 
+    public function addAddress(Request $request)
+    {
+        $user = auth()->user();
+        $id = $user->id;
+        $this->customerService->getCreditCard($id, $request->input());
+        return response()->json(['message' => 'success'], 201);
+    }
+
+    public function addCreditCard(Request $request)
+    {
+        $user = auth()->user();
+        $id = $user->id;
+        $this->customerService->addCreditCard($id, $request->input());
+        return response()->json(['message' => 'success'], 201);
+    }
+
     public function getCreditCard(Request $request)
     {
         $user = auth()->user();
