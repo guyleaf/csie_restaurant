@@ -45,7 +45,7 @@ export default {
         .then(response => {
           this.Info=[];
           let data=response.data;
-          console.log(this.Info)    })
+          this.Info.push({description: data.description, joinDate: data.created_at.split(" ",1)[0],shopName: data.name, imgPath:"https://picsum.photos/900/250/?image=3", rate:parseFloat(data.averageOfRatings).toFixed(1), numberOfRatings:parseInt(data.numberOfRatings), fans:parseInt(data.numberOfFans)});})
   }
 };
 </script>

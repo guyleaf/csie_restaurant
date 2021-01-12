@@ -89,8 +89,13 @@
                   id="name-input2"
                   v-model="creditCard"
                   :state="creditCardState"
+                  :formatter="formatter"
+                  @input="checkCreditCardValidity"
                   required
                 ></b-form-input>
+                <b-form-invalid-feedback :state="creditCardState">
+                  Invalid credit card number.
+                </b-form-invalid-feedback>
               </b-input-group>
             </b-form-group>
             <b-form-group
@@ -98,9 +103,15 @@
               label-for="name-input3"
               :state="expiredDateState"
             >
-            <b-input-group>
-              <datepicker minimum-view="month" name="uniquename" required clear-button v-model="expiredDate" format="MM/yy" typeable></datepicker>
+            <b-input-group class="outer">
+              <b-input-group-prepend is-text>
+                  <b-icon icon="calendar2-date" size="sm"></b-icon>
+              </b-input-group-prepend>
+              <datepicker wrapper-class="datepicker" :state="expiredDateState" @input="checkCreditCardValidity" minimum-view="month" name="uniquename" required clear-button v-model="expiredDate" format="MM/yy" typeable></datepicker>
             </b-input-group>
+            <b-alert v-if="expiredDateState!=null&&!expiredDateState&&creditCardState!=null&&creditCardState" show variant="danger">請選擇有效日期</b-alert>
+            <b-alert v-if="expiredDateState!=null&&!expiredDateState&&creditCardState!=null&&!creditCardState" show variant="danger">請選擇有效日期、有效卡號</b-alert>
+            <b-alert v-if="expiredDateState!=null&&expiredDateState&&creditCardState!=null&&!creditCardState" show variant="danger">請輸入有效卡號</b-alert>
             </b-form-group>
           </form>
         </b-modal>
@@ -127,6 +138,8 @@
 
 <script>
 import Datepicker from 'vuejs-datepicker';
+import moment from 'moment';
+
 export default {
   name: "Cashier",
   components: {
@@ -174,19 +187,18 @@ export default {
         creditCard: '',
         creditCardState: null,
         creditCards: [
-          {text: "請選擇信用卡", value: "請選擇信用卡", disabled: true},
-          {text: "sample", value: "sample"}
+          {text: "請選擇信用卡", value: "請選擇信用卡", disabled: true}
         ],
         expiredDate: '',
         expiredDateState: null
       }
   },
   methods:{
-    formatter(value) {
-      return moment(value).format("M");
-    },
-    onContext(ctx){
-      console.log(ctx)
+    formatter(value){
+      value = value.split("-").join("");
+
+      value = value.match(new RegExp('.{1,4}$|.{1,4}', 'g')).join("-");
+      return value
     },
     onChange(){
       let address = null;
@@ -203,7 +215,6 @@ export default {
       //this.$bus.$emit('sync', {address:address, payment_method:payment_method, coupon_code:coupon_code})
     },
     school(){
-      console.log(this.placeSelected)
     },
     addAddress(){
       this.$refs['modal'].show();
@@ -215,7 +226,6 @@ export default {
       let coupon = JSON.parse(this.$cookie.get('coupon'));
       if(coupon != null)
         {
-          console.log('12312')
           this.coupon = coupon.coupon.code;
           this.useValidCoupon()
           this.useCouponDiscount(coupon)
@@ -318,19 +328,37 @@ export default {
       document.cookie = 'discount=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
       this.$emit('deleteCoupon')
     },
+    getCustomerCreditCards(){
+      this.$http.get('/customer/creditCard',  {
+        headers: {
+          'Authorization': 'Bearer ' + this.$store.getters['auth/token']
+        }
+      }).then(response =>{
+        console.log(response.data)
+        for (let i = 0; i<response.data.length; i++){
+          this.creditCards.push({text:response.data[i].credit_card + '   ' + '有效期限:' + moment(response.data[i].expire_date).format("MM/YY"), value:response.data[i].credit_card + '   ' + '有效期限:' + moment(response.data[i].expire_date).format("MM/YY")})
+        }
+      }).catch(error => {
+        console.log(error)
+      });
+    },
     checkAddressValidity() {
       const valid = this.$refs.form.checkValidity()
       this.addressState = valid
       return valid
     },
     checkCreditCardValidity() {
-      const valid = this.$refs.credit_form.checkValidity()
-      this.creditCardState = valid;
+      let credit_card = this.creditCard.split("-").join("");
+      if (credit_card.length == 16 && !isNaN(credit_card))
+        this.creditCardState = true;
+      else
+        this.creditCardState = false;
+
       if (this.expiredDate)
         this.expiredDateState = true;
       else
         this.expiredDateState = false;
-      return valid && this.expiredDateState
+      return this.creditCardState && this.expiredDateState
     },
     resetModal() {
       this.newAddress = ''
@@ -353,8 +381,9 @@ export default {
           return
         }
       }
-      this.creditCards.push(this.creditCard)
+      this.creditCards.push({text:this.creditCard + '   ' + '有效期限:' + moment(this.expiredDate).format("MM/YY"), value:this.creditCard + '   ' + '有效期限:' + moment(this.expiredDate).format("MM/YY")})
       this.$nextTick(() => {
+        this.$alert("信用卡新增成功", "", "success")
         this.$bvModal.hide('modal-credit-card')
       })
     },
@@ -376,7 +405,6 @@ export default {
         }
       }
       this.address.push(this.newAddress)
-      console.log(this.address)
       this.$nextTick(() => {
         this.$bvModal.hide('modal-prevent-closing')
       })
@@ -392,6 +420,7 @@ export default {
   created(){
     this.getCouponState();
     this.getCutomerAddress();
+    this.getCustomerCreditCards();
   }
 }
 </script>
@@ -412,5 +441,8 @@ export default {
   }
   .creditCard{
     font-size: 1.2rem;
+  }
+  .outer{
+    margin-bottom: 10px;
   }
 </style>
