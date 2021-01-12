@@ -202,7 +202,7 @@ export default {
         }).then(response =>{
           console.log(response.data)
           this.$alert("成功建立訂單", "", "success")
-          this.$route.push('/')
+          this.$router.push('/')
         }).catch(error => {
           console.log(error.response)
         })
