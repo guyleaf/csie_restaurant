@@ -127,4 +127,18 @@ class SellerController extends Controller
         $state = $this->sellerService->addProductCategory($id, $request->all());
         return response()->json(['message' => 'Success', 'state' => $state], 201);
     }
+
+    public function deleteProductCategory(Request $request)
+    {
+        $this->sellerService->deleteProductCategory($request->input('id'));
+        return response()->json(['message' => 'Success']);
+    }
+
+    public function updateProductCategory(Request $request)
+    {
+        $user = auth()->user();
+        $id = $user->id;
+        $state = $this->sellerService->updateProductCategory($id, $request->all());
+        return response()->json(['message' => 'Success', 'state' => $state], 201);
+    }
 }
