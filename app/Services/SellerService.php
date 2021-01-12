@@ -86,7 +86,7 @@ class SellerService
 
         $this->productRepository->updateProduct($payload);
 
-        if ($image != null)
+        if (isset($image))
         {
             $product_id = $payload['id'];
 
@@ -129,7 +129,7 @@ class SellerService
     {
 
         $result = $this->productRepository->updateProductCategory($seller_id, $payload);
-        
+
         return $result;
     }
 
