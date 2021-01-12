@@ -57,8 +57,8 @@ class OrderService
     public function addOrder($customer_id, $order)
     {
         $now = new DateTime('now', new DateTimeZone('Asia/Taipei'));
-        $order['order_time'] = $now->format('Y-m-d H:i:s');
-        $order['status'] = 0;
+        $order["order"]['order_time'] = $now->format('Y-m-d H:i:s');
+        $order["order"]['status'] = 0;
         $this->orderRepository
         ->addOrder($customer_id, $order);
     }
