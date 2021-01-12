@@ -41,7 +41,7 @@
           @ok="handleAddress"
           centered
         >
-          <form ref="form" @submit.stop.prevent="handleAddress">
+          <form ref="form" @submit.prevent="handleAddress">
             <b-form-group
               label="您的地址："
               label-for="name-input"
@@ -111,10 +111,10 @@
                 size="md"
                 class="mb-3"
                 >
-            <b-form-input id="coupon-input" v-model="coupon" :placeholder="prompt" :state="couponState" aria-describedby='coupon-error' trim></b-form-input>
+            <b-form-input id="coupon-input" v-model="coupon" :placeholder="prompt" :state="couponState" :readonly="couponState" aria-describedby='coupon-error' trim></b-form-input>
             <b-input-group-append >
-              <b-button size="sm" v-if="couponState==null || !couponState" id="coupon_submit" text="Button" variant="success">使用</b-button>
-              <b-button size="sm" v-else id="coupon_submit" text="Button" variant="success">修改</b-button>
+              <b-button size="sm" v-if="couponState==null || !couponState" id="coupon_submit" text="Button" variant="success" @click="checkCoupon(coupon)">使用</b-button>
+              <b-button size="sm" v-else id="coupon_submit" text="Button" variant="success" @click="modifyCoupon">修改</b-button>
             </b-input-group-append>
             <b-form-invalid-feedback id='coupon-error' class='error_msg'>
                   {{errorMessage}}
@@ -135,7 +135,7 @@ export default {
   data(){
       return {
         coupon: null,
-        couponState: null,
+        couponState: false,
         prompt:'請輸入優惠卷',
         bookingShopName: null,
         CouponItems:[],
@@ -163,7 +163,7 @@ export default {
           {text: "現金支付", value: 2}
         ],
         address:[],
-        totalPrice: null,
+        disCountMoney:null,
         popoverShow: false,
         errorMessage: '',
         adHover:false,
@@ -200,7 +200,6 @@ export default {
 
       if (this.couponState)
         coupon_code = this.coupon
-      console.log(this.paymentMethodSelected)
       //this.$bus.$emit('sync', {address:address, payment_method:payment_method, coupon_code:coupon_code})
     },
     school(){
@@ -212,6 +211,17 @@ export default {
     addCreditCard(){
       this.$refs['credit'].show();
     },  
+    getCouponState(){
+      let coupon = JSON.parse(this.$cookie.get('coupon'));
+      if(coupon != null)
+        {
+          console.log('12312')
+          this.coupon = coupon.coupon.code;
+          this.useValidCoupon()
+          this.useCouponDiscount(coupon)
+          this.$cookie.set('discount',this.disCountMoney)
+        }
+    },
     getCutomerAddress(){
       this.$http.get('/customer/address',  {
         headers: {
@@ -223,6 +233,90 @@ export default {
         }
         this.addressSelected = this.address[0].value;
       })
+    },
+    useCouponDiscount(coupon){
+        this.disCountMoney = 0;
+        let products = JSON.parse(this.$cookie.get('product'))
+        for (let i = 0 ; i<coupon.coupon_items.length; i++){
+          let product = products.filter(j => j.id == coupon.coupon_items[i].product_id)
+          this.disCountMoney += coupon.coupon_items[i].quantity * (1-coupon.coupon.discount) * product[0].foodPrice 
+        }
+        this.totalPrice -= this.disCountMoney;
+      },
+    checkCoupon(coupon){
+        let id = this.$cookie.get('shopId');
+        let orderItems = this.$cookie.get('product')
+        let data = { coupon_code:coupon,seller_id:id,orderItems:orderItems,total_price:this.totalPrice}
+        this.$http.post('/customer/coupon/use',data , {
+          headers: {
+            'Authorization': 'Bearer ' + this.$store.getters['auth/token']
+          }
+        })
+        .then(response =>{
+          this.$confirm('輸入優惠券後無法更改商品，欲修改商品請先移除優惠券。','使用說明','warning').then(()=>{
+            this.useValidCoupon()
+            this.useCouponDiscount(response.data.coupon)
+            this.$cookie.set('coupon',JSON.stringify(response.data.coupon))
+            this.$cookie.set('discount',this.disCountMoney)
+            this.$alert('','輸入成功','success')
+            this.$emit('useCoupon')
+          })
+        })
+        .catch(error => {
+          console.log(error.response)
+          this.couponState = false
+          this.errorMessage = error.response.data.message
+        })
+      },
+    useValidCoupon(){
+      this.lockChagneButton()
+      this.couponState = true;
+    },
+    lockChagneButton(){
+      this.$bus.$emit("lockbutton")
+    },
+    unlockChangeButton(){
+      this.$bus.$emit("unlockbutton")
+    },
+    modifyCoupon(){
+      this.deleteCoupon()
+    },
+    modifySpinValue(index,value){
+      let productCookie = JSON.parse(this.$cookie.get("product"));
+      productCookie[index].quantity = value
+      document.cookie = 'product=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
+      this.$cookie.set('product', JSON.stringify(productCookie))
+      this.beforePrice = this.beforePrice + (value - this.ItemList[index].quantity) * this.ItemList[index].foodPrice
+      this.totalPrice = this.beforePrice - this.disCountMoney
+      this.productNum += value - this.ItemList[index].quantity
+      this.ItemList[index].quantity = value;
+    },
+    deleteCartCell(e){
+      this.productNum -= this.ItemList[e].quantity
+      this.totalPrice = this.totalPrice - this.ItemList[e].foodPrice*this.ItemList[e].quantity;
+      this.ItemList.splice(e,1);
+      if(this.totalPrice == 0) {
+        this.bookingShopName = null;
+        this.totalPrice = null;
+        }
+      if(this.ItemList.length == 0) //delete cookie
+      { 
+        this.submitInvalid = true
+        document.cookie = 'shopId=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
+        document.cookie = 'shopName=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
+        document.cookie = 'product=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
+      }
+      else{ this.$cookie.set('product',JSON.stringify(this.ItemList));}
+    },
+    deleteCoupon(){
+      let coupon_input = document.querySelector('#coupon-input')
+      this.couponState = null;
+      this.disCountMoney = null;
+      this.totalPrice = this.beforePrice
+      this.unlockChangeButton()
+      document.cookie = 'coupon=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
+      document.cookie = 'discount=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
+      this.$emit('deleteCoupon')
     },
     checkAddressValidity() {
       const valid = this.$refs.form.checkValidity()
@@ -246,7 +340,7 @@ export default {
       this.expiredDate = ''
     },
     handleCreditCard(bvModalEvt) {
-      bvModalEve.preventDefault()
+      bvModalEvt.preventDefault()
       this.handler2()
     },
     handler2() {
@@ -260,7 +354,6 @@ export default {
         }
       }
       this.creditCards.push(this.creditCard)
-      console.log(this.creditCards)
       this.$nextTick(() => {
         this.$bvModal.hide('modal-credit-card')
       })
@@ -289,7 +382,15 @@ export default {
       })
     }
   },
+  watch: {
+    $route: {
+      handler: function() {
+        this.getCouponState();
+       }
+      }
+    },
   created(){
+    this.getCouponState();
     this.getCutomerAddress();
   }
 }

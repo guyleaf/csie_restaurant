@@ -125,6 +125,7 @@
           this.coupon = coupon.coupon.code;
           this.useValidCoupon()
           this.useCouponDiscount(coupon)
+          this.$cookie.set('discount',this.disCountMoney)
         }
       },
       dataToCashier(){
@@ -168,6 +169,7 @@
               this.useValidCoupon()
               this.useCouponDiscount(response.data.coupon)
               this.$cookie.set('coupon',JSON.stringify(response.data.coupon))
+              this.$cookie.set('discount',this.disCountMoney)
               this.$alert('','輸入成功','success')
             })
           })
@@ -237,6 +239,7 @@
         this.unlockChangeButton()
         coupon_input.removeAttribute("readOnly");
         document.cookie = 'coupon=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
+        document.cookie = 'discount=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
       },
       showModal() {
         this.$bvModal.show('login-modal')
