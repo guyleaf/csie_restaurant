@@ -46,10 +46,10 @@ class OrderService
         return $result;
     }
 
-    public function updateOrder($id, $payload)
+    public function updateSellerOrder($id, $payload)
     {
         $result = $this->orderRepository
-        ->updateOrder($id, $payload);
+        ->updateSellerOrder($id, $payload);
 
         return $result;
     }
