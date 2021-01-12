@@ -24,22 +24,10 @@ class OrderController extends Controller
         $this->orderService = $orderService;
     }
 
-    // public function getOrderItems(Request $request, $id)
-    // {
-    //     try {
-    //         $result = $this->orderService->getOrderItems($id);
-    //     } catch (Exception $e) {
-    //         return response()->json([
-    //             'status' => $e->getCode(),
-    //             'messages' => unserialize($e->getMessage())
-    //         ], $e->getCode());
-    //     }
-
-    //     return response()->json($result);
-    // }
-
     public function addOrder(Request $request)
     {
-
+        $user = auth()->user();
+        $id = $user->id;
+        $this->orderService->addOrder($id, $request->input());
     }
 }

@@ -3,8 +3,7 @@ namespace App\Services;
 
 use App\Repositories\OrderRepository;
 use App\Repositories\CouponRepository;
-
-use function PHPUnit\Framework\isEmpty;
+use DateTime, DateTimeZone;
 
 class OrderService
 {
@@ -45,6 +44,23 @@ class OrderService
         }
 
         return $result;
+    }
+
+    public function updateSellerOrder($id, $payload)
+    {
+        $result = $this->orderRepository
+        ->updateSellerOrder($id, $payload);
+
+        return $result;
+    }
+
+    public function addOrder($customer_id, $order)
+    {
+        $now = new DateTime('now', new DateTimeZone('Asia/Taipei'));
+        $order['order_time'] = $now->format('Y-m-d H:i:s');
+        $order['status'] = 0;
+        $this->orderRepository
+        ->addOrder($customer_id, $order);
     }
 }
 ?>

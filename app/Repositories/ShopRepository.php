@@ -44,9 +44,11 @@ class ShopRepository
     public function getShops($currentNumber, $requiredNumber)
     {
         $shops = $this->shopsInfoView
+            ->join('member as M', 'M.id', '=', 'member_id')
+            ->where('is_deleted', '=', false)
             ->skip($currentNumber)
             ->take($requiredNumber)
-            ->get(['member_id as seller_id', 'name', 'counter_number', 'header_image', 'numberofratings', 'averageofratings']);
+            ->get(['member_id as seller_id', 'M.name', 'counter_number', 'header_image', 'numberofratings', 'averageofratings']);
 
         return $shops;
     }
@@ -63,11 +65,13 @@ class ShopRepository
     {
         $shops = $this->shopsInfoView
             ->join('seller_category_list as SCL', 'SCL.seller_id', '=', 'member_id')
+            ->join('member as M', 'M.id', '=', 'member_id')
+            ->where('is_deleted', '=', false)
             ->whereIn('SCL.category_id', $filters)
             ->skip($currentNumber)
             ->take($requiredNumber)
             ->distinct()
-            ->get(['member_id as seller_id', 'name', 'counter_number', 'header_image', 'numberofratings', 'averageofratings']);
+            ->get(['member_id as seller_id', 'M.name', 'counter_number', 'header_image', 'numberofratings', 'averageofratings']);
 
         return $shops;
     }
@@ -85,7 +89,23 @@ class ShopRepository
         $info = $this->shopTable
             ->join('member as M', 'id','=','member_id')
             ->where('member_id','=', $id)
-            ->get(['name','description','created_at']);
+            ->first(['name','description','created_at']);
+
+        $fans = DB::table('customer_favorite')
+            ->where('seller_id','=', $id)
+            ->groupBy('seller_id')
+            ->count();
+
+        $query = DB::table('order')
+            ->where('seller_id','=', $id)
+            ->groupBy('seller_id');
+
+        $ratings = $query->count();
+        $avgRatings = $query->avg('stars');
+
+        $info->numberOfFans = $fans;
+        $info->numberOfRatings = $ratings;
+        $info->averageOfRatings = $avgRatings;
         return $info;
     }
 
@@ -97,7 +117,7 @@ class ShopRepository
                $query->orwhere('name', 'like',  '%' . $keywords[$i] .'%');
             }
         })->get(['member_id as seller_id', 'name', 'counter_number', 'header_image', 'averageofratings']);
-        
+
         return $result;
     }
 }

@@ -111,5 +111,17 @@ class SellerService
         ->getOrderInfo($orderId);
         return $result;
     }
+
+    public function updateOrder($seller_id, $payload)
+    {
+        $result = $this->orderService->updateSellerOrder($seller_id, $payload);
+        return $result;
+    }
+    public function addProductCategory($id, $payload)
+    {
+        $result = $this->productRepository
+        ->addProductCategory($id, $payload);
+        return $result;
+    }
 }
 ?>
