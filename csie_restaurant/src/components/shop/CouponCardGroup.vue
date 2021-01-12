@@ -31,12 +31,15 @@ export default {
     },
     created(){
         let id = this.$router.currentRoute.params.id
-        this.$http.get('restaurants/' + id + '/coupons' + '?include_expired=0'). //FIXME  ?include_expired=1要移除
-        then(response => {
-            console.log(response.data)
-            this.couponCards=response.data;
+        this.$http.get('restaurants/' + id + '/coupons' + '?include_expired=0')
+        .then(response => {
+            this.couponCards = response.data;
+            //排序 未來的擺在前面
+            this.couponCards = this.couponCards.sort(function(a,b){
+                return Date.parse(b['coupon'].start_time) - Date.parse(a['coupon'].start_time)
+            })
         })
-    }
+    },
 }
 </script>
 

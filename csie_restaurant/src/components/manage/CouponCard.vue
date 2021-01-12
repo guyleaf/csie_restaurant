@@ -8,13 +8,13 @@
                 <a style="margin-left:30px; font-size:10px">每人可用次數：</a><a style="font-weight:bold; font-size:18px;">{{usage}}</a>
             </b-card-title>
             <!-- 0 for免運 1for滿XXX折扣 2for套餐組合><-->
-            <b-card-text v-if="type == 0">
-                <a>滿{{limitMoney}}元 </a><a style="color:red;">免運費</a>
+            <b-card-text v-if="typeSelected == 0">
+                <a>滿{{money}}元 </a><a style="color:red;">免運費</a>
             </b-card-text>
-            <b-card-text v-if="type == 1">
-                <a>滿{{limitMoney}}元 </a><a style="color:red;">{{showDiscount}}%off</a>
+            <b-card-text v-if="typeSelected == 1">
+                <a>滿{{money}}元 </a><a style="color:red;">{{showDiscount}}%off</a>
             </b-card-text>
-            <b-card-text v-if="type == 2">
+            <b-card-text v-if="typeSelected == 2">
                 <a v-for="(product, index) in products" :key="product.product_id">
                     {{product.quantity}} {{product.name}}
                     <a v-if="index != products.length-1 ">+</a>  
@@ -42,29 +42,29 @@
                     label="優惠類型"
                     label-for="type-input"
                     invalid-feedback="type is required">
-                    <b-form-radio-group v-model="type">
+                    <b-form-radio-group v-model="typeSelected">
                     <div style="display:flex; justify-content:space-around;">
-                        <b-form-radio value="0">滿額免運費</b-form-radio>
-                        <b-form-radio value="1">滿額打折</b-form-radio>
-                        <b-form-radio value="2">優惠套餐</b-form-radio>
+                        <b-form-radio value=0>滿額免運費</b-form-radio>
+                        <b-form-radio value=1>滿額打折</b-form-radio>
+                        <b-form-radio value=2>優惠套餐</b-form-radio>
                     </div>
                     </b-form-radio-group>
                     </b-form-group>
-                    <div class="row" v-if="type==0">
+                    <div class="row" v-if="typeSelected==0">
                         <div class="col-md-1 mt-2">滿額</div>
-                        <b-form-input class="col-md-2" v-model="limitMoney" placeholder="XX元免運費" type="text" required></b-form-input>
+                        <b-form-input class="col-md-2" v-model="money" placeholder="XX元免運費" min="0" type="number" required></b-form-input>
                         <div class="col-md-1 mt-0 ml-0">使用次數</div>
-                        <b-form-input class="col-md-3" v-model="numberOfUsage" placeholder="每人可用次數" type="text" required></b-form-input>
+                        <b-form-input class="col-md-3" v-model="usage" placeholder="每人可用次數" min="1" type="number" required></b-form-input>
                     </div>
-                    <div class="row" v-if="type==1">
+                    <div class="row" v-if="typeSelected==1">
                         <div class="col-md-1 mt-2">滿額</div>
-                        <b-form-input class="col-md-2" v-model="limitMoney" placeholder="XX元打折" type="text"  required></b-form-input>
+                        <b-form-input class="col-md-2" v-model="money" placeholder="XX元打折" type="number" min="0" required></b-form-input>
                         <div class="col-md-1 mt-2">折扣</div>
-                        <b-form-input class="col-md-2" v-model="discount" placeholder="請輸入小數" type="text" required></b-form-input>
+                        <b-form-input class="col-md-2" v-model="dis" placeholder="請輸入小數" type="number" step="0.1" max="1" min="0" required></b-form-input>
                         <div class="col-md-1 mt-0 ml-0">使用次數</div>
-                        <b-form-input class="col-md-3" v-model="numberOfUsage" placeholder="每人可用次數" type="text" required></b-form-input>
+                        <b-form-input class="col-md-3" v-model="usage" placeholder="每人可用次數" type="number" min="1" required></b-form-input>
                     </div>
-                    <b-form-group label="優惠商品" v-if="type==2">
+                    <b-form-group label="優惠商品" v-if="typeSelected==2">
                         <div class="row mt-2" v-for="(item, index) in couponItems" v-bind:key="index">
                             <div class="col-md-7">
                                 <b-form-select v-model="item.selected" :options="productOption" @change="setPrice(index,item.selected)"></b-form-select>
@@ -82,29 +82,28 @@
                         </div>
                         <div class="row mt-4">
                             <div class="col-md-1 mt-2">折扣</div>
-                            <b-form-input class="col-md-2" v-model="discount" placeholder="請輸入小數" type="text" required></b-form-input>
+                            <b-form-input class="col-md-2" v-model="dis" placeholder="請輸入小數" step="0.1" max="1" min="0" type="number" required></b-form-input>
                             <div class="col-md-1 mt-0 ml-0">使用次數</div>
-                            <b-form-input class="col-md-3" v-model="numberOfUsage" placeholder="每人可用次數" type="text" required></b-form-input>
+                            <b-form-input class="col-md-3" v-model="usage" placeholder="每人可用次數" min="1" type="number" required></b-form-input>
                             <h2 class="col-md-3">折價後金額</h2>
-                            <h2 class="col-md-2">{{Math.round(total*discount)}}</h2>
+                            <h2 class="col-md-2">{{Math.round(total*dis)}}</h2>
                         </div>
                     </b-form-group>
                                       <div class="mt-3" style="display:flex; justify-content:space-around;">
                         <div style="display:inline-flex; flex-wrap:nowrap;"> 
                             <div class="mt-2 mr-3">開始時間 </div>
                             <div>
-                                <date-picker v-if="Date.parse(start) > new Date()" v-model="start" :placeholder="start" :config="dateOption"></date-picker>
-                                <date-picker v-else disabled :placeholder="start" v-model="start" :config="dateOption"></date-picker>
+                                <date-picker v-model="startDate" :placeholder="startDate" :config="dateOption"></date-picker>
                             </div>
                         </div>
                         <div style="display:inline-flex; flex-wrap:nowrap;">
                             <div class="mt-2 mr-3">結束時間</div>
                             
-                            <div><date-picker v-model="expire" :placeholder="expire" :config="dateOption"></date-picker></div>
+                            <div><date-picker v-model="expireDate" :placeholder="expireDate" :config="dateOption"></date-picker></div>
                         </div>
                     </div>
                     <div class="row m-2" style="justify-content:space-around">
-                        <b-button variant="primary" @click="confirmModal" size="sm">修改</b-button>
+                        <b-button variant="primary" @click="checkValue" size="sm">修改</b-button>
                         <b-button variant="info" @click="cancelModal" size="sm">取消</b-button>
                     </div>
                 </div>
@@ -132,13 +131,14 @@ export default {
         usage: this.numberOfUsage, 
         couponAll:{'coupon':{}, "coupon_items":null },
 
-        dateOption: {            format: 'YYYY-MM-DD hh:mm:ss',
+        dateOption: {            
+            format: 'YYYY-MM-DD hh:mm:ss',
             sideBySide: true,
             useCurrent: false,
         },
-        couponItems:[ { selected: null, spinValue:1, price:0 } ],
+        couponItems:[ { selected: null, spinValue:1, price:0 }],
         productOption:[],
-        showDiscount: Math.round((1-this.discount)*100),
+        showDiscount: Math.round((1-this.dis)*100),
       }
     },
     props:{
@@ -146,7 +146,7 @@ export default {
         coupon_id: Number,
         type: Number,
         discount: Number,
-        limitMoney: String,
+        limitMoney: Number,
         start: String,
         expire: String,
         numberOfUsage: Number,
@@ -159,67 +159,95 @@ export default {
     methods:{
         showModal(){
             this.productOption=[];
-            this.couponItems = [ { selected: null, spinValue:1, price:0 } ];
             let id =this.$store.getters['auth/user'].id
             this.$http.get('restaurants/'+id+'/products')
             .then(response => {
-                console.log('openModalAPI');
                 let data=response.data;
                 for (let i=0;i<data.length;i++){
                     this.productOption.push({value:data[i].id, text:data[i].name, price:data[i].price});
                 }
-                console.log('productOption:',this.productOption)
                 this.productOption = this.productOption.sort(function (a, b) {
                     return a.name - b.name
                 });
                 
-                if(this.type==2){
+                if(this.typeSelected==2){
                     this.couponItems =[];
                     for(let i=0; i<this.products.length; i++){
                         let item = this.productOption.find(element => element.value == this.products[i].product_id);
-                        // console.log(item)
                         this.couponItems.push({selected:this.products[i].product_id, spinValue:this.products[i].quantity, price:item.price, name:item.text})
                     }
-                    // console.log('ALLCOUPON',this.couponItems);
                     this.setTotal()
                 } 
             })
             this.$refs['my-modal'].show();
         },
+        checkValue(){
+            if(this.money <= 0 && this.typeSelected !=2){  
+                this.$fire({
+                    type: 'warning',
+                    title: '數值錯誤',
+                    text: '滿額必須大於0',
+                })
+                this.money = this.limitMoney;
+            }
+            else if(this.typeSelected ==2 && (this.couponItems.length == 0 || this.couponItems[0].selected == null)){
+                this.$fire({
+                    type: 'warning',
+                    title: '填寫錯誤',
+                    text: '必須選擇至少一種商品',
+                })
+            }
+            else if(this.dis >= 1 && this.typeSelected !=0){  
+                this.$fire({
+                    type: 'warning',
+                    title: '數值錯誤',
+                    text: '折扣必須小於1',
+                })
+                this.dis = 0.9;
+            }
+            else if(this.dis == 0 && this.typeSelected !=0){  
+                this.$fire({
+                    type: 'warning',
+                    title: '數值錯誤',
+                    text: '折扣必須大於0',
+                })
+                this.dis = this.discount;
+            }
+            else if(this.usage <= 0){  
+                this.$fire({
+                    type: 'warning',
+                    title: '數值錯誤',
+                    text: '使用次數必須大於0',
+                })
+                this.usage = this.numberOfUsage;
+            }
+            else if(Date.parse(this.startDate) > Date.parse(this.expireDate)){ 
+                this.$fire({
+                    type: 'warning',
+                    title: '日期錯誤',
+                    text: '結束時間必須大於開始時間',
+                })
+                this.startDate =this.start;
+                this.expireDate=this.expire;
+            }
+            else if (Date.parse(this.expireDate) < new Date()){
+                this.$fire({
+                    type: 'warning',
+                    title: '日期錯誤',
+                    text: '結束時間必須大於現在',
+                })
+                this.expireDate =this.expire;
+            }    
+            else this.confirmModal();
+        },
         confirmModal(){
             //api update
-            
-            if(Date.parse(this.start) > new Date()){  //兩個時間都要填寫
-                if (this.start > this.expire){
-                    this.$fire({
-                        type: 'warning',
-                        title: '日期錯誤',
-                        text: '結束時間必須大於開始時間',
-                    })
-                    this.start =this.startDate;
-                    this.expire=this.expireDate
-                    return
-                }
-            }
-            else{ //只填結束時間
-                if (Date.parse(this.expire) < new Date()){
-                    this.$fire({
-                        type: 'warning',
-                        title: '日期錯誤',
-                        text: '結束時間必須大於現在',
-                    })
-                    // this.start =this.startDate;
-                    this.expire=this.expireDate
-                    return
-                }    
-            }
             let couponAll = {'coupon':{}, 'coupon_items': null};
-            if(this.type == 0) this.discount = 1;
+            if(this.typeSelected == 0) this.dis = 1;
+            couponAll['coupon'] = {id:this.coupon_id, code:this.code, start_time:this.startDate, end_time:this.expireDate, numberOfUsage: this.usage, 
+                                    type:parseInt(this.typeSelected,10), discount:parseFloat(this.dis), limit_money: parseInt(this.money,10) }
             
-            couponAll['coupon'] = {id:this.coupon_id, code:this.code, start_time:this.start, end_time:this.expire, numberOfUsage: this.numberOfUsage, 
-                                    type:this.type, discount:this.discount, limit_money: this.limitMoney }
-            
-            if(this.type ==2 ){
+            if(this.typeSelected ==2 ){
                 let items = [];
                 this.couponAll['coupon'].limit_money=null;
                 for (let i = 0; i<this.couponItems.length; i++){
@@ -230,25 +258,18 @@ export default {
                 couponAll['coupon_items'] = items;
             }
             // update local value;
+            this.showDiscount= Math.round((1-this.dis)*100),
+            this.$emit('updateCoupon', couponAll);
+            this.$refs['my-modal'].hide();
+        },
+        cancelModal(){
+            //reset to initial value (props)
             this.typeSelected = this.type;
             this.dis = this.discount;
             this.money = this.limitMoney;
             this.startDate = this.start;
             this.expireDate = this.expire;
             this.usage = this.numberOfUsage;
-            this.showDiscount= Math.round((1-this.discount)*100),
-            this.$emit('updateCoupon', couponAll);
-            console.log('emiittt')
-            this.$refs['my-modal'].hide();
-        },
-        cancelModal(){
-            //reset to initial value
-            this.type = this.typeSelected;
-            this.discount = this.dis;
-            this.limitMoney = this.money;
-            this.start = this.startDate;
-            this.exprire = this.expireDate;
-            this.numberOfUsage = this.usage;
             this.$refs['my-modal'].hide();
         },
         deleteTHIS(){
@@ -270,7 +291,6 @@ export default {
             this.setTotal();
         },
         setTotal(){
-            // console.log('total',this.total)
             this.total = 0;
             for(let i=0; i<this.couponItems.length; i++){
                 this.total += this.couponItems[i].price * this.couponItems[i].spinValue;

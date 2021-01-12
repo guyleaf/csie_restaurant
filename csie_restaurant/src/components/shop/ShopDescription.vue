@@ -68,7 +68,7 @@
 
 <script>
     export default {
-    name: 'ShopInfo',
+    name: 'ShopDescription',
     props:{
         description:String,
         shopName: String,

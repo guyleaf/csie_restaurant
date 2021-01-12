@@ -5,7 +5,8 @@
             <div class='couponField mb-5' style='display:flex; flex-direction:row; '>
                 <div v-for="coupon in couponCards" :key="coupon['coupon'].id">
                     <CouponCard :coupon_id="coupon['coupon'].id" :code="coupon['coupon'].code" :products="coupon['coupon_items']" :discount="parseFloat(coupon['coupon'].discount)" 
-                    :numberOfUsage="coupon['coupon'].numberOfUsage" :limitMoney="coupon['coupon'].limit_money" :start="coupon['coupon'].start_time" :expire="coupon['coupon'].end_time" :type="coupon['coupon'].type"
+                    :numberOfUsage="parseInt(coupon['coupon'].numberOfUsage,10)" :limitMoney="parseInt(coupon['coupon'].limit_money,10)" 
+                    :start="coupon['coupon'].start_time" :expire="coupon['coupon'].end_time" :type="coupon['coupon'].type" 
                     v-on="{updateCoupon:updateCoupon, deleteCoupon:deleteCoupon}"/>
                 </div>
             </div>
@@ -21,25 +22,25 @@
                     invalid-feedback="type is required">
                     <b-form-radio-group v-model="typeSelected">
                    <div style="display:flex; justify-content:space-around;">
-                        <b-form-radio value="0">滿額免運費</b-form-radio>
-                        <b-form-radio value="1">滿額打折</b-form-radio>
-                        <b-form-radio value="2">優惠套餐</b-form-radio>
+                        <b-form-radio value=0>滿額免運費</b-form-radio>
+                        <b-form-radio value=1>滿額打折</b-form-radio>
+                        <b-form-radio value=2>優惠套餐</b-form-radio>
                     </div>
                     </b-form-radio-group>
                     </b-form-group>
                     <div class="row" v-if="typeSelected==0">
                         <div class="col-md-1 mt-2">滿額</div>
-                        <b-form-input class="col-md-2" v-model="money" placeholder="XX元免運費" type="text" required></b-form-input>
+                        <b-form-input class="col-md-2" v-model="money" placeholder="XX元免運費" min="0" type="number" required></b-form-input>
                         <div class="col-md-1 mt-0 ml-0">使用次數</div>
-                        <b-form-input class="col-md-3" v-model="usage" placeholder="每人可用次數" type="text" required></b-form-input>
+                        <b-form-input class="col-md-3" v-model="usage" placeholder="每人可用次數" min="1" type="number" required></b-form-input>
                     </div>
                     <div class="row" v-if="typeSelected==1">
                         <div class="col-md-1 mt-2">滿額</div>
-                        <b-form-input class="col-md-2" v-model="money" placeholder="XX元打折" type="text"  required></b-form-input>
+                        <b-form-input class="col-md-2" v-model="money" placeholder="XX元打折" min="0" type="number" required></b-form-input>
                         <div class="col-md-1 mt-2">折扣</div>
-                        <b-form-input class="col-md-2" v-model="discount" placeholder="請輸入小數" type="text" required></b-form-input>
+                        <b-form-input class="col-md-2" v-model="discount" placeholder="請輸入小數" step="0.1" max="1" min="0" type="number" required></b-form-input>
                         <div class="col-md-1 mt-0 ml-0">使用次數</div>
-                        <b-form-input class="col-md-3" v-model="usage" placeholder="每人可用次數" type="text" required></b-form-input>
+                        <b-form-input class="col-md-3" v-model="usage" placeholder="每人可用次數" min="1" type="number" required></b-form-input>
                     </div>
                     <b-form-group label="優惠商品" v-if="typeSelected==2">
                         <div class="row mt-2" v-for="(item, index) in couponItems" v-bind:key="index">
@@ -61,9 +62,9 @@
                         </div>
                         <div class="row mt-4">
                             <div class="col-md-1 mt-2">折扣</div>
-                            <b-form-input class="col-md-2" v-model="discount" placeholder="請輸入小數" type="text" required></b-form-input>
+                            <b-form-input class="col-md-2" v-model="discount" placeholder="請輸入小數" step="0.1" max="1" min="0" type="number" required></b-form-input>
                             <div class="col-md-1 mt-0 ml-0">使用次數</div>
-                            <b-form-input class="col-md-3" v-model="usage" placeholder="每人可用次數" type="text" required></b-form-input>
+                            <b-form-input class="col-md-3" v-model="usage" placeholder="每人可用次數" min="1" type="number" required></b-form-input>
                             <h2 class="col-md-3">折價後金額</h2>
                             <h2 class="col-md-2">{{Math.round(total*discount)}}</h2>
                         </div>
@@ -81,7 +82,7 @@
                         </div>
                     </div>
                     <div class="row m-2" style="justify-content:space-around">
-                        <b-button variant="primary" @click="confirmModal" size="sm">新增</b-button>
+                        <b-button variant="primary" @click="checkValue" size="sm">新增</b-button>
                         <b-button variant="info" @click="cancelModal" size="sm">取消</b-button>
                     </div>
                 </div>
@@ -100,13 +101,11 @@ export default {
         CouponCard,
         datePicker,
     },
-    props:{
-    },
     data()
     {
         return{
             total: 0,
-            usage: 0,
+            usage: 1,
             startDate: '',
             expireDate: '',
             discount: 1,
@@ -122,7 +121,6 @@ export default {
             },
             couponItems:[ { selected: null, spinValue:1, price:0 } ],
             productOption:[],
-            
         }
     }, 
     methods:{
@@ -145,7 +143,7 @@ export default {
             })
             .catch(error=>{
                 this.$alert("更改失敗","","error");
-                console.log(error.response)
+                // console.log(error.response)
             })
         },       
         deleteCoupon(msg){
@@ -157,7 +155,7 @@ export default {
                 this.$alert("刪除成功","","success");
             }).catch(error=>{
                 this.$alert("刪除失敗","","error");
-                console.log(error.response)
+                // console.log(error.response)
             })
             let index = this.couponCards.findIndex( i=> i['coupon'].id === msg['coupon'].id)
             this.couponCards.splice(index,1);
@@ -172,19 +170,15 @@ export default {
 				var newCoupon = msg;
                 newCoupon['coupon'].id = response.data['coupon_id'];
                 if(newCoupon['coupon'].type == 2){
-                    console.log('in2')
                     for(let i=0; i<newCoupon['coupon_items'].length;i++){
                         let item = this.productOption.find(element => element.value == newCoupon['coupon_items'][i].product_id);
                         newCoupon['coupon_items'][i].name = item.text;
-                        // var optionIndex = this.productOption.findIndex(i => i.value === newCoupon['coupon_items'][i]['product_id'])
-                        // newCoupon['coupon_items'][i].name = this.productOption[optionIndex].text;
                     }
                 }
-                console.log('newwwwwwwww',newCoupon);
                 this.couponCards.push(newCoupon);      
             }).catch(error=>{
                 this.$alert("新增失敗","","error");
-                console.log(error.response)
+                // console.log(error.response)
             })
         },
         openModal(){
@@ -196,12 +190,11 @@ export default {
             let id =this.$store.getters['auth/user'].id
             this.$http.get('restaurants/'+id+'/products')
             .then(response => {
-                // console.log('openModalAPI');
                 let data=response.data;
                 for (let i=0;i<data.length;i++){
                     this.productOption.push({value:data[i].id, text:data[i].name, price:data[i].price});
                 }
-                console.log(this.productOption)
+                // console.log(this.productOption)
                 this.productOption = this.productOption.sort(function (a, b) {
                     return a.name - b.name
                 });
@@ -218,25 +211,106 @@ export default {
             }
             return result;
         },
+        checkValue(){
+            if(this.typeSelected == null){
+                this.$fire({
+                    type: 'warning',
+                    title: '填寫錯誤',
+                    text: '必須選擇一種類型',
+                })
+            }
+            else if(this.typeSelected ==2 && (this.couponItems.length == 0 || this.couponItems[0].selected == null)){
+                this.$fire({
+                    type: 'warning',
+                    title: '填寫錯誤',
+                    text: '必須選擇至少一種商品',
+                })
+            }
+            else if(this.startDate == '' && this.expireDate==''){
+                this.$fire({
+                    type: 'warning',
+                    title: '填寫錯誤',
+                    text: '必須填寫開始和結束時間',
+                })
+            }
+            else if(this.startDate == ''){
+                this.$fire({
+                    type: 'warning',
+                    title: '填寫錯誤',
+                    text: '必須填寫開始時間',
+                })
+            }
+            else if(this.expireDate==''){
+                this.$fire({
+                    type: 'warning',
+                    title: '填寫錯誤',
+                    text: '必須填寫結束時間',
+                })
+            }
+            else if(this.money <= 0 && this.typeSelected !=2){  
+                this.$fire({
+                    type: 'warning',
+                    title: '數值錯誤',
+                    text: '滿額必須大於0',
+                })
+                this.money = 1;
+            }
+            else if(this.discount >= 1 && this.typeSelected !=0){  
+                this.$fire({
+                    type: 'warning',
+                    title: '數值錯誤',
+                    text: '折扣必須小於1',
+                })
+                this.discount = 0.9;
+            }
+            else if(this.dis == 0 && this.typeSelected !=0){  
+                this.$fire({
+                    type: 'warning',
+                    title: '數值錯誤',
+                    text: '折扣必須大於0',
+                })
+                this.dis = 0.1;
+            }
+            else if(this.usage <= 0){  
+                this.$fire({
+                    type: 'warning',
+                    title: '數值錯誤',
+                    text: '使用次數必須大於0',
+                })
+                this.usage = 1;
+            }
+            else if(Date.parse(this.startDate) > Date.parse(this.expireDate)){ 
+                this.$fire({
+                    type: 'warning',
+                    title: '日期錯誤',
+                    text: '結束時間必須大於開始時間',
+                })
+            }
+            else if (Date.parse(this.expireDate) < new Date()){
+                this.$fire({
+                    type: 'warning',
+                    title: '日期錯誤',
+                    text: '結束時間必須大於現在',
+                })
+            }
+            else this.confirmModal();
+        },
         confirmModal(){
-            //FIXME 防呆input錯誤
             let couponAll = {'coupon':{}, "coupon_items":null };
             if(this.money == undefined) this.money = null; 
-            if(parseInt(this.typeSelected) == 0) this.discount = 1;
+            if(this.typeSelected == 0) this.discount = 1;
             couponAll['coupon'] = {id:null, code:this.code, start_time:this.startDate, end_time:this.expireDate, numberOfUsage: this.usage, //FIXME numberOfUsae
-                                    type:parseInt(this.typeSelected,10), discount:parseFloat(this.discount,10), limit_money:parseInt(this.money,10) }
+                                    type:parseInt(this.typeSelected,10), discount:parseFloat(this.discount), limit_money:parseInt(this.money,10) }
             if(this.typeSelected ==2 ){
                 this.info = [];
                 this.productName = [];
                 for (let i = 0; i<this.couponItems.length; i++){
                     if(this.couponItems[i].selected !=null){
                         this.info.push({product_id:this.couponItems[i].selected, quantity:this.couponItems[i].spinValue})
-                        // this.productName.push()
                     }
                 }
                 couponAll['coupon_items'] = this.info;
             }
-            console.log('showCOupon',couponAll);
             this.addCoupon(couponAll);
             this.$refs['my-modal'].hide();
         },
@@ -256,7 +330,6 @@ export default {
             this.setTotal();
         },
         setTotal(){
-            // console.log('total',this.total)
             this.total = 0;
             for(let i=0; i<this.couponItems.length; i++){
                 this.total += this.couponItems[i].price * this.couponItems[i].spinValue;
@@ -291,11 +364,7 @@ export default {
             this.couponCards = this.couponCards.sort(function(a,b){
                 return Date.parse(b['coupon'].start_time) - Date.parse(a['coupon'].start_time)
             })
-            console.log('getCoupons');
             // console.log(this.couponCards);
-        }).catch(error=>{
-            console.log('getCouponsFAIL');
-            console.log(error.response)
         })
     },
 }

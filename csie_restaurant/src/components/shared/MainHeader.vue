@@ -63,12 +63,10 @@ export default {
         showHistory() {
         },
         goHome(){
-            console.log('homeClean',this.search_result)
             this.reset()
             this.$bus.$emit('resetHome');
             if (this.$route.path != '/')
                 this.$router.push('/')
-            console.log('pushHome')
         },
         goSearch() {
             //let search = document.querySelector('#searchInput').textContent
@@ -77,7 +75,6 @@ export default {
             this.$bus.$emit('reloadHome');
             if (this.$route.path != '/')
                 this.$router.push('/')
-            console.log('pushSearch')
         }
     },
     computed: {
@@ -88,9 +85,8 @@ export default {
             let url = '/restaurants/search?' + keywords.join('&')
             this.$axios.get(this.$url + url)
             .then(response => {
-                console.log(response)
+                // console.log(response)
                 this.search_result = response.data;
-                console.log('22222222222',this.search_result);
                 this.search_shopName = [];
                 for(let i=0;i<this.search_result.length ;i++){
                     this.search_shopName.push(this.search_result[i].name);
