@@ -136,25 +136,22 @@ class ProductRepository
         DB::commit();
     }
 
-    public function updateProductCategory($seller_id, $payload, $payloadProduct)
+    public function updateProductCategory($seller_id, $payload)
     {
         $this->productCategoryTable
         ->where('name', '=', $payload['old']['name'])
         ->update($payload['new']);
 
-        $items = $this->productTable
+        $this->productTable
         ->join('seller as S', 'seller_id', '=', 'S.member_id')
         ->where('S.member_id','=', $seller_id)
         ->where('P.category_name','=', $payload['old']['name'])
-        ->distinct()
-        ->update($payloadProduct);
+        ->update(['category_name' => $payload['new']['name']]);
     }
 
     public function deleteProductCategory($payload)
     {
-        $this->productCategoryTable
-        ->where('name', '=', $payload['name'])
-        ->insert($payload);
+
     }
 }
 ?>
