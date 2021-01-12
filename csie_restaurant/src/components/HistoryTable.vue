@@ -101,8 +101,8 @@
     },
     methods:{
       price(data){
-        var discountItem=parseInt(data.quantity/data.couponQuantity)
-        return Math.round((data.price * discountItem * data.discount) + (data.price * (data.quantity-discountItem)))
+        console.log(data)
+        return Math.round((data.price * data.couponQuantity * data.discount) + (data.price * (data.quantity-data.couponQuantity)))
       },
       total(datas){
         let total=0;
@@ -149,16 +149,25 @@
             'Authorization': 'Bearer ' + this.$store.getters['auth/token']
           }
         }).then(response => {
-          console.log(response.data)
           let datas=response.data
+          console.log(datas)
           history.item.datas=[]
+          history.item.coupon_item=[]
           history.item.comment=datas.order.comment
           for(let i=0;i<datas.order_items.length;i++) 
           {
-            let discount = 1
-            if(datas.coupon_items!=undefined) for (let j =0;j<datas.coupon_items.length;j++)
-              if(datas.coupon_items[j].product_id == datas.order_items[i].product_id && datas.coupon_items[j].quantity<=datas.order_items[i].quantity) discount=datas.order.discount
-            history.item.datas.push({product_name:datas.order_items[i].product_name, price:datas.order_items[i].price, quantity:datas.order_items[i].quantity ,discount:discount, couponQuantity: datas.coupon_items[j].quantity})
+            // let discount = 1
+            // if(datas.coupon_items!=undefined) for (let j =0;j<datas.coupon_items.length;j++)
+            //   if(datas.coupon_items[j].product_id == datas.order_items[i].product_id && datas.coupon_items[j].quantity<=datas.order_items[i].quantity) 
+            //     {
+            //       discount=datas.order.discount
+            //       history.item.coupon_item={
+            //         name:datas.order_items[i].product_name,
+            //         couponQuantity: datas.coupon_items[j].quantity
+            //       }
+            //     }
+            history.item.datas.push({product_name:datas.order_items[i].product_name, price:datas.order_items[i].price, quantity:datas.order_items[i].quantity ,discount:datas.order.discount})
+            console.log(history.item.datas)
           }
           if(datas.order.coupon_type==1) history.item.isShippingCoupon=true;
           else history.item.isShippingCoupon=false;

@@ -63,6 +63,7 @@ export default {
     return {
       enabled: true,
       list: [],
+      addlist: [],
       dragging: false
     };
   },
@@ -86,9 +87,12 @@ export default {
         i++
       }
       this.list.push({ foodCategory: name, order: order++ });
+      this.addlist.push({name:name,display_order:order})
     },
     finish: function(){
-        this.$bus.$emit('updateTab',this.list);
+      if(this.addlist.length!=0) this.$bus.$emit("addProductCategory",this.addlist);
+      console.log(this.list)
+      this.$bus.$emit('updateTab',this.list);
     },
     checkMove: function(e) {
     },

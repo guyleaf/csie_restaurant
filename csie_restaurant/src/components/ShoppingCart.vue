@@ -192,7 +192,7 @@
           .then(response =>{
             this.useValidCoupon()
             this.getCouponItems(coupon)
-            this.$bus.$emit('disable')
+            this.$bus.$emit('lockbutton')
           })
           .catch(error => {
             console.log(error.response)

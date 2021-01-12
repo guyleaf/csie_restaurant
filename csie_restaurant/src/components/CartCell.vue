@@ -49,7 +49,7 @@ export default {
         }
     },
     mounted(){
-        this.$bus.$on("disable",() =>{this.disable=true})
+        this.$bus.$on("lockbutton",() =>{this.disable=true})
     }
 }
 </script>

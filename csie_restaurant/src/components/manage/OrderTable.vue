@@ -22,8 +22,7 @@
           <div class="row"> 客戶暱稱: {{row.item.clientName}}</div>
           <!-- <div class="row">  -->
           <div class='container row'>
-          
-            <div class='col-md-3'>
+            <div class='col-md-4'>
                   <b-row class="mb-2" v-for= "(data,index) in row.item.datas " :key="index">
                       <b-row class="mr-2">{{ data.product_name }}</b-row>
                       <b-row class="mr-2">* {{ data.quantity }} =</b-row>
@@ -32,7 +31,7 @@
                       <b-row v-if="data.discount<1" class="mr-2 discount pl-1 pr-1"> {{data.discount*10}}折</b-row>
                   </b-row>
             </div>
-            <div class='col-md-3 align-self-end'>
+            <div class='col-md-2 align-self-end'>
                 <b-row class="mb-2 justify-content-end">
                   <b-row>運費：</b-row>
                   <b-row v-bind:class="{'line-throughdisplay':row.item.isShippingCoupon,'mr-2':row.item.isShippingCoupon}">{{ row.item.fee }}</b-row>
@@ -96,33 +95,9 @@
       },
       total(datas){
         let total=0;
-        for(let i=0;i<datas.length;i++) total=total+parseFloat(parseFloat(datas[i].price * datas[i].quantity * datas[i].discount).toFixed(0))
+        if(datas!=undefined)
+          for(let i=0;i<datas.length;i++) total=total+parseFloat(parseFloat(datas[i].price * datas[i].quantity * datas[i].discount).toFixed(0))
         return total
-      },
-      clickStar(val,history){
-        var index = history.index
-        if(!this.items[index].isClicked){
-          if(!history.detailsShowing){
-            history.toggleDetails()
-          }
-          this.items[index].ratingdisabled=!this.items[index].ratingdisabled
-        }
-        if(!this.items[index].isRated){
-          this.items[index].isClicked = true
-          this.items[index].ratingStar = val+1
-        }
-      },
-      hoverStar(val,history){
-        var index = history.index
-        if(!this.items[index].isClicked){
-          this.items[index].ratingStar = val+1
-        }
-      },
-      unhoverStar(history){
-        var index = history.index
-        if(!this.items[index].isClicked){
-          this.items[index].ratingStar = 0
-        }
       },
       submitRating(history){
         var index = history.index
@@ -138,7 +113,15 @@
             this.items[index].isRated = true
             this.items[index].readonly = true
           }
+        this.$http.post('/seller/orders/update',{id:history.item.訂單編號, order:{status:history.item.訂單狀態}}, {
+        headers: {
+          'Authorization': 'Bearer ' + this.$store.getters['auth/token']
+        }
+        }).then(response=>{
           this.$alert("更改成功","","success");
+        }).catch(error =>{
+          console.log(error.response)
+        })
         })
         // this.items[index].ratingdisabled=!this.items[index].ratingdisabled
       },
@@ -149,7 +132,15 @@
           this.items[index].msg = '已取消'
           this.items[index].isFinish = true
           this.items[index].ratingdisabled=!this.items[index].ratingdisabled
-          this.$alert("取消成功","","success");
+            this.$http.post('/seller/orders/update',{id:history.item.訂單編號, order:{status:history.item.訂單狀態,}}, {
+          headers: {
+            'Authorization': 'Bearer ' + this.$store.getters['auth/token']
+          }
+          }).then(response=>{
+            this.$alert("取消成功","","success");
+          }).catch(error =>{
+          console.log(error.response)
+        })
         })
       },
       show(history){
@@ -158,10 +149,39 @@
             'Authorization': 'Bearer ' + this.$store.getters['auth/token']
           }
         }).then(response=>{
-          console.log(response.data)
-        })
-          console.log(history)
+          let data=response.data;
+          history.item.comment=data.order.comment
+          history.item.clientName=data.order.name
+          history.item.fee=data.order.fee
+          if(history.item.訂單狀態==4)
+            {
+              history.item.isFinish = true
+              history.item.ratingdisabled=!history.item.ratingdisabled
+              history.item.msg=this.status[history.item.訂單狀態]
+            }
+          else if(history.item.訂單狀態==5)
+          {
+            history.item.msg = '已取消'
+            history.item.isFinish = true
+            history.item.ratingdisabled=!history.item.ratingdisabled
+          }
+          else history.item.msg='下一步:'+this.status[history.item.訂單狀態+1]
+          history.item.datas=[]
+          console.log(history.item)
+          for(let i=0 ;i<data.order_items.length;i++)
+          {
+            let discount = 1
+            if(data.coupon_items!=undefined) {
+              for (let j =0;j<data.coupon_items.length;j++){
+              if(data.coupon_items[j].product_id == data.order_items[i].product_id && data.coupon_items[j].quantity<=data.order_items[i].quantity) {
+                discount=data.order.discount}}}
+            history.item.datas.push({product_name: data.order_items[i].product_name, price: data.order_items[i].price, quantity: data.order_items[i].quantity, discount: discount})
+          }
           history.toggleDetails()
+
+        }).catch(error =>{
+          console.log(error.response)
+        })
       }
     },
   computed:{
@@ -181,6 +201,9 @@
           {
             this.items.push({訂單編號: data[i].order_id,ratingStar: data[i].stars, 下單日期: data[i].order_time, 訂單狀態: data[i].status,readonly: true, ratingdisabled:false});
           }
+          this.items.sort(function(a,b){
+            return a.訂單狀態 - b.訂單狀態;
+            });
       })
       .catch(error => {
         this.$router.push('/')

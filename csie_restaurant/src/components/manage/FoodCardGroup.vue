@@ -277,11 +277,26 @@ export default {
                 this.$refs['my-modal'].hide();
             })
         },
+        addProductCategory(list){
+            let success=0
+            for( let i=0;i<list.length;i++)
+            {
+            this.$http.post('/seller/categories/add',list[i],{
+                    headers: {
+                        'Authorization': 'Bearer ' + this.$store.getters['auth/token']
+            }}).then( response=>{
+                success+=1
+                if(success==list.length)this.$alert("新增成功","","success");
+            }).catch( error=>{
+                console.log(error.response)
+            })}
+        },
         sortOrder:function(a, b){
             return a - b;
         },
         updateTab:function(msg){
             this.foodCategories=[]
+            console.log(msg)
             for(let i=0;i<msg.length;i++){
                 this.foodCategories.push({foodCategory: msg[i].foodCategory,order: msg[i].order,hover:false})
                 let id=msg[i].foodCategory.replace(/\s*/g,"");
@@ -291,7 +306,6 @@ export default {
             {
             let food = document.querySelector('#shopbody')
             let back = document.querySelector(id)
-            // console.log(back)
             if(food == null || back==null) {
                 setTimeout(setfbacksize.bind(this,id),100)
             }
@@ -305,7 +319,6 @@ export default {
         .then(response => {
           this.foodCards=[];
           let data=response.data;
-        //   console.log(response.data)
           for (let i=0;i<data.length;i++) {     
             this.foodCards.push({sellingState:data[i].status, soldOut:data[i].sold_out, foodId: data[i].id, foodName: data[i].name, price:parseInt(data[i].price), imgPath: this.$url + data[i].image_path, foodDescription: data[i].description, foodTag:data[i].category_name});}
             this.foodCards = this.foodCards.sort(function (a, b) {
@@ -323,25 +336,25 @@ export default {
             return a.order - b.order;
             });
             })
-        this.$bus.$on("updateTab", msg => {
-            this.updateTab(msg);
-        });
-        
-
     },
     mounted(){
         function setfbacksize()
         {
           let food = document.querySelector('#shopbody')
           let back = document.querySelectorAll('.fback')
-          if(food == null || back==null) {
+          if(food == null || back.length==0) {
             setTimeout(setfbacksize.bind(this),100)
           }
           else {
             for(let i=0;i<back.length;i++) back[i].style.minWidth= (shopbody.clientWidth).toString() +'px'
+            console.log(back)
           }
         }
         setfbacksize()
+        this.$bus.$on("addProductCategory", list =>{this.addProductCategory(list)})
+        this.$bus.$on("updateTab", msg => {
+            this.updateTab(msg);
+        });
     }
 }
 </script>
