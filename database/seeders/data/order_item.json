@@ -89,8 +89,7 @@
 		"quantity" : 3,
 		"price" : 55,
 		"note" : null
-	}
-	------,
+	},
 	{
 		"order_id" : 7,
 		"product_id" : 8,
