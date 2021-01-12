@@ -45,6 +45,8 @@ $router->group(['prefix' => 'customer'], function () use ($router) {
         $router->post('coupon/use', 'CustomerController@useCoupon');
         $router->get('address', 'CustomerController@getAddress');
         $router->get('creditCard', 'CustomerController@getCreditCard');
+        $router->post('creditCard', 'CustomerController@addCreditCard');
+        $router->post('address', 'CustomerController@addAddress');
     });
 });
 

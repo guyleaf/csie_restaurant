@@ -76,5 +76,19 @@ class CustomerRepository
         ->get(['credit_card', 'expire_date']);
         return $result;
     }
+
+    public function addCreditCard($id, $payload)
+    {
+        $payload['customer_id'] = $id;
+        $this->creditCard
+        ->insert($payload);
+    }
+
+    public function addAddress($id, $payload)
+    {
+        $payload['customer_id'] = $id;
+        $this->customerAddress
+        ->insert($payload);
+    }
 }
 ?>

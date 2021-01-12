@@ -82,6 +82,18 @@ class CustomerService
         return $result;
     }
 
+    public function addAddress($customerId, $payload)
+    {
+        $this->customerRepository
+        ->addAddress($customerId, $payload);
+    }
+
+    public function addCreditCard($customerId, $payload)
+    {
+        $this->customerRepository
+        ->addCreditCard($customerId, $payload);
+    }
+
     public function useCoupon($id, $coupon_code, $seller_id, $order)
     {
         $coupon = $this->shopService->useCoupon($coupon_code, $seller_id);
