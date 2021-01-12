@@ -318,11 +318,11 @@ export default {
             this.foodCategories=[];
             let data=response.data;
             // console.log(data)
-            for (let i=0;i<data.length;i++) this.foodCategories.push({foodCategory: data[i].name, order: data[i].display_order, hover:false});}
-            )
-        this.foodCategories.sort(function(a,b){
+            for (let i=0;i<data.length;i++) this.foodCategories.push({foodCategory: data[i].name, order: data[i].display_order, hover:false});
+            this.foodCategories.sort(function(a,b){
             return a.order - b.order;
-        });
+            });
+            })
         this.$bus.$on("updateTab", msg => {
             this.updateTab(msg);
         });
