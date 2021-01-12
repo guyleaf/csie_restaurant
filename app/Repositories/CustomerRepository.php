@@ -72,7 +72,7 @@ class CustomerRepository
     public function getCreditCard($id)
     {
         $result = $this->creditCard
-        ->where('customer_id', '=', '$id')
+        ->where('customer_id', '=', $id)
         ->get(['credit_card', 'expire_date']);
         return $result;
     }
