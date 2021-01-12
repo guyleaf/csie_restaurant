@@ -158,6 +158,7 @@
         if(this.checkLogin()){
           let id = this.$cookie.get('shopId');
           let orderItems = this.$cookie.get('product')
+          console.log(orderItems)
           let data = { coupon_code:coupon,seller_id:id,orderItems:orderItems,total_price:this.totalPrice}
           this.$http.post('/customer/coupon/use',data , {
             headers: {

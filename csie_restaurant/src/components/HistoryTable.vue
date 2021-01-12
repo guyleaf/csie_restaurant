@@ -22,10 +22,10 @@
             <div class='col-md-3'>
                   <b-row class="mb-2" v-for= "(data,index) in row.item.datas " :key="index">
                       <b-row class="mr-2">{{ data.product_name }}</b-row>
-                      <b-row class="mr-2">* {{ data.quantity }} =</b-row>
-                      <b-row v-bind:class="{'line-throughdisplay':data.discount<1}" class="mr-2">{{ data.price*data.quantity }}</b-row>
+                      <b-row class="mr-2">* {{ data.quantity }} :</b-row>
+                      <b-row v-if="data.discount!=null" v-bind:class="{'line-throughdisplay':data.discount<1}" class="mr-2">{{ data.price*data.quantity }}</b-row>
                       <b-row v-if="data.discount<1" class="mr-2"> {{price(data)}} </b-row>
-                      <b-row v-if="data.discount<1" class="mr-2 discount pl-1 pr-1"> {{data.discount*10}}折</b-row>
+                      <b-row v-if="data.discount<1 && data.discount!=null" class="mr-2 discount pl-1 pr-1"> {{data.discount*10}}折</b-row>
                   </b-row>
             </div>
             <div class='col-md-3 align-self-end'>
@@ -102,7 +102,9 @@
     methods:{
       price(data){
         console.log(data)
-        return Math.round((data.price * data.couponQuantity * data.discount) + (data.price * (data.quantity-data.couponQuantity)))
+        if(data.discount==null) return 'Ship free'
+        return Math.round((data.price * data.quantity * parseFloat(data.discount)))
+                // return Math.round((data.price * data.couponQuantity * data.discount) + (data.price * (data.quantity-data.couponQuantity)))
       },
       total(datas){
         let total=0;
@@ -144,12 +146,13 @@
         this.items[index].ratingdisabled=!this.items[index].ratingdisabled
       },
       show(history){
+        var datas; 
         this.$http.get('/customer/orders/'+history.item.id, {
           headers: {
             'Authorization': 'Bearer ' + this.$store.getters['auth/token']
           }
         }).then(response => {
-          let datas=response.data
+          datas=response.data
           console.log(datas)
           history.item.datas=[]
           history.item.coupon_item=[]
@@ -174,7 +177,29 @@
           history.item.fee=datas.order.fee;
           history.toggleDetails()
         })
-      }
+        // let orderItems = []
+        // console.log(datas.order.coupon_type,'123')
+        // if(datas.order.coupon_type == 2){
+          // for(let i= 0; i<datas.order_items.length;i++) {
+            // orderItems.push( {foodName:datas.order_items[i].product_name, quantity:datas.order_items[i].quantity, id:datas.order_items[i].product_id, 
+            // foodPrice:datas.order_items[i].price})
+            // console.log(i)
+          // }
+        
+          let couponTotal=0;
+          // for(let i=0;i<datas.order_items.length;i++) couponTotal += datas.order_items[i].quantity*datas.order_items[i].price
+        // let datacoupon = { coupon_code:datas.order.coupon_code,orderItems:orderItems,total_price:couponTotal}
+        }
+        //   this.$http.post('/customer/coupon/use',datacoupon , {
+        //     headers: {
+        //       'Authorization': 'Bearer ' + this.$store.getters['auth/token']
+        //     }
+        //   }).then(response=>{
+        //     console.log(response.data)
+        //   })
+        // }
+        // history.toggleDetails()
+    
     },
     mounted() {
       this.$http.get('/customer/orders', {
