@@ -62,7 +62,7 @@
         </b-form-group>
         <b-form-group>
           <b-input-group-prepend v-if="paymentMethodSelected==1">
-            <b-form-select class="col-11" v-model="creditCardSelected" @change="onChange" :options="creditCards"></b-form-select>
+            <b-form-select class="col-11" v-model="creditCardSelected" @change="onChange" :options="creditCards_options"></b-form-select>
             <b-button class="creditCard col-1" size="sm" text="Button" variant="success" @click="addCreditCard" squared>+</b-button>
           </b-input-group-prepend>
         </b-form-group>
@@ -186,7 +186,8 @@ export default {
         creditCardSelected: '請選擇信用卡',
         creditCard: '',
         creditCardState: null,
-        creditCards: [
+        creditCards: [],
+        creditCards_options: [
           {text: "請選擇信用卡", value: "請選擇信用卡", disabled: true}
         ],
         expiredDate: '',
@@ -196,7 +197,6 @@ export default {
   methods:{
     formatter(value){
       value = value.split("-").join("");
-
       value = value.match(new RegExp('.{1,4}$|.{1,4}', 'g')).join("-");
       return value
     },
@@ -231,6 +231,15 @@ export default {
           this.useCouponDiscount(coupon)
           this.$cookie.set('discount',this.disCountMoney)
         }
+    },
+    addCutomerAddress(data){
+      this.$axios.post(this.$url + '/customer/address', {address:data},  {
+        headers: {
+          'Authorization': 'Bearer ' + this.$store.getters['auth/token']
+        }
+      }).then(response =>{
+        console.log(response.data);
+      })
     },
     getCutomerAddress(){
       this.$http.get('/customer/address',  {
@@ -328,7 +337,18 @@ export default {
       document.cookie = 'discount=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
       this.$emit('deleteCoupon')
     },
-    getCustomerCreditCards(){
+    addCustomerCreditCard(credit_card, expire_date){
+      console.log(credit_card)
+      console.log(expire_date)
+      this.$axios.post(this.$url + '/customer/creditCard', {credit_card:credit_card, expire_date:moment(expire_date).format("YYYY-MM-DD")},  {
+        headers: {
+          'Authorization': 'Bearer ' + this.$store.getters['auth/token']
+        }
+      }).then(response =>{
+        console.log(response.data);
+      })
+    },
+    getCustomerCreditCard(){
       this.$http.get('/customer/creditCard',  {
         headers: {
           'Authorization': 'Bearer ' + this.$store.getters['auth/token']
@@ -336,7 +356,8 @@ export default {
       }).then(response =>{
         console.log(response.data)
         for (let i = 0; i<response.data.length; i++){
-          this.creditCards.push({text:response.data[i].credit_card + '   ' + '有效期限:' + moment(response.data[i].expire_date).format("MM/YY"), value:response.data[i].credit_card + '   ' + '有效期限:' + moment(response.data[i].expire_date).format("MM/YY")})
+          this.creditCards_options.push({text:response.data[i].credit_card + '   ' + '有效期限:' + moment(response.data[i].expire_date).format("MM/YY"), value:response.data[i].credit_card + '   ' + '有效期限:' + moment(response.data[i].expire_date).format("MM/YY")})
+          this.creditCards.push({credit_card: response.data[i].credit_card, expire_date:response.data[i].expire_date})
         }
       }).catch(error => {
         console.log(error)
@@ -375,13 +396,15 @@ export default {
       if (!this.checkCreditCardValidity())
         return
       for (let i = 0 ; i<this.creditCards.length; i++){
-        if(this.creditCard == this.creditCards[i].value){
+        if(this.creditCard == this.creditCards[i].credit_card){
           this.$alert("重複的信用卡，請重新輸入","","warning")
           this.creditCardState = false 
           return
         }
       }
-      this.creditCards.push({text:this.creditCard + '   ' + '有效期限:' + moment(this.expiredDate).format("MM/YY"), value:this.creditCard + '   ' + '有效期限:' + moment(this.expiredDate).format("MM/YY")})
+      this.addCustomerCreditCard(this.creditCard, this.expiredDate);
+      this.creditCards_options.push({text:this.creditCard + '   ' + '有效期限:' + moment(this.expiredDate).format("MM/YY"), value:this.creditCard + '   ' + '有效期限:' + moment(this.expiredDate).format("MM/YY")})
+      this.creditCards.push({credit_card: this.creditCard, expire_date:this.expiredDate})
       this.$nextTick(() => {
         this.$alert("信用卡新增成功", "", "success")
         this.$bvModal.hide('modal-credit-card')
@@ -404,8 +427,10 @@ export default {
           return
         }
       }
+      this.addCutomerAddress(this.newAddress)
       this.address.push(this.newAddress)
       this.$nextTick(() => {
+        this.$alert("地址新增成功", "", "success")
         this.$bvModal.hide('modal-prevent-closing')
       })
     }
@@ -420,7 +445,7 @@ export default {
   created(){
     this.getCouponState();
     this.getCutomerAddress();
-    this.getCustomerCreditCards();
+    this.getCustomerCreditCard();
   }
 }
 </script>
