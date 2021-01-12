@@ -13,10 +13,10 @@ import {
   throttleAdapterEnhancer,
 } from "axios-extensions";
 
-Vue.prototype.$url = "http://api.guyleaf.site:8880";
+Vue.prototype.$url = "https://api.guyleaf.site:8881";
 Vue.prototype.$axios = axios; // no cache response
 Vue.prototype.$http = axios.create({
-  baseURL: "http://api.guyleaf.site:8880",
+  baseURL: "https://api.guyleaf.site:8881",
   headers: { "Cache-Control": "no-cache" },
   adapter: throttleAdapterEnhancer(
     cacheAdapterEnhancer(axios.defaults.adapter)

@@ -11,7 +11,7 @@
                     <!--<b-card-text class = "card_text">{{index}}</b-card-text>-->
                 </b-col>
                 <b-col md="2" align="right">
-                    <b-button @click="deleteitem" variant="outline-danger" vertical>x</b-button>
+                    <b-button @click="deleteitem" variant="outline-danger" :disabled="disable" vertical>x</b-button>
                 </b-col>
             </b-row>
         </b-card>
@@ -50,6 +50,11 @@ export default {
     },
     mounted(){
         this.$bus.$on("lockbutton",() =>{this.disable=true})
+        this.$bus.$on("unlockbutton",() =>{this.disable=false})
+    },
+    created(){
+        if (JSON.parse(this.$cookie.get('coupon')) != null) this.disable = true
+        else this.disable = false
     }
 }
 </script>

@@ -14,7 +14,7 @@
           </div>
         </div>
         <div class="payOption"> 
-          <CashierForm />
+          <CashierForm  v-on="{deleteCoupon:deleteCoupon, useCoupon:useCoupon}"/>
         </div>
       </b-col>
 
@@ -43,7 +43,7 @@
                   <span>小計</span>
                 </div>
                 <div class='col-md-5' style="text-align: end;">
-                  ${{totalPrice}}
+                  ${{beforeMoney}}
                   <span >({{productNum}}份餐點)</span>
                 </div>
               </div>
@@ -51,7 +51,13 @@
                 <div class='col-md-7'>
                   <span>外送費</span>
                 </div>
-                <div class='col-md-5' style="text-align: end;">$30</div>
+                <div class='col-md-5' style="text-align: end;">${{shipping}}</div>
+              </div>
+              <div class="row" style="margin:3% -15px 3% -15px">
+                <div class='col-md-7'>
+                  <span>折扣</span>
+                </div>
+                <div class='col-md-5' style="text-align: end;">-${{discountMoney}}</div>
               </div>
             </div>
             <div class="row afterPrice">
@@ -61,7 +67,7 @@
               <div class='col-md-5 tlprice' style="text-align: end;"><h3>${{totalPrice}}</h3></div>
             </div>
             <div class="justify-content-end">
-                <b-button class="col-md-12 b-submit" variant="secondary" type="submit">一鍵下訂單</b-button>
+                <b-button class="col-md-12 b-submit" variant="secondary" type="submit" @click="submit">一鍵下訂單</b-button>
                 <div class="col-md-12 " style="text-align:center; margin-top:2%; padding:0; ">
                   條款： 按一下按鈕送出訂單，即表示您確認已詳閱隱私政策，並且同意 孜宮庭園 的 使用條款
                 </div>
@@ -89,7 +95,12 @@ export default {
     return {
         ItemList:[],
         productNum: 0,
+        beforeMoney:0,
         totalPrice: 0,
+        discountMoney:0,
+        shipping:30,
+        coupon_code: '',
+        shop_id: null
       }
   },
   methods:{
@@ -99,21 +110,28 @@ export default {
       },
       loadingData(){
         this.ItemList = [];
+        this.totalPrice = 0
+        this.beforeMoney = 0
         let data = this.parseCookie();
         for (var i = 0; i<data.length;i++)
         {
           this.ItemList.push({foodName:data[i].foodName, quantity:data[i].quantity, foodPrice:data[i].foodPrice});
-          console.log(this.ItemList[i].foodPrice * this.ItemList[i].quantity)
           this.productNum += this.ItemList[i].quantity;
-          this.totalPrice += this.ItemList[i].foodPrice * this.ItemList[i].quantity
+          this.beforeMoney += this.ItemList[i].foodPrice * this.ItemList[i].quantity
+          this.totalPrice = this.beforeMoney
         }
+        this.coupon_code = this.$cookie.get("coupon_code");
+        this.discountMoney = this.$cookie.get('discount')
+        this.shop_id = this.$cookie.get("shopId");
+        this.totalPrice -= (this.discountMoney -30)
       },
       modifySpinValue(index,value){
         let productCookie = JSON.parse(this.$cookie.get("product"));
         let difValue = value - this.ItemList[index].quantity ;
         productCookie[index].quantity = value
         document.cookie = 'product=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
-        this.totalPrice = this.totalPrice + (value - this.ItemList[index].quantity) * this.ItemList[index].foodPrice
+        this.beforeMoney = this.beforeMoney + (value - this.ItemList[index].quantity) * this.ItemList[index].foodPrice
+        this.totalPrice = this.beforeMoney + this.shipping
         this.ItemList[index].quantity = value;
         this.productNum += difValue;
         this.$cookie.set('product', JSON.stringify(productCookie))
@@ -133,21 +151,34 @@ export default {
         }
         else{
           this.productNum -= this.ItemList[e].quantity
-          this.totalPrice -= this.ItemList[e].quantity * this.ItemList[e].foodPrice 
+          this.beforeMoney -= this.ItemList[e].quantity * this.ItemList[e].foodPrice 
+          this.totalPrice = this.beforeMoney + this.shipping
           this.ItemList.splice(e,1);
           this.$cookie.set('product',JSON.stringify(this.ItemList));
         }
       },
+      useCoupon(){
+        this.discountMoney  = this.$cookie.get('discount') ;
+        this.totalPrice = this.beforeMoney - this.discountMoney + this.shipping
+      },
+      deleteCoupon(){
+        console.log(this.$cookie.get('discount'))
+        this.discountMoney  = this.$cookie.get('discount') ;
+        this.totalPrice = this.beforeMoney + this.shipping
+      },
+      submit() {
+        let data = [];
+        data.push({coupon_code:this.coupon_code, seller_id:parseInt(this.shop_id)})
+      }
+  },
+  mounted(){
+    this.$bus.$on('discountMoney', () =>{
+    })
   },
   created(){
     this.loadingData()
-    this.$http.get('/customer/address',  {
-      headers: {
-        'Authorization': 'Bearer ' + this.$store.getters['auth/token']
-      }
-    }).then(response =>{
-      console.log(response.data)
-    })
+    this.$bus.$on('ok', (isValid) => {
+    });
   },
   computed: {
   }
