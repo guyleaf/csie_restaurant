@@ -75,6 +75,13 @@ class CustomerService
         return $result;
     }
 
+    public function getCreditCard($customerId)
+    {
+        $result = $this->customerRepository
+        ->getCreditCard($customerId);
+        return $result;
+    }
+
     public function useCoupon($id, $coupon_code, $seller_id, $order)
     {
         $coupon = $this->shopService->useCoupon($coupon_code, $seller_id);
