@@ -54,13 +54,11 @@ export default {
         .then(response => {
           this.foodCategories=[];
           let data=response.data;
-          for (let i=0;i<data.length;i++) this.foodCategories.push({foodCategory: data[i].name, order: data[i].display_order});}
-        )
-        this.foodCategory.sort(function(a,b){
+          for (let i=0;i<data.length;i++) this.foodCategories.push({foodCategory: data[i].name, order: data[i].display_order});
+            this.foodCategories.sort(function(a,b){
             return a.order - b.order;
-        });
-        for(let i=0;i<this.foodCategory.length;i++)
-            this.foodCategories.push({categoryId: i, foodCategory: this.foodCategory[i].tag,hover:false})
+            });
+          })
     },
     mounted(){
          function setfbacksize()
