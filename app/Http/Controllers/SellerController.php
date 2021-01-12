@@ -81,7 +81,15 @@ class SellerController extends Controller
         $result = $this->sellerService->getOrderInfo($orderId);
         return response()->json($result);
     }
-
+    
+    public function updateOrder(Request $request)
+    {
+        $user = auth()->user();
+        $id = $user->id;
+        $this->sellerService->updateOrder($id, $request->all());
+        return response()->json(['message' => 'Success'], 201);
+    }
+    
     public function getProducts(Request $request)
     {
         $user = auth()->user();

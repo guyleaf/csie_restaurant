@@ -46,6 +46,14 @@ class OrderService
         return $result;
     }
 
+    public function updateOrder($id, $payload)
+    {
+        $result = $this->orderRepository
+        ->updateOrder($id, $payload);
+
+        return $result;
+    }
+
     public function addOrder($customer_id, $order)
     {
         $now = new DateTime('now', new DateTimeZone('Asia/Taipei'));
