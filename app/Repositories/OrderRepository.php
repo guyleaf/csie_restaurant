@@ -118,7 +118,7 @@ class OrderRepository
     {
         DB::transaction(function () use ($id, $order) {
             DB::table('order', 'O')
-            ->where('O.id', '=', $order['order']['id'])
+            ->where('O.id', '=', $order['id'])
             ->where('O.customer_id', '=', $id)
             ->orWhere('O.seller_id', '=', $id)
             ->update($order['order']);
