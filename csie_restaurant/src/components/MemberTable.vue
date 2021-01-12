@@ -169,7 +169,7 @@
           this.members = [];
           let data = response.data.customers;
           for (let i=0;i<data.length;i++){ this.members.push({isActive:true, id:data[i].customer_id, username:data[i].username, name:data[i].name, email:data[i].email, 
-                                                              created_at:data[i].created_at, phone:data[i].phone,member_status:data[i].member_status})}
+                                                              created_at:data[i].created_at, phone:data[i].phone ,member_status:data[i].member_status})}
           this.numOfMembers = response.data.numbers;
           this.$bus.$emit('setNumOfMembers', this.numOfMembers);
         })

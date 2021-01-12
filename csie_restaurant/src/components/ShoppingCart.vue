@@ -125,7 +125,7 @@
           this.coupon = coupon.coupon.code;
           this.useValidCoupon()
           this.useCouponDiscount(coupon)
-          this.$cookie.set('discount',this.disCountMoney)
+          this.$cookie.set('discount',Math.round(this.disCountMoney))
         }
       },
       dataToCashier(){
