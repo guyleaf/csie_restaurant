@@ -152,6 +152,15 @@ export default {
         modityfoodcategory(index){ //FIXME
             console.log(index)
             this.updateTab(this.foodCategories)
+            this.$http.post('/seller/categories/update',{old:{name:this.foodCategories[index].foodCategory},new:{name:this.modityName}},{
+                    headers: {
+                        'Authorization': 'Bearer ' + this.$store.getters['auth/token']
+            }}).then( response=>{
+                this.$alert("修改成功","","success");
+                window.location.reload()
+            }).catch( error=>{
+                console.log(error.response)
+            })
             this.foodCategories[index].foodCategory=this.modityName;
             this.modityName='';
             this.editable=-1;
