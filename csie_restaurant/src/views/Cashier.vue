@@ -61,7 +61,7 @@
               <div class='col-md-5 tlprice' style="text-align: end;"><h3>${{totalPrice}}</h3></div>
             </div>
             <div class="justify-content-end">
-                <b-button class="col-md-12 b-submit" variant="secondary" type="submit">一鍵下訂單</b-button>
+                <b-button class="col-md-12 b-submit" variant="secondary" type="submit" @click="submit">一鍵下訂單</b-button>
                 <div class="col-md-12 " style="text-align:center; margin-top:2%; padding:0; ">
                   條款： 按一下按鈕送出訂單，即表示您確認已詳閱隱私政策，並且同意 孜宮庭園 的 使用條款
                 </div>
@@ -90,6 +90,8 @@ export default {
         ItemList:[],
         productNum: 0,
         totalPrice: 0,
+        coupon_code: '',
+        shop_id: null
       }
   },
   methods:{
@@ -107,6 +109,8 @@ export default {
           this.productNum += this.ItemList[i].quantity;
           this.totalPrice += this.ItemList[i].foodPrice * this.ItemList[i].quantity
         }
+        this.coupon_code = this.$cookie.get("coupon_code");
+        this.shop_id = this.$cookie.get("shopId");
       },
       modifySpinValue(index,value){
         let productCookie = JSON.parse(this.$cookie.get("product"));
@@ -138,16 +142,16 @@ export default {
           this.$cookie.set('product',JSON.stringify(this.ItemList));
         }
       },
+      submit() {
+        let data = [];
+        data.push({coupon_code:this.coupon_code, seller_id:parseInt(this.shop_id)})
+      }
   },
   created(){
     this.loadingData()
-    this.$http.get('/customer/address',  {
-      headers: {
-        'Authorization': 'Bearer ' + this.$store.getters['auth/token']
-      }
-    }).then(response =>{
-      console.log(response.data)
-    })
+    this.$bus.$on('ok', (isValid) => {
+
+    });
   },
   computed: {
   }

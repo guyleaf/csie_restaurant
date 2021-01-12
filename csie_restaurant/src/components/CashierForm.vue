@@ -4,6 +4,7 @@
           <b-form-radio-group
             id="radio-group-1"
             v-model="placeSelected"
+            @change="onChange"
             :options="places"
             name="radio-options"
          ></b-form-radio-group>
@@ -37,10 +38,10 @@
           title="新增地址"
           @show="resetModal"
           @hidden="resetModal"
-          @ok="handleOk"
+          @ok="handleAddress"
           centered
         >
-          <form ref="form" @submit.stop.prevent="handleSubmit">
+          <form ref="form" @submit.stop.prevent="handleAddress">
             <b-form-group
               label="您的地址："
               label-for="name-input"
@@ -55,10 +56,55 @@
             </b-form-group>
           </form>
         </b-modal>
-        <b-form-group label="支付方式:" label-for="payment">
-            <!-- <b-form-radio v-model="selected" name="pay" value="1">信用卡</b-form-radio>
-            <b-form-radio v-model="selected" name="pay" value="2">現金支付  </b-form-radio> -->
+
+        <b-form-group label="支付方式：" label-for="payment">
+          <b-form-radio-group v-model="paymentMethodSelected" @change="onChange" :options="paymentMethods"></b-form-radio-group>
         </b-form-group>
+        <b-form-group>
+          <b-input-group-prepend v-if="paymentMethodSelected==1">
+            <b-form-select class="col-11" v-model="creditCardSelected" @change="onChange" :options="creditCards"></b-form-select>
+            <b-button class="creditCard col-1" size="sm" text="Button" variant="success" @click="addCreditCard" squared>+</b-button>
+          </b-input-group-prepend>
+        </b-form-group>
+        <b-modal
+          id="modal-credit-card"
+          ref="credit"
+          title="新增信用卡"
+          @show="resetModal"
+          @hidden="resetModal"
+          @ok="handleCreditCard"
+          centered
+        >
+          <form ref="credit_form" @submit.stop.prevent="handler2">
+            <b-form-group
+              label="您的信用卡卡號："
+              label-for="name-input2"
+              :state="creditCardState"
+            >
+              <b-input-group>
+                <b-input-group-prepend is-text>
+                  <b-icon icon="credit-card"></b-icon>
+                </b-input-group-prepend>
+                <b-form-input
+                  id="name-input2"
+                  v-model="creditCard"
+                  :state="creditCardState"
+                  required
+                ></b-form-input>
+              </b-input-group>
+            </b-form-group>
+            <b-form-group
+              label="到期日："
+              label-for="name-input3"
+              :state="expiredDateState"
+            >
+            <b-input-group>
+              <datepicker minimum-view="month" name="uniquename" required clear-button v-model="expiredDate" format="MM/yy" typeable></datepicker>
+            </b-input-group>
+            </b-form-group>
+          </form>
+        </b-modal>
+        
         <b-form-group label="優惠碼:" label-for="coupon">
             <div class='tlprice' id='coupon'>
             <b-input-group
@@ -80,9 +126,11 @@
 </template>
 
 <script>
+import Datepicker from 'vuejs-datepicker';
 export default {
   name: "Cashier",
   components: {
+    Datepicker
   },
   data(){
       return {
@@ -110,6 +158,10 @@ export default {
           { text: "第五教學大樓", value: "第五教學大樓"},
           { text: "第六教學大樓", value: "第六教學大樓"},
         ],
+        paymentMethods: [
+          {text: "信用卡", value: 1},
+          {text: "現金支付", value: 2}
+        ],
         address:[],
         totalPrice: null,
         popoverShow: false,
@@ -117,15 +169,49 @@ export default {
         adHover:false,
         newAddress: '',
         addressState: null,
+        paymentMethodSelected: 1,
+        creditCardSelected: '請選擇信用卡',
+        creditCard: '',
+        creditCardState: null,
+        creditCards: [
+          {text: "請選擇信用卡", value: "請選擇信用卡", disabled: true},
+          {text: "sample", value: "sample"}
+        ],
+        expiredDate: '',
+        expiredDateState: null
       }
   },
   methods:{
+    formatter(value) {
+      return moment(value).format("M");
+    },
+    onContext(ctx){
+      console.log(ctx)
+    },
+    onChange(){
+      let address = null;
+      let coupon_code = null;
+      let payment_method = null;
+
+      if (this.placeSelected.value === 'school')
+        address = this.schoolPlaceSelected.text
+      else if (this.placeSelected.value === 'outside')
+        address = this.addressSelected.text;
+
+      if (this.couponState)
+        coupon_code = this.coupon
+      console.log(this.paymentMethodSelected)
+      //this.$bus.$emit('sync', {address:address, payment_method:payment_method, coupon_code:coupon_code})
+    },
     school(){
       console.log(this.placeSelected)
     },
     addAddress(){
       this.$refs['modal'].show();
     },
+    addCreditCard(){
+      this.$refs['credit'].show();
+    },  
     getCutomerAddress(){
       this.$http.get('/customer/address',  {
         headers: {
@@ -138,23 +224,55 @@ export default {
         this.addressSelected = this.address[0].value;
       })
     },
-    checkFormValidity() {
+    checkAddressValidity() {
       const valid = this.$refs.form.checkValidity()
       this.addressState = valid
       return valid
     },
+    checkCreditCardValidity() {
+      const valid = this.$refs.credit_form.checkValidity()
+      this.creditCardState = valid;
+      if (this.expiredDate)
+        this.expiredDateState = true;
+      else
+        this.expiredDateState = false;
+      return valid && this.expiredDateState
+    },
     resetModal() {
       this.newAddress = ''
       this.addressState = null
+      this.creditCard = ''
+      this.creditCardState = null
+      this.expiredDate = ''
     },
-    handleOk(bvModalEvt) {
+    handleCreditCard(bvModalEvt) {
+      bvModalEve.preventDefault()
+      this.handler2()
+    },
+    handler2() {
+      if (!this.checkCreditCardValidity())
+        return
+      for (let i = 0 ; i<this.creditCards.length; i++){
+        if(this.creditCard == this.creditCards[i].value){
+          this.$alert("重複的信用卡，請重新輸入","","warning")
+          this.creditCardState = false 
+          return
+        }
+      }
+      this.creditCards.push(this.creditCard)
+      console.log(this.creditCards)
+      this.$nextTick(() => {
+        this.$bvModal.hide('modal-credit-card')
+      })
+    },
+    handleAddress(bvModalEvt) {
       // Prevent modal from closing
       bvModalEvt.preventDefault()
       // Trigger submit handler
-      this.handleSubmit()
+      this.handler1()
     },
-    handleSubmit() {
-      if (!this.checkFormValidity()) {
+    handler1() {
+      if (!this.checkAddressValidity()) {
         return
       }
       for (let i = 0 ; i<this.address.length; i++){
@@ -190,5 +308,8 @@ export default {
   }
   .outside{
     margin: 2%;
+  }
+  .creditCard{
+    font-size: 1.2rem;
   }
 </style>
