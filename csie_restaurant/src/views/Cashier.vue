@@ -151,7 +151,8 @@ export default {
         }
         else{
           this.productNum -= this.ItemList[e].quantity
-          this.totalPrice -= this.ItemList[e].quantity * this.ItemList[e].foodPrice 
+          this.beforeMoney -= this.ItemList[e].quantity * this.ItemList[e].foodPrice 
+          this.totalPrice = this.beforeMoney + this.shipping
           this.ItemList.splice(e,1);
           this.$cookie.set('product',JSON.stringify(this.ItemList));
         }
