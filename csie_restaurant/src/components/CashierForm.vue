@@ -229,7 +229,7 @@ export default {
           this.coupon = coupon.coupon.code;
           this.useValidCoupon()
           this.useCouponDiscount(coupon)
-          this.$cookie.set('discount',this.disCountMoney)
+          this.$cookie.set('discount',Math.round(this.disCountMoney))
         }
     },
     addCutomerAddress(data){
@@ -276,7 +276,7 @@ export default {
             this.useValidCoupon()
             this.useCouponDiscount(response.data.coupon)
             this.$cookie.set('coupon',JSON.stringify(response.data.coupon))
-            this.$cookie.set('discount',this.disCountMoney)
+            this.$cookie.set('discount',Math.round(this.disCountMoney))
             this.$alert('','輸入成功','success')
             this.$emit('useCoupon')
           })
