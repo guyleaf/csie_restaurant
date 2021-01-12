@@ -114,7 +114,7 @@ class SellerService
 
     public function updateOrder($seller_id, $payload)
     {
-        $result = $this->orderService->updateOrder($seller_id, $payload);
+        $result = $this->orderService->updateSellerOrder($seller_id, $payload);
         return $result;
     }
     public function addProductCategory($id, $payload)
