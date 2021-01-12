@@ -99,8 +99,12 @@ export default {
         totalPrice: 0,
         discountMoney:0,
         shipping:30,
+        shop_id: null,
         coupon_code: '',
-        shop_id: null
+        address: '',
+        payment_method: 1,
+        coupon: null,
+        taking_method: null
       }
   },
   methods:{
@@ -159,7 +163,23 @@ export default {
       },
       useCoupon(){
         this.discountMoney  = this.$cookie.get('discount') ;
-        this.totalPrice = this.beforeMoney - this.discountMoney + this.shipping
+        this.coupon = JSON.parse(this.$cookie.get('coupon'));
+        if (this.coupon.coupon.type != 1)
+          this.totalPrice = this.beforeMoney - this.discountMoney + this.shipping
+        else if (this.coupon.coupon.type == 1)
+        {
+          if (this.discountMoney >= this.shipping)
+          {
+            this.discountMoney -= this.shipping
+            this.shipping = 0
+          }
+          else
+          {
+            this.shipping -= this.discountMoney
+          }
+          
+          this.totalPrice = this.beforeMoney - this.discountMoney + this.shipping
+        }
       },
       deleteCoupon(){
         console.log(this.$cookie.get('discount'))
@@ -167,17 +187,37 @@ export default {
         this.totalPrice = this.beforeMoney + this.shipping
       },
       submit() {
-        let data = [];
-        data.push({coupon_code:this.coupon_code, seller_id:parseInt(this.shop_id)})
+        let order = {coupon_code:this.coupon_code, seller_id:parseInt(this.shop_id), address: this.address, taking_method: this.taking_method, payment_method: this.payment_method, fee: this.shipping}
+        let cookie = JSON.parse(this.$cookie.get("product"));
+        let order_items = []
+        for (let i=0;i<cookie.length;i++)
+        {
+          order_items.push({product_id: cookie[i].id, quantity: cookie[i].quantity, price: cookie[i].foodPrice})
+        }
+
+        this.$axios.post(this.$url + '/order', {order: order, order_items: order_items},  {
+          headers: {
+            'Authorization': 'Bearer ' + this.$store.getters['auth/token']
+          }
+        }).then(response =>{
+          console.log(response.data)
+          this.$alert("成功建立訂單", "", "success")
+          this.$route.push('/')
+        }).catch(error => {
+          console.log(error.response)
+        })
       }
   },
   mounted(){
-    this.$bus.$on('discountMoney', () =>{
-    })
   },
   created(){
     this.loadingData()
-    this.$bus.$on('ok', (isValid) => {
+    this.$bus.$on('sync', (data) => {
+      console.log(data);
+      this.coupon_code = data.coupon_code
+      this.address = data.address
+      this.payment_method = data.payment_method
+      this.taking_method = data.taking_method
     });
   },
   computed: {

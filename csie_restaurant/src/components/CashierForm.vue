@@ -12,7 +12,7 @@
 
         <b-form-group v-slot="{ ariaDescribedby }">
           <div class="inSchool" v-if="placeSelected=='school'">
-             <b-form-select v-model="schoolPlaceSelected" :options="schoolPlaces"></b-form-select>
+             <b-form-select v-model="schoolPlaceSelected" @change="onChange" :options="schoolPlaces"></b-form-select>
           </div>
           <div class="outside" v-if="placeSelected=='outside'" >
             <div class="row placetxt"> 您的地點：</div>
@@ -25,6 +25,7 @@
               button-variant="outline-dark"
               buttons
               stacked
+              @change="onChange"
             ></b-form-radio-group>
             <div class="adb">
               <b-icon animation="cylon" variant="secondary" @mouseleave="adHover=false" v-if="adHover" icon="plus-circle-fill" font-scale="3" @click="addAddress"/>
@@ -183,12 +184,12 @@ export default {
         newAddress: '',
         addressState: null,
         paymentMethodSelected: 1,
-        creditCardSelected: '請選擇信用卡',
+        creditCardSelected: '-1',
         creditCard: '',
         creditCardState: null,
         creditCards: [],
         creditCards_options: [
-          {text: "請選擇信用卡", value: "請選擇信用卡", disabled: true}
+          {text: "請選擇信用卡", value: -1, disabled: true}
         ],
         expiredDate: '',
         expiredDateState: null
@@ -204,15 +205,23 @@ export default {
       let address = null;
       let coupon_code = null;
       let payment_method = null;
+      let credit_card = null;
 
-      if (this.placeSelected.value === 'school')
-        address = this.schoolPlaceSelected.text
-      else if (this.placeSelected.value === 'outside')
-        address = this.addressSelected.text;
-
+      if (this.placeSelected === 'school')
+        address = this.schoolPlaceSelected
+      else if (this.placeSelected === 'outside')
+        address = this.addressSelected;
+      
       if (this.couponState)
         coupon_code = this.coupon
-      //this.$bus.$emit('sync', {address:address, payment_method:payment_method, coupon_code:coupon_code})
+
+      payment_method = this.paymentMethodSelected;
+
+      if (this.paymentMethodSelected == 1)
+        credit_card = this.creditCards[this.creditCardSelected]
+      
+
+      this.$bus.$emit('sync', {address:address, payment_method:payment_method, coupon_code:coupon_code, credit_card_info:credit_card, taking_method: 1})
     },
     school(){
     },
@@ -356,7 +365,7 @@ export default {
       }).then(response =>{
         console.log(response.data)
         for (let i = 0; i<response.data.length; i++){
-          this.creditCards_options.push({text:response.data[i].credit_card + '   ' + '有效期限:' + moment(response.data[i].expire_date).format("MM/YY"), value:response.data[i].credit_card + '   ' + '有效期限:' + moment(response.data[i].expire_date).format("MM/YY")})
+          this.creditCards_options.push({text:response.data[i].credit_card + '   ' + '有效期限:' + moment(response.data[i].expire_date).format("MM/YY"), value:i})
           this.creditCards.push({credit_card: response.data[i].credit_card, expire_date:response.data[i].expire_date})
         }
       }).catch(error => {
@@ -403,7 +412,7 @@ export default {
         }
       }
       this.addCustomerCreditCard(this.creditCard, this.expiredDate);
-      this.creditCards_options.push({text:this.creditCard + '   ' + '有效期限:' + moment(this.expiredDate).format("MM/YY"), value:this.creditCard + '   ' + '有效期限:' + moment(this.expiredDate).format("MM/YY")})
+      this.creditCards_options.push({text:this.creditCard + '   ' + '有效期限:' + moment(this.expiredDate).format("MM/YY"), value:this.creditCards_options.length-1})
       this.creditCards.push({credit_card: this.creditCard, expire_date:this.expiredDate})
       this.$nextTick(() => {
         this.$alert("信用卡新增成功", "", "success")
