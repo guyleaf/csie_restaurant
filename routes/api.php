@@ -72,6 +72,8 @@ $router->group(['prefix' => 'seller', 'middleware' => 'jwt.seller'], function ()
     });
     $router->group(['prefix' => 'categories'], function () use ($router) {
         $router->post('add', 'SellerController@addProductCategory');
+        $router->post('update', 'SellerController@updateProductCategory');
+        $router->post('delete', 'SellerController@deleteProductCategory');
     });
 });
 

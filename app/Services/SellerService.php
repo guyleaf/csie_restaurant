@@ -117,10 +117,24 @@ class SellerService
         $result = $this->orderService->updateSellerOrder($seller_id, $payload);
         return $result;
     }
+
     public function addProductCategory($id, $payload)
     {
         $result = $this->productRepository
         ->addProductCategory($id, $payload);
+        return $result;
+    }
+
+    public function updateProductCategory($seller_id, $payload)
+    {
+        $payloadProduct['category_name']=$payload['new']['name']
+        $result = $this->productRepository->updateProductCategory($seller_id, $payload, $payloadProduct);
+        return $result;
+    }
+
+    public function deleteProductCategory($id)
+    {
+        $result = $this->productRepository->deleteProductCategory($id);
         return $result;
     }
 }
