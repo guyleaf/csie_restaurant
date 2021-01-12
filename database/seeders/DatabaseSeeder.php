@@ -13,6 +13,7 @@ use Database\Seeders\CouponSeeder;
 use Database\Seeders\SpecifiedCouponProductSeeder;
 use Database\Seeders\OrderSeeder;
 use Database\Seeders\OrderItemSeeder;
+use Database\Seeders\CreditCardSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -36,6 +37,7 @@ class DatabaseSeeder extends Seeder
         $specified_coupon_product_path = base_path('database/seeders/data/specified_coupon_product.json');
         $order_path = base_path('database/seeders/data/order.json');
         $order_item_path = base_path('database/seeders/data/order_item.json');
+        $credit_card_path = base_path('database/seeders/data/credit_card.json');
 
         $this->call(MemberSeeder::class, false,
         ['member_path' => $member_path, 'customer_path' => $customer_path, 'seller_path' => $seller_path]);
@@ -49,5 +51,6 @@ class DatabaseSeeder extends Seeder
         $this->call(OrderSeeder::class, false, ['order_path' => $order_path]);
         $this->call(OrderItemSeeder::class, false, ['order_item_path' => $order_item_path]);
         $this->call(ProductImageSeeder::class, false, ['product_image_path' => $product_image_path]);
+        $this->call(CreditCardSeeder::class, false, ['credit_card_path' => $credit_card_path]);
     }
 }
