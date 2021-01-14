@@ -4,6 +4,7 @@ namespace App\Services;
 use App\Repositories\CouponRepository;
 use App\Repositories\ProductRepository;
 use App\Services\OrderService;
+use App\Services\ProductService;
 use Exception;
 use Illuminate\Validation\Rules\Exists;
 use Intervention\Image\Facades\Image as Image;
@@ -26,16 +27,22 @@ class SellerService
     protected $orderService;
 
     /**
+     * @var App\Services\ProductService $productService
+     */
+    protected $productService;
+
+    /**
      * Shop service constructor
      *
      * @param \App\Repositories\CouponRepository $couponRepository
      * @param \App\Repositories\ProductRepository $productRepository
      */
-    public function __construct(CouponRepository $couponRepository, ProductRepository $productRepository, OrderService $orderService)
+    public function __construct(CouponRepository $couponRepository, ProductRepository $productRepository, OrderService $orderService, ProductService $productService)
     {
         $this->couponRepository = $couponRepository;
         $this->productRepository = $productRepository;
         $this->orderService = $orderService;
+        $this->productService = $productService;
     }
 
     public function addCoupon($seller_id, $payload)

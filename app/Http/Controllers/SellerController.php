@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Services\SellerService;
 use App\Services\ShopService;
-use App\Services\ProductService;
 use App\Services\OrderService;
 use Exception;
 
@@ -22,20 +21,14 @@ class SellerController extends Controller
     protected $shopService;
 
     /**
-     * @var \App\Services\ProductService $productService
-     */
-    protected $productService;
-
-    /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(SellerService $sellerService, ShopService $shopService, ProductService $productService)
+    public function __construct(SellerService $sellerService, ShopService $shopService)
     {
         $this->sellerService = $sellerService;
         $this->shopService = $shopService;
-        $this->productService = $productService;
     }
 
     public function getCoupons(Request $request)
