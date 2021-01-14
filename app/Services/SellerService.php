@@ -134,7 +134,7 @@ class SellerService
 
     public function addProductCategory($seller_id, $payload)
     {
-        $this->productRepository->addProductCategory($id, $payload);
+        $this->productRepository->addProductCategory($seller_id, $payload);
     }
 
     public function updateProductCategory($seller_id, $payload)
@@ -144,7 +144,7 @@ class SellerService
 
     public function deleteProductCategory($seller_id, $payload)
     {
-        $this->productRepository->deleteProductCategory($id, $payload);
+        $this->productRepository->deleteProductCategory($seller_id, $payload);
     }
 }
 ?>
