@@ -198,6 +198,7 @@ export default {
       submit() {
         let order = {coupon_code:this.coupon_code, seller_id:parseInt(this.shop_id), address: this.address, taking_method: this.taking_method, payment_method: this.payment_method, fee: this.shipping}
         let cookie = JSON.parse(this.$cookie.get("product"));
+        let coupon_code = JSON.parse(this.$cookie.get("coupon_code"));
         console.log(cookie);
         let order_items = []
         for (let i=0;i<cookie.length;i++)
@@ -205,7 +206,13 @@ export default {
           order_items.push({product_id: cookie[i].id, quantity: cookie[i].quantity, price: cookie[i].foodPrice})
         }
 
-        this.$axios.post(this.$url + '/order', {order: order, order_items: order_items},  {
+        let data = {
+          order: order,
+          order_items: order_items,
+          coupon_code: coupon_code
+        }
+        
+        this.$axios.post(this.$url + '/order', data,  {
           headers: {
             'Authorization': 'Bearer ' + this.$store.getters['auth/token']
           }
