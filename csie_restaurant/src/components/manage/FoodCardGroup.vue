@@ -151,17 +151,24 @@ export default {
         },
         modityfoodcategory(index){ //FIXME
             console.log(index)
-            this.updateTab(this.foodCategories)
-            this.$http.post('/seller/categories/update',{old:{name:this.foodCategories[index].foodCategory},new:{name:this.modityName}},{
+            let modityName = this.modityName
+            this.$http.post('/seller/categories/update',{old:{name:this.foodCategories[index].foodCategory},new:{name:modityName}},{
                     headers: {
                         'Authorization': 'Bearer ' + this.$store.getters['auth/token']
             }}).then( response=>{
                 this.$alert("修改成功","","success");
-                window.location.reload()
+                
+                this.sameTag(this.foodCategories[index].foodCategory, null).forEach(item => {
+                    item.foodTag = modityName;
+                });
+                this.foodCategories.push({foodCategory: modityName, order: this.foodCategories[index].order, hover:false});
+                this.foodCategories.splice(index, 1);
+                console.log(this.foodCategories)
+                this.updateTab(this.foodCategories);
             }).catch( error=>{
-                console.log(error.response)
+                console.log(error)
             })
-            this.foodCategories[index].foodCategory=this.modityName;
+            
             this.modityName='';
             this.editable=-1;
         },
@@ -204,7 +211,8 @@ export default {
             this.resetModal();
             this.$refs['my-modal'].hide();
         },
-        sameTag:function(category,state){
+        sameTag:function(category,state=null){
+            if (state == null) return this.foodCards.filter(i => i.foodTag === category)
             return this.foodCards.filter(i => i.foodTag === category && i.sellingState == state)
         },
         showModal(foodCategory) {
@@ -306,6 +314,9 @@ export default {
         updateTab:function(msg){
             this.foodCategories=[]
             console.log(msg)
+            msg.sort(function(a,b){
+                return a.order - b.order;
+            });
             for(let i=0;i<msg.length;i++){
                 this.foodCategories.push({foodCategory: msg[i].foodCategory,order: msg[i].order,hover:false})
                 let id=msg[i].foodCategory.replace(/\s*/g,"");
@@ -324,27 +335,31 @@ export default {
     },
     created(){
         let id =this.$store.getters['auth/user'].id
-        this.$http.get('restaurants/'+id+'/products')
+        this.$axios.get(this.$url + '/seller/products', {
+            headers: {
+                'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
+            }
+        })
         .then(response => {
           this.foodCards=[];
           let data=response.data;
           for (let i=0;i<data.length;i++) {     
-            this.foodCards.push({sellingState:data[i].status, soldOut:data[i].sold_out, foodId: data[i].id, foodName: data[i].name, price:parseInt(data[i].price), imgPath: this.$url + data[i].image_path, foodDescription: data[i].description, foodTag:data[i].category_name});}
+            this.foodCards.push({sellingState:Boolean(data[i].status), soldOut:data[i].sold_out, foodId: data[i].id, foodName: data[i].name, price:parseInt(data[i].price), imgPath: this.$url + data[i].image_path, foodDescription: data[i].description, foodTag:data[i].category_name});}
             this.foodCards = this.foodCards.sort(function (a, b) {
                 return a.foodName - b.foodName
             });
-            
+            this.$bus.$emit('productsNumber',this.foodCards.filter(i => i.sellingState == true).length)
         })
-        this.$http.get('/restaurants/'+id+'/category')
-            .then(response => {
+        this.$axios.get(this.$url + '/restaurants/'+id+'/category')
+        .then(response => {
             this.foodCategories=[];
             let data=response.data;
             // console.log(data)
             for (let i=0;i<data.length;i++) this.foodCategories.push({foodCategory: data[i].name, order: data[i].display_order, hover:false});
             this.foodCategories.sort(function(a,b){
-            return a.order - b.order;
+                return a.order - b.order;
             });
-            })
+        })
     },
     mounted(){
         function setfbacksize()

@@ -101,7 +101,7 @@
     },
     methods:{
       price(data){
-        console.log(data)
+        //console.log(data)
         if(data.discount==null) return 'Ship free'
         return Math.round((data.price * data.quantity * parseFloat(data.discount)))
                 // return Math.round((data.price * data.couponQuantity * data.discount) + (data.price * (data.quantity-data.couponQuantity)))
@@ -153,7 +153,7 @@
           }
         }).then(response => {
           datas=response.data
-          console.log(datas)
+          //console.log(datas)
           history.item.datas=[]
           history.item.coupon_item=[]
           history.item.comment=datas.order.comment
@@ -170,7 +170,7 @@
             //       }
             //     }
             history.item.datas.push({product_name:datas.order_items[i].product_name, price:datas.order_items[i].price, quantity:datas.order_items[i].quantity ,discount:datas.order.discount})
-            console.log(history.item.datas)
+            //(history.item.datas)
           }
           if(datas.order.coupon_type==1) history.item.isShippingCoupon=true;
           else history.item.isShippingCoupon=false;

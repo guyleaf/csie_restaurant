@@ -40,37 +40,28 @@ export default {
         },
     },
     created(){
-    let id = this.$router.currentRoute.params.id
-    this.$http.get('restaurants/'+id+'/products')
-        .then(response => {
-          this.foodCards=[];
-          let data=response.data;
-          for (let i=0;i<data.length;i++) 
-            {
-              this.foodCards.push({sellingState:data[i].status, soldOut:data[i].sold_out, foodId: data[i].id, foodName: data[i].name, price:data[i].price, imgPath: this.$url + data[i].image_path, foodDescription: data[i].description, foodTag:data[i].category_name});}
-              console.log(this.foodCards)
-              this.$bus.$emit('productsNumber',this.foodCards.filter(i => i.sellingState == true).length)  
-    })
-    this.$http.get('/restaurants/'+id+'/category')
-        .then(response => {
-          this.foodCategories=[];
-          let data=response.data;
-          for (let i=0;i<data.length;i++) this.foodCategories.push({foodCategory: data[i].name, order: data[i].display_order});
-            console.log(this.foodCategories)
-            this.foodCategories.sort(function(a,b){
-            return a.order - b.order;
-            });
-          })
-    this.$http.get('/seller/'+id+'/category')
-        .then(response => {
-          this.foodCategories=[];
-          let data=response.data;
-          for (let i=0;i<data.length;i++) this.foodCategories.push({foodCategory: data[i].name, order: data[i].display_order});
-            console.log(this.foodCategories)
-            this.foodCategories.sort(function(a,b){
-            return a.order - b.order;
-            });
-          })
+        let id = this.$router.currentRoute.params.id
+        
+        this.$http.get('/restaurants/'+id+'/products')
+            .then(response => {
+            this.foodCards=[];
+            let data=response.data;
+            for (let i=0;i<data.length;i++) 
+                {
+                this.foodCards.push({sellingState:data[i].status, soldOut:data[i].sold_out, foodId: data[i].id, foodName: data[i].name, price:data[i].price, imgPath: this.$url + data[i].image_path, foodDescription: data[i].description, foodTag:data[i].category_name});}
+                console.log(this.foodCards)
+                this.$bus.$emit('productsNumber',this.foodCards.filter(i => i.sellingState == true).length)  
+        })
+        this.$http.get('/restaurants/'+id+'/category')
+            .then(response => {
+            this.foodCategories=[];
+            let data=response.data;
+            for (let i=0;i<data.length;i++) this.foodCategories.push({foodCategory: data[i].name, order: data[i].display_order});
+                console.log(this.foodCategories)
+                this.foodCategories.sort(function(a,b){
+                return a.order - b.order;
+                });
+            })
     },
     mounted(){
          function setfbacksize()

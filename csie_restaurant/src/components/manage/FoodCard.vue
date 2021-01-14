@@ -103,7 +103,7 @@ export default {
         price: Number,
         foodId: Number,
         soldOut: Boolean,
-        sellingState: Number,
+        sellingState: Boolean,
         foodId: Number,
     },
     computed:{
@@ -192,8 +192,9 @@ export default {
                         if(this.foodName != this.vfoodName) {this.foodName = this.vfoodName;formdata.append('name',this.vfoodName);}
                         if(this.foodDescription != this.vfoodDescription) {this.foodDescription = this.vfoodDescription;formdata.append('description',this.vfoodDescription);}
                         if(this.price != this.vprice) {this.price = this.vprice;formdata.append('price',this.vprice);}
-                        if(this.imgPath != this.image) {this.imgPath=this.preview;formdata.append('image',this.image);}
-
+                        if(this.imgPath != this.image) {this.imgPath=this.preview;formdata.append('image',this.image);console.log(22)}
+                        
+                        
                         this.$http.post('/seller/products/update',formdata,{
                             headers: {
                             'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
@@ -236,22 +237,21 @@ export default {
             if(!this.soldOut)  msg='是否標記為售完？'
             else msg='是否確定已補足庫存？'
             this.$confirm(msg,"","question").then(() => {
-            this.$emit("changeStock",this.foodId)
-            })  
+                this.$emit("changeStock",this.foodId)
+            }).catch(error => {})
         },
         changeShelf(){
             let msg=''
             if(!this.sellingState)  msg='你確定要上架？'
             else  msg='你確定要下架？'
             this.$confirm(msg,"","question").then(() => {
-            this.$emit("changeState",this.foodId)
-        })
+                this.$emit("changeState",this.foodId)
+            }).catch(error => {})
         },
         deleteProduct(){
             this.$confirm("你確定要刪除？","","question").then(() => {
-            this.$emit("deleteProduct",this.foodId)
-        });
-
+                this.$emit("deleteProduct",this.foodId)
+            }).catch(error => {});
         },
         checkFormValidity() {
             const valid1 = this.$refs['name-input'].checkValidity()
