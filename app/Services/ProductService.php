@@ -22,10 +22,10 @@ class ProductService
         $this->productRepository = $productRepository;
     }
 
-    public function getItems($id)
+    public function getItems($seller_id, $include_nonSelling)
     {
         $result = $this->productRepository
-            ->getShopItemsByShopId($id);
+            ->getShopItemsByShopId($seller_id, $include_nonSelling);
         return $result;
     }
 

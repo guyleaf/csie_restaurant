@@ -36,13 +36,19 @@ class ProductRepository
         $this->productCategoryTable = DB::table('product_category', 'PC');
     }
 
-    public function getShopItemsByShopId($id)
+    public function getShopItemsByShopId($id, $include_nonSelling)
     {
         $items = $this->productTable
             ->join('seller as S', 'seller_id', '=', 'S.member_id')
             ->join('product_image as PI', 'PI.id', '=', 'P.id')
             ->where('S.member_id','=', $id)
-            ->where('is_deleted', '=', false)
+            ->where('is_deleted', '=', false);
+
+        if (!$include_nonSelling)
+            $items = $items
+                ->where('status', '=', 1);
+
+        $items = $items
             ->distinct()
             ->get(['P.id', 'name', 'price', 'P.description', 'category_name','sold_out','status', 'PI.image_path']);
 

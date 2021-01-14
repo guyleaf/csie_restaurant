@@ -94,7 +94,7 @@ class SellerController extends Controller
     {
         $user = auth()->user();
         $id = $user->id;
-        $result = $this->productService->getItems($id);
+        $result = $this->sellerService->getProducts($id);
         return response()->json($result);
     }
 

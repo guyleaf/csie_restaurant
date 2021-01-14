@@ -55,6 +55,13 @@ class SellerService
         $this->couponRepository->updateCoupon($payload);
     }
 
+    public function getProducts($id)
+    {
+        $result = $this->productService
+        ->getItems($id, true);
+        return $result;
+    }
+
     public function addProduct($seller_id, $payload)
     {
         $image = Image::make($payload['image'])->resize(200, 200)->encode('jpg');
