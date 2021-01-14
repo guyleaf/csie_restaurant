@@ -2,6 +2,7 @@
 namespace App\Repositories;
 
 use Illuminate\Support\Facades\DB;
+use Datetime, Timezone;
 
 class OrderRepository
 {
@@ -111,6 +112,16 @@ class OrderRepository
 
             DB::table('order_item', 'OI')
             ->insert($order['order_items']);
+
+            if (isset($order['coupon_code']))
+            {
+                $now = new DateTime('now', new DateTimeZone('Asia/Taipei'));
+                $now = $now->format('Y-m-d H:i:s');
+                DB::table('used_coupon', 'UC')
+                ->insert(
+                    ['customer_id' => $customer_id, 'coupon_code' => $order['coupon_code'], 'usage_time' => $now]
+                );
+            }
         });
     }
 

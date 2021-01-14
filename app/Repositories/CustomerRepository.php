@@ -53,8 +53,7 @@ class CustomerRepository
     public function countUsageNumberOfUsedCoupon($id, $coupon_code)
     {
         $result = $this->usedCoupon
-        ->join('coupon as CP', 'CP.id', '=', 'UC.coupon_id')
-        ->where('CP.code', '=', $coupon_code)
+        ->where('UC.coupon_code', '=', $coupon_code)
         ->count();
 
         return $result;
