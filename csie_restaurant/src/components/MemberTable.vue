@@ -114,7 +114,7 @@
                 this.members[member.index].member_status=!this.members[member.index].member_status
             }).catch(error=>{
                 // this.$alert("修改失敗","","error");
-                console.log(error.response)
+                // console.log(error.response)
             })
         });    
       },
@@ -128,13 +128,13 @@
             }).then(response =>{
                 this.$alert("刪除成功","","success");
                 this.members.splice(member.index,1);
-                console.log("刪除成功")
+                // console.log("刪除成功")
                 this.routeMembers("now")
                 this.$emit("deleteMember")
             })
             .catch(error=>{
                 // this.$alert("刪除失敗","","error");
-                console.log(error.response)
+                // console.log(error.response)
             })
         });
       },
@@ -160,7 +160,7 @@
         else {lstPgButton.disabled = false;}
         if (nxtNumber >= this.numOfMembers) {nxtButton.disabled = true}
         else {nxtButton.disabled = false}
-        console.log(this.currentNumber );
+        // console.log(this.currentNumber );
       },
       refresh() {
         let url = '/admin/customers?currentNumber=0&requiredNumber=5'

@@ -32,7 +32,7 @@ export default {
         toShop(){
             this.$router.push({name: 'Shop', params:{id:this.shopId, shopName: this.shopName} });
             this.$store.dispatch('auth/cleanSearchResult')
-            // console.log('afterCleanin', this.$store.getters['auth/searchResult']);
+            // // console.log('afterCleanin', this.$store.getters['auth/searchResult']);
         },
     }
 }

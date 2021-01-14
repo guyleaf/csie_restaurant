@@ -120,7 +120,7 @@
         }).then(response=>{
           this.$alert("更改成功","","success");
         }).catch(error =>{
-          console.log(error.response)
+          // console.log(error.response)
         })
         })
         // this.items[index].ratingdisabled=!this.items[index].ratingdisabled
@@ -139,7 +139,7 @@
           }).then(response=>{
             this.$alert("取消成功","","success");
           }).catch(error =>{
-          console.log(error.response)
+          // console.log(error.response)
         })
         })
       },
@@ -167,7 +167,7 @@
           }
           else history.item.msg='下一步:'+this.status[history.item.訂單狀態+1]
           history.item.datas=[]
-          console.log(history.item)
+          // console.log(history.item)
           for(let i=0 ;i<data.order_items.length;i++)
           {
             let discount = 1
@@ -180,7 +180,7 @@
           history.toggleDetails()
 
         }).catch(error =>{
-          console.log(error.response)
+          // console.log(error.response)
         })
       }
     },
@@ -196,7 +196,7 @@
       .then(response => {
           this.items=[];
           let data=response.data;
-          console.log(data)
+          // console.log(data)
           for (let i=0;i<data.length;i++)
           {
             this.items.push({訂單編號: data[i].order_id,ratingStar: data[i].stars, 下單日期: data[i].order_time, 訂單狀態: data[i].status,readonly: true, ratingdisabled:false});

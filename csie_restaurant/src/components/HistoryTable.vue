@@ -101,14 +101,21 @@
     },
     methods:{
       price(data){
-        //console.log(data)
-        if(data.discount==null) return 'Ship free'
-        return Math.round((data.price * data.quantity * parseFloat(data.discount)))
+        if(data.discount==null) return 'Free'
+        else if (isNaN(data.discount)) return data.price * data.quantity
+        return Math.round((data.price * data.quantity * data.discount))
                 // return Math.round((data.price * data.couponQuantity * data.discount) + (data.price * (data.quantity-data.couponQuantity)))
       },
       total(datas){
         let total=0;
-        for(let i=0;i<datas.length;i++) total=total+parseFloat(parseFloat(datas[i].price * datas[i].quantity * datas[i].discount).toFixed(0))
+        console.log(datas)
+        for(let i=0;i<datas.length;i++) 
+        {
+          if (isNaN(datas[i].discount) || datas[i].discount == null)
+            total=total+(datas[i].price * datas[i].quantity)
+          else
+            total=total+(datas[i].price * datas[i].quantity * datas[i].discount).toFixed(0)
+        }
         return total
       },
       clickStar(val,history){
@@ -153,7 +160,7 @@
           }
         }).then(response => {
           datas=response.data
-          //console.log(datas)
+          //// console.log(datas)
           history.item.datas=[]
           history.item.coupon_item=[]
           history.item.comment=datas.order.comment
@@ -169,7 +176,7 @@
             //         couponQuantity: datas.coupon_items[j].quantity
             //       }
             //     }
-            history.item.datas.push({product_name:datas.order_items[i].product_name, price:datas.order_items[i].price, quantity:datas.order_items[i].quantity ,discount:datas.order.discount})
+            history.item.datas.push({product_name:datas.order_items[i].product_name, price:parseInt(datas.order_items[i].price), quantity:parseInt(datas.order_items[i].quantity),discount:parseFloat(datas.order.discount)})
             //(history.item.datas)
           }
           if(datas.order.coupon_type==1) history.item.isShippingCoupon=true;
@@ -178,12 +185,12 @@
           history.toggleDetails()
         })
         // let orderItems = []
-        // console.log(datas.order.coupon_type,'123')
+        // // console.log(datas.order.coupon_type,'123')
         // if(datas.order.coupon_type == 2){
           // for(let i= 0; i<datas.order_items.length;i++) {
             // orderItems.push( {foodName:datas.order_items[i].product_name, quantity:datas.order_items[i].quantity, id:datas.order_items[i].product_id, 
             // foodPrice:datas.order_items[i].price})
-            // console.log(i)
+            // // console.log(i)
           // }
         
           let couponTotal=0;
@@ -195,14 +202,14 @@
         //       'Authorization': 'Bearer ' + this.$store.getters['auth/token']
         //     }
         //   }).then(response=>{
-        //     console.log(response.data)
+        //     // console.log(response.data)
         //   })
         // }
         // history.toggleDetails()
     
     },
     mounted() {
-      this.$http.get('/customer/orders', {
+      this.$axios.get(this.$url + '/customer/orders', {
         headers: {
           'Authorization': 'Bearer ' + this.$store.getters['auth/token']
         }

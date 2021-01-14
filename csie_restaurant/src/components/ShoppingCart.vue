@@ -113,12 +113,14 @@
         let coupon = JSON.parse(this.$cookie.get('coupon'));
         this.bookingShopName = this.$cookie.get('shopName')
         if(data == null) this.submitInvalid = true;
-        for (var i = 0; i<data.length;i++)
-        {
-          this.beforePrice = this.totalPrice + data[i].foodPrice*data[i].quantity; 
-          this.totalPrice = this.beforePrice
-          this.ItemList.push({foodName:data[i].foodName, quantity:data[i].quantity, foodPrice:data[i].foodPrice});
-          this.productNum += this.ItemList[i].quantity
+        else {
+          for (var i = 0; i<data.length;i++)
+          {
+            this.beforePrice = this.totalPrice + data[i].foodPrice*data[i].quantity; 
+            this.totalPrice = this.beforePrice
+            this.ItemList.push({foodName:data[i].foodName, quantity:data[i].quantity, foodPrice:data[i].foodPrice});
+            this.productNum += this.ItemList[i].quantity
+          }
         }
         if(coupon != null)
         {
@@ -158,7 +160,7 @@
         if(this.checkLogin()){
           let id = this.$cookie.get('shopId');
           let orderItems = this.$cookie.get('product')
-          console.log(orderItems)
+          // console.log(orderItems)
           let data = { coupon_code:coupon,seller_id:id,orderItems:orderItems,total_price:this.totalPrice}
           this.$http.post('/customer/coupon/use',data , {
             headers: {
@@ -175,7 +177,7 @@
             })
           })
           .catch(error => {
-            console.log(error.response)
+            // console.log(error.response)
             this.couponState = false
             this.errorMessage = error.response.data.message
           })

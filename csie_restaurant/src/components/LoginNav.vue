@@ -73,7 +73,8 @@
             type: "success",
             timer: 5000
           })
-          this.$router.push("/")
+          if (this.$route.path != "/")
+            this.$router.push("/")
         }).catch(error => {
           this.logined = false
           this.$store.dispatch('auth/invalidate')
@@ -83,7 +84,8 @@
             type: "success",
             timer: 5000
           })
-          this.$router.push("/")
+          if (this.$route.path != "/")
+            this.$router.push("/")
         })
       },
       refreshToken(token) {

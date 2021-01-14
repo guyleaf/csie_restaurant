@@ -114,7 +114,7 @@
             this.$router.push({name: 'ShopManage'});
         })
         .catch(error => {
-          console.log(error)
+          // console.log(error)
           let status = error.response.status
           switch (status) {
             case 401:

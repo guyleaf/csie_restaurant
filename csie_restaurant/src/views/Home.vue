@@ -81,7 +81,7 @@ export default {
     // if(sR.length != 0) {
     //     this.searchMode = true;
     //     this.keywords = this.$store.getters['auth/keywords'];
-    //     console.log('NOTNULL')
+    //     // console.log('NOTNULL')
     //     this.cards = [];
     //     for(let i=0; i<sR.length; i++){
     //       this.cards.push({shopId: sR[i].seller_id, shopName: sR[i].name, imgPath: this.$url + sR[i].header_image, rating: sR[i].averageofratings});
@@ -101,14 +101,14 @@ export default {
 
 
     this.$bus.$on('reloadHome',  (keywords) =>{
-      console.log('Homeon')
+      // console.log('Homeon')
       this.searchMode = true;
       let shops = this.$store.getters['auth/searchResult'];
       this.keywords = this.$store.getters['auth/keywords'];
       this.loadShops(shops)
     });
     this.$bus.$on('resetHome',  () =>{
-      console.log('resetHome')
+      // console.log('resetHome')
       this.searchMode = false;
       this.keywords = '';
       this.getShops()

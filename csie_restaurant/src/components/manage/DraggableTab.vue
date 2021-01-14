@@ -91,7 +91,7 @@ export default {
     },
     finish: function(){
       if(this.addlist.length!=0) this.$bus.$emit("addProductCategory",this.addlist);
-      console.log(this.list)
+      // console.log(this.list)
       this.$bus.$emit('updateTab',this.list);
     },
     checkMove: function(e) {

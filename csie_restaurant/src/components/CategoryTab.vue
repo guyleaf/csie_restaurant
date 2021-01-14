@@ -28,7 +28,7 @@
             let tabClass = document.querySelector('.CategoryTab')
             let tabBar = tabClass.querySelector('ul')
             let totalY = scrollItems[index].offsetTop-tabBar.clientHeight
-            console.log(totalY)
+            // console.log(totalY)
             let distance = document.documentElement.scrollTop
             let step = Math.abs(totalY-distance) / 50
             if (totalY > distance) 

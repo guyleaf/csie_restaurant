@@ -150,7 +150,7 @@ export default {
             this.modityName=this.foodCategories[index].foodCategory;
         },
         modityfoodcategory(index){ //FIXME
-            console.log(index)
+            // console.log(index)
             let modityName = this.modityName
             this.$http.post('/seller/categories/update',{old:{name:this.foodCategories[index].foodCategory},new:{name:modityName}},{
                     headers: {
@@ -163,10 +163,10 @@ export default {
                 });
                 this.foodCategories.push({foodCategory: modityName, order: this.foodCategories[index].order, hover:false});
                 this.foodCategories.splice(index, 1);
-                console.log(this.foodCategories)
+                // console.log(this.foodCategories)
                 this.updateTab(this.foodCategories);
             }).catch( error=>{
-                console.log(error)
+                // console.log(error)
             })
             
             this.modityName='';
@@ -191,7 +191,7 @@ export default {
             if(this.Name == null) {this.nameState=false}
             if(this.Price == null) {this.priceState=false}
             if(this.image == null) {this.imageState=false}
-            console.log(this.Name)
+            // console.log(this.Name)
             if(this.nameState!=false && this.priceState!=false){
             this.$confirm("確定要新增此商品？","","question").then(() => {
                 this.addProduct()
@@ -217,7 +217,7 @@ export default {
         },
         showModal(foodCategory) {
             this.foodCategory=foodCategory
-            console.log(foodCategory)
+            // console.log(foodCategory)
             this.$refs['my-modal'].show();
         },
         changeStock(id){
@@ -232,7 +232,7 @@ export default {
                 this.$alert("修改成功","","success");
             }).catch(error=>{
                 // this.$alert("修改失敗","","error");
-                console.log(error.response)
+                // console.log(error.response)
             })
         },
         changeSellingState(id){
@@ -247,7 +247,7 @@ export default {
                 this.$alert("修改成功","","success");
             }).catch(error=>{
                 // this.$alert("修改失敗","","error");
-                console.log(error.response)
+                // console.log(error.response)
             })
         },
         deleteProduct(id){
@@ -262,7 +262,7 @@ export default {
             })
             .catch(error=>{
                 // this.$alert("刪除失敗","","error");
-                console.log(error.response)
+                // console.log(error.response)
             })
             this.foodCards.splice(index,1);
         },
@@ -283,13 +283,13 @@ export default {
             }).then( response=>{
                 this.foodCards.push({sellingState:1, soldOut:false, foodId: response.data.product_id, foodName: this.Name, price:parseInt(this.Price), imgPath: this.$url + response.data.image_path, foodDescription: this.Description, foodTag:this.foodCategory})
                 this.$alert("新增成功","","success");
-                console.log(response.data)
+                // console.log(response.data)
                 this.resetModal();
                 this.$refs['my-modal'].hide();
             })
             .catch(error=>{
                 // this.$alert("新增失敗","","error");
-                console.log(error.response)
+                // console.log(error.response)
                 this.resetModal();
                 this.$refs['my-modal'].hide();
             })
@@ -305,7 +305,7 @@ export default {
                 success+=1
                 if(success==list.length)this.$alert("新增成功","","success");
             }).catch( error=>{
-                console.log(error.response)
+                // console.log(error.response)
             })}
         },
         sortOrder:function(a, b){
@@ -313,7 +313,7 @@ export default {
         },
         updateTab:function(msg){
             this.foodCategories=[]
-            console.log(msg)
+            // console.log(msg)
             msg.sort(function(a,b){
                 return a.order - b.order;
             });
@@ -354,7 +354,7 @@ export default {
         .then(response => {
             this.foodCategories=[];
             let data=response.data;
-            // console.log(data)
+            // // console.log(data)
             for (let i=0;i<data.length;i++) this.foodCategories.push({foodCategory: data[i].name, order: data[i].display_order, hover:false});
             this.foodCategories.sort(function(a,b){
                 return a.order - b.order;
@@ -371,7 +371,7 @@ export default {
           }
           else {
             for(let i=0;i<back.length;i++) back[i].style.minWidth= (shopbody.clientWidth).toString() +'px'
-            console.log(back)
+            // console.log(back)
           }
         }
         setfbacksize()

@@ -46,7 +46,7 @@
     },
     created(){
         this.$bus.on('productsNumber',num =>{
-            console.log(num)
+            // console.log(num)
             this.commodity=num.toString()}
         )
     }

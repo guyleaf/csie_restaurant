@@ -1,6 +1,10 @@
 <template>
     <b-form>
-        <b-form-group label="碰面地點:" label-for="payment" >
+        <b-form-group label="取餐方式：" label-for="taking_method">
+          <b-form-radio-group v-model="takingMethodSelected" @change="onChange" :options="takingMethods"></b-form-radio-group>
+        </b-form-group>
+
+        <b-form-group v-if="takingMethodSelected == 0" label="碰面地點:" label-for="payment" >
           <b-form-radio-group
             id="radio-group-1"
             v-model="placeSelected"
@@ -10,9 +14,9 @@
          ></b-form-radio-group>
         </b-form-group>
 
-        <b-form-group v-slot="{ ariaDescribedby }">
+        <b-form-group v-if="takingMethodSelected == 0" v-slot="{ ariaDescribedby }">
           <div class="inSchool" v-if="placeSelected=='school'">
-             <b-form-select v-model="schoolPlaceSelected" @change="onChange" :options="schoolPlaces"></b-form-select>
+             <b-form-select v-model="schoolPlaceSelected" :state="schoolPlaceSelectedState" @change="onChange" :options="schoolPlaces"></b-form-select>
           </div>
           <div class="outside" v-if="placeSelected=='outside'" >
             <div class="row placetxt"> 您的地點：</div>
@@ -62,8 +66,8 @@
           <b-form-radio-group v-model="paymentMethodSelected" @change="onChange" :options="paymentMethods"></b-form-radio-group>
         </b-form-group>
         <b-form-group>
-          <b-input-group-prepend v-if="paymentMethodSelected==1">
-            <b-form-select class="col-11" v-model="creditCardSelected" @change="onChange" :options="creditCards_options"></b-form-select>
+          <b-input-group-prepend v-if="paymentMethodSelected==0">
+            <b-form-select class="col-11" v-model="creditCardSelected" @change="onChange" :state="creditCardselectedState" :options="creditCards_options"></b-form-select>
             <b-button class="creditCard col-1" size="sm" text="Button" variant="success" @click="addCreditCard" squared>+</b-button>
           </b-input-group-prepend>
         </b-form-group>
@@ -149,12 +153,13 @@ export default {
   data(){
       return {
         coupon: null,
-        couponState: false,
+        couponState: null,
         prompt:'請輸入優惠卷',
         bookingShopName: null,
         CouponItems:[],
         placeSelected:'school',
         schoolPlaceSelected:'請選擇地點',
+        schoolPlaceSelectedState: null,
         addressSelected: '0',
         places:[
           { text: "北科大校內", value: "school" },
@@ -173,8 +178,8 @@ export default {
           { text: "第六教學大樓", value: "第六教學大樓"},
         ],
         paymentMethods: [
-          {text: "信用卡", value: 1},
-          {text: "現金支付", value: 2}
+          {text: "信用卡", value: 0},
+          {text: "現金支付", value: 1}
         ],
         address:[],
         disCountMoney:null,
@@ -183,7 +188,7 @@ export default {
         adHover:false,
         newAddress: '',
         addressState: null,
-        paymentMethodSelected: 1,
+        paymentMethodSelected: 0,
         creditCardSelected: '-1',
         creditCard: '',
         creditCardState: null,
@@ -191,8 +196,14 @@ export default {
         creditCards_options: [
           {text: "請選擇信用卡", value: -1, disabled: true}
         ],
+        creditCardselectedState: null,
         expiredDate: '',
-        expiredDateState: null
+        expiredDateState: null,
+        takingMethodSelected: 0,
+        takingMethods: [
+          {text: "外送", value: 0},
+          {text: "自取", value: 1}
+        ]
       }
   },
   methods:{
@@ -207,18 +218,35 @@ export default {
       let payment_method = null;
       let credit_card = null;
 
-      if (this.placeSelected === 'school')
-        address = this.schoolPlaceSelected
-      else if (this.placeSelected === 'outside')
-        address = this.addressSelected;
-      
+      if (this.takingMethodSelected == 0)
+      {
+        if (this.placeSelected === 'school')
+          address = this.schoolPlaceSelected
+        else if (this.placeSelected === 'outside')
+          address = this.addressSelected;
+        
+        if (this.placeSelected === 'school' && address == '請選擇地點')
+          this.schoolPlaceSelectedState = false;
+        else
+          this.schoolPlaceSelectedState = true;
+      }
+
       if (this.couponState)
         coupon_code = this.coupon
 
       payment_method = this.paymentMethodSelected;
 
-      if (this.paymentMethodSelected == 1)
-        credit_card = this.creditCards[this.creditCardSelected]
+      if (this.paymentMethodSelected == 0)
+      {
+        if (this.creditCardSelected != '-1')
+        {
+          this.creditCardselectedState = true;
+          credit_card = this.creditCards[this.creditCardSelected];
+        }
+        else
+          this.creditCardselectedState = false;
+      }
+        
       
 
       this.$bus.$emit('sync', {address:address, payment_method:payment_method, coupon_code:coupon_code, credit_card_info:credit_card, taking_method: 1})
@@ -247,7 +275,7 @@ export default {
           'Authorization': 'Bearer ' + this.$store.getters['auth/token']
         }
       }).then(response =>{
-        console.log(response.data);
+        // console.log(response.data);
       })
     },
     getCutomerAddress(){
@@ -272,6 +300,12 @@ export default {
         this.totalPrice -= this.disCountMoney;
       },
     checkCoupon(coupon){
+        if (coupon == '')
+        {
+          this.couponState = false;
+          this.errorMessage = '優惠券欄位不能為空';
+          return
+        }
         let id = this.$cookie.get('shopId');
         let orderItems = this.$cookie.get('product')
         let data = { coupon_code:coupon,seller_id:id,orderItems:orderItems,total_price:this.totalPrice}
@@ -291,7 +325,7 @@ export default {
           })
         })
         .catch(error => {
-          console.log(error.response)
+          // console.log(error.response)
           this.couponState = false
           this.errorMessage = error.response.data.message
         })
@@ -347,14 +381,14 @@ export default {
       this.$emit('deleteCoupon')
     },
     addCustomerCreditCard(credit_card, expire_date){
-      console.log(credit_card)
-      console.log(expire_date)
+      // console.log(credit_card)
+      // console.log(expire_date)
       this.$axios.post(this.$url + '/customer/creditCard', {credit_card:credit_card, expire_date:moment(expire_date).format("YYYY-MM-DD")},  {
         headers: {
           'Authorization': 'Bearer ' + this.$store.getters['auth/token']
         }
       }).then(response =>{
-        console.log(response.data);
+        // console.log(response.data);
       })
     },
     getCustomerCreditCard(){
@@ -363,13 +397,13 @@ export default {
           'Authorization': 'Bearer ' + this.$store.getters['auth/token']
         }
       }).then(response =>{
-        console.log(response.data)
+        // console.log(response.data)
         for (let i = 0; i<response.data.length; i++){
           this.creditCards_options.push({text:response.data[i].credit_card + '   ' + '有效期限:' + moment(response.data[i].expire_date).format("MM/YY"), value:i})
           this.creditCards.push({credit_card: response.data[i].credit_card, expire_date:response.data[i].expire_date})
         }
       }).catch(error => {
-        console.log(error)
+        // console.log(error)
       });
     },
     checkAddressValidity() {
@@ -396,6 +430,8 @@ export default {
       this.creditCard = ''
       this.creditCardState = null
       this.expiredDate = ''
+      this.creditCardselectedState = null
+      this.schoolPlaceSelectedState = null
     },
     handleCreditCard(bvModalEvt) {
       bvModalEvt.preventDefault()
@@ -449,12 +485,27 @@ export default {
       handler: function() {
         this.getCouponState();
        }
-      }
-    },
+    }
+  },
   created(){
     this.getCouponState();
     this.getCutomerAddress();
     this.getCustomerCreditCard();
+    this.$bus.$on('checkAll', () => {
+      if (this.paymentMethodSelected == 0 || this.takingMethodSelected == 0)
+      {
+        if (this.paymentMethodSelected == 0 && this.creditCardSelected == '-1')
+          this.creditCardselectedState = false;
+
+        if (this.takingMethodSelected == 0 && this.placeSelected === 'school' && this.schoolPlaceSelected == '請選擇地點')
+          this.schoolPlaceSelectedState = false;
+
+        if ((this.paymentMethodSelected == 0 && !this.creditCardselectedState) || (this.takingMethodSelected == 0 && this.placeSelected === 'school' && !this.schoolPlaceSelectedState))
+          return;
+      }
+      
+      this.$bus.$emit('submit');
+    });
   }
 }
 </script>

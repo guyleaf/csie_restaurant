@@ -67,7 +67,7 @@
               <div class='col-md-5 tlprice' style="text-align: end;"><h3>${{totalPrice}}</h3></div>
             </div>
             <div class="justify-content-end">
-                <b-button class="col-md-12 b-submit" variant="secondary" type="submit" @click="submit">一鍵下訂單</b-button>
+                <b-button class="col-md-12 b-submit" variant="secondary" type="submit" @click="checkAll">一鍵下訂單</b-button>
                 <div class="col-md-12 " style="text-align:center; margin-top:2%; padding:0; ">
                   條款： 按一下按鈕送出訂單，即表示您確認已詳閱隱私政策，並且同意 孜宮庭園 的 使用條款
                 </div>
@@ -117,13 +117,19 @@ export default {
         this.totalPrice = 0
         this.beforeMoney = 0
         let data = this.parseCookie();
-        for (var i = 0; i<data.length;i++)
+        if (data != null)
         {
-          this.ItemList.push({foodName:data[i].foodName, quantity:data[i].quantity, foodPrice:data[i].foodPrice});
-          this.productNum += this.ItemList[i].quantity;
-          this.beforeMoney += this.ItemList[i].foodPrice * this.ItemList[i].quantity
-          this.totalPrice = this.beforeMoney
+          for (var i = 0; i<data.length;i++)
+          {
+            this.ItemList.push({foodName:data[i].foodName, quantity:data[i].quantity, foodPrice:data[i].foodPrice});
+            this.productNum += this.ItemList[i].quantity;
+            this.beforeMoney += this.ItemList[i].foodPrice * this.ItemList[i].quantity
+            this.totalPrice = this.beforeMoney
+          }
         }
+        else
+          this.$router.push('/')
+
         this.coupon_code = this.$cookie.get("coupon_code");
         this.discountMoney = this.$cookie.get('discount')
         this.shop_id = this.$cookie.get("shopId");
@@ -145,11 +151,11 @@ export default {
         { 
           this.$confirm("移除這個商品會刪除此筆訂單，您確定嗎？","刪除訂單","warning").then(() => {
             this.ItemList.splice(e,1);
-            document.cookie = 'shopId=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
-            document.cookie = 'shopName=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
-            document.cookie = 'product=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
+            this.$cookie.delete("product")
+            this.$cookie.delete("shopName")
+            this.$cookie.delete("shopId")
             this.$alert('已刪除訂單','','success').then(()=>{
-              this.$router.push({ name: 'Home' })
+              this.$router.push("/")
             })
           })
         }
@@ -182,13 +188,17 @@ export default {
         }
       },
       deleteCoupon(){
-        console.log(this.$cookie.get('discount'))
+        // console.log(this.$cookie.get('discount'))
         this.discountMoney  = this.$cookie.get('discount') ;
         this.totalPrice = this.beforeMoney + this.shipping
+      },
+      checkAll() {
+        this.$bus.$emit('checkAll')
       },
       submit() {
         let order = {coupon_code:this.coupon_code, seller_id:parseInt(this.shop_id), address: this.address, taking_method: this.taking_method, payment_method: this.payment_method, fee: this.shipping}
         let cookie = JSON.parse(this.$cookie.get("product"));
+        console.log(cookie);
         let order_items = []
         for (let i=0;i<cookie.length;i++)
         {
@@ -200,9 +210,15 @@ export default {
             'Authorization': 'Bearer ' + this.$store.getters['auth/token']
           }
         }).then(response =>{
-          console.log(response.data)
+          // console.log(response.data)
+          this.$cookie.delete("product")
+          this.$cookie.delete("shopName")
+          this.$cookie.delete("shopId")
+          this.$cookie.delete("coupon")
+          this.$cookie.delete("coupon_code")
+          this.$cookie.delete("discount")
           this.$alert("成功建立訂單", "", "success")
-          this.$router.push('/')
+          this.$router.push("/")
         }).catch(error => {
           console.log(error.response)
         })
@@ -213,11 +229,14 @@ export default {
   created(){
     this.loadingData()
     this.$bus.$on('sync', (data) => {
-      console.log(data);
+      // console.log(data);
       this.coupon_code = data.coupon_code
       this.address = data.address
       this.payment_method = data.payment_method
       this.taking_method = data.taking_method
+    });
+    this.$bus.$on('submit', () => {
+      this.submit();
     });
   },
   computed: {

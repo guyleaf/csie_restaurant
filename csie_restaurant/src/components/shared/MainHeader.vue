@@ -85,7 +85,7 @@ export default {
             let url = '/restaurants/search?' + keywords.join('&')
             this.$axios.get(this.$url + url)
             .then(response => {
-                // console.log(response)
+                // // console.log(response)
                 this.search_result = response.data;
                 this.search_shopName = [];
                 for(let i=0;i<this.search_result.length ;i++){
@@ -93,7 +93,7 @@ export default {
                 }
             })
             .catch(error => {
-                console.log(error)
+                // console.log(error)
             })
         
         },

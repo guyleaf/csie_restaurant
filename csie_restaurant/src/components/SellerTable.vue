@@ -120,7 +120,7 @@
                 this.members[member.index].member_status=!this.members[member.index].member_status
             }).catch(error=>{
                 // this.$alert("修改失敗","","error");
-                console.log(error.response)
+                // console.log(error.response)
             })
         });    
       },
@@ -134,13 +134,13 @@
             }).then(response =>{
                 this.$alert("刪除成功","","success");
                 this.members.splice(member.index,1);
-                console.log("刪除成功")
+                // console.log("刪除成功")
                 this.routeMembers("now")
                 this.$emit("deleteMember")
             })
             .catch(error=>{
                 // this.$alert("刪除失敗","","error");
-                console.log(error.response)
+                // console.log(error.response)
             })
         });
       },
@@ -166,7 +166,7 @@
         else {lstPgButton.disabled = false;}
         if (nxtNumber >= this.numOfMembers) {nxtButton.disabled = true}
         else {nxtButton.disabled = false}
-        console.log(this.currentNumber );
+        // console.log(this.currentNumber );
       },
       refresh() {
         let url = '/admin/sellers?currentNumber=0&requiredNumber=5'
@@ -174,7 +174,7 @@
         .then(response => {
           this.members = [];
           let data = response.data.sellers;
-          console.log(data)
+          // console.log(data)
           for (let i=0;i<data.length;i++){ this.members.push({isActive:true, id:data[i].seller_id, username:data[i].username, name:data[i].name, email:data[i].email, 
                                                               created_at:data[i].created_at, phone:data[i].phone, member_status:data[i].member_status, counter_number:data[i].counter_number})}
           this.numOfMembers = response.data.numbers;

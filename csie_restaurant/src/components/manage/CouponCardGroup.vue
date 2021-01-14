@@ -143,7 +143,7 @@ export default {
             })
             .catch(error=>{
                 // this.$alert("更改失敗","","error");
-                // console.log(error.response)
+                // // console.log(error.response)
             })
         },       
         deleteCoupon(msg){
@@ -155,7 +155,7 @@ export default {
                 this.$alert("刪除成功","","success");
             }).catch(error=>{
                 // this.$alert("刪除失敗","","error");
-                console.log(error.response)
+                // console.log(error.response)
             })
             let index = this.couponCards.findIndex( i=> i['coupon'].id === msg['coupon'].id)
             this.couponCards.splice(index,1);
@@ -178,7 +178,7 @@ export default {
                 this.couponCards.push(newCoupon);      
             }).catch(error=>{
                 // this.$alert("新增失敗","","error");
-                console.log(error.response)
+                // console.log(error.response)
             })
         },
         openModal(){
@@ -194,7 +194,7 @@ export default {
                 for (let i=0;i<data.length;i++){
                     this.productOption.push({value:data[i].id, text:data[i].name, price:data[i].price});
                 }
-                // console.log(this.productOption)
+                // // console.log(this.productOption)
                 this.productOption = this.productOption.sort(function (a, b) {
                     return a.name - b.name
                 });
@@ -364,7 +364,7 @@ export default {
             this.couponCards = this.couponCards.sort(function(a,b){
                 return Date.parse(b['coupon'].start_time) - Date.parse(a['coupon'].start_time)
             })
-            // console.log(this.couponCards);
+            // // console.log(this.couponCards);
         })
     },
 }

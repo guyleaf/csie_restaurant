@@ -192,7 +192,7 @@ export default {
                         if(this.foodName != this.vfoodName) {this.foodName = this.vfoodName;formdata.append('name',this.vfoodName);}
                         if(this.foodDescription != this.vfoodDescription) {this.foodDescription = this.vfoodDescription;formdata.append('description',this.vfoodDescription);}
                         if(this.price != this.vprice) {this.price = this.vprice;formdata.append('price',this.vprice);}
-                        if(this.imgPath != this.image) {this.imgPath=this.preview;formdata.append('image',this.image);console.log(22)}
+                        if(this.imgPath != this.image) {this.imgPath=this.preview;formdata.append('image',this.image);}
                         
                         
                         this.$http.post('/seller/products/update',formdata,{
@@ -218,7 +218,7 @@ export default {
                             // })
                             // }, 300)
                             this.$refs['my-modal'].hide();
-                            console.log(error.response)
+                            // console.log(error.response)
                         })
                     })
                 }

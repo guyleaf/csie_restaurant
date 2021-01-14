@@ -242,7 +242,7 @@ import { serialize } from 'object-to-formdata';
       submit() {
         // Exit when the form isn't valid
         if (!this.checkFormValidity()) {
-            console.log("錯誤")
+            // console.log("錯誤")
             return
         }
         this.$_verification(this.name, this.username, this.password, this.phone, this.email, this.image, this.counter_number, this.description)
@@ -264,14 +264,14 @@ import { serialize } from 'object-to-formdata';
             header_image:image
         }};
         const formData = serialize(data)
-        console.log(data)
+        // console.log(data)
         let url='/admin/members/add';
-        console.log(data)
+        // console.log(data)
         this.$axios.post(this.$url + url, formData)
         .then(response => {
           this.showAlert = false
           let data = response.data
-          console.log(response.data)
+          // console.log(response.data)
           setTimeout(() => {
             this.$fire({
             title: "註冊成功",
@@ -283,7 +283,7 @@ import { serialize } from 'object-to-formdata';
           this.$emit('close')
         })
         .catch(error => {
-          console.log(error.response)
+          // console.log(error.response)
           let status = error.response.status
           switch (status) {
             case 401:
@@ -316,7 +316,7 @@ import { serialize } from 'object-to-formdata';
     created(){
     this.$http.get('/restaurants/category')
     .then(response => {
-      console.log(response.data)
+      // console.log(response.data)
       for(let i=0;i<response.data.length;i++)
       this.categories.push({text:response.data[i].name,value:response.data[i].category_id})
     })

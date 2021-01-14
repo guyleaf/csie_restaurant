@@ -104,7 +104,7 @@ export default {
                     if(checkIndex != -1) cartProduct[checkIndex].quantity += this.data[0].quantity;
                     else cartProduct.push(this.data[0])
                     this.$cookie.set('product', JSON.stringify(cartProduct));
-                    console.log(this.$cookie.get('product'))
+                    // console.log(this.$cookie.get('product'))
                 }
                 else 
                 {
@@ -125,7 +125,7 @@ export default {
         },
         checkItemExistCart(cart,item){
             let index = -1;
-            console.log(cart)
+            // console.log(cart)
             var filteredObj = cart.find(function(cart, i){
                 if(cart.foodName === item.foodName){
                     index = i;

@@ -44,7 +44,7 @@
     methods:
     {
       selecting: function () {
-        console.log('selecting..');
+        // console.log('selecting..');
         this.$emit("selectChange", this.selected)
       }
     },
