@@ -142,7 +142,7 @@ export default {
                 this.couponCards.splice(index, 1, newCoupon);
             })
             .catch(error=>{
-                this.$alert("更改失敗","","error");
+                // this.$alert("更改失敗","","error");
                 // console.log(error.response)
             })
         },       
@@ -154,8 +154,8 @@ export default {
             }).then(response=>{
                 this.$alert("刪除成功","","success");
             }).catch(error=>{
-                this.$alert("刪除失敗","","error");
-                // console.log(error.response)
+                // this.$alert("刪除失敗","","error");
+                console.log(error.response)
             })
             let index = this.couponCards.findIndex( i=> i['coupon'].id === msg['coupon'].id)
             this.couponCards.splice(index,1);
@@ -177,8 +177,8 @@ export default {
                 }
                 this.couponCards.push(newCoupon);      
             }).catch(error=>{
-                this.$alert("新增失敗","","error");
-                // console.log(error.response)
+                // this.$alert("新增失敗","","error");
+                console.log(error.response)
             })
         },
         openModal(){

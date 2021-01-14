@@ -119,7 +119,7 @@
                 this.$alert("修改成功","","success");
                 this.members[member.index].member_status=!this.members[member.index].member_status
             }).catch(error=>{
-                this.$alert("修改失敗","","error");
+                // this.$alert("修改失敗","","error");
                 console.log(error.response)
             })
         });    
@@ -139,7 +139,7 @@
                 this.$emit("deleteMember")
             })
             .catch(error=>{
-                this.$alert("刪除失敗","","error");
+                // this.$alert("刪除失敗","","error");
                 console.log(error.response)
             })
         });

@@ -223,7 +223,7 @@ export default {
             }).then(response =>{
                 this.$alert("修改成功","","success");
             }).catch(error=>{
-                this.$alert("修改失敗","","error");
+                // this.$alert("修改失敗","","error");
                 console.log(error.response)
             })
         },
@@ -238,7 +238,7 @@ export default {
             }).then(response =>{
                 this.$alert("修改成功","","success");
             }).catch(error=>{
-                this.$alert("修改失敗","","error");
+                // this.$alert("修改失敗","","error");
                 console.log(error.response)
             })
         },
@@ -253,7 +253,7 @@ export default {
                 this.$alert("刪除成功","","success");
             })
             .catch(error=>{
-                this.$alert("刪除失敗","","error");
+                // this.$alert("刪除失敗","","error");
                 console.log(error.response)
             })
             this.foodCards.splice(index,1);
@@ -280,7 +280,7 @@ export default {
                 this.$refs['my-modal'].hide();
             })
             .catch(error=>{
-                this.$alert("新增失敗","","error");
+                // this.$alert("新增失敗","","error");
                 console.log(error.response)
                 this.resetModal();
                 this.$refs['my-modal'].hide();

@@ -208,14 +208,14 @@ export default {
                             }, 100)
                             this.$refs['my-modal'].hide();
                         }).catch(error=>{
-                            setTimeout(() => {
-                                this.$fire({
-                                title: "修改失敗",
-                                text: "",
-                                type: "error",
-                                timer: 5000
-                            })
-                            }, 300)
+                            // setTimeout(() => {
+                            //     this.$fire({
+                            //     title: "修改失敗",
+                            //     text: "",
+                            //     type: "error",
+                            //     timer: 5000
+                            // })
+                            // }, 300)
                             this.$refs['my-modal'].hide();
                             console.log(error.response)
                         })

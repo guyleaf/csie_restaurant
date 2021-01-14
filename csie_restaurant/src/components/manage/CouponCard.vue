@@ -12,14 +12,14 @@
                 <a>滿{{money}}元 </a><a style="color:red;">免運費</a>
             </b-card-text>
             <b-card-text v-if="typeSelected == 1">
-                <a>滿{{money}}元 </a><a style="color:red;">{{showDiscount}}%off</a>
+                <a>滿{{money}}元 </a><a style="color:red;">{{Math.round((1-dis)*100)}}%off</a>
             </b-card-text>
             <b-card-text v-if="typeSelected == 2">
                 <a v-for="(product, index) in products" :key="product.product_id">
                     {{product.quantity}} {{product.name}}
                     <a v-if="index != products.length-1 ">+</a>  
                 </a>
-                <a style="color:red;">{{showDiscount}}%off</a>
+                <a style="color:red;">{{Math.round((1-dis)*100)}}%off</a>
             </b-card-text>
             <b-card-text>開始:{{start}}</b-card-text>
             <b-card-text>結束:{{expire}}</b-card-text>
@@ -138,7 +138,6 @@ export default {
         },
         couponItems:[ { selected: null, spinValue:1, price:0 }],
         productOption:[],
-        showDiscount: Math.round((1-this.dis)*100),
       }
     },
     props:{
@@ -258,7 +257,6 @@ export default {
                 couponAll['coupon_items'] = items;
             }
             // update local value;
-            this.showDiscount= Math.round((1-this.dis)*100),
             this.$emit('updateCoupon', couponAll);
             this.$refs['my-modal'].hide();
         },
