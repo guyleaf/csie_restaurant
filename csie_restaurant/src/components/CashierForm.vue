@@ -150,6 +150,9 @@ export default {
   components: {
     Datepicker
   },
+  props: {
+    totalPrice: Number
+  },
   data(){
       return {
         coupon: null,
@@ -203,7 +206,8 @@ export default {
         takingMethods: [
           {text: "外送", value: 0},
           {text: "自取", value: 1}
-        ]
+        ],
+        total_price: this.totalPrice
       }
   },
   methods:{
@@ -293,11 +297,15 @@ export default {
     useCouponDiscount(coupon){
         this.disCountMoney = 0;
         let products = JSON.parse(this.$cookie.get('product'))
-        for (let i = 0 ; i<coupon.coupon_items.length; i++){
-          let product = products.filter(j => j.id == coupon.coupon_items[i].product_id)
-          this.disCountMoney += coupon.coupon_items[i].quantity * (1-coupon.coupon.discount) * product[0].foodPrice 
+        
+        if (coupon.coupon.type == 2)
+        {
+          for (let i = 0 ; i<coupon.coupon_items.length; i++){
+            let product = products.filter(j => j.id == coupon.coupon_items[i].product_id)
+            this.disCountMoney += coupon.coupon_items[i].quantity * coupon.coupon.discount * product[0].foodPrice 
+          }
+          this.total_price -= this.disCountMoney;
         }
-        this.totalPrice -= this.disCountMoney;
       },
     checkCoupon(coupon){
         if (coupon == '')
@@ -308,7 +316,8 @@ export default {
         }
         let id = this.$cookie.get('shopId');
         let orderItems = this.$cookie.get('product')
-        let data = { coupon_code:coupon,seller_id:id,orderItems:orderItems,total_price:this.totalPrice}
+        let data = { coupon_code:coupon,seller_id:id,orderItems:orderItems,total_price:this.total_price}
+        console.log(data)
         this.$http.post('/customer/coupon/use',data , {
           headers: {
             'Authorization': 'Bearer ' + this.$store.getters['auth/token']
@@ -349,17 +358,16 @@ export default {
       document.cookie = 'product=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
       this.$cookie.set('product', JSON.stringify(productCookie))
       this.beforePrice = this.beforePrice + (value - this.ItemList[index].quantity) * this.ItemList[index].foodPrice
-      this.totalPrice = this.beforePrice - this.disCountMoney
+      this.total_price = this.beforePrice - this.disCountMoney
       this.productNum += value - this.ItemList[index].quantity
       this.ItemList[index].quantity = value;
     },
     deleteCartCell(e){
       this.productNum -= this.ItemList[e].quantity
-      this.totalPrice = this.totalPrice - this.ItemList[e].foodPrice*this.ItemList[e].quantity;
+      this.total_price = this.total_price - this.ItemList[e].foodPrice*this.ItemList[e].quantity;
       this.ItemList.splice(e,1);
-      if(this.totalPrice == 0) {
+      if(this.total_price == 0) {
         this.bookingShopName = null;
-        this.totalPrice = null;
         }
       if(this.ItemList.length == 0) //delete cookie
       { 
@@ -374,7 +382,7 @@ export default {
       let coupon_input = document.querySelector('#coupon-input')
       this.couponState = null;
       this.disCountMoney = null;
-      this.totalPrice = this.beforePrice
+      this.total_price = this.beforePrice
       this.unlockChangeButton()
       document.cookie = 'coupon=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
       document.cookie = 'discount=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 

@@ -52,6 +52,11 @@
           <div class='col-md-3 tlprice' style="text-align: end;">{{disCountMoney}}</div>
         </div>
         <div class="row " v-if="productNum!= 0">
+          <div class='col-md-9 tlprice'>運費</div>
+          <div class='col-md-3 tlprice' v-if="fee != 0" style="text-align: end;">{{fee}}</div>
+          <div class='col-md-3 tlprice' v-else style="text-align: end;">免運</div>
+        </div>
+        <div class="row " v-if="productNum!= 0">
           <div class='col-md-9 tlprice'>總計 (包含稅項) :</div>
           <div class='col-md-3 tlprice' style="text-align: end;">{{totalPrice}}</div>
         </div>
@@ -98,9 +103,10 @@
         totalPrice: null,
         popoverShow: false,
         submitInvalid: false,
-        disCountMoney: null,
+        disCountMoney: 0,
         productNum: null,
-        errorMessage: ''
+        errorMessage: '',
+        fee: 30
       }
     },
     methods: {
@@ -150,11 +156,18 @@
       useCouponDiscount(coupon){
         this.disCountMoney = 0;
         let products = JSON.parse(this.$cookie.get('product'))
-        for (let i = 0 ; i<coupon.coupon_items.length; i++){
-          let product = products.filter(j => j.id == coupon.coupon_items[i].product_id)
-          this.disCountMoney += coupon.coupon_items[i].quantity * (1-coupon.coupon.discount) * product[0].foodPrice 
+        if (coupon.coupon.type == 0)
+          this.fee = 0
+        else if (coupon.coupon.type == 1)
+          this.totalPrice *= coupon.coupon.discount;
+        else if (coupon.coupon.type == 2)
+        {
+          for (let i = 0 ; i<coupon.coupon_items.length; i++){
+            let product = products.filter(j => j.id == coupon.coupon_items[i].product_id)
+            this.disCountMoney += coupon.coupon_items[i].quantity * coupon.coupon.discount * product[0].foodPrice 
+          }
+          this.totalPrice -= this.disCountMoney;
         }
-        this.totalPrice -= this.disCountMoney;
       },
       checkCoupon(coupon){
         if(this.checkLogin()){
@@ -237,7 +250,8 @@
       deleteCoupon(){
         let coupon_input = document.querySelector('#coupon-input')
         this.couponState = null;
-        this.disCountMoney = null;
+        this.disCountMoney = 0;
+        this.fee = 30;
         this.totalPrice = this.beforePrice
         this.unlockChangeButton()
         coupon_input.removeAttribute("readOnly");

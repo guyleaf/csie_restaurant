@@ -14,7 +14,7 @@
           </div>
         </div>
         <div class="payOption"> 
-          <CashierForm  v-on="{deleteCoupon:deleteCoupon, useCoupon:useCoupon}"/>
+          <CashierForm  v-on="{deleteCoupon:deleteCoupon, useCoupon:useCoupon}" :totalPrice="totalPrice" />
         </div>
       </b-col>
 
@@ -51,7 +51,8 @@
                 <div class='col-md-7'>
                   <span>外送費</span>
                 </div>
-                <div class='col-md-5' style="text-align: end;">${{shipping}}</div>
+                <div v-if="shipping != 0" class='col-md-5' style="text-align: end;">${{shipping}}</div>
+                <div v-else class='col-md-5' style="text-align: end;">免運</div>
               </div>
               <div class="row" style="margin:3% -15px 3% -15px">
                 <div class='col-md-7'>
@@ -134,6 +135,7 @@ export default {
         this.discountMoney = this.$cookie.get('discount')
         this.shop_id = this.$cookie.get("shopId");
         this.totalPrice -= (this.discountMoney -30)
+        console.log(this.totalPrice)
       },
       modifySpinValue(index,value){
         let productCookie = JSON.parse(this.$cookie.get("product"));
@@ -170,27 +172,16 @@ export default {
       useCoupon(){
         this.discountMoney  = this.$cookie.get('discount') ;
         this.coupon = JSON.parse(this.$cookie.get('coupon'));
-        if (this.coupon.coupon.type != 1)
+        if (this.coupon.coupon.type != 0)
           this.totalPrice = this.beforeMoney - this.discountMoney + this.shipping
-        else if (this.coupon.coupon.type == 1)
-        {
-          if (this.discountMoney >= this.shipping)
-          {
-            this.discountMoney -= this.shipping
-            this.shipping = 0
-          }
-          else
-          {
-            this.shipping -= this.discountMoney
-          }
-          
-          this.totalPrice = this.beforeMoney - this.discountMoney + this.shipping
-        }
+        else if (this.coupon.coupon.type == 0)
+          this.shipping = 0
       },
       deleteCoupon(){
         // console.log(this.$cookie.get('discount'))
         this.discountMoney  = this.$cookie.get('discount') ;
         this.totalPrice = this.beforeMoney + this.shipping
+        console.log(this.totalPrice)
       },
       checkAll() {
         this.$bus.$emit('checkAll')
@@ -211,7 +202,7 @@ export default {
           order_items: order_items,
           coupon_code: coupon_code
         }
-        
+
         this.$axios.post(this.$url + '/order', data,  {
           headers: {
             'Authorization': 'Bearer ' + this.$store.getters['auth/token']
