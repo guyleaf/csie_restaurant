@@ -132,8 +132,6 @@ class ProductRepository
         $payload['seller_id'] = $seller_id;
         $this->productCategoryTable
         ->insert($payload);
-
-        DB::commit();
     }
 
     public function updateProductCategory($seller_id, $payload)
@@ -149,9 +147,12 @@ class ProductRepository
         ->update(['category_name' => $payload['new']['name']]);
     }
 
-    public function deleteProductCategory($payload)
+    public function deleteProductCategory($seller_id, $payload)
     {
-
+        $this->productCategoryTable
+        ->where('seller_id', '=', $seller_id)
+        ->where('name', '=', $payload['name'])
+        ->delete();
     }
 }
 ?>

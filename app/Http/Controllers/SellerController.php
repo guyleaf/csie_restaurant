@@ -124,8 +124,8 @@ class SellerController extends Controller
     {
         $user = auth()->user();
         $id = $user->id;
-        $state = $this->sellerService->addProductCategory($id, $request->all());
-        return response()->json(['message' => 'Success', 'state' => $state], 201);
+        $this->sellerService->addProductCategory($id, $request->all());
+        return response()->json(['message' => 'Success'], 201);
     }
 
     public function deleteProductCategory(Request $request)
@@ -138,7 +138,7 @@ class SellerController extends Controller
     {
         $user = auth()->user();
         $id = $user->id;
-        $state = $this->sellerService->updateProductCategory($id, $request->all());
-        return response()->json(['message' => 'Success', 'state' => $state], 201);
+        $this->sellerService->updateProductCategory($id, $request->all());
+        return response()->json(['message' => 'Success'], 201);
     }
 }

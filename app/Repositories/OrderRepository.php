@@ -111,25 +111,25 @@ class OrderRepository
 
             DB::table('order_item', 'OI')
             ->insert($order['order_items']);
-        }, 3);
+        });
     }
 
-    public function updateCustomerOrder($id, $order)
+    public function updateCustomerOrder($customer_id, $order)
     {
-        DB::transaction(function () use ($id, $order) {
+        DB::transaction(function () use ($customer_id, $order) {
             DB::table('order', 'O')
             ->where('O.id', '=', $order['id'])
-            ->where('O.customer_id', '=', $id)
+            ->where('O.customer_id', '=', $customer_id)
             ->update($order['order']);
         });
     }
 
-    public function updateSellerOrder($id, $order)
+    public function updateSellerOrder($seller_id, $order)
     {
-        DB::transaction(function () use ($id, $order) {
+        DB::transaction(function () use ($seller_id, $order) {
             DB::table('order', 'O')
             ->where('O.id', '=', $order['id'])
-            ->where('O.seller_id', '=', $id)
+            ->where('O.seller_id', '=', $seller_id)
             ->update($order['order']);
         });
     }

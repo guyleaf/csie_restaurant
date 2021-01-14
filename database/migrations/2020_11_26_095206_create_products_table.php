@@ -30,8 +30,7 @@ class CreateProductsTable extends Migration
             // $table->enum("Status", [0, 1])->comment("商品狀態");
             $table->foreign("seller_id")->references("member_id")->on("seller")
             ->onUpdate("cascade")->onDelete("cascade");
-            $table->foreign(["category_id", "category_name"])->references(["seller_id", "name"])->on("product_category")
-            ->onUpdate("cascade")->onDelete("cascade");
+            $table->foreign(["category_id", "category_name"])->references(["seller_id", "name"])->on("product_category");
             $table->index("seller_id");
         });
         DB::statement('ALTER TABLE "product" ADD CONSTRAINT chk_status_of_product CHECK (status BETWEEN 0 AND 1);');

@@ -93,9 +93,10 @@ class SellerService
             $image_path = 'storage/restaurant/' . strval($seller_id);
             $image_name = strval($product_id) . '.jpg';
             $state = unlink(public_path($image_path. '/' . $image_name));
+            if (!$state)
+                throw 'Error: Unable to delete image file';
             $image->save($image_path. '/' . $image_name, 100);
         }
-        return $state;
     }
 
     public function getOrders($id)
@@ -114,29 +115,22 @@ class SellerService
 
     public function updateOrder($seller_id, $payload)
     {
-        $result = $this->orderService->updateSellerOrder($seller_id, $payload);
-        return $result;
+        $this->orderService->updateSellerOrder($seller_id, $payload);
     }
 
-    public function addProductCategory($id, $payload)
+    public function addProductCategory($seller_id, $payload)
     {
-        $result = $this->productRepository
-        ->addProductCategory($id, $payload);
-        return $result;
+        $this->productRepository->addProductCategory($id, $payload);
     }
 
     public function updateProductCategory($seller_id, $payload)
     {
-
-        $result = $this->productRepository->updateProductCategory($seller_id, $payload);
-
-        return $result;
+        $this->productRepository->updateProductCategory($seller_id, $payload);
     }
 
-    public function deleteProductCategory($id)
+    public function deleteProductCategory($seller_id, $payload)
     {
-        $result = $this->productRepository->deleteProductCategory($id);
-        return $result;
+        $this->productRepository->deleteProductCategory($id, $payload);
     }
 }
 ?>
