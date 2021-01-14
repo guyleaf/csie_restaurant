@@ -92,7 +92,7 @@ class SellerService
 
     public function updateProduct($seller_id, $payload)
     {
-        if (!empty($payload['image']))
+        if (isset($payload['image']))
         {
             $image = Image::make($payload['image'])->resize(200, 200)->encode('jpg');
             unset($payload['image']);
