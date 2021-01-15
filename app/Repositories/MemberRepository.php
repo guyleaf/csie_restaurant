@@ -157,7 +157,15 @@ class MemberRepository
                 $payload['seller']['header_image'] = '/storage/restaurant/' . strval($member_id) . '/header.jpg';
             else
                 $payload['seller']['header_image'] = '/storage/restaurant/' . 'default_header.jpg';
+            
+            $counter = $this->sellerTable
+            ->where('counter_number', '=', $payload['seller']['counter_number'])
+            ->count();
 
+            if ($counter != 0)
+                throw 'Counter number exists';
+
+            $this->sellerTable = DB::table('seller');
             $this->sellerTable
             ->insert($payload['seller']);
 
