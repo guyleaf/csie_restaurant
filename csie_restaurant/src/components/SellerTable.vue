@@ -112,8 +112,8 @@
         this.$confirm(msg,"","question").then(() => {
             let update = {id:this.members[member.index].id, member_status:!this.members[member.index].member_status}
             this.$http.post('/admin/members/update',update,{
-                headers: {
-                'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
+                'headers': {
+                  'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
                 }
             }).then(response =>{
                 this.$alert("修改成功","","success");
@@ -128,8 +128,8 @@
         this.$confirm("你確定要刪除？","","question").then(() => {
             let deleteMember = {id:this.members[member.index].id}
             this.$http.post('/admin/members/delete',deleteMember,{
-                headers: {
-                'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
+                'headers': {
+                  'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
                 }
             }).then(response =>{
                 this.$alert("刪除成功","","success");
@@ -170,7 +170,11 @@
       },
       refresh() {
         let url = '/admin/sellers?currentNumber=0&requiredNumber=5'
-        this.$axios.get(this.$url + url)
+        this.$axios.get(this.$url + url, {
+          'headers': {
+            'Authorization': 'Bearer ' + this.$store.getters['auth/token'],
+          }
+        })
         .then(response => {
           this.members = [];
           let data = response.data.sellers;

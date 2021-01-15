@@ -106,10 +106,10 @@
           <b-form-group
           label="標籤"
           label-for="category-input"
-          invalid-feedback=""
+          invalid-feedback="請選擇至少一商店分類"
           :state="categoryState"
           >
-          <b-form-select v-model="selected" :options="categories" multiple :select-size="8"></b-form-select>
+          <b-form-select v-model="selected" :options="categories" multiple :select-size="8" :state="categoryState"></b-form-select>
         </b-form-group>
         </b-col>
         </b-row>
@@ -147,7 +147,7 @@ import { serialize } from 'object-to-formdata';
     name: 'AddSellerForm',
     data() {
         return {
-            selected:[],
+            selected: [],
             name: null,
             username: null,
             password: null,
@@ -164,6 +164,9 @@ import { serialize } from 'object-to-formdata';
         }
     },
     computed: {
+      categoryState() {
+        return this.selected.length > 0
+      },
       nameState() {
           if (this.name === null) {
               return null
@@ -291,12 +294,18 @@ import { serialize } from 'object-to-formdata';
               this.showAlert = true;
               break;
             case 500:
-              this.errorMsg = 'Unknown error';  //FIXME
+              this.errorMsg = 'Server error';  //FIXME
+              this.showAlert = true;
+              break;
+            case 400:
+              this.errorMsg = error.response.data.message;
               this.showAlert = true;
               break;
           }
-          this.account = null
           this.password = null
+          this.checkPassword = null
+          this.counter_number = null
+          this.selected = []
         })
       },
       reset() {
