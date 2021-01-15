@@ -1,8 +1,16 @@
 <template>
   <div>
     <b-table :items="items" :fields="fields" striped responsive="sm">
+      <template #cell(訂單狀態)="row">
+        <span v-if="row.item.訂單狀態 == '已下單'" class="text-success">{{ row.item.訂單狀態 }}</span>
+        <span v-else-if="row.item.訂單狀態 == '店家已確認'" class="text-info">{{ row.item.訂單狀態 }}</span>
+        <span v-else-if="row.item.訂單狀態 == '準備中'" class="text-warning">{{ row.item.訂單狀態 }}</span>
+        <span v-else-if="row.item.訂單狀態 == '運送中'" class="text-primary">{{ row.item.訂單狀態 }}</span>
+        <span v-else-if="row.item.訂單狀態 == '已取消'" class="text-danger">{{ row.item.訂單狀態 }}</span>
+        <span v-else>{{ row.item.訂單狀態 }}</span>
+      </template>
       <template #cell(評分)="row">
-        <div class="star">
+        <div v-if="!row.item.hideRating" class="star">
             <div class='starXin' v-for="(item,index) in list" :key='index'>
               <div @click="clickStar(index,row)" >
                 <img :src="row.item.ratingStar>index?stara:starb" @mouseover="hoverStar(index,row)" @mouseleave="unhoverStar(row)"/>
@@ -38,7 +46,7 @@
                   <b-row>總金額：{{ total(row.item.datas) }}</b-row>
                 </b-row>
             </div>
-            <div class='col-md-6'>
+            <div v-if="!row.item.hideRating" class='col-md-6'>
                 <div class='row justify-content-center'>
                   <textarea :id="'text'+row.index" :placeholder="items[row.index].comment" class='tA' :readonly="items[row.index].readonly"/>
                   <div :id ="'disabled-wrapper'+row.index" class="d-inline-block sb">
@@ -108,7 +116,7 @@
       },
       total(datas){
         let total=0;
-        console.log(datas)
+        // console.log(datas)
         for(let i=0;i<datas.length;i++) 
         {
           if (isNaN(datas[i].discount) || datas[i].discount == null)
@@ -179,7 +187,7 @@
             history.item.datas.push({product_name:datas.order_items[i].product_name, price:parseInt(datas.order_items[i].price), quantity:parseInt(datas.order_items[i].quantity),discount:parseFloat(datas.order.discount)})
             //(history.item.datas)
           }
-          if(datas.order.coupon_type==1) history.item.isShippingCoupon=true;
+          if(datas.order.coupon_type==0) history.item.isShippingCoupon=true;
           else history.item.isShippingCoupon=false;
           history.item.fee=datas.order.fee;
           history.toggleDetails()
@@ -223,14 +231,18 @@
             let isRated=false
             let readonly=false
             let isClicked=false
-            if(data[i].stars>0) 
+            let hideRating = false
+            if (data[i].status != 4)
+              hideRating = true
+            
+            if(!hideRating && data[i].stars>0) 
             {
               isClicked=true
               isRated=true
               readonly=true
               ratingdisabled=true
             }
-            this.items.push({訂單狀態: this.status[data[i].status],ratingStar: data[i].stars, 日期: data[i].order_time, seller_id: data[i].seller_id, 店家: data[i].seller_name ,id: data[i].order_id, isRated: isRated, readonly: readonly, ratingdisabled:ratingdisabled, isClicked: isClicked});
+            this.items.push({訂單狀態: this.status[data[i].status],ratingStar: data[i].stars, hideRating: hideRating, 日期: data[i].order_time, seller_id: data[i].seller_id, 店家: data[i].seller_name ,id: data[i].order_id, isRated: isRated, readonly: readonly, ratingdisabled:ratingdisabled, isClicked: isClicked});
           }
       })
       .catch(error => {

@@ -2,7 +2,12 @@
   <div>
     <b-table :items="items" :fields="fields" striped responsive="sm">
       <template #cell(訂單狀態)="row">
-        {{status[row.item.訂單狀態]}}
+        <span v-if="row.item.訂單狀態 == 0" class="text-success">{{ status[row.item.訂單狀態] }}</span>
+        <span v-else-if="row.item.訂單狀態 == 1" class="text-info">{{ status[row.item.訂單狀態] }}</span>
+        <span v-else-if="row.item.訂單狀態 == 2" class="text-warning">{{ status[row.item.訂單狀態] }}</span>
+        <span v-else-if="row.item.訂單狀態 == 3" class="text-primary">{{ status[row.item.訂單狀態] }}</span>
+        <span v-else-if="row.item.訂單狀態 == 5" class="text-danger">{{ status[row.item.訂單狀態] }}</span>
+        <span v-else>{{ status[row.item.訂單狀態] }}</span>
       </template>
       <template #cell(評分)="row">
         <div class="star">
