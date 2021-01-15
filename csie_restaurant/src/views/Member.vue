@@ -40,11 +40,6 @@ export default {
       }
     },
     created(){
-      // this.$http.get('/admin/members?currentNumber=0&requiredNumber=50')
-      // .then(response => {
-      //   // console.log(response.data)
-      //   this.amount=response.data.length;
-      // })
       this.$bus.$on('setNumOfMembers', (nums) => {
         this.amount=nums;
       });

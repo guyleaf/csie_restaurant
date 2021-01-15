@@ -4,8 +4,8 @@
             <div class='tag mt-5'>優惠卷</div>
             <div class='couponField mb-5' style='display:flex; flex-direction:row; '>
                 <div v-for="coupon in couponCards" :key="coupon['coupon'].id">
-                    <CouponCard :code="coupon['coupon'].code" :products="coupon['coupon_items']" :discount="coupon['coupon'].discount" 
-                    :limitMoney="coupon['coupon'].limit_money" :expire="coupon['coupon'].end_time" :type="coupon['coupon'].type"/>
+                    <CouponCard :code="coupon['coupon'].code" :products="coupon['coupon_items']" :discount="parseFloat(coupon['coupon'].discount)" 
+                    :limitMoney="parseInt(coupon['coupon'].limit_money)" :expire="coupon['coupon'].end_time" :type="coupon['coupon'].type"/>
                 </div>
             </div>
         </div>
@@ -20,24 +20,23 @@ export default {
         CouponCard,
     },
     props:{
+        // couponCards: Array,
     },
     data()
     {
         return{
-            couponCards:[] , 
+            couponCards:[],
         }
     }, 
     methods:{
     },
+    watch: {
+    },
     created(){
         let id = this.$router.currentRoute.params.id
-        this.$http.get('restaurants/' + id + '/coupons' + '?include_expired=0')
+        this.$axios.get(this.$url + '/restaurants/' + id + '/coupons' + '?include_expired=0')
         .then(response => {
             this.couponCards = response.data;
-            //排序 未來的擺在前面
-            this.couponCards = this.couponCards.sort(function(a,b){
-                return Date.parse(b['coupon'].start_time) - Date.parse(a['coupon'].start_time)
-            })
         })
     },
 }

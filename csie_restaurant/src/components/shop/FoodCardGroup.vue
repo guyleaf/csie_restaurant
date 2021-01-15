@@ -42,7 +42,7 @@ export default {
     created(){
         let id = this.$router.currentRoute.params.id
         
-        this.$http.get('/restaurants/'+id+'/products')
+        this.$axios.get(this.$url+'/restaurants/'+id+'/products')
             .then(response => {
             this.foodCards=[];
             let data=response.data;
@@ -52,7 +52,7 @@ export default {
                 // console.log(this.foodCards)
                 this.$bus.$emit('productsNumber',this.foodCards.filter(i => i.sellingState == true).length)  
         })
-        this.$http.get('/restaurants/'+id+'/category')
+        this.$axios.get(this.$url+'/restaurants/'+id+'/category')
             .then(response => {
             this.foodCategories=[];
             let data=response.data;

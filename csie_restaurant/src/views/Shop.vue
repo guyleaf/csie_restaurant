@@ -4,7 +4,7 @@
       <div class='row justify-content-center'>
         <div class='col-md-8'>
             <ShopDescription v-bind="Info"/>
-            <CouponCardGroup id="couponTab"/> <!--FIXME???-->
+            <CouponCardGroup id="couponTab" /> 
             <FoodCardGroup />
         </div>
       </div>
@@ -27,25 +27,26 @@ export default {
   data: function() {
     return {
       Info:[],
+      couponInfo:[],
     };
   },
   methods: {
 
   },
   watch:{
-    // Info:function(){
-    //   this.$bus.$on('reloadShop',msg =>{
-    //       window.location.reload();
-    //   })
-    // }
   },
   created(){
     let id = this.$router.currentRoute.params.id
     this.$http.get('restaurants/'+id+'/Info')
-        .then(response => {
-          this.Info=[];
-          let data=response.data;
-          this.Info.push({description: data.description, joinDate: data.created_at.split(" ",1)[0],shopName: data.name, imgPath:"https://picsum.photos/900/250/?image=3", rate:parseFloat(Math.round(data.averageOfRatings*10))/10, numberOfRatings:parseInt(data.numberOfRatings), fans:parseInt(data.numberOfFans)});})
+    .then(response => {
+      this.Info=[];
+      let data=response.data;
+      this.Info.push({description: data.description, joinDate: data.created_at.split(" ",1)[0],shopName: data.name, imgPath:"https://picsum.photos/900/250/?image=3", rate:parseFloat(Math.round(data.averageOfRatings*10))/10, numberOfRatings:parseInt(data.numberOfRatings), fans:parseInt(data.numberOfFans)});
+    })
+    this.$http.get('restaurants/' + id + '/coupons' + '?include_expired=0')
+    .then(response => {
+      this.couponInfo = response.data;
+    })
   }
 };
 </script>

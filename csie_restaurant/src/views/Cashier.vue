@@ -220,7 +220,7 @@ export default {
           this.$alert("成功建立訂單", "", "success")
           this.$router.push("/")
         }).catch(error => {
-          console.log(error.response)
+          // console.log(error.response)
         })
       }
   },

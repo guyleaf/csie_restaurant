@@ -139,7 +139,7 @@ export default {
                 this.$cookie.set('shopName',this.$router.currentRoute.params.shopName)
                 this.$cookie.set('product', JSON.stringify(this.data))
                 // uploadtodatabase
-                // this.$alert("成功建立新訂單","","success");
+                this.$alert("成功建立新訂單","","success");
                 // this.$bus.$emit("addfunction",this.dataToCart);
                 // this.$refs['my-modal'].hide();
             // })
@@ -153,15 +153,9 @@ export default {
                 document.cookie = 'coupon=; expires=Thu, 01 Jan 1970 00:00:00 GMT';
                 document.cookie = 'discount=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
                 document.cookie = 'totalPrice=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
-                // this.$cookie.set('shopId',this.$router.currentRoute.params.id)
-                // this.$cookie.set('shopName',this.$router.currentRoute.params.shopName)
-                // this.$cookie.set('product', JSON.stringify(this.data))
-                // uploadtodatabase
                 this.$alert("已清空購物車","","success").then(()=>{
                     this.$refs['my-modal'].show();
                 });
-                // this.$bus.$emit("addfunction",this.dataToCart);
-                // this.$refs['my-modal'].hide();
             })
         },
         hoverCard() {   

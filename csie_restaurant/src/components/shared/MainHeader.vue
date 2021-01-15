@@ -65,11 +65,11 @@ export default {
         goHome(){
             this.reset()
             this.$bus.$emit('resetHome');
-            if (this.$route.path != '/')
+            if (this.$route.path != '/'){
                 this.$router.push('/')
+            }
         },
         goSearch() {
-            //let search = document.querySelector('#searchInput').textContent
             this.$store.dispatch('auth/setSearchResult', this.search_result);
             this.$store.dispatch('auth/setKeywords', this.keywords);
             this.$bus.$emit('reloadHome');
@@ -93,7 +93,7 @@ export default {
                 }
             })
             .catch(error => {
-                console.log(error.response)
+                // console.log(error.response)
             })
         
         },
