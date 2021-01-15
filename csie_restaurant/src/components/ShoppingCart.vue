@@ -115,6 +115,9 @@
         this.ItemList = [];
         this.totalPrice = 0;
         this.productNum = 0;
+        this.disCountMoney = 0;
+        this.coupon = null;
+        this.couponState = null;
         this.submitInvalid = false;
         let data = JSON.parse(this.$cookie.get("product"));
         let coupon = JSON.parse(this.$cookie.get('coupon'));

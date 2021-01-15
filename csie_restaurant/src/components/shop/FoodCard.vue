@@ -104,7 +104,6 @@ export default {
                     if(checkIndex != -1) cartProduct[checkIndex].quantity += this.data[0].quantity;
                     else cartProduct.push(this.data[0])
                     this.$cookie.set('product', JSON.stringify(cartProduct));
-                    console.log(this.$cookie.get('product'))
                 }
                 else 
                 {
@@ -151,6 +150,9 @@ export default {
                 document.cookie = 'shopId=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
                 document.cookie = 'shopName=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
                 document.cookie = 'product=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
+                document.cookie = 'coupon=; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                document.cookie = 'discount=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
+                document.cookie = 'totalPrice=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
                 // this.$cookie.set('shopId',this.$router.currentRoute.params.id)
                 // this.$cookie.set('shopName',this.$router.currentRoute.params.shopName)
                 // this.$cookie.set('product', JSON.stringify(this.data))
