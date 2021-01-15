@@ -46,6 +46,7 @@ class ShopRepository
         $shops = $this->shopsInfoView
             ->join('member as M', 'M.id', '=', 'member_id')
             ->where('is_deleted', '=', false)
+            ->where('member_status', '=', 0)
             ->skip($currentNumber)
             ->take($requiredNumber)
             ->get(['member_id as seller_id', 'M.name', 'counter_number', 'header_image', 'numberofratings', 'averageofratings']);
@@ -67,6 +68,7 @@ class ShopRepository
             ->join('seller_category_list as SCL', 'SCL.seller_id', '=', 'member_id')
             ->join('member as M', 'M.id', '=', 'member_id')
             ->where('is_deleted', '=', false)
+            ->where('member_status', '=', 0)
             ->whereIn('SCL.category_id', $filters)
             ->skip($currentNumber)
             ->take($requiredNumber)
@@ -112,6 +114,8 @@ class ShopRepository
     public function searchShops($keywords)
     {
         $result = $this->shopsInfoView
+        ->where('member_status', '=', 0)
+        ->where('is_deleted', '=', false)
         ->where(function ($query) use ($keywords) {
             for ($i = 0; $i < count($keywords); $i++){
                $query->orwhere('name', 'like',  '%' . $keywords[$i] .'%');
