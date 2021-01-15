@@ -142,23 +142,22 @@ class ProductRepository
 
     public function updateProductCategory($seller_id, $payload)
     {
-        var_dump($payload);
         DB::transaction(function () use ($seller_id, $payload) {
             if (gettype($payload['old']) != 'array')
             {
                 DB::table('product_category', 'PC')
                 ->where('seller_id', '=', $seller_id)
                 ->where('name', '=', $payload['old']['name'])
-                ->update($payload['new']);
+                ->update(['name' => $payload['new']['name']]);
             }
             else
             {
-                array_map(function ($old, $new) use ($seller_id) {
+                array_map(function ($new) use ($seller_id) {
                     DB::table('product_category', 'PC')
                     ->where('seller_id', '=', $seller_id)
-                    ->where('name', '=', $old['name'])
+                    ->where('name', '=', $new['name'])
                     ->update(['display_order' => $new['display_order']]);                                           
-                }, $payload['old'], $payload['new']);
+                }, $payload['new']);
             }
         });
     }
