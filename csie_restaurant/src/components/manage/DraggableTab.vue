@@ -49,7 +49,7 @@
 
 <script>
 import draggable from "vuedraggable";
-let order = 0;
+let order = 1;
 export default {
   name: "DraggableTab",
   order: 0,
@@ -73,8 +73,8 @@ export default {
     foodCategory: function(){
       this.list=[]
       for(let i=0;i<this.foodCategory.length;i++){
-        this.list.push({foodCategory:this.foodCategory[i].foodCategory, order:this.foodCategory[i].order});
-        order += 1;
+        // this.list.push({foodCategory:this.foodCategory[i].foodCategory, order:this.foodCategory[i].order});
+        this.list.push({foodCategory:this.foodCategory[i].foodCategory, order:i+1});
     }}
   },
   methods: {
@@ -90,15 +90,19 @@ export default {
       this.addlist.push({name:name,display_order:order})
     },
     finish: function(){
-      if(this.addlist.length!=0) this.$bus.$emit("addProductCategory",this.addlist);
-      // console.log(this.list)
-      this.$bus.$emit('updateTab',this.list);
+      if(this.addlist.length!=0){
+        this.$bus.$emit("addProductCategory",this.addlist);
+      } 
+      else{
+        this.$bus.$emit('updateTabOrder',this.list);
+      }
+      
     },
     checkMove: function(e) {
     },
     dragEnd: function(e) {
         for(let i=0;i<this.foodCategory.length;i++){
-            this.list[i].order = i;
+            this.list[i].order = i+1;
         }
     }
   },

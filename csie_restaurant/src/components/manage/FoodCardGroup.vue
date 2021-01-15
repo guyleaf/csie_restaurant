@@ -124,24 +124,7 @@ export default {
             preview: require('../../assets/photoupload.png'),
             foodCategories:[],
             foodCards:
-            [
-                /*{sellingState:true, soldOut:false, foodId: 0,  foodName: 'ShopRon',  imgPath: 'https://placekitten.com/300/300', foodDescription: '11111111',  foodTag: 'Ron', price:123},
-                {sellingState:true, soldOut:false, foodId: 1,  foodName: 'ShopRon',  imgPath: 'https://placekitten.com/300/300', foodDescription: '878787878', foodTag: 'Ron', price:133},
-                {sellingState:true, soldOut:false, foodId: 2,  foodName: 'ShopPan', imgPath: 'https://placekitten.com/300/300', foodDescription: '3333333',   foodTag: 'Pan', price:13},
-                {sellingState:true, soldOut:false, foodId: 3,  foodName: 'Lee',  imgPath: 'https://placekitten.com/300/300', foodDescription: '0000000',   foodTag: 'Lee', price:23},
-                {sellingState:true, soldOut:false, foodId: 4,  foodName: 'Leeaaa',  imgPath: 'https://placekitten.com/300/300', foodDescription: '11111111',  foodTag: 'Lee', price:12},
-                {sellingState:true, soldOut:false, foodId: 5,  foodName: 'Ron',  imgPath: 'https://placekitten.com/300/300', foodDescription: '878787878', foodTag: 'Ron', price:64},
-                {sellingState:true, soldOut:false, foodId: 6,  foodName: 'Ronaa', imgPath: 'https://placekitten.com/300/300', foodDescription: '7777777',   foodTag: 'Ron', price:17},
-                {sellingState:true, soldOut:false, foodId: 7,  foodName: 'Lee',  imgPath: 'https://placekitten.com/300/300', foodDescription: '0000000',   foodTag: 'Lee', price:283},
-                {sellingState:true, soldOut:false, foodId: 16,  foodName: 'Leeaa',  imgPath: 'https://placekitten.com/300/300', foodDescription: '11111111',  foodTag: 'Lee', price:173},
-                {sellingState:true, soldOut:false, foodId: 9,  foodName: 'ShopPan',  imgPath: 'https://placekitten.com/300/300', foodDescription: '222222222', foodTag: 'Pan', price:19},
-                {sellingState:true, soldOut:false, foodId: 10, foodName: 'ShoPanf', imgPath: 'https://placekitten.com/300/300', foodDescription: '5555555',   foodTag: 'Pan', price:26},
-                {sellingState:true, soldOut:false, foodId: 11, foodName: 'ShPanee',  imgPath: 'https://placekitten.com/300/300', foodDescription: '6666666',   foodTag: 'Pan', price:183},
-                {sellingState:true, soldOut:false, foodId: 12, foodName: 'ShPanon',  imgPath: 'https://placekitten.com/300/300', foodDescription: '77777777',  foodTag: 'Pan', price:188},
-                {sellingState:true, soldOut:false, foodId: 13, foodName: 'SPanPan',  imgPath: 'https://placekitten.com/300/300', foodDescription: '888888888', foodTag: 'Pan', price:120},
-                {sellingState:true, soldOut:false, foodId: 14, foodName: 'ShPanf', imgPath: 'https://placekitten.com/300/300', foodDescription: '9999999',   foodTag: 'Pan', price:73},
-                FIXME*/
-            ], 
+            [], 
         }
     },
     methods:{
@@ -157,16 +140,15 @@ export default {
                         'Authorization': 'Bearer ' + this.$store.getters['auth/token']
             }}).then( response=>{
                 this.$alert("修改成功","","success");
-                
                 this.sameTag(this.foodCategories[index].foodCategory, null).forEach(item => {
                     item.foodTag = modityName;
                 });
                 this.foodCategories.push({foodCategory: modityName, order: this.foodCategories[index].order, hover:false});
                 this.foodCategories.splice(index, 1);
                 // console.log(this.foodCategories)
-                this.updateTab(this.foodCategories);
+                // this.updateTabShow(this.foodCategories);
             }).catch( error=>{
-                // console.log(error)
+                console.log(error.response)
             })
             
             this.modityName='';
@@ -296,32 +278,59 @@ export default {
         },
         addProductCategory(list){
             let success=0
+            
             for( let i=0;i<list.length;i++)
             {
-            this.$http.post('/seller/categories/add',list[i],{
-                    headers: {
-                        'Authorization': 'Bearer ' + this.$store.getters['auth/token']
-            }}).then( response=>{
-                success+=1
-                if(success==list.length)this.$alert("新增成功","","success");
-            }).catch( error=>{
-                // console.log(error.response)
-            })}
+                this.$http.post('/seller/categories/add',list[i],{
+                        headers: {
+                            'Authorization': 'Bearer ' + this.$store.getters['auth/token']
+                }}).then( response=>{
+                    success+=1
+                    if(success==list.length)this.$alert("新增成功","","success");
+                    this.foodCategories.push({foodCategory:list[0].name, order:list[0].display_order})
+                    
+                    let id=list[0].name.replace(/\s*/g,"");
+                    setfbacksize('#'+id)
+                    function setfbacksize(id){
+                        let food = document.querySelector('#shopbody')
+                        let back = document.querySelector(id)
+                        if(food == null || back==null) setTimeout(setfbacksize.bind(this,id),100)
+                        else  back.style.minWidth= (shopbody.clientWidth).toString() +'px'
+                    }
+                }).catch( error=>{
+                    // console.log(error.response)
+                }
+            )}
         },
         sortOrder:function(a, b){
             return a - b;
         },
         updateTab:function(msg){
+            // console.log('MSG',msg)
+            this.oldCategories = this.foodCategories;
+            // console.log(this.oldCategories);
             this.foodCategories=[]
-            // console.log(msg)
-            msg.sort(function(a,b){
+            this.newOrder ={old:[],new:[]}
+            msg = msg.sort(function(a,b){
                 return a.order - b.order;
             });
             for(let i=0;i<msg.length;i++){
-                this.foodCategories.push({foodCategory: msg[i].foodCategory,order: msg[i].order,hover:false})
+                this.foodCategories.push({foodCategory: msg[i].foodCategory,order: i+1,hover:false})
+                this.newOrder['old'].push({name:this.oldCategories[i].foodCategory, display_order:this.oldCategories[i].order})
+                this.newOrder['new'].push({name:this.foodCategories[i].foodCategory, display_order:this.foodCategories[i].order})
                 let id=msg[i].foodCategory.replace(/\s*/g,"");
                 setfbacksize('#'+id)
             }
+            this.$http.post('/seller/categories/update',this.newOrder,{
+                headers: {
+                    'Authorization': 'Bearer ' + this.$store.getters['auth/token']
+            }}).then(response=>{
+                console.log(response.data)
+            }
+            ).catch(error=>{
+                console.log(error.response)
+            })
+
             function setfbacksize(id)
             {
             let food = document.querySelector('#shopbody')
@@ -331,7 +340,7 @@ export default {
             }
             else  back.style.minWidth= (shopbody.clientWidth).toString() +'px'
             }
-        }
+        },
     },
     created(){
         let id =this.$store.getters['auth/user'].id
@@ -356,7 +365,7 @@ export default {
             let data=response.data;
             // // console.log(data)
             for (let i=0;i<data.length;i++) this.foodCategories.push({foodCategory: data[i].name, order: data[i].display_order, hover:false});
-            this.foodCategories.sort(function(a,b){
+            this.foodCategories = this.foodCategories.sort(function(a,b){
                 return a.order - b.order;
             });
         })
@@ -376,8 +385,8 @@ export default {
         }
         setfbacksize()
         this.$bus.$on("addProductCategory", list =>{this.addProductCategory(list)})
-        this.$bus.$on("updateTab", msg => {
-            this.updateTab(msg);
+        this.$bus.$on("updateTabOrder", msg => {
+            this.updateTab(msg)
         });
     }
 }
