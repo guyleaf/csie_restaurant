@@ -153,6 +153,10 @@ class ProductRepository
             }
             else
             {
+                DB::table('product_category', 'PC')
+                ->where('seller_id', '=', $seller_id)
+                ->delete();
+                
                 array_map(function ($old, $new) use ($seller_id) {
                     DB::table('product_category', 'PC')
                     ->where('seller_id', '=', $seller_id)
