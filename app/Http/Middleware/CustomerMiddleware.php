@@ -31,7 +31,7 @@ class CustomerMiddleware extends BaseMiddleware
         $token = $this->auth->parseToken();
         $user = $this->auth->toUser($token);
 
-        if ($user->permission != 2) {
+        if ($user->permission != 2 || $user->member_status != 0) {
             throw new UnauthorizedHttpException('customer-auth', 'Forbidden', 403);
         }
 

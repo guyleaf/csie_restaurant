@@ -77,7 +77,7 @@ $router->group(['prefix' => 'seller', 'middleware' => 'jwt.seller'], function ()
     });
 });
 
-$router->group(['prefix' => 'admin'], function () use ($router) {
+$router->group(['prefix' => 'admin', 'middleware' => 'jwt.admin'], function () use ($router) {
     $router->get('coupons', '');
     $router->get('sellers', 'AdminController@getSellers');
     $router->get('customers', 'AdminController@getCustomers');
