@@ -114,6 +114,7 @@ class ShopRepository
     public function searchShops($keywords)
     {
         $result = $this->shopsInfoView
+        ->join('member as M', 'M.id', '=', 'member_id')
         ->where('member_status', '=', 0)
         ->where('is_deleted', '=', false)
         ->where(function ($query) use ($keywords) {
