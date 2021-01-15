@@ -1,0 +1,30 @@
+[
+	{
+		"member_id" : 2,
+		"sex" : true
+	},
+	{
+		"member_id" : 5,
+		"sex" : true
+	},
+	{
+		"member_id" : 6,
+		"sex" : true
+	},
+	{
+		"member_id" : 7,
+		"sex" : true
+	},
+	{
+		"member_id" : 8,
+		"sex" : true
+	},
+	{
+		"member_id" : 9,
+		"sex" : true
+	},
+	{
+		"member_id" : 10,
+		"sex" : true
+	}
+]

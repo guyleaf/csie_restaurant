@@ -1,0 +1,87 @@
+[
+	{
+		"seller_id" : 3,
+		"name" : "精品咖啡",
+		"display_order" : 1
+	},
+	{
+		"seller_id" : 3,
+		"name" : "義式磚壓三明治",
+		"display_order" : 2
+	},
+	{
+		"seller_id" : 4,
+		"name" : "甜味鬆餅",
+		"display_order" : 1
+	},
+	{
+		"seller_id" : 4,
+		"name" : "鹹味鬆餅",
+		"display_order" : 2
+	},
+	{
+		"seller_id" : 11,
+		"name" : "超值全餐",
+		"display_order" : 1
+	},
+	{
+		"seller_id" : 11,
+		"name" : "人氣單點",
+		"display_order" : 2
+	},
+	{
+		"seller_id" : 11,
+		"name" : "奶昔",
+		"display_order" : 3
+	},
+	{
+		"seller_id" : 12,
+		"name" : "XL套餐",
+		"display_order" : 1
+	},
+	{
+		"seller_id" : 12,
+		"name" : "多人歡聚餐",
+		"display_order" : 2
+	},
+	{
+		"seller_id" : 12,
+		"name" : "單點",
+		"display_order" : 3
+	},
+	{
+		"seller_id" : 13,
+		"name" : "原葉鮮萃茶 Tea",
+		"display_order" : 1
+	},
+	{
+		"seller_id" : 13,
+		"name" : "奶茶及拿鐵",
+		"display_order" : 2
+	},
+	{
+		"seller_id" : 14,
+		"name" : "泰好吃咖哩",
+		"display_order" : 1
+	},
+	{
+		"seller_id" : 14,
+		"name" : "涼夏沙拉",
+		"display_order" : 2
+	},
+	{
+		"seller_id" : 14,
+		"name" : "地驚蔥有餅",
+		"display_order" : 3
+	},
+	{
+		"seller_id" : 15,
+		"name" : "經典蔥抓餅",
+		"display_order" : 1
+	},
+	{
+		"seller_id" : 15,
+		"name" : "飲品",
+		"display_order" : 2
+	}
+]

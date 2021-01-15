@@ -1,0 +1,34 @@
+[
+	{
+		"category_id" : 1,
+		"name" : "早餐"
+	},
+	{
+		"category_id" : 2,
+		"name" : "台灣美食"
+	},
+	{
+		"category_id" : 3,
+		"name" : "義大利美食"
+	},
+	{
+		"category_id" : 4,
+		"name" : "美式美食"
+	},
+	{
+		"category_id" : 5,
+		"name" : "飲料"
+	},
+	{
+		"category_id" : 6,
+		"name" : "下午茶"
+	},
+	{
+		"category_id" : 7,
+		"name" : "速食"
+	},
+	{
+		"category_id" : 8,
+		"name" : "泰國美食"
+	}
+]
