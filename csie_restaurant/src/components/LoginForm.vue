@@ -125,6 +125,10 @@
               this.errorMsg = 'Unknown error';
               this.showAlert = true;
               break;
+            case 400:
+              this.errorMsg = 'Login failed. Please contact the administrator.';
+              this.showAlert = true;
+              break;
           }
 
           this.account = null
