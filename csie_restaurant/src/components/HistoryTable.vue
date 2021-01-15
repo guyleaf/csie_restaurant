@@ -43,7 +43,7 @@
                   <b-row v-if='row.item.isShippingCoupon' class="mb-2">0</b-row>
                 </b-row>
                 <b-row class="mb-2 justify-content-end">
-                  <b-row>總金額：{{ total(row.item.datas) }}</b-row>
+                  <b-row>總金額：{{totals(row.item.datas)}}</b-row>
                 </b-row>
             </div>
             <div v-if="!row.item.hideRating" class='col-md-6'>
@@ -114,9 +114,8 @@
         return Math.round((data.price * data.quantity * data.discount))
                 // return Math.round((data.price * data.couponQuantity * data.discount) + (data.price * (data.quantity-data.couponQuantity)))
       },
-      total(datas){
+      totals(datas){
         let total=0;
-        // console.log(datas)
         for(let i=0;i<datas.length;i++) 
         {
           if (isNaN(datas[i].discount) || datas[i].discount == null)
@@ -130,9 +129,8 @@
         var index = history.index
         if(!this.items[index].isClicked){
           if(!history.detailsShowing){
-            history.toggleDetails()
+            this.show(history)
           }
-          this.items[index].ratingdisabled=!this.items[index].ratingdisabled
         }
         if(!this.items[index].isRated){
           this.items[index].isClicked = true
@@ -168,24 +166,12 @@
           }
         }).then(response => {
           datas=response.data
-          //// console.log(datas)
           history.item.datas=[]
           history.item.coupon_item=[]
           history.item.comment=datas.order.comment
           for(let i=0;i<datas.order_items.length;i++) 
           {
-            // let discount = 1
-            // if(datas.coupon_items!=undefined) for (let j =0;j<datas.coupon_items.length;j++)
-            //   if(datas.coupon_items[j].product_id == datas.order_items[i].product_id && datas.coupon_items[j].quantity<=datas.order_items[i].quantity) 
-            //     {
-            //       discount=datas.order.discount
-            //       history.item.coupon_item={
-            //         name:datas.order_items[i].product_name,
-            //         couponQuantity: datas.coupon_items[j].quantity
-            //       }
-            //     }
             history.item.datas.push({product_name:datas.order_items[i].product_name, price:parseInt(datas.order_items[i].price), quantity:parseInt(datas.order_items[i].quantity),discount:parseFloat(datas.order.discount)})
-            //(history.item.datas)
           }
           if(datas.order.coupon_type==0) history.item.isShippingCoupon=true;
           else history.item.isShippingCoupon=false;
