@@ -163,7 +163,7 @@ class MemberRepository
             ->count();
 
             if ($counter != 0)
-                throw Exception('Counter number exists');
+                throw new Exception('Counter number exists');
 
             $this->sellerTable = DB::table('seller');
             $this->sellerTable
