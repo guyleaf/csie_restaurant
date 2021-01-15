@@ -142,15 +142,24 @@ class ProductRepository
 
     public function updateProductCategory($seller_id, $payload)
     {
-        $this->productCategoryTable
-        ->where('name', '=', $payload['old']['name'])
-        ->update($payload['new']);
-
-        $this->productTable
-        ->join('seller as S', 'seller_id', '=', 'S.member_id')
-        ->where('S.member_id','=', $seller_id)
-        ->where('P.category_name','=', $payload['old']['name'])
-        ->update(['category_name' => $payload['new']['name']]);
+        DB::transaction(function () use ($seller_id, $payload) {
+            if (gettype($payload['old']) != 'array')
+            {
+                DB::table('product_category', 'PC')
+                ->where('seller_id', '=', $seller_id)
+                ->where('name', '=', $payload['old']['name'])
+                ->update($payload['new']);
+            }
+            else
+            {
+                array_map(function ($old, $new) use ($seller_id) {
+                    DB::table('product_category', 'PC')
+                    ->where('seller_id', '=', $seller_id)
+                    ->where('name', '=', $old['name'])
+                    ->update($new);
+                }, $payload['old'], $payload['new']);
+            }
+        });
     }
 
     public function deleteProductCategory($seller_id, $payload)
