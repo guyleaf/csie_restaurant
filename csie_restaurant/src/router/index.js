@@ -1,5 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import store from "../store";
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -113,13 +115,30 @@ const router = new VueRouter({
     };
   },
 });
+
+const seller = ["Shop", "Home", "ShopManage", "SalesReport", "ManageShops"];
+const admin = ["Shop", "Home", "SalesReport", "Customer", "Seller"];
+const customer = ["Shop", "Home", "History", "Cashier"];
+const anonymous = ["Shop", "Home"];
+
 router.beforeEach((to, from, next) => {
-  //可以做router路徑判斷
-  if (1) {
-    // 0 viewer 1 seller 2 mall this.$store.getters['auth/user'].permission ==
-    next();
+  if (store.getters["auth/token"] != null) {
+    if (store.getters["auth/user"].permission == 0 && admin.includes(to.name))
+      next();
+    else if (
+      store.getters["auth/user"].permission == 1 &&
+      seller.includes(to.name)
+    )
+      next();
+    else if (
+      store.getters["auth/user"].permission == 2 &&
+      customer.includes(to.name)
+    )
+      next();
+    else next(false);
   } else {
-    next();
+    if (anonymous.includes(to.name)) next();
+    else next(false);
   }
 });
 export default router;
