@@ -105,8 +105,8 @@ class MemberService
 
             $member_id = $this->memberRepository->addSeller($payload);
 
-            if (!mkdir('storage/restaurant/' . strval($member_id), 0777))
-                throw 'Error to make new folder';
+            if (!file_exists('storage/restaurant/' . strval($member_id)))
+                mkdir('storage/restaurant/' . strval($member_id), 0777);
 
             if (isset($image))
                 $image->save('storage/restaurant/' . strval($member_id) . '/header.jpg');
