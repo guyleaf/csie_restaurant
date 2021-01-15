@@ -142,6 +142,7 @@ class ProductRepository
 
     public function updateProductCategory($seller_id, $payload)
     {
+        var_dump($payload);
         DB::transaction(function () use ($seller_id, $payload) {
             if (gettype($payload['old']) != 'array')
             {
