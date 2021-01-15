@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Services\ShopService;
 use App\Services\SearchService;
+use App\Services\ProductService;
 use Exception;
 
 class ShopController extends Controller
@@ -20,14 +21,20 @@ class ShopController extends Controller
     protected $searchService;
 
     /**
+     * @var \App\Services\ProductService $productService
+     */
+    protected $productService;
+
+    /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(ShopService $shopService, SearchService $searchService)
+    public function __construct(ShopService $shopService, SearchService $searchService, ProductService $productService)
     {
         $this->shopService = $shopService;
         $this->searchService = $searchService;
+        $this->productService = $productService;
     }
 
     /**
@@ -67,18 +74,60 @@ class ShopController extends Controller
         return response()->json($result);
     }
 
-    
-    public function getProduct(Request $request, $id)
+    public function getProducts(Request $request, $id)
     {
         try {
-            $result = $this->searchService->getProduct();
+            $result = $this->shopService->getProducts($id);
         } catch (Exception $e) {
             return response()->json([
                 'status' => $e->getCode(),
                 'messages' => unserialize($e->getMessage())
             ], $e->getCode());
         }
-
         return response()->json($result);
+    }
+
+    public function getShopInfo(Request $request, $id)
+    {
+        try {
+            $result = $this->shopService->getShopInfo($id);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => $e->getCode(),
+                'messages' => unserialize($e->getMessage())
+            ], $e->getCode());
+        }
+        return response()->json($result);
+    }
+
+    public function getProductCategories(Request $request, $id)
+    {
+        try {
+            $result = $this->shopService->getProductCategories($id);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => $e->getCode(),
+                'messages' => unserialize($e->getMessage())
+            ], $e->getCode());
+        }
+        return response()->json($result);
+    }
+
+    public function getCoupons(Request $request, $id)
+    {
+        $include_expired = false;
+        if ($request->exists('include_expired'))
+            $include_expired = (int)$request->query('include_expired');
+        $result = $this->shopService->getCoupons($id, $include_expired);
+        return response()->json($result);
+    }
+
+    public function searchShops(Request $request)
+    {
+        $keywords = $request->query('keywords');
+        $result = $this->searchService
+        ->searchShops($keywords);
+
+        return $result;
     }
 }
