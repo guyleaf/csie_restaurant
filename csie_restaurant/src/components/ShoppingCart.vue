@@ -115,6 +115,9 @@
         this.ItemList = [];
         this.totalPrice = 0;
         this.productNum = 0;
+        this.disCountMoney = 0;
+        this.coupon = null;
+        this.couponState = null;
         this.submitInvalid = false;
         let data = JSON.parse(this.$cookie.get("product"));
         let coupon = JSON.parse(this.$cookie.get('coupon'));
@@ -162,7 +165,7 @@
         else if (coupon.coupon.type == 1)
         {
           this.disCountMoney = Math.floor(this.beforePrice * (100 - coupon.coupon.discount*100)/100);
-          this.totalPrice = Math.round(this.totalPrice * coupon.coupon.discount);
+          this.totalPrice = this.totalPrice - this.disCountMoney
         }
         else if (coupon.coupon.type == 2)
         {
