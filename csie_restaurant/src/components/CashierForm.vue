@@ -164,6 +164,7 @@ export default {
         schoolPlaceSelected:'請選擇地點',
         schoolPlaceSelectedState: null,
         addressSelected: '0',
+        ItemList:[],
         places:[
           { text: "北科大校內", value: "school" },
           { text: "校外地址", value: "outside" },
@@ -207,6 +208,7 @@ export default {
           {text: "外送", value: 0},
           {text: "自取", value: 1}
         ],
+        productNum:null,
         total_price: this.totalPrice
       }
   },
@@ -250,9 +252,6 @@ export default {
         else
           this.creditCardselectedState = false;
       }
-        
-      
-
       this.$bus.$emit('sync', {address:address, payment_method:payment_method, coupon_code:coupon_code, credit_card_info:credit_card, taking_method: 1})
     },
     school(){
@@ -263,6 +262,23 @@ export default {
     addCreditCard(){
       this.$refs['credit'].show();
     },  
+    setPriceToCookie(){
+      this.$cookie.set('beforePrice',this.beforePrice)
+      this.$cookie.set('totalPrice',this.total_price)
+    },
+    getProductInfo(){
+      this.ItemList = [];
+      this.total_price = 0;
+      this.productNum = 0;
+      let data = JSON.parse(this.$cookie.get("product"));
+      for (var i = 0; i<data.length;i++)
+      {
+        this.beforePrice = this.total_price + data[i].foodPrice*data[i].quantity; 
+        this.total_price = this.beforePrice
+        this.ItemList.push({foodName:data[i].foodName, quantity:data[i].quantity, foodPrice:data[i].foodPrice, id:data[i].id});
+        this.productNum += this.ItemList[i].quantity
+      }
+    },
     getCouponState(){
       let coupon = JSON.parse(this.$cookie.get('coupon'));
       if(coupon != null)
@@ -297,8 +313,15 @@ export default {
     useCouponDiscount(coupon){
         this.disCountMoney = 0;
         let products = JSON.parse(this.$cookie.get('product'))
-        
-        if (coupon.coupon.type == 2)
+        if (coupon.coupon.type == 0){
+          this.$emit('unFee')
+        }
+        else if (coupon.coupon.type == 1)
+        {
+          this.disCountMoney = Math.floor(this.beforePrice * (1-coupon.coupon.discount));
+          this.totalPrice = Math.round(this.totalPrice * coupon.coupon.discount);
+        }
+        else if (coupon.coupon.type == 2)
         {
           for (let i = 0 ; i<coupon.coupon_items.length; i++){
             let product = products.filter(j => j.id == coupon.coupon_items[i].product_id)
@@ -316,8 +339,7 @@ export default {
         }
         let id = this.$cookie.get('shopId');
         let orderItems = this.$cookie.get('product')
-        let data = { coupon_code:coupon,seller_id:id,orderItems:orderItems,total_price:this.total_price}
-        console.log(data)
+        let data = { coupon_code:coupon,seller_id:id,orderItems:orderItems,total_price:this.beforePrice}
         this.$http.post('/customer/coupon/use',data , {
           headers: {
             'Authorization': 'Bearer ' + this.$store.getters['auth/token']
@@ -352,37 +374,12 @@ export default {
     modifyCoupon(){
       this.deleteCoupon()
     },
-    modifySpinValue(index,value){
-      let productCookie = JSON.parse(this.$cookie.get("product"));
-      productCookie[index].quantity = value
-      document.cookie = 'product=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
-      this.$cookie.set('product', JSON.stringify(productCookie))
-      this.beforePrice = this.beforePrice + (value - this.ItemList[index].quantity) * this.ItemList[index].foodPrice
-      this.total_price = this.beforePrice - this.disCountMoney
-      this.productNum += value - this.ItemList[index].quantity
-      this.ItemList[index].quantity = value;
-    },
-    deleteCartCell(e){
-      this.productNum -= this.ItemList[e].quantity
-      this.total_price = this.total_price - this.ItemList[e].foodPrice*this.ItemList[e].quantity;
-      this.ItemList.splice(e,1);
-      if(this.total_price == 0) {
-        this.bookingShopName = null;
-        }
-      if(this.ItemList.length == 0) //delete cookie
-      { 
-        this.submitInvalid = true
-        document.cookie = 'shopId=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
-        document.cookie = 'shopName=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
-        document.cookie = 'product=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
-      }
-      else{ this.$cookie.set('product',JSON.stringify(this.ItemList));}
-    },
     deleteCoupon(){
       let coupon_input = document.querySelector('#coupon-input')
       this.couponState = null;
       this.disCountMoney = null;
       this.total_price = this.beforePrice
+      this.setPriceToCookie()
       this.unlockChangeButton()
       document.cookie = 'coupon=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
       document.cookie = 'discount=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
@@ -495,7 +492,18 @@ export default {
        }
     }
   },
+  mounted(){
+    this.$bus.$on('modifySpin',(beforePrice,totalPrice) => {
+      this.beforePrice = beforePrice;
+      this.totalPrice = totalPrice;
+    })
+    this.$bus.$on('deleteCell',(beforePrice,totalPrice) => {
+      this.beforePrice = beforePrice;
+      this.totalPrice = totalPrice;
+    })
+  },
   created(){
+    this.getProductInfo();
     this.getCouponState();
     this.getCutomerAddress();
     this.getCustomerCreditCard();

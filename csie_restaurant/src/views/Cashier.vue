@@ -14,7 +14,7 @@
           </div>
         </div>
         <div class="payOption"> 
-          <CashierForm  v-on="{deleteCoupon:deleteCoupon, useCoupon:useCoupon}" :totalPrice="totalPrice" />
+          <CashierForm  v-on="{deleteCoupon:deleteCoupon, useCoupon:useCoupon, unFee:unFee}" :totalPrice="totalPrice" />
         </div>
       </b-col>
 
@@ -122,7 +122,7 @@ export default {
         {
           for (var i = 0; i<data.length;i++)
           {
-            this.ItemList.push({foodName:data[i].foodName, quantity:data[i].quantity, foodPrice:data[i].foodPrice});
+            this.ItemList.push({foodName:data[i].foodName, quantity:data[i].quantity, foodPrice:data[i].foodPrice, id:data[i].id});
             this.productNum += this.ItemList[i].quantity;
             this.beforeMoney += this.ItemList[i].foodPrice * this.ItemList[i].quantity
             this.totalPrice = this.beforeMoney
@@ -135,7 +135,6 @@ export default {
         this.discountMoney = this.$cookie.get('discount')
         this.shop_id = this.$cookie.get("shopId");
         this.totalPrice -= (this.discountMoney -30)
-        console.log(this.totalPrice)
       },
       modifySpinValue(index,value){
         let productCookie = JSON.parse(this.$cookie.get("product"));
@@ -147,6 +146,7 @@ export default {
         this.ItemList[index].quantity = value;
         this.productNum += difValue;
         this.$cookie.set('product', JSON.stringify(productCookie))
+        this.$bus.$emit('modifySpin',this.beforeMoney,this.totalPrice);
       },
       deleteCartCell(e){
         if(this.ItemList.length == 1) //delete cookie
@@ -168,6 +168,7 @@ export default {
           this.ItemList.splice(e,1);
           this.$cookie.set('product',JSON.stringify(this.ItemList));
         }
+        this.$bus.$emit('deleteCell',this.beforeMoney,this.totalPrice);
       },
       useCoupon(){
         this.discountMoney  = this.$cookie.get('discount') ;
@@ -178,10 +179,13 @@ export default {
           this.shipping = 0
       },
       deleteCoupon(){
-        // console.log(this.$cookie.get('discount'))
-        this.discountMoney  = this.$cookie.get('discount') ;
+        this.shipping = 30;
+        this.discountMoney = 0;
         this.totalPrice = this.beforeMoney + this.shipping
-        console.log(this.totalPrice)
+      },
+      unFee(){
+        this.shipping = 0;
+        this.totalPrice = this.beforeMoney + this.shipping
       },
       checkAll() {
         this.$bus.$emit('checkAll')
@@ -190,7 +194,6 @@ export default {
         let order = {coupon_code:this.coupon_code, seller_id:parseInt(this.shop_id), address: this.address, taking_method: this.taking_method, payment_method: this.payment_method, fee: this.shipping}
         let cookie = JSON.parse(this.$cookie.get("product"));
         let coupon_code = JSON.parse(this.$cookie.get("coupon_code"));
-        console.log(cookie);
         let order_items = []
         for (let i=0;i<cookie.length;i++)
         {
@@ -208,7 +211,6 @@ export default {
             'Authorization': 'Bearer ' + this.$store.getters['auth/token']
           }
         }).then(response =>{
-          // console.log(response.data)
           this.$cookie.delete("product")
           this.$cookie.delete("shopName")
           this.$cookie.delete("shopId")
@@ -227,7 +229,6 @@ export default {
   created(){
     this.loadingData()
     this.$bus.$on('sync', (data) => {
-      // console.log(data);
       this.coupon_code = data.coupon_code
       this.address = data.address
       this.payment_method = data.payment_method

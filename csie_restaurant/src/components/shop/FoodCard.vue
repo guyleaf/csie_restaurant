@@ -104,7 +104,7 @@ export default {
                     if(checkIndex != -1) cartProduct[checkIndex].quantity += this.data[0].quantity;
                     else cartProduct.push(this.data[0])
                     this.$cookie.set('product', JSON.stringify(cartProduct));
-                    // console.log(this.$cookie.get('product'))
+                    console.log(this.$cookie.get('product'))
                 }
                 else 
                 {

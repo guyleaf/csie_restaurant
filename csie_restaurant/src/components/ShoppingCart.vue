@@ -58,7 +58,7 @@
         </div>
         <div class="row " v-if="productNum!= 0">
           <div class='col-md-9 tlprice'>總計 (包含稅項) :</div>
-          <div class='col-md-3 tlprice' style="text-align: end;">{{totalPrice}}</div>
+          <div class='col-md-3 tlprice' style="text-align: end;">{{totalPrice+fee}}</div>
         </div>
         <div class="row col-md-12" >
           <b-button id="checkSb" class="checkOut" @click="onOk" variant="info" :disabled="submitInvalid" vertical>結帳</b-button>
@@ -97,6 +97,7 @@
             foodName: null,
             foodPrice: null,
             quantity: null,
+            id:null
           }
         ],
         beforePrice:null,
@@ -124,7 +125,7 @@
           {
             this.beforePrice = this.totalPrice + data[i].foodPrice*data[i].quantity; 
             this.totalPrice = this.beforePrice
-            this.ItemList.push({foodName:data[i].foodName, quantity:data[i].quantity, foodPrice:data[i].foodPrice});
+            this.ItemList.push({foodName:data[i].foodName, quantity:data[i].quantity, foodPrice:data[i].foodPrice, id:data[i].id});
             this.productNum += this.ItemList[i].quantity
           }
         }
@@ -146,7 +147,7 @@
             type: 'warning',
             title: '請先登入',
             text: '您必須登入後才能使用此功能',
-            confirmButtonText:'登入',
+            confirmButtonText:'`登入',
           }).then(r => {
             this.showModal()
           });
@@ -159,7 +160,10 @@
         if (coupon.coupon.type == 0)
           this.fee = 0
         else if (coupon.coupon.type == 1)
-          this.totalPrice *= coupon.coupon.discount;
+        {
+          this.disCountMoney = Math.floor(this.beforePrice * (1-coupon.coupon.discount));
+          this.totalPrice = Math.round(this.totalPrice * coupon.coupon.discount);
+        }
         else if (coupon.coupon.type == 2)
         {
           for (let i = 0 ; i<coupon.coupon_items.length; i++){
@@ -174,7 +178,7 @@
           let id = this.$cookie.get('shopId');
           let orderItems = this.$cookie.get('product')
           // console.log(orderItems)
-          let data = { coupon_code:coupon,seller_id:id,orderItems:orderItems,total_price:this.totalPrice}
+          let data = { coupon_code:coupon,seller_id:id,orderItems:orderItems,total_price:this.beforePrice}
           this.$http.post('/customer/coupon/use',data , {
             headers: {
               'Authorization': 'Bearer ' + this.$store.getters['auth/token']
@@ -232,7 +236,8 @@
       },
       deleteCartCell(e){
         this.productNum -= this.ItemList[e].quantity
-        this.totalPrice = this.totalPrice - this.ItemList[e].foodPrice*this.ItemList[e].quantity;
+        this.beforePrice = this.beforePrice - this.ItemList[e].foodPrice*this.ItemList[e].quantity;
+        this.totalPrice = this.beforePrice;
         this.ItemList.splice(e,1);
         if(this.totalPrice == 0) {
           this.bookingShopName = null;
@@ -271,6 +276,8 @@
         if(this.checkLogin()){
           this.confirmModal()
           this.onClose()
+          this.$cookie.set('beforePrice', this.beforePrice)
+          this.$cookie.set('totalPrice', this.totalPrice)
           if (this.$router.currentRoute['name'] == "Cashier") window.location.reload();
           else this.$router.push("/cashier");
         }
