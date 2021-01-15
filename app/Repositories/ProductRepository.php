@@ -157,7 +157,7 @@ class ProductRepository
                     DB::table('product_category', 'PC')
                     ->where('seller_id', '=', $seller_id)
                     ->where('name', '=', $old['name'])
-                    ->update($new['display_order']);                                           
+                    ->update(['display_order' => $new['display_order']]);                                           
                 }, $payload['old'], $payload['new']);
             }
         });
