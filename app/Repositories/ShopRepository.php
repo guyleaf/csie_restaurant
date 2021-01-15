@@ -119,9 +119,9 @@ class ShopRepository
         ->where('is_deleted', '=', false)
         ->where(function ($query) use ($keywords) {
             for ($i = 0; $i < count($keywords); $i++){
-               $query->orwhere('name', 'like',  '%' . $keywords[$i] .'%');
+               $query->orwhere('M.name', 'like',  '%' . $keywords[$i] .'%');
             }
-        })->get(['member_id as seller_id', 'name', 'counter_number', 'header_image', 'averageofratings']);
+        })->get(['member_id as seller_id', 'M.name', 'counter_number', 'header_image', 'averageofratings']);
 
         return $result;
     }
