@@ -147,8 +147,8 @@ class ProductRepository
             {
                 DB::table('product_category', 'PC')
                 ->where('seller_id', '=', $seller_id)
-                ->where('name', '=', $payload['old']['name'])
-                ->update(['name' => $payload['new']['name']]);
+                ->where('name', '=', $payload['old']->name)
+                ->update(['name' => $payload['new']->name]);
             }
             else
             {
