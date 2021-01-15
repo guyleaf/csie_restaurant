@@ -161,7 +161,7 @@
           this.fee = 0
         else if (coupon.coupon.type == 1)
         {
-          this.disCountMoney = Math.floor(this.beforePrice * (1-coupon.coupon.discount));
+          this.disCountMoney = Math.floor(this.beforePrice * (100 - coupon.coupon.discount*100)/100);
           this.totalPrice = Math.round(this.totalPrice * coupon.coupon.discount);
         }
         else if (coupon.coupon.type == 2)

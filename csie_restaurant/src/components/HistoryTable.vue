@@ -178,29 +178,7 @@
           history.item.fee=datas.order.fee;
           history.toggleDetails()
         })
-        // let orderItems = []
-        // // console.log(datas.order.coupon_type,'123')
-        // if(datas.order.coupon_type == 2){
-          // for(let i= 0; i<datas.order_items.length;i++) {
-            // orderItems.push( {foodName:datas.order_items[i].product_name, quantity:datas.order_items[i].quantity, id:datas.order_items[i].product_id, 
-            // foodPrice:datas.order_items[i].price})
-            // // console.log(i)
-          // }
-        
-          let couponTotal=0;
-          // for(let i=0;i<datas.order_items.length;i++) couponTotal += datas.order_items[i].quantity*datas.order_items[i].price
-        // let datacoupon = { coupon_code:datas.order.coupon_code,orderItems:orderItems,total_price:couponTotal}
-        }
-        //   this.$http.post('/customer/coupon/use',datacoupon , {
-        //     headers: {
-        //       'Authorization': 'Bearer ' + this.$store.getters['auth/token']
-        //     }
-        //   }).then(response=>{
-        //     // console.log(response.data)
-        //   })
-        // }
-        // history.toggleDetails()
-    
+      }
     },
     mounted() {
       this.$axios.get(this.$url + '/customer/orders', {
