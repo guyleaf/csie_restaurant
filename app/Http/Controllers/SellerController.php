@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Services\SellerService;
 use App\Services\ShopService;
-use App\Services\ProductService;
 use App\Services\OrderService;
 use Exception;
 
@@ -22,20 +21,14 @@ class SellerController extends Controller
     protected $shopService;
 
     /**
-     * @var \App\Services\ProductService $productService
-     */
-    protected $productService;
-
-    /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(SellerService $sellerService, ShopService $shopService, ProductService $productService)
+    public function __construct(SellerService $sellerService, ShopService $shopService)
     {
         $this->sellerService = $sellerService;
         $this->shopService = $shopService;
-        $this->productService = $productService;
     }
 
     public function getCoupons(Request $request)
@@ -81,12 +74,20 @@ class SellerController extends Controller
         $result = $this->sellerService->getOrderInfo($orderId);
         return response()->json($result);
     }
-
+    
+    public function updateOrder(Request $request)
+    {
+        $user = auth()->user();
+        $id = $user->id;
+        $this->sellerService->updateOrder($id, $request->all());
+        return response()->json(['message' => 'Success'], 201);
+    }
+    
     public function getProducts(Request $request)
     {
         $user = auth()->user();
         $id = $user->id;
-        $result = $this->productService->getItems($id);
+        $result = $this->sellerService->getProducts($id);
         return response()->json($result);
     }
 
@@ -108,7 +109,29 @@ class SellerController extends Controller
     {
         $user = auth()->user();
         $id = $user->id;
-        $state = $this->sellerService->updateProduct($id, $request->all());
-        return response()->json(['message' => 'Success', 'state' => $state], 201);
+        $this->sellerService->updateProduct($id, $request->all());
+        return response()->json(['message' => 'Success'], 201);
+    }
+
+    public function addProductCategory(Request $request)
+    {
+        $user = auth()->user();
+        $id = $user->id;
+        $this->sellerService->addProductCategory($id, $request->all());
+        return response()->json(['message' => 'Success'], 201);
+    }
+
+    public function deleteProductCategory(Request $request)
+    {
+        $this->sellerService->deleteProductCategory($request->input('id'));
+        return response()->json(['message' => 'Success']);
+    }
+
+    public function updateProductCategory(Request $request)
+    {
+        $user = auth()->user();
+        $id = $user->id;
+        $this->sellerService->updateProductCategory($id, $request->all());
+        return response()->json(['message' => 'Success'], 201);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Services;
 use App\Repositories\CouponRepository;
 use App\Repositories\ProductRepository;
 use App\Services\OrderService;
+use App\Services\ProductService;
 use Exception;
 use Illuminate\Validation\Rules\Exists;
 use Intervention\Image\Facades\Image as Image;
@@ -26,16 +27,22 @@ class SellerService
     protected $orderService;
 
     /**
+     * @var App\Services\ProductService $productService
+     */
+    protected $productService;
+
+    /**
      * Shop service constructor
      *
      * @param \App\Repositories\CouponRepository $couponRepository
      * @param \App\Repositories\ProductRepository $productRepository
      */
-    public function __construct(CouponRepository $couponRepository, ProductRepository $productRepository, OrderService $orderService)
+    public function __construct(CouponRepository $couponRepository, ProductRepository $productRepository, OrderService $orderService, ProductService $productService)
     {
         $this->couponRepository = $couponRepository;
         $this->productRepository = $productRepository;
         $this->orderService = $orderService;
+        $this->productService = $productService;
     }
 
     public function addCoupon($seller_id, $payload)
@@ -53,6 +60,13 @@ class SellerService
     public function updateCoupon($payload)
     {
         $this->couponRepository->updateCoupon($payload);
+    }
+
+    public function getProducts($id)
+    {
+        $result = $this->productService
+        ->getItems($id, true);
+        return $result;
     }
 
     public function addProduct($seller_id, $payload)
@@ -78,7 +92,7 @@ class SellerService
 
     public function updateProduct($seller_id, $payload)
     {
-        if (!empty($payload['image']))
+        if (isset($payload['image']))
         {
             $image = Image::make($payload['image'])->resize(200, 200)->encode('jpg');
             unset($payload['image']);
@@ -86,16 +100,17 @@ class SellerService
 
         $this->productRepository->updateProduct($payload);
 
-        if ($image != null)
+        if (isset($image))
         {
             $product_id = $payload['id'];
 
             $image_path = 'storage/restaurant/' . strval($seller_id);
             $image_name = strval($product_id) . '.jpg';
             $state = unlink(public_path($image_path. '/' . $image_name));
+            if (!$state)
+                throw 'Error: Unable to delete image file';
             $image->save($image_path. '/' . $image_name, 100);
         }
-        return $state;
     }
 
     public function getOrders($id)
@@ -110,6 +125,26 @@ class SellerService
         $result = $this->orderService
         ->getOrderInfo($orderId);
         return $result;
+    }
+
+    public function updateOrder($seller_id, $payload)
+    {
+        $this->orderService->updateSellerOrder($seller_id, $payload);
+    }
+
+    public function addProductCategory($seller_id, $payload)
+    {
+        $this->productRepository->addProductCategory($seller_id, $payload);
+    }
+
+    public function updateProductCategory($seller_id, $payload)
+    {
+        $this->productRepository->updateProductCategory($seller_id, $payload);
+    }
+
+    public function deleteProductCategory($seller_id, $payload)
+    {
+        $this->productRepository->deleteProductCategory($seller_id, $payload);
     }
 }
 ?>

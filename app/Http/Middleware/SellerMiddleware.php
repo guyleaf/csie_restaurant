@@ -30,7 +30,7 @@ class SellerMiddleware extends BaseMiddleware
         $token = $this->auth->parseToken();
         $user = $this->auth->toUser($token);
 
-        if ($user->permission != 1) {
+        if ($user->permission != 1 || $user->member_status != 0) {
             throw new UnauthorizedHttpException('seller-auth', 'Forbidden', 403);
         }
 

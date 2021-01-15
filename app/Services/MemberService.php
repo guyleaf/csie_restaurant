@@ -4,7 +4,7 @@ namespace App\Services;
 use Illuminate\Support\Facades\Validator;
 use App\Repositories\MemberRepository;
 use InvalidArgumentException;
-// use Intervention\Image\Facades\Image as Image;
+use Intervention\Image\Facades\Image as Image;
 
 class MemberService
 {
@@ -88,13 +88,16 @@ class MemberService
         $this->memberRepository->deleteMember($id);
     }
 
+    /**
+     * @param Illuminate\Http\UploadedFile $payload['seller']['header_image]
+     */
     public function addMember($payload)
     {
-        if($payload['member']->permission === 1)
+        if($payload['member']['permission'] == 1)
         {
             if (!empty($payload['seller']['header_image']))
             {
-                // $image = Image::make($payload['seller']['header_image'])->resize(640, 480)->encode('jpg', 100);
+                $image = Image::make($payload['seller']['header_image']->get())->resize(640, 480)->encode('jpg', 100);
                 $payload['seller']['header_image'] = true;
             }
             else
@@ -102,10 +105,13 @@ class MemberService
 
             $member_id = $this->memberRepository->addSeller($payload);
 
-            if ($image != null)
-                $image->save('restaurant/' . strval($member_id) . '/header.jpg');
+            if (!file_exists('storage/restaurant/' . strval($member_id)))
+                mkdir('storage/restaurant/' . strval($member_id), 0777);
+
+            if (isset($image))
+                $image->save('storage/restaurant/' . strval($member_id) . '/header.jpg');
         }
-        elseif($payload['member']->permission === 2)
+        elseif($payload['member']['permission'] == 2)
         {
             $this->memberRepository->addCustomer($payload);
         }

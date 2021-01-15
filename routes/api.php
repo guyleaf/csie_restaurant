@@ -31,7 +31,7 @@ $router->group(['prefix' => 'auth'], function () use ($router) {
 $router->group(['prefix' => 'restaurants'], function () use ($router) {
     $router->get('', 'ShopController@getShops');
     $router->get('category', 'ShopController@getCategories');
-    $router->get('{id}/products', 'ShopController@getItems');
+    $router->get('{id}/products', 'ShopController@getProducts');
     $router->get('{id}/category', 'ShopController@getProductCategories');
     $router->get('{id}/Info', 'ShopController@getShopInfo');
     $router->get('{id}/coupons', 'ShopController@getCoupons');
@@ -44,14 +44,16 @@ $router->group(['prefix' => 'customer'], function () use ($router) {
         $router->get('orders/{orderId}', 'CustomerController@getOrderInfo');
         $router->post('coupon/use', 'CustomerController@useCoupon');
         $router->get('address', 'CustomerController@getAddress');
+        $router->get('creditCard', 'CustomerController@getCreditCard');
+        $router->post('creditCard', 'CustomerController@addCreditCard');
+        $router->post('address', 'CustomerController@addAddress');
     });
 });
 
 // 交易中..
-$router->group(['prefix' => 'order'], function () use ($router) {
+$router->group(['prefix' => 'order', 'middleware' => 'jwt.customer'], function () use ($router) {
     $router->post('', 'OrderController@addOrder');
     $router->get('event', 'OrderController@listenOrder');
-    $router->post('update', 'OrderController@updateOrder');
 });
 
 $router->group(['prefix' => 'seller', 'middleware' => 'jwt.seller'], function () use ($router) {
@@ -61,15 +63,21 @@ $router->group(['prefix' => 'seller', 'middleware' => 'jwt.seller'], function ()
     $router->post('coupons/update', 'SellerController@updateCoupon');
     $router->get('orders', 'SellerController@getOrders');
     $router->get('orders/{orderId}', 'SellerController@getOrderInfo');
+    $router->post('orders/update', 'SellerController@updateOrder');
     $router->group(['prefix' => 'products'], function () use ($router) {
         $router->get('', 'SellerController@getProducts');
         $router->post('add', 'SellerController@addProduct');
         $router->post('delete', 'SellerController@deleteProduct');
         $router->post('update', 'SellerController@updateProduct');
     });
+    $router->group(['prefix' => 'categories'], function () use ($router) {
+        $router->post('add', 'SellerController@addProductCategory');
+        $router->post('update', 'SellerController@updateProductCategory');
+        $router->post('delete', 'SellerController@deleteProductCategory');
+    });
 });
 
-$router->group(['prefix' => 'admin'], function () use ($router) {
+$router->group(['prefix' => 'admin', 'middleware' => 'jwt.admin'], function () use ($router) {
     $router->get('coupons', '');
     $router->get('sellers', 'AdminController@getSellers');
     $router->get('customers', 'AdminController@getCustomers');

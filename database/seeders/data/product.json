@@ -614,7 +614,7 @@
 		"is_deleted" : false,
 		"category_id" : 14,
 		"category_name" : "涼夏沙拉"
-},
+	},
 	{
 		"id" : 45,
 		"seller_id" : 11,
@@ -626,7 +626,7 @@
 		"modified_time" : "2020-06-18T16:00:00.000Z",
 		"status" : 1,
 		"is_deleted" : false,
-		"category_id" : 13,
+		"category_id" : 11,
 		"category_name" : "奶昔"
 	},
 	{
@@ -640,7 +640,7 @@
 		"modified_time" : "2020-06-18T16:00:00.000Z",
 		"status" : 0,
 		"is_deleted" : false,
-		"category_id" : 13,
+		"category_id" : 11,
 		"category_name" : "奶昔"
 	},
 	{

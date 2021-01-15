@@ -52,6 +52,13 @@ class ShopService
         return $result;
     }
 
+    public function getProducts($id)
+    {
+        $result = $this->productService
+        ->getItems($id, false);
+        return $result;
+    }
+    
     public function getCoupons($id, $include_expired=false)
     {
         $result = $this->couponRepository

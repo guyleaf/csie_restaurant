@@ -74,10 +74,10 @@ class ShopController extends Controller
         return response()->json($result);
     }
 
-    public function getItems(Request $request, $id)
+    public function getProducts(Request $request, $id)
     {
         try {
-            $result = $this->productService->getItems($id);
+            $result = $this->shopService->getProducts($id);
         } catch (Exception $e) {
             return response()->json([
                 'status' => $e->getCode(),

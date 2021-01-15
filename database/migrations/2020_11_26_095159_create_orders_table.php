@@ -17,7 +17,7 @@ class CreateOrdersTable extends Migration
         Schema::create('order', function (Blueprint $table) {
             $table->bigIncrements("id")->comment("訂單編號");
             $table->foreignId("customer_id")->comment("顧客編號");
-            $table->foreignId("coupon_id")->nullable()->comment("優惠券編號");
+            $table->string("coupon_code")->nullable()->comment("優惠券代號");
             $table->foreignid("seller_id")->comment("商店編號");
             $table->dateTime("order_time")->comment("下單時間");
             $table->dateTime("ship_time")->nullable()->comment("運送時間");
@@ -33,7 +33,7 @@ class CreateOrdersTable extends Migration
             // $table->enum("taking_method", [0, 1])->comment("取餐方式");
             $table->foreign("customer_id")->references("member_id")->on("customer")
             ->onUpdate("cascade")->onDelete("cascade");
-            $table->foreign("coupon_id")->references("id")->on("coupon")
+            $table->foreign("coupon_code")->references("code")->on("coupon")
             ->onUpdate("cascade")->onDelete("cascade");
             $table->foreign("seller_id")->references("member_id")->on("seller")
             ->onUpdate("cascade")->onDelete("cascade");

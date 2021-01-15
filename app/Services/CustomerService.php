@@ -32,16 +32,15 @@ class CustomerService
             return $coupon['coupon']->limit_money <= $order['total_price'];
         else if ($coupon['coupon']->type === 2)
         {
-            $orderItems = collect($order['orderItems']);
+            $orderItems = collect(json_decode($order['orderItems'], true));
             $coupon_items = $coupon['coupon_items'];
-            var_dump($coupon['coupon_items']);
 
             $tmp = $coupon_items->every(function ($value, $key) use ($order, $orderItems){
                 $product_id = $value->product_id;
                 $quantity = $value->quantity;
                 return $orderItems->contains(function ($value, $key) use ($product_id, $quantity) {
-                    return $value->id == $product_id &&
-                    $value->quantity >= $quantity;
+                    return $value['id'] == $product_id &&
+                    $value['quantity'] >= $quantity;
                 });
             });
             return $tmp;
@@ -76,6 +75,25 @@ class CustomerService
         return $result;
     }
 
+    public function getCreditCard($customerId)
+    {
+        $result = $this->customerRepository
+        ->getCreditCard($customerId);
+        return $result;
+    }
+
+    public function addAddress($customerId, $payload)
+    {
+        $this->customerRepository
+        ->addAddress($customerId, $payload);
+    }
+
+    public function addCreditCard($customerId, $payload)
+    {
+        $this->customerRepository
+        ->addCreditCard($customerId, $payload);
+    }
+
     public function useCoupon($id, $coupon_code, $seller_id, $order)
     {
         $coupon = $this->shopService->useCoupon($coupon_code, $seller_id);
@@ -85,7 +103,6 @@ class CustomerService
 
         $numberOfUsage = $this->customerRepository->countUsageNumberOfUsedCoupon($id, $coupon_code);
 
-        var_dump($coupon['coupon']);
         if ($coupon['coupon']->numberOfUsage - $numberOfUsage === 0)
             return 5;
 

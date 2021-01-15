@@ -12,9 +12,19 @@ class CustomerRepository
     protected $customer;
 
     /**
-     * @var \Illuminate\Database\Query\Builder $coupon
+     * @var \Illuminate\Database\Query\Builder $usedCoupon
      */
     protected $usedCoupon;
+
+    /**
+     * @var \Illuminate\Database\Query\Builder $customerAddress
+     */
+    protected $customerAddress;
+
+    /**
+     * @var \Illuminate\Database\Query\Builder $customerCreditCard
+     */
+    protected $creditCard;
 
     /**
      * Member Repository constructor
@@ -26,6 +36,7 @@ class CustomerRepository
         $this->customer = DB::table('customer', 'C');
         $this->customerAddress = DB::table('customer_address', 'CA');
         $this->usedCoupon = DB::table('used_coupon', 'UC');
+        $this->creditCard = DB::table('credit_card', 'CC');
     }
 
     // public function getUsedCoupons($id, $coupon_code)
@@ -42,8 +53,7 @@ class CustomerRepository
     public function countUsageNumberOfUsedCoupon($id, $coupon_code)
     {
         $result = $this->usedCoupon
-        ->join('coupon as CP', 'CP.id', '=', 'UC.coupon_id')
-        ->where('CP.code', '=', $coupon_code)
+        ->where('UC.coupon_code', '=', $coupon_code)
         ->count();
 
         return $result;
@@ -56,6 +66,28 @@ class CustomerRepository
         ->get(["address"]);
 
         return $result;
+    }
+
+    public function getCreditCard($id)
+    {
+        $result = $this->creditCard
+        ->where('customer_id', '=', $id)
+        ->get(['credit_card', 'expire_date']);
+        return $result;
+    }
+
+    public function addCreditCard($id, $payload)
+    {
+        $payload['customer_id'] = $id;
+        $this->creditCard
+        ->insert($payload);
+    }
+
+    public function addAddress($id, $payload)
+    {
+        $payload['customer_id'] = $id;
+        $this->customerAddress
+        ->insert($payload);
     }
 }
 ?>
