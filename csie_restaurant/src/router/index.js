@@ -1,3 +1,4 @@
+import { TabsPlugin } from "bootstrap-vue";
 import Vue from "vue";
 import VueRouter from "vue-router";
 import store from "../store";
@@ -20,14 +21,6 @@ const routes = [
           title: "孜宮庭園 - 首頁",
         },
       },
-      // {
-      //     name: 'SearchResult',
-      //     path: 'searchResult',
-      //     component: () => import('@/views/SearchResult.vue'),
-      //     meta: {
-      //         title: '孜宮庭園 - 搜尋結果',
-      //     }
-      // },
       {
         name: "Shop",
         path: "shop/:id/:shopName",
@@ -128,15 +121,18 @@ router.beforeEach((to, from, next) => {
     else if (
       store.getters["auth/user"].permission == 1 &&
       seller.includes(to.name)
-    )
+    ){
       next();
+    }
     else if (
       store.getters["auth/user"].permission == 2 &&
       customer.includes(to.name)
     )
       next();
     else next(false);
-  } else {
+  } 
+  
+  else {
     if (anonymous.includes(to.name)) next();
     else next(false);
   }

@@ -104,7 +104,7 @@ export default {
                     if(checkIndex != -1) cartProduct[checkIndex].quantity += this.data[0].quantity;
                     else cartProduct.push(this.data[0])
                     this.$cookie.set('product', JSON.stringify(cartProduct));
-                    console.log(this.$cookie.get('product'))
+                    // console.log(this.$cookie.get('product'))
                 }
                 else 
                 {
@@ -140,7 +140,7 @@ export default {
                 this.$cookie.set('shopName',this.$router.currentRoute.params.shopName)
                 this.$cookie.set('product', JSON.stringify(this.data))
                 // uploadtodatabase
-                // this.$alert("成功建立新訂單","","success");
+                this.$alert("成功建立新訂單","","success");
                 // this.$bus.$emit("addfunction",this.dataToCart);
                 // this.$refs['my-modal'].hide();
             // })
