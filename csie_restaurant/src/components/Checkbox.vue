@@ -4,12 +4,12 @@
     <div class="checkboxMenu row mt-1">
       <b-form-checkbox class="mb-1 checkbox"
         v-model="selected"
-        @change="onChange()"
         v-for="category in categories"
         :key="category.category_id"
         :value="category.category_id"
         button
         button-variant="none"
+        @change="selecting"
       >
         {{ category.name }}
       </b-form-checkbox>
@@ -20,28 +20,33 @@
 
 <script>
   export default {
-      name:"Checkbox",
+    name:"Checkbox",
+    props: {
+      categories: Array
+    },
     data() {
       return {
-        categories:{
-          category_id: '',
-          name:'',
-        },
-        info: null,
-        category: [],
         selected: [], // Must be an array reference!
       }
     },
-    mounted () {
-      this.$http.get('/restaurants/category')
-          .then(response => (this.categories = response.data))
+    mounted() {
+       this.$bus.$on('resetHome', () => {
+         this.selected = []
+       });
+       this.$bus.$on('reloadHome', () => {
+         this.selected = []
+       });
+    },
+    watch:
+    {
+      
     },
     methods:
     {
-      onChange()
-      {
-        this.$emit("selectChange",this.selected)
-      },
+      selecting: function () {
+        // console.log('selecting..');
+        this.$emit("selectChange", this.selected)
+      }
     },
   }
 </script>

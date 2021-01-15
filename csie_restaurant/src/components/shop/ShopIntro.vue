@@ -38,11 +38,17 @@
     props:{
         shopName: String,
         imgPath: String,
-        commodity: Number,
-        fans: Number,
-        joinDate: Date,
-        rate: Number
+        commodity: String,
+        fans: String,
+        joinDate: String,
+        rate: String
         
+    },
+    created(){
+        this.$bus.on('productsNumber',num =>{
+            // console.log(num)
+            this.commodity=num.toString()}
+        )
     }
 }
 </script>

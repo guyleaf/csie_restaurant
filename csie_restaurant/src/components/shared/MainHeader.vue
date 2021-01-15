@@ -1,32 +1,34 @@
 <template>
     <div>
-        <b-navbar toggleable="lg" type="dark" variant="dark">
-            <b-navbar-brand> 
-                <router-link :to="{name: 'Home'}" class="nav-link" variant="info">孜宮庭園</router-link>
+        <b-navbar toggleable="lg" type="dark" variant="dark" class='header'>
+            <b-navbar-brand @click="goHome" class="nav-link" variant="info"> 
+                孜宮庭園
             </b-navbar-brand>
-
             <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-
             <b-collapse id="nav-collapse" is-nav>
             <b-navbar-nav>
-                <b-nav-item> 
-                    <router-link :to="{name: 'Home'}" class="nav-link">Home</router-link>
+                <b-nav-item @click="goHome" class="nav-link" variant="info"> 
+                    Home
                 </b-nav-item>
             </b-navbar-nav>
-            
             <!-- Right aligned nav items -->
-
             <b-nav-form class="ml-auto">
-                <b-form-input size="sm" class="mr-sm-2" placeholder="Search"></b-form-input>
-                <b-button size="sm" class="my-2 my-sm-0" type="submit" variant="success">button</b-button> <!--input type="image" src="" /-->
+                <b-input-group size="sm" >
+                    <b-form-input list="searchInput" placeholder="Search Shop" v-model="keywords" debounce="500"></b-form-input>
+                    <datalist id="searchInput">
+                        <option v-for="name in search_shopName" :key="name"> {{ name }}</option>
+                    </datalist>
+                    <b-input-group-prepend >
+                        <b-button variant="success" @click="goSearch">Search</b-button>
+                    </b-input-group-prepend>
+                </b-input-group>
             </b-nav-form>
-            <b-navbar-nav class="ml-5">
-                <ShoppingCart />
+            <b-navbar-nav class="ml-4 mr-3">
+                <ShoppingCart v-if="this.$store.getters['auth/token'] == null || this.$store.getters['auth/user'].permission==2 && 
+                showShoppingCart"/>
             </b-navbar-nav>
             <b-navbar-nav>
-                <b-nav-item> 
-                    <router-link :to="{name: 'Login'}" class="nav-link login">Login</router-link>
-                </b-nav-item>
+                <LoginNav ref="loginNav"></LoginNav>
             </b-navbar-nav>
             </b-collapse>
         </b-navbar>
@@ -35,25 +37,79 @@
 
 <script>
 import ShoppingCart from "@/components/ShoppingCart.vue";
+import LoginNav from "@/components/LoginNav.vue";
 // @ is an alias to /src
-// import HelloWorld from "@/components/HelloWorld.vue";
 export default {
     name: "main-header",
     components: {
         ShoppingCart,
+        LoginNav
     },
     data: function() {
         return {
+            keywords: '',
+            search_result: [],
+            search_shopName: [], //options
+            showShoppingCart: true
         };
     },
-    method: {
+    methods: {
+        reset() {
+            this.keywords = ''
+            this.search_result = []
+            this.$store.dispatch('auth/cleanSearchResult');
+            this.$store.dispatch('auth/cleanKeywords');
+        },
+        showHistory() {
+        },
+        goHome(){
+            this.reset()
+            this.$bus.$emit('resetHome');
+            if (this.$route.path != '/'){
+                this.$router.push('/')
+            }
+        },
+        goSearch() {
+            this.$store.dispatch('auth/setSearchResult', this.search_result);
+            this.$store.dispatch('auth/setKeywords', this.keywords);
+            this.$bus.$emit('reloadHome');
+            if (this.$route.path != '/')
+                this.$router.push('/')
+        }
     },
     computed: {
     },
+    watch: {
+        keywords: function (newKey, oldKey) {
+            let keywords = newKey.split(" ").map(x => 'keywords[]=' + x)
+            let url = '/restaurants/search?' + keywords.join('&')
+            this.$axios.get(this.$url + url)
+            .then(response => {
+                // // console.log(response)
+                this.search_result = response.data;
+                this.search_shopName = [];
+                for(let i=0;i<this.search_result.length ;i++){
+                    this.search_shopName.push(this.search_result[i].name);
+                }
+            })
+            .catch(error => {
+                // console.log(error.response)
+            })
+        
+        },
+        $route: {
+            handler: function() {
+                if(this.$router.currentRoute['name'] == "Cashier") this.showShoppingCart = false;
+                else this.showShoppingCart = true;
+            },
+         },
+    },
+    created: function() {
+        if(this.$router.currentRoute['name'] == "Cashier") this.showShoppingCart = false;
+        else this.showShoppingCart = true;
+    },
     beforeCreate: function() {},
-    created: function() {},
     beforeMount: function() {},
-    mounted: function() {},
     beforeUpdate: function() {},
     updated: function() {},
     activated: function() {},
