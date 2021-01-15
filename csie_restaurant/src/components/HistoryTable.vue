@@ -122,7 +122,7 @@
           if (isNaN(datas[i].discount) || datas[i].discount == null)
             total=total+(datas[i].price * datas[i].quantity)
           else
-            total=total+(datas[i].price * datas[i].quantity * datas[i].discount).toFixed(0)
+            total=Math.round(total+(datas[i].price * datas[i].quantity * datas[i].discount))
         }
         return total
       },
