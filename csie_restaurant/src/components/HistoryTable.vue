@@ -72,39 +72,7 @@
         starb:'https://i.imgur.com/gONraUA.png',//暗星星
         status: ['已下單','店家已確認','準備中','運送中','已完成','已取消'],
         fields: ['店家', '日期', '訂單狀態', '評分', '顯示更多'],
-        items: [
-          { 
-              id:0,
-              seller_id:0,
-              ratingStar:0,
-              isClicked:false,
-              isRated:false,
-              readonly:false,
-              comment:"請留下您的評論。",
-              ratingdisabled:true,
-              店家: 'Dickerson', 日期: '2020-11-11 04:12:25',
-              運輸時間:'null',地址:'null',訂單狀態:'4',
-              fee:0,
-              isShippingCoupon:false,
-              datas:[
-                  {name:123123, price:123, quantity:1,discount:1},
-                  {name:456, price:456, quantity:2},
-              ]
-          }, 
-           { 
-              ratingStar:0,
-              isClicked:false,
-              isRated:false,
-              readonly:false,
-              comment:"請留下您的評論。",
-              ratingdisabled:'disabled',
-              店家: 'Dickerson', 日期: 'Macdonald',
-              datas:[
-                  {name:123123},
-                  {name:456 },
-              ]
-          }, 
-        ],
+        items: [],
       }
     },
     methods:{
