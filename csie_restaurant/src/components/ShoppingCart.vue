@@ -20,7 +20,7 @@
         <b-button @click="onClose" class="close" aria-label="Close">
           <span class="d-inline-block" aria-hidden="true">&times;</span>
         </b-button>
-        訂購餐廳：{{bookingShopName}}  
+        訂購餐廳：{{bookingShopName}}
       </template>
       <div v-for="(item,index) in ItemList" :key="index" class="productbd" >
         <CartCell v-on:deleteclick="deleteCartCell" @spinClick="modifySpinValue" @deleteCoupon='deleteCoupon' v-bind="item" :index="index"/>
@@ -41,7 +41,6 @@
                   {{errorMessage}}
            </b-form-invalid-feedback>
           </b-input-group>
-          
         </div>
         <div class="row" v-if="productNum!= 0">
           <div class='col-md-9 tlprice'>小計(共{{productNum}}項餐點)</div>
@@ -63,7 +62,7 @@
         <div class="row col-md-12" >
           <b-button id="checkSb" class="checkOut" @click="onOk" variant="info" :disabled="submitInvalid" vertical>結帳</b-button>
         </div>
-      <!-- <b-nav-item @click="onOk" variant="outline-info" vertical>  
+      <!-- <b-nav-item @click="onOk" variant="outline-info" vertical>
         <router-link :to="{name: 'Cashier'}" class="nav-link">Ok</router-link>
       </b-nav-item> -->
       <!--div>
@@ -126,7 +125,7 @@
         else {
           for (var i = 0; i<data.length;i++)
           {
-            this.beforePrice = this.totalPrice + data[i].foodPrice*data[i].quantity; 
+            this.beforePrice = this.totalPrice + data[i].foodPrice*data[i].quantity;
             this.totalPrice = this.beforePrice
             this.ItemList.push({foodName:data[i].foodName, quantity:data[i].quantity, foodPrice:data[i].foodPrice, id:data[i].id});
             this.productNum += this.ItemList[i].quantity
@@ -137,7 +136,7 @@
           this.coupon = coupon.coupon.code;
           this.useValidCoupon()
           this.useCouponDiscount(coupon)
-          this.$cookie.set('discount',Math.round(this.disCountMoney))
+          this.$cookie.set('discount',Math.round(this.disCountMoney), {path: "/"})
         }
       },
       dataToCashier(){
@@ -171,7 +170,7 @@
         {
           for (let i = 0 ; i<coupon.coupon_items.length; i++){
             let product = products.filter(j => j.id == coupon.coupon_items[i].product_id)
-            this.disCountMoney += coupon.coupon_items[i].quantity * coupon.coupon.discount * product[0].foodPrice 
+            this.disCountMoney += coupon.coupon_items[i].quantity * coupon.coupon.discount * product[0].foodPrice
           }
           this.totalPrice -= this.disCountMoney;
         }
@@ -191,8 +190,8 @@
             this.$confirm('輸入優惠券後無法更改商品，欲修改商品請先移除優惠券。','使用說明','warning').then(()=>{
               this.useValidCoupon()
               this.useCouponDiscount(response.data.coupon)
-              this.$cookie.set('coupon',JSON.stringify(response.data.coupon))
-              this.$cookie.set('discount',this.disCountMoney)
+              this.$cookie.set('coupon',JSON.stringify(response.data.coupon), {path: "/"})
+              this.$cookie.set('discount',this.disCountMoney, {path: "/"})
               this.$alert('','輸入成功','success')
             })
           })
@@ -230,8 +229,8 @@
       modifySpinValue(index,value){
         let productCookie = JSON.parse(this.$cookie.get("product"));
         productCookie[index].quantity = value
-        document.cookie = 'product=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
-        this.$cookie.set('product', JSON.stringify(productCookie))
+        document.cookie = 'product=; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+        this.$cookie.set('product', JSON.stringify(productCookie), {path: "/"})
         this.beforePrice = this.beforePrice + (value - this.ItemList[index].quantity) * this.ItemList[index].foodPrice
         this.totalPrice = this.beforePrice - this.disCountMoney
         this.productNum += value - this.ItemList[index].quantity
@@ -247,13 +246,13 @@
           this.totalPrice = null;
           }
         if(this.ItemList.length == 0) //delete cookie
-        { 
+        {
           this.submitInvalid = true
-          document.cookie = 'shopId=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
-          document.cookie = 'shopName=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
-          document.cookie = 'product=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
+          document.cookie = 'shopId=; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+          document.cookie = 'shopName=; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+          document.cookie = 'product=; expires=Thu, 01 Jan 1970 00:00:00 GMT';
         }
-        else{ this.$cookie.set('product',JSON.stringify(this.ItemList));}
+        else{ this.$cookie.set('product',JSON.stringify(this.ItemList), {path: "/"});}
       },
       deleteCoupon(){
         let coupon_input = document.querySelector('#coupon-input')
@@ -263,8 +262,8 @@
         this.totalPrice = this.beforePrice
         this.unlockChangeButton()
         coupon_input.removeAttribute("readOnly");
-        document.cookie = 'coupon=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
-        document.cookie = 'discount=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; 
+        document.cookie = 'coupon=; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+        document.cookie = 'discount=; expires=Thu, 01 Jan 1970 00:00:00 GMT';
       },
       showModal() {
         this.$bvModal.show('login-modal')
@@ -279,8 +278,8 @@
         if(this.checkLogin()){
           this.confirmModal()
           this.onClose()
-          this.$cookie.set('beforePrice', this.beforePrice)
-          this.$cookie.set('totalPrice', this.totalPrice)
+          this.$cookie.set('beforePrice', this.beforePrice, {path: "/"})
+          this.$cookie.set('totalPrice', this.totalPrice, {path: "/"})
           if (this.$router.currentRoute['name'] == "Cashier") window.location.reload();
           else this.$router.push("/cashier");
         }
@@ -291,7 +290,7 @@
         {
             foodName: name,
             foodPrice: price,
-            quantity: spinValue,    
+            quantity: spinValue,
         })
       },
       handleScroll ()
