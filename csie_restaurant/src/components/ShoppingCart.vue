@@ -41,7 +41,6 @@
                   {{errorMessage}}
            </b-form-invalid-feedback>
           </b-input-group>
-
         </div>
         <div class="row" v-if="productNum!= 0">
           <div class='col-md-9 tlprice'>小計(共{{productNum}}項餐點)</div>
