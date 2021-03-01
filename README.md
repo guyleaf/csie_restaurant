@@ -6,7 +6,7 @@ SRS系統需求規格書: https://pse.is/3cb2dd
 
 系統簡報: https://guyleaf.pse.is/38jplg
 
-操作範例:
+操作範例:
 - 非會員使用者: https://youtu.be/ZA9aH1XE3s4
 - 申請會員下訂單: https://youtu.be/kAIIq0J3KVk 
 - 管理會員: https://youtu.be/0kFB9uCj-fk
