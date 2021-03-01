@@ -1,21 +1,17 @@
 
-# CSIE_restaurant
+# CSIE restaurant 電子商務餐廳外送平台
+結合北科學餐與外送服務平台的概念，為消費者、商家及商場的購物與管理⾏為提供服務，了解消費者及商家買賣流程，設計並實際製作出⼈性化的線上購物系統
 
-After pulling
+SRS系統需求規格書
 
-~~bash~~
 
-cd {folder}/CSIE_restaurant/csie_restaurant
-npm install 
+## Frontend
 
-# Lumen PHP Framework
-
-[![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework)
-[![Total Downloads](https://img.shields.io/packagist/dt/laravel/framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Stable Version](https://img.shields.io/packagist/v/laravel/framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![License](https://img.shields.io/packagist/l/laravel/framework)](https://packagist.org/packages/laravel/lumen-framework)
-
-Laravel Lumen is a stunningly fast PHP micro-framework for building web applications with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Lumen attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as routing, database abstraction, queueing, and caching.
+## Backend
+### Features
+- 設計資料庫Schema、ER diagram
+- 使用MVC架構，並額外新增 Repository 和 Service layer 分離資料邏輯與商業邏輯
+- 採用前後端分離與 API 設計
 
 ## Official Documentation
 
