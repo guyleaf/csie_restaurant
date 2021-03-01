@@ -1,0 +1,54 @@
+[
+	{
+		"seller_id" : 3,
+		"category_id" : 5
+	},
+	{
+		"seller_id" : 3,
+		"category_id" : 6
+	},
+	{
+		"seller_id" : 4,
+		"category_id" : 5
+	},
+	{
+		"seller_id" : 4,
+		"category_id" : 6
+	},
+	{
+		"seller_id" : 11,
+		"category_id" : 4
+	},
+	{
+		"seller_id" : 11,
+		"category_id" : 7
+	},
+	{
+		"seller_id" : 12,
+		"category_id" : 4
+	},
+	{
+		"seller_id" : 12,
+		"category_id" : 7
+	},
+	{
+		"seller_id" : 13,
+		"category_id" : 5
+	},
+	{
+		"seller_id" : 13,
+		"category_id" : 6
+	},
+	{
+		"seller_id" : 14,
+		"category_id" : 8
+	},
+	{
+		"seller_id" : 15,
+		"category_id" : 2
+	},
+	{
+		"seller_id" : 15,
+		"category_id" : 5
+	}
+]

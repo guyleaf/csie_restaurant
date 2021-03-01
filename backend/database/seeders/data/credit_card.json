@@ -1,0 +1,77 @@
+[
+	{
+		"customer_id": 2,
+		"credit_card": "1231-4232-4345-5424",
+		"expire_date": "2023-01-12"
+	},
+	{
+		"customer_id": 2,
+		"credit_card": "0428-4256-9200-5329",
+		"expire_date": "2025-02-20"
+	},
+	{
+		"customer_id": 5,
+		"credit_card": "8453-4058-3490-8428",
+		"expire_date": "2030-03-01"
+	},
+	{
+		"customer_id": 5,
+		"credit_card": "0472-4824-8943-8922",
+		"expire_date": "2035-04-21"
+	},
+	{
+		"customer_id": 6,
+		"credit_card": "8913-0920-9042-8932",
+		"expire_date": "2024-05-04"
+	},
+	{
+		"customer_id": 6,
+		"credit_card": "8492-4289-8492-9012",
+		"expire_date": "2030-06-21"
+	},
+	{
+		"customer_id": 7,
+		"credit_card": "0398-8053-8193-8902",
+		"expire_date": "2028-07-18"
+	},
+	{
+		"customer_id": 7,
+		"credit_card": "0298-4809-8492-8293",
+		"expire_date": "2033-08-08"
+	},
+	{
+		"customer_id": 8,
+		"credit_card": "8192-1382-7823-0123",
+		"expire_date": "2030-09-29"
+	},
+	{
+		"customer_id": 8,
+		"credit_card": "0912-8329-4288-7723",
+		"expire_date": "2036-10-10"
+	},
+	{
+		"customer_id": 9,
+		"credit_card": "2489-8429-1293-8913",
+		"expire_date": "2040-11-14"
+	},
+	{
+		"customer_id": 9,
+		"credit_card": "1289-3829-2982-1120",
+		"expire_date": "2045-12-12"
+	},
+	{
+		"customer_id": 10,
+		"credit_card": "7321-8001-7711-8913",
+		"expire_date": "2028-01-06"
+	},
+	{
+		"customer_id": 10,
+		"credit_card": "3223-9232-1289-1234",
+		"expire_date": "2036-05-05"
+	},
+	{
+		"customer_id": 10,
+		"credit_card": "0232-9102-8429-8912",
+		"expire_date": "2040-08-28"
+	}
+]
