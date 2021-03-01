@@ -4,7 +4,9 @@
 
 SRS系統需求規格書: https://guyleaf.pse.is/3cu7r4
 
-系統簡報: https://guyleaf.pse.is/38jplg
+系統簡報:
+- powerpoint version: https://guyleaf.pse.is/38jplg
+- pdf version: https://guyleaf.pse.is/3c94ck
 
 操作範例:
 - 非會員使用者: https://youtu.be/ZA9aH1XE3s4
