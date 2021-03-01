@@ -1,5 +1,8 @@
 # csie_restaurant
 
+Language: Javascript
+Framework: Vue.js
+
 ## Project setup
 ```
 npm install
