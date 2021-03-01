@@ -4,7 +4,7 @@ module.exports = {
   devServer: {
     proxy: "http://localhost:8081",
   },
-  publicPath: process.env.NODE_ENV === "production" ? "/CSIE_restaurant/" : "/",
+  publicPath: process.env.NODE_ENV === "production" ? "/csie_restaurant/" : "/",
   outputDir: "./dist",
   productionSourceMap: false,
   chainWebpack(config) {
