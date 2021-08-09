@@ -4,6 +4,7 @@ Language: Javascript
 Framework: Vue.js
 
 ## Project setup
+### Install dependencies
 ```
 npm install
 ```
