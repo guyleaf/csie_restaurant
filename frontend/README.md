@@ -1,6 +1,6 @@
-# csie_restaurant
+# frontend
 
-Language: Javascript
+Language: Javascript  
 Framework: Vue.js
 
 ## Project setup
@@ -25,3 +25,8 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+## License
+
+The Vue.js framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).  
+The Vue CLI tool is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
