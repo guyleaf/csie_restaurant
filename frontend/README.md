@@ -1,4 +1,4 @@
-# frontend
+# Frontend
 
 Language: Javascript  
 Framework: Vue.js
